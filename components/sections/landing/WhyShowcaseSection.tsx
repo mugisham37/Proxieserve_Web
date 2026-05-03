@@ -4,7 +4,7 @@ import { WhyDemoCard } from "@/components/molecules/WhyDemoCard";
 export function WhyShowcaseSection() {
   return (
     <section className="bg-surface border-t border-b border-border">
-      <div className="max-w-[1280px] mx-auto px-8 py-16 md:px-4 md:py-10">
+      <div className="max-w-[1280px] mx-auto px-4 py-10 md:px-8 md:py-16">
         <SectionLabel>Explainable AI</SectionLabel>
         <h2 className="text-[clamp(26px,3.5vw,36px)] font-semibold tracking-[-0.02em] text-text mb-3">
           Every number has a <em>&ldquo;Why?&rdquo;</em>

@@ -11,12 +11,13 @@ export function TestimonialsSection() {
   useGSAPScrollReveal(ref, { selector: ".reveal", stagger: 0.1 });
 
   return (
-    <section ref={ref} className="max-w-[1280px] mx-auto px-8 py-16 md:px-4 md:py-10">
-      <SectionLabel>What sellers say</SectionLabel>
+    <section ref={ref} className="max-w-[1280px] mx-auto px-4 py-10 md:px-8 md:py-16">
+      <SectionLabel>Seller Stories</SectionLabel>
       <h2 className="text-[clamp(26px,3.5vw,36px)] font-semibold tracking-[-0.02em] text-text mb-6">
-        Real results, real sellers
+        Sellers who let SolAI run their growth.
       </h2>
-      <div className="grid grid-cols-3 gap-4 md:grid-cols-1">
+      {/* mobile: 1 col | 768px+: 3 col */}
+      <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-3">
         {TESTIMONIALS.map((t) => (
           <TestimonialCard key={t.name} item={t} />
         ))}

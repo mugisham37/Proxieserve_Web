@@ -39,8 +39,8 @@ export function ContactFormSection() {
     "w-full px-3 py-2 text-[14px] bg-bg text-text border border-border rounded-[10px] font-sans transition-colors duration-[120ms] focus:outline-none focus:border-brand focus:ring-[3px] focus:ring-[var(--brand-soft)]";
 
   return (
-    <div className="max-w-[1280px] mx-auto px-8 py-12 md:px-4">
-      <div className="grid grid-cols-[1.2fr_1fr] gap-10 md:grid-cols-1">
+    <div className="max-w-[1280px] mx-auto px-4 py-12 md:px-8">
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.2fr_1fr]">
         {/* Form */}
         <div className="bg-surface border border-border rounded-[14px] p-8">
           {sent ? (
@@ -68,7 +68,7 @@ export function ContactFormSection() {
                 Request a demo
               </h3>
               <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-2 gap-4 mb-4 sm:grid-cols-1">
+                <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-2">
                   <div className="flex flex-col gap-1">
                     <label className="text-[13px] font-medium text-text">
                       Full name
@@ -110,7 +110,7 @@ export function ContactFormSection() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-4 sm:grid-cols-1">
+                <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-2">
                   <div className="flex flex-col gap-1">
                     <label className="text-[13px] font-medium text-text">
                       Monthly ad spend

@@ -1,74 +1,68 @@
 "use client";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { useState } from "react";
+import { MkIcon } from "@/components/atoms/MkIcon";
 
 export function WhyDemoCard() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="bg-bg border border-border rounded-[14px] p-6 max-w-[380px] w-full">
+    <div className="bg-bg border border-border rounded-lg p-6 max-w-[380px] w-full relative">
       {/* Header */}
       <div className="flex justify-between items-center mb-2">
         <span className="text-[12px] text-text-subtle">Total Spend · Today</span>
-        <Popover>
-          <PopoverTrigger
-            className="text-[12px] font-medium text-brand bg-transparent border-none cursor-pointer px-2 py-0.5 rounded hover:bg-brand-soft transition-colors"
-            aria-label="Why was this amount spent?"
-          >
-            Why?
-          </PopoverTrigger>
-          <PopoverContent
-            side="top"
-            className="w-80 bg-surface border border-border text-text p-4 rounded-[14px] shadow-lg"
-          >
-            <p className="text-[13px] font-semibold text-text mb-1">
-              Why US$ 4,231.45?
-            </p>
-            <ul className="text-[12px] text-text-muted space-y-1 mb-3 list-none p-0">
-              <li className="pl-3 relative before:content-['·'] before:absolute before:left-0 before:text-text-subtle before:font-bold">
-                Audience #3 (Lagos, F 25–34) hit 4.2× ROAS threshold
-              </li>
-              <li className="pl-3 relative before:content-['·'] before:absolute before:left-0 before:text-text-subtle before:font-bold">
-                Shifted $800 from paused Meta carousel to WhatsApp DM
-              </li>
-              <li className="pl-3 relative before:content-['·'] before:absolute before:left-0 before:text-text-subtle before:font-bold">
-                Still $5,768.55 inside daily cap
-              </li>
-            </ul>
-            <p className="text-[11px] text-text-subtle border-t border-border pt-2">
-              Decided by Optimiser Agent · GPT-4o · 2 min ago
-            </p>
-          </PopoverContent>
-        </Popover>
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="text-[12px] font-medium text-brand bg-transparent border-none cursor-pointer px-2 py-0.5 rounded hover:bg-brand-soft transition-colors font-sans"
+        >
+          Why?
+        </button>
       </div>
 
       {/* Value */}
       <div className="font-mono text-[32px] font-semibold text-text [font-feature-settings:'tnum']">
-        US$ 4,231
-        <span className="text-text-muted text-[22px]">.45</span>
+        US$ 4,231<span className="text-text-muted text-[22px]">.45</span>
       </div>
       <div className="text-[13px] text-text-subtle mt-1">
         of US$ 10,000 cap ·{" "}
         <span className="text-success">Inside cap</span>
       </div>
 
-      {/* Breakdown */}
-      <div className="mt-4 pt-4 border-t border-border">
-        <p className="text-[12px] text-text-subtle mb-2">Allocated today</p>
-        <ul className="text-[13px] text-text-muted space-y-1 list-none p-0">
-          <li className="pl-3 relative before:content-['·'] before:absolute before:left-0 before:text-text-subtle before:font-bold">
-            Meta Ads — US$ 2,400
-          </li>
-          <li className="pl-3 relative before:content-['·'] before:absolute before:left-0 before:text-text-subtle before:font-bold">
-            Google Ads — US$ 1,400
-          </li>
-          <li className="pl-3 relative before:content-['·'] before:absolute before:left-0 before:text-text-subtle before:font-bold">
-            WhatsApp DM — US$ 431.45
-          </li>
-        </ul>
-      </div>
+      {/* Inline popover — expands below value when open */}
+      {open && (
+        <div className="mt-4 pt-4 border-t border-border">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-semibold text-[13px] text-text">Why this spend level?</span>
+            <button
+              onClick={() => setOpen(false)}
+              className="bg-transparent border-none text-text-subtle cursor-pointer flex"
+            >
+              <MkIcon name="x" size={16} />
+            </button>
+          </div>
+          <p className="text-[14px] font-medium text-text mb-2">
+            Increased Instagram Reels budget by 15%
+          </p>
+          <ul className="list-none p-0 m-0 mb-2">
+            {[
+              "CPA tracking 18% under target (US$ 8.45 vs US$ 12.00)",
+              "Reels CTR 3.2% — 1.8× above Feed average",
+              "ROAS 3.8x — highest across all active ad sets",
+            ].map((item) => (
+              <li
+                key={item}
+                className="text-[13px] text-text-muted pl-3.5 py-0.5 relative before:content-['·'] before:absolute before:left-0.5 before:font-bold before:text-text-subtle"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+          <div className="flex items-center gap-2 pt-2 border-t border-border text-[12px]">
+            <span className="text-brand font-medium">Real-time Optimizer</span>
+            <code className="font-mono text-[11px] text-text-subtle">run_7f3a…e91c</code>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

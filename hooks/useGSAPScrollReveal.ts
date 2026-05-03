@@ -23,38 +23,50 @@ export function useGSAPScrollReveal(
   } = options;
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    // eslint-disable-next-line prefer-const
     let gsapContext: { revert: () => void } | undefined;
+    let cancelled = false;
 
     const init = async () => {
       const { gsap } = await import("gsap");
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+
+      // If cleanup ran before this resolved, bail out
+      if (cancelled) return;
+
       gsap.registerPlugin(ScrollTrigger);
 
       gsapContext = gsap.context(() => {
-        const elements = containerRef.current?.querySelectorAll(selector);
-        if (!elements?.length) return;
+        const elements = container.querySelectorAll<Element>(selector);
+        if (!elements.length) return;
 
-        gsap.from(elements, {
-          y,
-          opacity: 0,
+        // Set initial hidden state immediately so there's no flash
+        gsap.set(elements, { opacity: 0, y });
+
+        // Animate to visible when the container enters the viewport
+        gsap.to(elements, {
+          opacity: 1,
+          y: 0,
           duration,
           stagger,
-          ease: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+          ease: "power2.out",
           scrollTrigger: {
-            trigger: containerRef.current,
+            trigger: container,
             start,
+            once: true,
           },
         });
-      }, containerRef);
+      }, container);
     };
 
     init();
 
     return () => {
+      cancelled = true;
       gsapContext?.revert();
     };
-  }, [containerRef, selector, y, stagger, duration, start]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }

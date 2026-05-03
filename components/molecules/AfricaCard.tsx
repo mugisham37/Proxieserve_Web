@@ -2,7 +2,6 @@ import { MkIcon } from "@/components/atoms/MkIcon";
 import { RailBadge } from "@/components/atoms/RailBadge";
 import { LangChip } from "@/components/atoms/LangChip";
 import type { AfricaCardItem } from "@/types";
-import { cn } from "@/lib/utils";
 
 interface AfricaCardProps {
   item: AfricaCardItem;
@@ -11,14 +10,7 @@ interface AfricaCardProps {
 export function AfricaCard({ item }: AfricaCardProps) {
   return (
     <div className="reveal bg-surface border border-border rounded-[14px] p-7">
-      <div
-        className={cn(
-          "w-12 h-12 rounded-[10px] flex items-center justify-center mb-4",
-          item.isAccentRwanda
-            ? "bg-[rgba(52,168,83,0.1)] text-accent-rwanda"
-            : "bg-brand-soft text-brand"
-        )}
-      >
+      <div className="w-12 h-12 rounded-[10px] flex items-center justify-center mb-4 bg-[rgba(52,168,83,0.1)] text-accent-rwanda">
         <MkIcon name={item.icon} size={24} />
       </div>
 

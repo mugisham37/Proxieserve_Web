@@ -3,57 +3,55 @@ import type { PricingTier, CurrencyCode } from "@/types";
 export const PRICING_TIERS: PricingTier[] = [
   {
     id: "starter",
-    name: "Starter",
+    name: "01 · Starter",
     baseUsd: 0,
     period: "Free forever",
     annualUsd: 0,
-    desc: "One product, one campaign. Get your first sale with SolAI — no card required.",
+    desc: "Try SolAI with one product, one channel, and US$ 500/month ad-spend headroom.",
     features: [
-      "1 active product",
-      "Meta or Google (one channel)",
-      "WhatsApp Sales Agent (100 conversations/mo)",
+      "1 product",
+      "Meta Ads only",
+      "WhatsApp + web widget",
       "Stripe payments",
-      "7-day audit log",
-      "Email support",
+      "Full audit trail",
     ],
     ctaLabel: "Start free",
   },
   {
     id: "growth",
-    name: "Growth",
+    name: "02 · Growth",
     baseUsd: 99,
     period: "per month",
     annualUsd: 79,
-    desc: "Multi-channel campaigns, Mobile Money, and unlimited conversations for growing sellers.",
+    desc: "Full platform. All channels. All payment rails. Unlimited products.",
     features: [
-      "10 active products",
-      "Meta + Google simultaneously",
-      "Unlimited Sales Agent conversations",
-      "Stripe + MTN MoMo + M-Pesa",
-      "4 languages",
-      "30-day audit log",
-      "Priority chat support",
+      "Unlimited products",
+      "Meta + Google Ads",
+      "All 5 chat channels",
+      "Stripe + MoMo + Airtel",
+      "Up to US$ 10,000/mo ad spend",
+      "CRM integrations",
+      "Priority support",
     ],
-    ctaLabel: "Start Growth",
+    ctaLabel: "Start free trial",
     featured: true,
   },
   {
     id: "scale",
-    name: "Scale",
+    name: "03 · Scale",
     baseUsd: 349,
     period: "per month",
     annualUsd: 279,
-    desc: "Unlimited products, all payment rails, custom agent training, and dedicated support.",
+    desc: "High-volume sellers. Custom caps. Dedicated support. SLA.",
     features: [
-      "Unlimited products",
-      "All channels + custom channels",
-      "Custom Sales Agent training",
-      "All payment rails incl. Wave & Airtel",
-      "90-day audit log",
-      "Data residency choice",
-      "Dedicated account manager",
+      "Everything in Growth",
+      "Unlimited ad spend",
+      "TikTok Ads (beta)",
+      "Custom CRM webhooks",
+      "Compliance exports",
+      "99.9% SLA",
     ],
-    ctaLabel: "Contact sales",
+    ctaLabel: "Talk to sales",
   },
 ];
 
@@ -69,14 +67,13 @@ export const CURRENCY_RATES: Record<CurrencyCode, number> = {
 const ZERO_DECIMAL: CurrencyCode[] = ["RWF", "KES", "NGN"];
 
 export function formatPrice(usd: number, currency: CurrencyCode): string {
-  if (usd === 0) return "Free";
   const value = usd * CURRENCY_RATES[currency];
   const isZeroDecimal = ZERO_DECIMAL.includes(currency);
   const formatted = isZeroDecimal
     ? Math.round(value).toLocaleString("en-US")
     : value.toLocaleString("en-US", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       });
   return `${currency} ${formatted}`;
 }

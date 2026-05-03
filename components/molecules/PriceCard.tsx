@@ -7,12 +7,11 @@ import { cn } from "@/lib/utils";
 interface PriceCardProps {
   tier: PricingTier;
   currency: CurrencyCode;
-  isAnnual: boolean;
 }
 
-export function PriceCard({ tier, currency, isAnnual }: PriceCardProps) {
-  const price = isAnnual ? tier.annualUsd : tier.baseUsd;
-  const formattedPrice = formatPrice(price, currency);
+export function PriceCard({ tier, currency }: PriceCardProps) {
+  const isFree = tier.baseUsd === 0;
+  const annualTotal = tier.annualUsd * 12;
 
   return (
     <div
@@ -32,27 +31,21 @@ export function PriceCard({ tier, currency, isAnnual }: PriceCardProps) {
       </p>
 
       <div className="font-mono text-[clamp(28px,3vw,40px)] font-semibold text-text [font-feature-settings:'tnum'] mb-1">
-        {tier.baseUsd === 0 ? (
-          "Free"
+        {isFree ? (
+          formatPrice(0, currency)
         ) : (
           <>
-            {formattedPrice}
-            <span className="text-[16px] font-normal text-text-muted">/mo</span>
+            {formatPrice(tier.baseUsd, currency)}
+            <span className="text-[16px] font-normal text-text-muted">/month</span>
           </>
         )}
       </div>
 
-      {isAnnual && tier.baseUsd > 0 && (
-        <p className="text-[13px] text-text-subtle mb-1">
-          Billed annually · save{" "}
-          {Math.round(((tier.baseUsd - tier.annualUsd) / tier.baseUsd) * 100)}%
-        </p>
-      )}
-      {!isAnnual && tier.baseUsd > 0 && (
-        <p className="text-[13px] text-text-subtle mb-1">per month</p>
-      )}
+      <p className="text-[13px] text-text-subtle mb-3">
+        {isFree ? "Free forever" : `${formatPrice(annualTotal, currency)} paid annually`}
+      </p>
 
-      <p className="text-[14px] text-text-muted leading-[1.6] mb-4 mt-2">
+      <p className="text-[14px] text-text-muted leading-[1.6] mb-4">
         {tier.desc}
       </p>
 
