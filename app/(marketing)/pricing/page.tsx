@@ -12,8 +12,7 @@ export default function PricingPage() {
           Simple, transparent pricing
         </h1>
         <p className="text-[clamp(16px,1.8vw,18px)] text-text-muted max-w-[600px] leading-[1.7]">
-          Start free. Scale as you grow. Or pay only when we generate revenue —
-          your choice.
+          Two models. One audit log. We only win when you win.
         </p>
       </div>
       <PricingGridSection />

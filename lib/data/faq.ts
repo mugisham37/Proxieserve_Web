@@ -2,27 +2,27 @@ import type { FAQItem } from "@/types";
 
 export const FAQ_ITEMS: FAQItem[] = [
   {
-    q: "Do I need a Meta or Google ads account?",
-    a: "Yes — SolAI runs campaigns inside your own ad accounts so you always own the data and spend. Setup takes less than 5 minutes: connect once via OAuth and SolAI manages everything from there.",
+    q: "Does SolAI spend money on my behalf?",
+    a: "Yes — on your own ad accounts. SolAI connects via OAuth and runs campaigns on accounts you own. You set daily and total spend caps that cannot be exceeded. SolAI cannot access your card; ads are billed by Meta/Google directly to your account.",
   },
   {
-    q: "How does SolAI explain its decisions?",
-    a: "Every automated action — a budget shift, a creative swap, a paused campaign — is logged in real time with the model's reasoning: which signals it saw, what threshold triggered the action, and what outcome it predicted. You can audit any decision in the timeline.",
+    q: "What happens if something goes wrong with a campaign?",
+    a: "SolAI monitors every campaign every 15 minutes. If CPA spikes, CTR collapses, or any anomaly is detected, the affected campaign is automatically paused. You get a dashboard alert with a full explanation. You can resume or override any time.",
   },
   {
-    q: "Which payment methods does SolAI support for closing sales?",
-    a: "Stripe (cards) in all supported countries, plus MTN Mobile Money, Airtel Money, M-Pesa, and Wave across Rwanda, Uganda, Kenya, Nigeria, and Senegal. Zero-decimal currencies (RWF, KES, NGN) are handled natively.",
+    q: "Can I use Mobile Money to accept payments?",
+    a: "Absolutely. SolAI supports MTN MoMo, Airtel Money, Flutterwave, and Paystack alongside Stripe. When a buyer in Rwanda or Kenya wants to pay via MoMo, the Sales Agent generates a MoMo payment link right in the chat.",
   },
   {
-    q: "Can I set a hard spend cap so it never overspends?",
-    a: "Yes — you set a daily cap and a total cap. The Planner Agent respects both and will never exceed them. If the cap is approached, it automatically scales back bids rather than pause campaigns mid-flight.",
+    q: "How does the \"Why?\" button work?",
+    a: "Every auto-decided number on your dashboard — spend, ROAS, CPA, any agent action — has a \"Why?\" trigger. Click it and a popover shows the exact inputs, reasoning, and outcome of that decision. You can drill into the full audit trail from there.",
   },
   {
-    q: "Is my customer data stored in Africa?",
-    a: "Conversation transcripts and order data are stored in AWS af-south-1 (Cape Town) by default. You can select a different region in Settings. SolAI is compliant with Rwanda's Data Protection Law, South Africa's POPIA, and Nigeria's NDPR.",
+    q: "What languages does SolAI support?",
+    a: "The conversational Sales Agent handles English, French, Kinyarwanda, and Swahili at launch. The dashboard UI is available in all four. More languages are on the roadmap.",
   },
   {
-    q: "What languages does the sales agent speak?",
-    a: "English, French, Kinyarwanda, and Swahili out of the box. The agent detects the customer's language from the first message and replies in kind. Additional languages can be requested — get in touch.",
+    q: "Is my data safe?",
+    a: "SolAI runs on AWS af-south-1 (Cape Town), compliant with GDPR, POPIA, and Rwanda's Data Protection Law. All data is encrypted at rest and in transit. Audit logs are immutable and tamper-evident. We never store raw card data — that's Stripe's scope.",
   },
 ];

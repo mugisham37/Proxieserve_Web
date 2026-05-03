@@ -5,11 +5,10 @@ export function FeaturesHeaderSection() {
         Platform
       </p>
       <h1 className="text-[clamp(28px,4vw,44px)] font-bold tracking-[-0.03em] text-text mb-3">
-        Everything your revenue engine needs
+        Everything SolAI does for you.
       </h1>
       <p className="text-[clamp(16px,1.8vw,18px)] text-text-muted max-w-[600px] leading-[1.7]">
-        Five specialised agents. One platform. Every decision explained and
-        every cent tracked.
+        Eight capabilities that close the loop from product upload to revenue.
       </p>
     </div>
   );

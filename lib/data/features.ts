@@ -2,59 +2,59 @@ import type { FeatureItem } from "@/types";
 
 export const FEATURES: FeatureItem[] = [
   {
-    icon: "zap",
-    title: "5-Agent System",
-    desc: "Planner, Creative, Optimiser, Sales Agent, and Handoff Agent work in parallel — each specialist, each accountable.",
+    icon: "layers",
+    title: "5-Agent Autonomous System",
+    desc: "A Supervisor orchestrates five specialist agents: Campaign Planner, Creative Generator, Real-time Optimizer, Conversational Sales Agent, and Order Handoff. Each has its own model, tools, and logging schema.",
     detail:
-      "The Planner sets strategy and budget allocation. Creative generates and A/B-tests ad copy and images. Optimiser monitors ROAS every 15 minutes. Sales Agent handles every WhatsApp/Messenger conversation. Handoff coordinates order fulfilment.",
+      "The Planner researches audiences and splits budgets. The Creative generates ad copy, images, and short video. The Optimizer watches metrics every 15 minutes. The Sales Agent closes in chat. Handoff delivers clean orders.",
   },
   {
     icon: "messageCircle",
     title: "Conversational Sales Agent",
-    desc: "Qualifies leads, answers objections, sends payment links, and confirms orders — 24/7, in the customer's language.",
+    desc: "Not a chatbot that routes to humans — a closer. Handles WhatsApp, Instagram DM, Facebook Messenger, and web widget simultaneously.",
     detail:
-      "Powered by a fine-tuned model trained on thousands of successful e-commerce conversations across Africa. Handles price negotiations, size queries, and delivery questions without human escalation.",
+      "Detects browse/interest/buy/support/spam intent in milliseconds. Qualifies with the minimum questions needed. Generates payment links in-thread. Confirms on webhook. Escalates to humans only when frustration or complexity is detected.",
   },
   {
     icon: "eye",
     title: "100% Explainable AI",
-    desc: "Every automated decision comes with the model's reasoning. Budget shifts, creative swaps, audience changes — all logged.",
+    desc: "Every budget shift, creative pick, audience change, bid adjustment, and chat reply is logged with an immutable, signed audit trail.",
     detail:
-      "The 'Why?' button is attached to every KPI on the dashboard. Tap it to see which signals triggered the action, what threshold was crossed, and what outcome the model predicted. Fully auditable.",
+      "Each event captures: inputs considered, reasoning, action taken, result, and a SHA-256 hash chained to the previous event. The \"Why?\" button on every dashboard metric opens this trail. Your accountant can read it. Regulators can verify it.",
   },
   {
     icon: "shield",
-    title: "Budget Control",
-    desc: "Set daily and total caps. The system never exceeds them — it scales back gracefully rather than pause mid-flight.",
+    title: "Three-Tier Budget Control",
+    desc: "Spend caps enforced at Swarm (tenant), Agent (role), and Task (campaign/conversation) levels. Hard limits, not soft suggestions.",
     detail:
-      "Nested envelopes: global cap → per-platform cap → per-campaign cap. Any overage at a lower level triggers automatic rebalancing upstream. You can adjust caps at any time from the dashboard.",
+      "A spend-velocity circuit breaker trips if per-minute spend exceeds baseline. Any single action above a configurable threshold requires human approval. Default: reject on timeout (fail-closed).",
   },
   {
     icon: "creditCard",
     title: "Africa-First Payments",
-    desc: "MTN MoMo, Airtel Money, M-Pesa, Wave, and Stripe — customers pay the way they already pay.",
+    desc: "Stripe for international cards. Flutterwave, Paystack, MTN MoMo, and Airtel Money for the African market. All first-class, not regional add-ons.",
     detail:
-      "Zero-decimal currencies (RWF, KES, NGN, XOF) handled natively. Payment confirmation via SMS when data is spotty. Reconciliation report available daily in your preferred currency.",
+      "Zero-decimal currencies handled correctly (RWF, KES, NGN, XOF). MoMo settlement notes (~24h) surfaced in the order view. Payment links generated in-chat by the Sales Agent.",
   },
   {
     icon: "refreshCw",
-    title: "Real-time Optimisation",
-    desc: "The Optimiser agent checks every campaign every 15 minutes and reallocates budget automatically.",
+    title: "Real-Time Optimisation",
+    desc: "Every 15 minutes, the Optimizer pulls metrics, compares to 7-day rolling baselines, and acts: pause, scale, reallocate, or alert.",
     detail:
-      "Uses a multi-armed bandit algorithm with Thompson sampling. Winning audiences and creatives receive more budget; losers are paused after 3 consecutive underperforming cycles. Every reallocation is explained.",
+      "Uses Claude Haiku 4.5 for speed and cost. Falls back to Groq Llama 3.3 70B if Bedrock is throttled. Anomaly detection auto-pauses on 3 consecutive ticks of >50% deviation.",
   },
   {
     icon: "globe",
     title: "Multi-Channel, Multi-Language",
-    desc: "Meta, Google, WhatsApp, Instagram, Messenger — one upload, every channel. Four languages built in.",
+    desc: "English, French, Kinyarwanda, Swahili at launch. WhatsApp, Instagram DM, Messenger, web widget, SMS fallback.",
     detail:
-      "English, French, Kinyarwanda, and Swahili. The Sales Agent detects the customer's language from the first message and replies in kind. Channel mix is automatically optimised per product category.",
+      "All channels funnel into a unified conversation thread per lead. The dashboard shows a three-column inbox on desktop, single column on mobile. Slash-commands for human takeover.",
   },
   {
     icon: "lock",
     title: "Compliance Built In",
-    desc: "Rwanda DPL, South Africa POPIA, Nigeria NDPR, GDPR — data residency, consent, and proof-of-consent included.",
+    desc: "GDPR, POPIA, Rwanda Law N° 058/2021. Data residency in AWS af-south-1. 72-hour breach notification. Immutable audit logs.",
     detail:
-      "Customer data defaults to AWS af-south-1 (Cape Town). Consent banners are region-aware. Proof-of-consent export is available for any audit. No extra compliance tooling required.",
+      "Region-aware consent banners. Right-to-erasure within 30 days. Compliance export as signed JSON-LD. Sub-processor register maintained. SOC 2 readiness in scope.",
   },
 ];

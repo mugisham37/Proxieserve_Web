@@ -9,14 +9,14 @@ export default function AfricaPage() {
       {/* Page header */}
       <div className="max-w-[1280px] mx-auto px-8 pt-16 pb-8 border-b border-border md:px-4 md:pt-10">
         <p className="font-mono text-[12px] font-medium text-brand uppercase tracking-[0.08em] mb-3">
-          Built for Africa
+          For Africa
         </p>
         <h1 className="text-[clamp(28px,4vw,44px)] font-bold tracking-[-0.03em] text-text mb-3">
-          Africa-first, from the ground up
+          Built <em>from</em> Africa, <em>for</em> Africa.
         </h1>
         <p className="text-[clamp(16px,1.8vw,18px)] text-text-muted max-w-[600px] leading-[1.7]">
-          SolAI was designed in Kigali for the reality of African e-commerce —
-          Mobile Money, WhatsApp, low-bandwidth, and multi-lingual customers.
+          SolAI is headquartered in Kigali, Rwanda. We understand the
+          infrastructure, the payment rails, the languages, and the opportunity.
         </p>
       </div>
 

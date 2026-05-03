@@ -5,8 +5,7 @@ import { MkIcon } from "@/components/atoms/MkIcon";
 import { SPEND_RANGES, PLATFORMS } from "@/lib/constants";
 
 interface FormState {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   company: string;
   spend: string;
@@ -15,8 +14,7 @@ interface FormState {
 }
 
 const EMPTY: FormState = {
-  firstName: "",
-  lastName: "",
+  fullName: "",
   email: "",
   company: "",
   spend: "",
@@ -51,11 +49,11 @@ export function ContactFormSection() {
                 <MkIcon name="check" size={28} />
               </div>
               <h3 className="text-[18px] font-semibold text-text mb-2">
-                Message received!
+                We&apos;ll be in touch within 24 hours.
               </h3>
               <p className="text-[14px] text-text-muted mb-4">
-                We&apos;ll get back to you within one business day. In the
-                meantime, explore the platform.
+                Check your inbox for a confirmation. In the meantime, you can
+                start a free account immediately.
               </p>
               <button
                 onClick={() => { setSent(false); setForm(EMPTY); }}
@@ -67,62 +65,48 @@ export function ContactFormSection() {
           ) : (
             <>
               <h3 className="text-[18px] font-semibold text-text mb-5">
-                Get in touch
+                Request a demo
               </h3>
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-4 mb-4 sm:grid-cols-1">
                   <div className="flex flex-col gap-1">
                     <label className="text-[13px] font-medium text-text">
-                      First name
+                      Full name
                     </label>
                     <input
                       type="text"
                       required
-                      value={form.firstName}
-                      onChange={set("firstName")}
+                      value={form.fullName}
+                      onChange={set("fullName")}
                       className={inputClass}
-                      placeholder="Amara"
+                      placeholder="Kalisa Mugisha"
                     />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="text-[13px] font-medium text-text">
-                      Last name
+                      Email
                     </label>
                     <input
-                      type="text"
+                      type="email"
                       required
-                      value={form.lastName}
-                      onChange={set("lastName")}
+                      value={form.email}
+                      onChange={set("email")}
                       className={inputClass}
-                      placeholder="Diallo"
+                      placeholder="kalisa@inema.rw"
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1 mb-4">
                   <label className="text-[13px] font-medium text-text">
-                    Work email
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={form.email}
-                    onChange={set("email")}
-                    className={inputClass}
-                    placeholder="amara@store.rw"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1 mb-4">
-                  <label className="text-[13px] font-medium text-text">
-                    Company / store name
+                    Company
                   </label>
                   <input
                     type="text"
                     value={form.company}
                     onChange={set("company")}
                     className={inputClass}
-                    placeholder="Kigali Threads"
+                    placeholder="Inema Boutique"
                   />
                 </div>
 
@@ -161,22 +145,23 @@ export function ContactFormSection() {
 
                 <div className="flex flex-col gap-1 mb-6">
                   <label className="text-[13px] font-medium text-text">
-                    How can we help?
+                    Anything we should know?
                   </label>
                   <textarea
-                    rows={4}
+                    rows={3}
                     value={form.message}
                     onChange={set("message")}
                     className={inputClass + " resize-y"}
-                    placeholder="Tell us about your store and what you're looking to achieve..."
+                    placeholder="Tell us about your products, target market, or questions..."
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3 text-[14px] font-semibold bg-brand text-white rounded-[10px] border-none cursor-pointer hover:bg-[#4A6BEE] transition-all duration-150"
+                  className="w-full py-3 text-[14px] font-semibold bg-brand text-white rounded-[10px] border-none cursor-pointer hover:bg-[#4A6BEE] transition-all duration-150 flex items-center justify-center gap-2"
                 >
-                  Send message
+                  <MkIcon name="send" size={16} />
+                  Send request
                 </button>
               </form>
             </>
@@ -186,15 +171,15 @@ export function ContactFormSection() {
         {/* Info */}
         <div>
           <h3 className="text-[18px] font-semibold text-text mb-5">
-            Contact info
+            Other ways to reach us
           </h3>
 
           <div className="flex gap-3 mb-4 text-[14px] text-text-muted">
             <MkIcon name="mail" size={18} className="text-brand shrink-0 mt-0.5" />
             <div>
               <strong className="block text-text mb-0.5">Email</strong>
-              <a href="mailto:hello@solai.rw" className="text-brand">
-                hello@solai.rw
+              <a href="mailto:hello@solai.digisi.rw" className="text-brand">
+                hello@solai.digisi.rw
               </a>
             </div>
           </div>
@@ -213,7 +198,7 @@ export function ContactFormSection() {
             <MkIcon name="mapPin" size={18} className="text-brand shrink-0 mt-0.5" />
             <div>
               <strong className="block text-text mb-0.5">Office</strong>
-              Norrsken House Kigali
+              Kigali Innovation City
               <br />
               KG 7 Ave, Kigali, Rwanda
             </div>
@@ -224,7 +209,7 @@ export function ContactFormSection() {
             <h4 className="text-[11px] font-semibold uppercase tracking-[0.06em] text-text-subtle mb-2">
               Legal
             </h4>
-            {["Privacy Policy", "Terms of Service", "Data Processing Agreement", "Cookie Policy"].map((l) => (
+            {["Privacy Policy", "Terms of Service", "GDPR Notice", "Rwanda DPL Statement", "POPIA Compliance", "Sub-Processor Register"].map((l) => (
               <a
                 key={l}
                 href="#"
