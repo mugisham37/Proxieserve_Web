@@ -1,0 +1,213 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Dark mode activates on .dark class (set by next-themes with attribute="class") */
+@custom-variant dark (&:is(.dark *));
+
+/* ── Tailwind v4 @theme: expose tokens as utilities ── */
+@theme inline {
+  /* SolAI semantic colors */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+  --color-accent-rwanda: var(--accent-rwanda);
+
+  /* shadcn required tokens */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* SolAI border radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+
+  /* Fonts (variables set by next/font in layout.tsx) */
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-heading: var(--font-inter), system-ui, sans-serif;
+}
+
+/* ── Dark mode (primary experience) ── */
+:root,
+.dark {
+  --bg: #0B0D12;
+  --surface: #11141B;
+  --surface-2: #161A22;
+  --text: #F2F4F7;
+  --text-muted: #98A2B3;
+  --text-subtle: #667085;
+  --brand: #5B7CFF;
+  --brand-soft: #1B2240;
+  --success: #34D399;
+  --warning: #FFB547;
+  --danger: #F97066;
+  --info: #7AA7FF;
+  --accent-rwanda: #34A853;
+
+  /* shadcn tokens */
+  --background: #0B0D12;
+  --foreground: #F2F4F7;
+  --card: #11141B;
+  --card-foreground: #F2F4F7;
+  --popover: #161A22;
+  --popover-foreground: #F2F4F7;
+  --primary: #5B7CFF;
+  --primary-foreground: #ffffff;
+  --secondary: #161A22;
+  --secondary-foreground: #F2F4F7;
+  --muted: #11141B;
+  --muted-foreground: #98A2B3;
+  --accent: #1B2240;
+  --accent-foreground: #5B7CFF;
+  --destructive: #F97066;
+  --border: #1F2430;
+  --input: #1F2430;
+  --ring: #5B7CFF;
+  --radius: 10px;
+}
+
+/* ── Light mode override ── */
+.light {
+  --bg: #FFFFFF;
+  --surface: #F7F8FA;
+  --surface-2: #EEF1F5;
+  --text: #0B0D12;
+  --text-muted: #475467;
+  --text-subtle: #667085;
+  --brand: #2E5BFF;
+  --brand-soft: #E8EEFF;
+  --success: #0B8A4D;
+  --warning: #B25E00;
+  --danger: #B42318;
+  --info: #175CD3;
+  --accent-rwanda: #1E8E3E;
+
+  /* shadcn tokens */
+  --background: #FFFFFF;
+  --foreground: #0B0D12;
+  --card: #F7F8FA;
+  --card-foreground: #0B0D12;
+  --popover: #EEF1F5;
+  --popover-foreground: #0B0D12;
+  --primary: #2E5BFF;
+  --primary-foreground: #ffffff;
+  --secondary: #EEF1F5;
+  --secondary-foreground: #0B0D12;
+  --muted: #F7F8FA;
+  --muted-foreground: #475467;
+  --accent: #E8EEFF;
+  --accent-foreground: #2E5BFF;
+  --destructive: #B42318;
+  --border: #E4E7EC;
+  --input: #E4E7EC;
+  --ring: #2E5BFF;
+}
+
+/* ── Base styles ── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  em {
+    color: var(--brand);
+    font-style: italic;
+  }
+
+  a {
+    color: var(--brand);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ── FAQ accordion open border accent ── */
+.faq-item-open {
+  border-bottom-color: var(--warning) !important;
+}
+
+/* ── Accordion chevron animation ── */
+.accordion-chevron {
+  color: var(--text-subtle);
+  transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  flex-shrink: 0;
+}
+
+[data-panel][data-open] ~ .accordion-chevron,
+[data-state="open"] .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Custom scrollbar (dark theme) ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-subtle);
+}
