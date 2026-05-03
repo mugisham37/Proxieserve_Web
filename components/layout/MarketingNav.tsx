@@ -84,7 +84,7 @@ export function MarketingNav() {
 
           {/* Log in */}
           <Link
-            href="#"
+            href="/sign-in"
             className="hidden md:block text-[14px] font-medium text-[var(--text-muted)] hover:text-[var(--text)] no-underline hover:no-underline transition-colors duration-[120ms]"
           >
             Log in
@@ -92,7 +92,7 @@ export function MarketingNav() {
 
           {/* CTA */}
           <Link
-            href="/contact"
+            href="/sign-up"
             className="inline-flex items-center gap-1.5 px-[22px] py-[10px] text-[14px] font-semibold bg-[var(--brand)] text-white border border-[var(--brand)] rounded-[10px] no-underline hover:no-underline hover:bg-[#4A6BEE] transition-all duration-150"
           >
             Start free

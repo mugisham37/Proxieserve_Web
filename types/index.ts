@@ -2,9 +2,12 @@ export type IconName =
   | "check"
   | "x"
   | "arrowRight"
+  | "arrowLeft"
   | "zap"
   | "shield"
   | "eye"
+  | "eyeOff"
+  | "user"
   | "messageCircle"
   | "barChart"
   | "globe"
@@ -25,7 +28,12 @@ export type IconName =
   | "externalLink"
   | "mail"
   | "mapPin"
-  | "whatsapp";
+  | "whatsapp"
+  | "fingerprint"
+  | "key"
+  | "copy"
+  | "download"
+  | "google";
 
 export interface FAQItem {
   q: string;
@@ -88,3 +96,10 @@ export interface FooterColumn {
   heading: string;
   links: { label: string; href: string }[];
 }
+
+// ── Auth flow types ──────────────────────────────────────────────────────────
+export type AuthMethod = "email" | "passkey" | "magic";
+export type ResetStep = "request" | "sent" | "newpw";
+export type TwoFAStep = "choose" | "codes" | "done";
+export type TwoFAMethod = "app" | "sms";
+export type PasswordStrength = 0 | 1 | 2 | 3 | 4;
