@@ -36,9 +36,8 @@ export function ResetPasswordForm() {
   useEffect(() => {
     import("gsap").then(({ gsap }) => {
       gsap.from(".auth-form-content > *", {
-        y: 16, opacity: 0, duration: 0.4, stagger: 0.07, ease: "power2.out",
+        y: 14, duration: 0.35, stagger: 0.06, ease: "power2.out", clearProps: "transform",
       });
-      gsap.from(".auth-panel-side", { x: 20, opacity: 0, duration: 0.5 });
     });
   }, []);
 

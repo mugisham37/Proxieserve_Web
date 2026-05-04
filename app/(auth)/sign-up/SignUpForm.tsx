@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -19,8 +19,6 @@ import type { AuthMethod } from "@/types";
 export function SignUpForm() {
   const router = useRouter();
   const [method, setMethod] = useState<AuthMethod>("email");
-  const formContentRef = useRef<HTMLDivElement>(null);
-
   const {
     register,
     handleSubmit,
@@ -35,20 +33,15 @@ export function SignUpForm() {
   const watchedPassword = watch("password", "");
 
   useEffect(() => {
-    let gsap: typeof import("gsap").gsap | undefined;
-    import("gsap").then(({ gsap: g }) => {
-      gsap = g;
-      if (formContentRef.current) {
-        g.from(".auth-form-content > *", {
-          y: 16,
-          opacity: 0,
-          duration: 0.4,
-          stagger: 0.07,
-          ease: "power2.out",
-        });
-      }
+    import("gsap").then(({ gsap }) => {
+      gsap.from(".auth-form-content > *", {
+        y: 14,
+        duration: 0.35,
+        stagger: 0.06,
+        ease: "power2.out",
+        clearProps: "transform",
+      });
     });
-    return () => { gsap?.killTweensOf(".auth-form-content > *"); };
   }, []);
 
   const onSubmit = async (_data: SignUpInput) => {

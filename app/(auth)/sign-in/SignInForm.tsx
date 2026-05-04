@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -22,7 +22,6 @@ export function SignInForm() {
   const router = useRouter();
   const [attempts, setAttempts] = useState(0);
   const [lockout, setLockout] = useState(0);
-  const formContentRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
@@ -37,13 +36,8 @@ export function SignInForm() {
   useEffect(() => {
     import("gsap").then(({ gsap }) => {
       gsap.from(".auth-form-content > *", {
-        y: 16,
-        opacity: 0,
-        duration: 0.4,
-        stagger: 0.07,
-        ease: "power2.out",
+        y: 14, duration: 0.35, stagger: 0.06, ease: "power2.out", clearProps: "transform",
       });
-      gsap.from(".auth-panel-side", { x: 20, opacity: 0, duration: 0.5 });
     });
   }, []);
 

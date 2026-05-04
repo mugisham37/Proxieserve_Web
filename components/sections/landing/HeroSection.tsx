@@ -37,12 +37,14 @@ export function HeroSection() {
       const { gsap } = await import("gsap");
       ctx = gsap.context(() => {
         gsap.from(".hero-content > *", {
-          y: 24, opacity: 0, duration: 0.6, stagger: 0.1,
+          y: 24, duration: 0.6, stagger: 0.1,
           ease: "cubic-bezier(0.2,0.8,0.2,1)", delay: 0.1,
+          clearProps: "transform",
         });
         gsap.from(".hero-layer", {
-          y: 60, x: 20, opacity: 0, duration: 0.8, stagger: 0.15,
+          y: 60, x: 20, duration: 0.8, stagger: 0.15,
           ease: "cubic-bezier(0.2,0.8,0.2,1)", delay: 0.3,
+          clearProps: "transform",
         });
       }, heroRef);
     };

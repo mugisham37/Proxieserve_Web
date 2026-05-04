@@ -29,11 +29,7 @@ export function MarketingNav() {
   return (
     <nav
       className="sticky top-0 z-[100] border-b border-[var(--border)]"
-      style={{
-        background: "color-mix(in srgb, var(--bg) 85%, transparent)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-      }}
+      style={{ background: "var(--bg)" }}
     >
       <div className="max-w-[1280px] mx-auto px-4 md:px-8 h-14 flex items-center gap-6">
         {/* Logo */}
