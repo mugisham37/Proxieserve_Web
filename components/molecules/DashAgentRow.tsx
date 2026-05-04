@@ -15,11 +15,8 @@ const healthLabel: Record<AgentRow["health"], string> = {
 export function DashAgentRow({ agent, isLast }: DashAgentRowProps) {
   return (
     <div
-      className="grid items-center gap-3 py-2.5 text-[13px]"
-      style={{
-        gridTemplateColumns: "200px 1fr 80px 100px 40px",
-        borderBottom: isLast ? "none" : "1px solid var(--border)",
-      }}
+      className="grid grid-cols-1 sm:grid-cols-[160px_1fr_60px_80px_36px] lg:grid-cols-[200px_1fr_80px_100px_40px] items-center gap-1 sm:gap-3 py-2.5 text-[13px]"
+      style={{ borderBottom: isLast ? "none" : "1px solid var(--border)" }}
     >
       <div className="flex items-center gap-2 font-medium" style={{ color: "var(--text)" }}>
         <span
@@ -35,14 +32,14 @@ export function DashAgentRow({ agent, isLast }: DashAgentRowProps) {
       </div>
 
       <span
-        className="truncate text-[13px] hidden sm:block"
+        className="truncate text-[13px] pl-9 sm:pl-0"
         style={{ color: "var(--text-muted)" }}
       >
         {agent.task}
       </span>
 
       <code
-        className="text-[12px] hidden sm:block"
+        className="text-[12px] pl-9 sm:pl-0 hidden sm:block"
         style={{
           color: "var(--text-subtle)",
           fontFamily: "var(--font-jetbrains-mono), monospace",
@@ -51,13 +48,13 @@ export function DashAgentRow({ agent, isLast }: DashAgentRowProps) {
         {agent.runtime}
       </code>
 
-      <span className="flex items-center gap-1.5 text-[12px] hidden sm:flex" style={{ color: "var(--text-muted)" }}>
+      <span className="hidden sm:flex items-center gap-1.5 text-[12px]" style={{ color: "var(--text-muted)" }}>
         <DashStatusDot variant={agent.health} pulse={agent.health === "running"} />
         {healthLabel[agent.health]}
       </span>
 
       <button
-        className="text-[11px] font-medium bg-transparent border-none cursor-pointer px-1.5 py-0.5 rounded"
+        className="text-[11px] font-medium bg-transparent border-none cursor-pointer px-1.5 py-0.5 rounded self-start sm:self-center"
         style={{ color: "var(--brand)", fontFamily: "inherit" }}
         onMouseEnter={(e) => (e.currentTarget.style.background = "var(--brand-soft)")}
         onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}

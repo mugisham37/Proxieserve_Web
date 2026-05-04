@@ -3,9 +3,9 @@ import { FOOTER_COLUMNS, COMPLIANCE_BADGES } from "@/lib/constants";
 
 export function MarketingFooter() {
   return (
-    <footer className="bg-[var(--surface)] border-t border-[var(--border)] px-4 md:px-8 pt-12 pb-6">
+    <footer className="bg-[var(--surface)] px-4 md:px-8 pt-12 pb-6">
       {/* Main grid: 2-col on mobile, 4-col on desktop */}
-      <div className="max-w-[1280px] mx-auto grid grid-cols-2 gap-8 mb-10 md:grid-cols-[2fr_1fr_1fr_1fr]">
+      <div className="max-w-[1280px] mx-auto grid grid-cols-2 gap-8 mb-10 border-t border-[var(--border)] pt-12 md:grid-cols-[2fr_1fr_1fr_1fr]">
         {/* Brand column */}
         <div className="col-span-2 md:col-span-1">
           <div className="flex items-center gap-2 text-[17px] font-bold text-[var(--text)] mb-3">

@@ -106,10 +106,10 @@ export function HeroSection() {
             Start free
           </Link>
           <Link
-            href="#demo"
+            href="/contact"
             className="inline-flex items-center gap-1.5 px-7 py-3.5 text-[15px] font-medium bg-transparent text-[var(--text)] border border-[var(--border)] rounded-[10px] no-underline hover:no-underline hover:bg-[var(--surface-2)] hover:border-[var(--text-subtle)] transition-all duration-150"
           >
-            Watch demo
+            Book demo
           </Link>
         </div>
         <div className="text-[13px] text-[var(--text-subtle)] flex flex-col gap-1">

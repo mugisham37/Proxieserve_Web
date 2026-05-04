@@ -3,13 +3,12 @@ import Link from "next/link";
 export function CTASection() {
   return (
     <section
-      className="border-t border-border"
       style={{
         background:
           "linear-gradient(135deg, var(--brand-soft) 0%, var(--bg) 60%)",
       }}
     >
-      <div className="max-w-[1280px] mx-auto px-4 py-14 text-center md:px-8 md:py-20">
+      <div className="max-w-[1280px] mx-auto px-4 py-14 text-center border-t border-border md:px-8 md:py-20">
         <h2 className="text-[clamp(26px,4vw,44px)] font-bold tracking-[-0.03em] text-text mb-4">
           Ready to let SolAI run your growth?
         </h2>

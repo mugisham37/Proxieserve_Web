@@ -21,8 +21,8 @@ export default function AfricaPage() {
       </div>
 
       {/* Stats row */}
-      <div className="bg-surface border-b border-border">
-        <div className="max-w-[1280px] mx-auto px-8 py-12 md:px-4">
+      <div className="bg-surface">
+        <div className="max-w-[1280px] mx-auto px-8 py-12 border-b border-border md:px-4">
           <div className="flex justify-center gap-12 flex-wrap">
             {AFRICA_STATS.map((s) => (
               <StatBlock key={s.label} value={s.value} label={s.label} />

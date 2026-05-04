@@ -15,28 +15,19 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { label: "Features", href: "/features" },
       { label: "Pricing", href: "/pricing" },
       { label: "For Africa", href: "/africa" },
-      { label: "Changelog", href: "#" },
-      { label: "Roadmap", href: "#" },
     ],
   },
   {
     heading: "Company",
     links: [
-      { label: "About", href: "#" },
-      { label: "Blog", href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "Press", href: "#" },
       { label: "Contact", href: "/contact" },
     ],
   },
   {
     heading: "Legal",
     links: [
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms of Service", href: "#" },
-      { label: "Data Processing", href: "#" },
-      { label: "Cookie Policy", href: "#" },
-      { label: "Compliance", href: "#" },
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
     ],
   },
 ];

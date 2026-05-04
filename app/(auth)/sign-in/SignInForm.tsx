@@ -62,7 +62,7 @@ export function SignInForm() {
       setAttempts(0);
       return;
     }
-    router.push("/sign-in"); // production: /dashboard
+    router.push("/dashboard");
   };
 
   const locked = lockout > 0;
@@ -143,7 +143,7 @@ export function SignInForm() {
       </div>
 
       <p className="text-[14px] text-[var(--text-muted)] text-center mt-5">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/sign-up" className="text-[var(--brand)] font-medium">
           Sign up free
         </Link>

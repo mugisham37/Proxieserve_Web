@@ -209,13 +209,19 @@ export function ContactFormSection() {
             <h4 className="text-[11px] font-semibold uppercase tracking-[0.06em] text-text-subtle mb-2">
               Legal
             </h4>
-            {["Privacy Policy", "Terms of Service", "GDPR Notice", "Rwanda DPL Statement", "POPIA Compliance", "Sub-Processor Register"].map((l) => (
+            {[
+              { label: "Privacy Policy", href: "/privacy" },
+              { label: "Terms of Service", href: "/terms" },
+              { label: "GDPR Notice", href: "/privacy" },
+              { label: "Rwanda DPL Statement", href: "/privacy" },
+              { label: "POPIA Compliance", href: "/privacy" },
+            ].map((l) => (
               <a
-                key={l}
-                href="#"
+                key={l.label}
+                href={l.href}
                 className="block text-[13px] text-text-muted mb-1.5 no-underline hover:text-brand hover:no-underline transition-colors"
               >
-                {l}
+                {l.label}
               </a>
             ))}
           </div>
