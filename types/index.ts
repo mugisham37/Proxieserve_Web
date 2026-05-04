@@ -33,7 +33,13 @@ export type IconName =
   | "key"
   | "copy"
   | "download"
-  | "google";
+  | "google"
+  | "rocket"
+  | "store"
+  | "upload"
+  | "info"
+  | "link2"
+  | "sliders";
 
 export interface FAQItem {
   q: string;
@@ -103,3 +109,9 @@ export type ResetStep = "request" | "sent" | "newpw";
 export type TwoFAStep = "choose" | "codes" | "done";
 export type TwoFAMethod = "app" | "sms";
 export type PasswordStrength = 0 | 1 | 2 | 3 | 4;
+
+// ── Onboarding flow types ────────────────────────────────────────────────────
+export type ConnectionKey = "shopify" | "woo" | "meta" | "google" | "whatsapp";
+export type ConnectionStatus = "connected" | "idle";
+export type RailKey = "stripe" | "momo" | "airtel" | "flutterwave";
+export type OnboardingStep = 0 | 1 | 2 | 3 | 4;

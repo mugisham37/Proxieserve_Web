@@ -36,7 +36,7 @@ export function VerifyEmailForm() {
     setSubmitting(true);
     await new Promise((r) => setTimeout(r, 800));
     setSubmitting(false);
-    router.push("/2fa-setup");
+    router.push("/onboarding");
   };
 
   const handleResend = () => {
