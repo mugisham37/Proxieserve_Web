@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { SPEND_RANGES, PLATFORMS } from "@/src/lib/constants";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { SPEND_RANGES, PLATFORMS } from "@/lib/constants";
 
 interface FormState {
   fullName: string;

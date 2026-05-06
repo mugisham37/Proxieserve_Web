@@ -1,4 +1,4 @@
-import type { PasswordStrength } from "@/src/types";
+import type { PasswordStrength } from "@/types";
 
 function calcStrength(pw: string): PasswordStrength {
   if (!pw) return 0;

@@ -1,5 +1,5 @@
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import type { CopilotMsg as CopilotMsgType } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import type { CopilotMsg as CopilotMsgType } from "@/types";
 
 interface CopilotMsgProps {
   message: CopilotMsgType;

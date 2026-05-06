@@ -1,5 +1,5 @@
-import { StatBlock } from "@/src/components/atoms/StatBlock";
-import { STATS } from "@/src/lib/constants";
+import { StatBlock } from "@/components/atoms/StatBlock";
+import { STATS } from "@/lib/constants";
 
 export function StatsSection() {
   return (

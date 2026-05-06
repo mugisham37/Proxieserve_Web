@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AuthLayout } from "@/src/components/layout/AuthLayout";
-import { OTPCodeGrid } from "@/src/components/molecules/OTPCodeGrid";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { VerifyEmailPanel } from "@/src/components/sections/auth/VerifyEmailPanel";
+import { AuthLayout } from "@/components/layout/AuthLayout";
+import { OTPCodeGrid } from "@/components/molecules/OTPCodeGrid";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { VerifyEmailPanel } from "@/components/sections/auth/VerifyEmailPanel";
 
 const RESEND_SECONDS = 60;
 

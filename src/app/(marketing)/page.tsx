@@ -1,12 +1,12 @@
-import { HeroSection } from "@/src/components/sections/landing/HeroSection";
-import { LogoStripSection } from "@/src/components/sections/landing/LogoStripSection";
-import { HowItWorksSection } from "@/src/components/sections/landing/HowItWorksSection";
-import { WhyShowcaseSection } from "@/src/components/sections/landing/WhyShowcaseSection";
-import { ComparisonSection } from "@/src/components/sections/landing/ComparisonSection";
-import { StatsSection } from "@/src/components/sections/landing/StatsSection";
-import { TestimonialsSection } from "@/src/components/sections/landing/TestimonialsSection";
-import { FAQSection } from "@/src/components/sections/landing/FAQSection";
-import { CTASection } from "@/src/components/sections/landing/CTASection";
+import { HeroSection } from "@/components/sections/landing/HeroSection";
+import { LogoStripSection } from "@/components/sections/landing/LogoStripSection";
+import { HowItWorksSection } from "@/components/sections/landing/HowItWorksSection";
+import { WhyShowcaseSection } from "@/components/sections/landing/WhyShowcaseSection";
+import { ComparisonSection } from "@/components/sections/landing/ComparisonSection";
+import { StatsSection } from "@/components/sections/landing/StatsSection";
+import { TestimonialsSection } from "@/components/sections/landing/TestimonialsSection";
+import { FAQSection } from "@/components/sections/landing/FAQSection";
+import { CTASection } from "@/components/sections/landing/CTASection";
 
 export default function LandingPage() {
   return (

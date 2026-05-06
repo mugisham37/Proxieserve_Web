@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { SectionLabel } from "@/src/components/atoms/SectionLabel";
-import { PricingGridSection } from "@/src/components/sections/pricing/PricingGridSection";
-import { CurrencySelect } from "@/src/components/molecules/CurrencySelect";
-import { CTASection } from "@/src/components/sections/landing/CTASection";
-import { cn } from "@/src/lib/utils";
-import type { CurrencyCode, PlanType } from "@/src/types";
+import { SectionLabel } from "@/components/atoms/SectionLabel";
+import { PricingGridSection } from "@/components/sections/pricing/PricingGridSection";
+import { CurrencySelect } from "@/components/molecules/CurrencySelect";
+import { CTASection } from "@/components/sections/landing/CTASection";
+import { cn } from "@/lib/utils";
+import type { CurrencyCode, PlanType } from "@/types";
 
 export default function PricingPage() {
   const [planType, setPlanType] = useState<PlanType>("subscription");

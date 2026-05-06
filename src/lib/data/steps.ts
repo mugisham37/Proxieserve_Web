@@ -1,4 +1,4 @@
-import type { StepItem } from "@/src/types";
+import type { StepItem } from "@/types";
 
 export const STEPS: StepItem[] = [
   {

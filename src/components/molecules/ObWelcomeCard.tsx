@@ -1,5 +1,5 @@
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import type { IconName } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import type { IconName } from "@/types";
 
 interface ObWelcomeCardProps {
   icon: IconName;

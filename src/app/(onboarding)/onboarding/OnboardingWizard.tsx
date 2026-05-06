@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { OnboardingLayout } from "@/src/components/layout/OnboardingLayout";
-import { ObWelcomeStep } from "@/src/components/sections/onboarding/ObWelcomeStep";
-import { ObConnectionsStep } from "@/src/components/sections/onboarding/ObConnectionsStep";
-import { ObPaymentsStep } from "@/src/components/sections/onboarding/ObPaymentsStep";
-import { ObProductBudgetStep } from "@/src/components/sections/onboarding/ObProductBudgetStep";
-import { ObReviewLaunchStep, LaunchSuccess } from "@/src/components/sections/onboarding/ObReviewLaunchStep";
-import type { ConnectionKey, ConnectionStatus, RailKey } from "@/src/types";
-import type { ProductBudgetInput } from "@/src/lib/onboarding/schemas";
+import { OnboardingLayout } from "@/components/layout/OnboardingLayout";
+import { ObWelcomeStep } from "@/components/sections/onboarding/ObWelcomeStep";
+import { ObConnectionsStep } from "@/components/sections/onboarding/ObConnectionsStep";
+import { ObPaymentsStep } from "@/components/sections/onboarding/ObPaymentsStep";
+import { ObProductBudgetStep } from "@/components/sections/onboarding/ObProductBudgetStep";
+import { ObReviewLaunchStep, LaunchSuccess } from "@/components/sections/onboarding/ObReviewLaunchStep";
+import type { ConnectionKey, ConnectionStatus, RailKey } from "@/types";
+import type { ProductBudgetInput } from "@/lib/onboarding/schemas";
 
 interface WizardState {
   connections: Record<ConnectionKey, ConnectionStatus>;

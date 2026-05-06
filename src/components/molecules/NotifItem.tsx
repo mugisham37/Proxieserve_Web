@@ -1,4 +1,4 @@
-import type { DashNotification, EventType } from "@/src/types";
+import type { DashNotification, EventType } from "@/types";
 
 const typeColor: Record<EventType, string> = {
   success: "var(--success)",

@@ -1,6 +1,6 @@
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { ObStatusDot } from "@/src/components/atoms/ObStatusDot";
-import type { IconName } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { ObStatusDot } from "@/components/atoms/ObStatusDot";
+import type { IconName } from "@/types";
 
 interface ObConnectItemProps {
   icon: IconName;

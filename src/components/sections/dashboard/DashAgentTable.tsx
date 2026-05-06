@@ -1,6 +1,6 @@
-import { DashSectionTitle } from "@/src/components/atoms/DashSectionTitle";
-import { DashAgentRow } from "@/src/components/molecules/DashAgentRow";
-import { DASH_AGENTS } from "@/src/lib/data/dashboard";
+import { DashSectionTitle } from "@/components/atoms/DashSectionTitle";
+import { DashAgentRow } from "@/components/molecules/DashAgentRow";
+import { DASH_AGENTS } from "@/lib/data/dashboard";
 
 export function DashAgentTable() {
   return (

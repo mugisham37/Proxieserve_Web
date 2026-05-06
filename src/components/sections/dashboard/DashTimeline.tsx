@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { DashSectionTitle } from "@/src/components/atoms/DashSectionTitle";
-import { DashTimelineItem } from "@/src/components/molecules/DashTimelineItem";
-import { DASH_TIMELINE } from "@/src/lib/data/dashboard";
+import { DashSectionTitle } from "@/components/atoms/DashSectionTitle";
+import { DashTimelineItem } from "@/components/molecules/DashTimelineItem";
+import { DASH_TIMELINE } from "@/lib/data/dashboard";
 
 export function DashTimeline() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);

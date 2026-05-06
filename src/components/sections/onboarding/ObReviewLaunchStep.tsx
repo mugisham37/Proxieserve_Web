@@ -1,10 +1,10 @@
 "use client";
 
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { ObStatusDot } from "@/src/components/atoms/ObStatusDot";
-import { ObReviewCard } from "@/src/components/molecules/ObReviewCard";
-import { AuthConsentRow } from "@/src/components/molecules/AuthConsentRow";
-import type { ConnectionKey, ConnectionStatus, RailKey } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { ObStatusDot } from "@/components/atoms/ObStatusDot";
+import { ObReviewCard } from "@/components/molecules/ObReviewCard";
+import { AuthConsentRow } from "@/components/molecules/AuthConsentRow";
+import type { ConnectionKey, ConnectionStatus, RailKey } from "@/types";
 
 interface ObReviewLaunchStepProps {
   connections: Record<ConnectionKey, ConnectionStatus>;

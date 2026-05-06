@@ -1,4 +1,4 @@
-import type { NavLink, FooterColumn } from "@/src/types";
+import type { NavLink, FooterColumn } from "@/types";
 
 export const NAV_LINKS: NavLink[] = [
   { href: "/", label: "Home" },

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { DashKpiGrid } from "@/src/components/sections/dashboard/DashKpiGrid";
-import { DashTimeline } from "@/src/components/sections/dashboard/DashTimeline";
-import { DashAttention } from "@/src/components/sections/dashboard/DashAttention";
-import { DashAgentTable } from "@/src/components/sections/dashboard/DashAgentTable";
+import { DashKpiGrid } from "@/components/sections/dashboard/DashKpiGrid";
+import { DashTimeline } from "@/components/sections/dashboard/DashTimeline";
+import { DashAttention } from "@/components/sections/dashboard/DashAttention";
+import { DashAgentTable } from "@/components/sections/dashboard/DashAgentTable";
 
 export function DashboardHome() {
   const [kpiWhyOpen, setKpiWhyOpen] = useState<number | null>(null);

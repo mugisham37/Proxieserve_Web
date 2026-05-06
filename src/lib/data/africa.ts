@@ -1,4 +1,4 @@
-import type { AfricaCardItem } from "@/src/types";
+import type { AfricaCardItem } from "@/types";
 
 export const AFRICA_CARDS: AfricaCardItem[] = [
   {

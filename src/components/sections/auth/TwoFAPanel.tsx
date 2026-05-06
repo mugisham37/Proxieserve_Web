@@ -1,6 +1,6 @@
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { AuthTrustBadge } from "@/src/components/atoms/AuthTrustBadge";
-import { TWOFA_TRUST_BADGES } from "@/src/lib/auth/data";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { AuthTrustBadge } from "@/components/atoms/AuthTrustBadge";
+import { TWOFA_TRUST_BADGES } from "@/lib/auth/data";
 
 export function TwoFAPanel() {
   return (

@@ -1,4 +1,4 @@
-import type { IconName } from "@/src/types";
+import type { IconName } from "@/types";
 
 interface MkIconProps {
   name: IconName;

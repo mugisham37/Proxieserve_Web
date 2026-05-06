@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import type { PricingTier, CurrencyCode } from "@/src/types";
-import { formatPrice } from "@/src/lib/data/pricing";
-import { cn } from "@/src/lib/utils";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import type { PricingTier, CurrencyCode } from "@/types";
+import { formatPrice } from "@/lib/data/pricing";
+import { cn } from "@/lib/utils";
 
 interface PriceCardProps {
   tier: PricingTier;

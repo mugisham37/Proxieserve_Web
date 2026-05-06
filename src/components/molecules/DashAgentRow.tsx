@@ -1,5 +1,5 @@
-import { DashStatusDot } from "@/src/components/atoms/DashStatusDot";
-import type { AgentRow } from "@/src/types";
+import { DashStatusDot } from "@/components/atoms/DashStatusDot";
+import type { AgentRow } from "@/types";
 
 interface DashAgentRowProps {
   agent: AgentRow;

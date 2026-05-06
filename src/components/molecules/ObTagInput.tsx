@@ -1,6 +1,6 @@
 "use client";
 
-import { MkIcon } from "@/src/components/atoms/MkIcon";
+import { MkIcon } from "@/components/atoms/MkIcon";
 
 interface ObTagInputProps {
   tags: string[];

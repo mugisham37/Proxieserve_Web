@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import { SectionLabel } from "@/src/components/atoms/SectionLabel";
-import { TestimonialCard } from "@/src/components/molecules/TestimonialCard";
-import { useGSAPScrollReveal } from "@/src/hooks/useGSAPScrollReveal";
-import { TESTIMONIALS } from "@/src/lib/data/testimonials";
+import { SectionLabel } from "@/components/atoms/SectionLabel";
+import { TestimonialCard } from "@/components/molecules/TestimonialCard";
+import { useGSAPScrollReveal } from "@/hooks/useGSAPScrollReveal";
+import { TESTIMONIALS } from "@/lib/data/testimonials";
 
 export function TestimonialsSection() {
   const ref = useRef<HTMLElement>(null);

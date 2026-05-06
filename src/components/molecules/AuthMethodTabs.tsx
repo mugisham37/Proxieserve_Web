@@ -1,6 +1,6 @@
 "use client";
 
-import type { AuthMethod } from "@/src/types";
+import type { AuthMethod } from "@/types";
 
 const TABS: { id: AuthMethod; label: string }[] = [
   { id: "email", label: "Email" },

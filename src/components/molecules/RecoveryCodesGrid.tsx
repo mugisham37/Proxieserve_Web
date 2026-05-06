@@ -1,7 +1,7 @@
 "use client";
 
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { RecoveryCode } from "@/src/components/atoms/RecoveryCode";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { RecoveryCode } from "@/components/atoms/RecoveryCode";
 
 interface RecoveryCodesGridProps {
   codes: readonly string[];

@@ -1,6 +1,6 @@
-import { AuthLogo } from "@/src/components/atoms/AuthLogo";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { ObStepper } from "@/src/components/molecules/ObStepper";
+import { AuthLogo } from "@/components/atoms/AuthLogo";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { ObStepper } from "@/components/molecules/ObStepper";
 
 const ONBOARDING_STEPS = ["Welcome", "Connections", "Payments", "Product & Budget", "Review & Launch"];
 

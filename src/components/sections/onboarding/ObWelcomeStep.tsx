@@ -1,5 +1,5 @@
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { ObWelcomeCard } from "@/src/components/molecules/ObWelcomeCard";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { ObWelcomeCard } from "@/components/molecules/ObWelcomeCard";
 
 const WELCOME_CARDS = [
   {

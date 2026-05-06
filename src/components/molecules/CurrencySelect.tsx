@@ -6,8 +6,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/src/components/ui/select";
-import type { CurrencyCode } from "@/src/types";
+} from "@/components/ui/select";
+import type { CurrencyCode } from "@/types";
 
 const CURRENCIES: CurrencyCode[] = ["US$", "EUR", "RWF", "KES", "NGN", "ZAR"];
 

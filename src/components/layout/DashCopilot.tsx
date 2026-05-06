@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { CopilotMsg } from "@/src/components/molecules/CopilotMsg";
-import { useDashboardUI } from "@/src/hooks/useDashboardUI";
-import { DASH_COPILOT_MESSAGES } from "@/src/lib/data/dashboard";
-import type { CopilotMsg as CopilotMsgType } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { CopilotMsg } from "@/components/molecules/CopilotMsg";
+import { useDashboardUI } from "@/hooks/useDashboardUI";
+import { DASH_COPILOT_MESSAGES } from "@/lib/data/dashboard";
+import type { CopilotMsg as CopilotMsgType } from "@/types";
 
 export function DashCopilot() {
   const { copilotOpen, setCopilotOpen } = useDashboardUI();

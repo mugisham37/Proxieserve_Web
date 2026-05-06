@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { NavBadge } from "@/src/components/atoms/NavBadge";
-import { useDashboardUI } from "@/src/hooks/useDashboardUI";
-import { DASH_NAV_ITEMS } from "@/src/lib/data/dashboard";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { NavBadge } from "@/components/atoms/NavBadge";
+import { useDashboardUI } from "@/hooks/useDashboardUI";
+import { DASH_NAV_ITEMS } from "@/lib/data/dashboard";
 
 export function DashTopbar() {
   const { setMobileMenuOpen, setNotifOpen } = useDashboardUI();

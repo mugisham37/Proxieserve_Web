@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import type { NotifTab } from "@/src/types";
+import type { NotifTab } from "@/types";
 
 interface DashboardUIState {
   sidebarCollapsed: boolean;

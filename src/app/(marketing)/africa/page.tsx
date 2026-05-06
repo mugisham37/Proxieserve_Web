@@ -1,7 +1,7 @@
-import { AfricaGridSection } from "@/src/components/sections/africa/AfricaGridSection";
-import { StatBlock } from "@/src/components/atoms/StatBlock";
-import { CTASection } from "@/src/components/sections/landing/CTASection";
-import { AFRICA_STATS } from "@/src/lib/data/africa";
+import { AfricaGridSection } from "@/components/sections/africa/AfricaGridSection";
+import { StatBlock } from "@/components/atoms/StatBlock";
+import { CTASection } from "@/components/sections/landing/CTASection";
+import { AFRICA_STATS } from "@/lib/data/africa";
 
 export default function AfricaPage() {
   return (

@@ -1,10 +1,10 @@
 "use client";
 
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { NotifItem } from "@/src/components/molecules/NotifItem";
-import { useDashboardUI } from "@/src/hooks/useDashboardUI";
-import { DASH_NOTIFICATIONS } from "@/src/lib/data/dashboard";
-import type { NotifTab } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { NotifItem } from "@/components/molecules/NotifItem";
+import { useDashboardUI } from "@/hooks/useDashboardUI";
+import { DASH_NOTIFICATIONS } from "@/lib/data/dashboard";
+import type { NotifTab } from "@/types";
 
 const TABS: { id: NotifTab; label: string }[] = [
   { id: "all", label: "All" },

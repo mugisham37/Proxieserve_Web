@@ -1,6 +1,6 @@
-import { DashSectionTitle } from "@/src/components/atoms/DashSectionTitle";
-import { DashAttentionCard } from "@/src/components/molecules/DashAttentionCard";
-import { DASH_ATTENTION } from "@/src/lib/data/dashboard";
+import { DashSectionTitle } from "@/components/atoms/DashSectionTitle";
+import { DashAttentionCard } from "@/components/molecules/DashAttentionCard";
+import { DASH_ATTENTION } from "@/lib/data/dashboard";
 
 export function DashAttention() {
   return (

@@ -1,4 +1,4 @@
-import type { TestimonialItem } from "@/src/types";
+import type { TestimonialItem } from "@/types";
 
 const AVATAR_COLORS = ["#5B7CFF", "#34D399", "#FFB547", "#F97066", "#7AA7FF", "#34A853"];
 

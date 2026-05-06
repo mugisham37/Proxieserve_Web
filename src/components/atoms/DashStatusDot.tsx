@@ -1,4 +1,4 @@
-import type { HealthStatus } from "@/src/types";
+import type { HealthStatus } from "@/types";
 
 const colorMap: Record<HealthStatus, string> = {
   running: "var(--success)",

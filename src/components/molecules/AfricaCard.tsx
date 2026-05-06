@@ -1,7 +1,7 @@
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { RailBadge } from "@/src/components/atoms/RailBadge";
-import { LangChip } from "@/src/components/atoms/LangChip";
-import type { AfricaCardItem } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { RailBadge } from "@/components/atoms/RailBadge";
+import { LangChip } from "@/components/atoms/LangChip";
+import type { AfricaCardItem } from "@/types";
 
 interface AfricaCardProps {
   item: AfricaCardItem;

@@ -1,5 +1,5 @@
-import { SectionLabel } from "@/src/components/atoms/SectionLabel";
-import { WhyDemoCard } from "@/src/components/molecules/WhyDemoCard";
+import { SectionLabel } from "@/components/atoms/SectionLabel";
+import { WhyDemoCard } from "@/components/molecules/WhyDemoCard";
 
 export function WhyShowcaseSection() {
   return (

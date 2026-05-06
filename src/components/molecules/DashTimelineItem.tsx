@@ -1,4 +1,4 @@
-import type { TimelineEvent, EventType } from "@/src/types";
+import type { TimelineEvent, EventType } from "@/types";
 
 const typeColor: Record<EventType, string> = {
   success: "var(--success)",

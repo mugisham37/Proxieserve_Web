@@ -1,6 +1,6 @@
-import { AuthPanelTestimonial } from "@/src/components/molecules/AuthPanelTestimonial";
-import { AuthPanelStat } from "@/src/components/molecules/AuthPanelStat";
-import { SIGNIN_TESTIMONIAL, SIGNIN_PANEL_STATS } from "@/src/lib/auth/data";
+import { AuthPanelTestimonial } from "@/components/molecules/AuthPanelTestimonial";
+import { AuthPanelStat } from "@/components/molecules/AuthPanelStat";
+import { SIGNIN_TESTIMONIAL, SIGNIN_PANEL_STATS } from "@/lib/auth/data";
 
 export function SignInPanel() {
   return (

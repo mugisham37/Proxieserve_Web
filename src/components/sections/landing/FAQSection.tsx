@@ -1,6 +1,6 @@
-import { SectionLabel } from "@/src/components/atoms/SectionLabel";
-import { FAQAccordion } from "@/src/components/molecules/FAQAccordion";
-import { FAQ_ITEMS } from "@/src/lib/data/faq";
+import { SectionLabel } from "@/components/atoms/SectionLabel";
+import { FAQAccordion } from "@/components/molecules/FAQAccordion";
+import { FAQ_ITEMS } from "@/lib/data/faq";
 
 export function FAQSection() {
   return (

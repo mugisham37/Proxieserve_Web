@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { SectionLabel } from "@/src/components/atoms/SectionLabel";
+import { SectionLabel } from "@/components/atoms/SectionLabel";
 
 const LAYERS = [
   {

@@ -1,8 +1,8 @@
 "use client";
 
-import { ObConnectItem } from "@/src/components/molecules/ObConnectItem";
-import { ObInfoBanner } from "@/src/components/molecules/ObInfoBanner";
-import type { ConnectionKey, ConnectionStatus, IconName } from "@/src/types";
+import { ObConnectItem } from "@/components/molecules/ObConnectItem";
+import { ObInfoBanner } from "@/components/molecules/ObInfoBanner";
+import type { ConnectionKey, ConnectionStatus, IconName } from "@/types";
 
 interface ConnectionItem {
   key: ConnectionKey;

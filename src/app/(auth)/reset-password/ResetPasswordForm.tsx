@@ -5,18 +5,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AuthLayout } from "@/src/components/layout/AuthLayout";
-import { AuthFieldInput } from "@/src/components/molecules/AuthFieldInput";
-import { PasswordFieldInput } from "@/src/components/molecules/PasswordFieldInput";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { ResetPasswordPanel } from "@/src/components/sections/auth/ResetPasswordPanel";
+import { AuthLayout } from "@/components/layout/AuthLayout";
+import { AuthFieldInput } from "@/components/molecules/AuthFieldInput";
+import { PasswordFieldInput } from "@/components/molecules/PasswordFieldInput";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { ResetPasswordPanel } from "@/components/sections/auth/ResetPasswordPanel";
 import {
   resetRequestSchema,
   setNewPasswordSchema,
   type ResetRequestInput,
   type SetNewPasswordInput,
-} from "@/src/lib/auth/schemas";
-import type { ResetStep } from "@/src/types";
+} from "@/lib/auth/schemas";
+import type { ResetStep } from "@/types";
 
 export function ResetPasswordForm() {
   const router = useRouter();

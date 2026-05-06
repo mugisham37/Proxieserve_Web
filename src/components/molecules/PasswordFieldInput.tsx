@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { PasswordStrengthBar } from "@/src/components/atoms/PasswordStrengthBar";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { PasswordStrengthBar } from "@/components/atoms/PasswordStrengthBar";
 
 interface PasswordFieldInputProps {
   id: string;

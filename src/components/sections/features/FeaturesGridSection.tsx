@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { FeatureCard } from "@/src/components/molecules/FeatureCard";
-import { useGSAPScrollReveal } from "@/src/hooks/useGSAPScrollReveal";
-import { FEATURES } from "@/src/lib/data/features";
+import { FeatureCard } from "@/components/molecules/FeatureCard";
+import { useGSAPScrollReveal } from "@/hooks/useGSAPScrollReveal";
+import { FEATURES } from "@/lib/data/features";
 
 export function FeaturesGridSection() {
   const ref = useRef<HTMLDivElement>(null);

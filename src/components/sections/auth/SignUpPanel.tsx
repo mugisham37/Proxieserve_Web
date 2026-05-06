@@ -1,6 +1,6 @@
-import { AuthPanelStep } from "@/src/components/molecules/AuthPanelStep";
-import { AuthTrustBadge } from "@/src/components/atoms/AuthTrustBadge";
-import { SIGNUP_PANEL_STEPS, SIGNUP_TRUST_BADGES } from "@/src/lib/auth/data";
+import { AuthPanelStep } from "@/components/molecules/AuthPanelStep";
+import { AuthTrustBadge } from "@/components/atoms/AuthTrustBadge";
+import { SIGNUP_PANEL_STEPS, SIGNUP_TRUST_BADGES } from "@/lib/auth/data";
 
 export function SignUpPanel() {
   return (

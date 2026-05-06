@@ -1,7 +1,7 @@
-import { DashKpiBadge } from "@/src/components/atoms/DashKpiBadge";
-import { DashSparkline } from "@/src/components/molecules/DashSparkline";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import type { KpiCard } from "@/src/types";
+import { DashKpiBadge } from "@/components/atoms/DashKpiBadge";
+import { DashSparkline } from "@/components/molecules/DashSparkline";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import type { KpiCard } from "@/types";
 
 interface DashKpiCardProps {
   data: KpiCard;

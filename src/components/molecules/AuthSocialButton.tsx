@@ -1,7 +1,7 @@
 "use client";
 
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import type { IconName } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import type { IconName } from "@/types";
 
 interface AuthSocialButtonProps {
   icon: IconName;

@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { useDashboardUI } from "@/src/hooks/useDashboardUI";
-import { DASH_NAV_ITEMS } from "@/src/lib/data/dashboard";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { useDashboardUI } from "@/hooks/useDashboardUI";
+import { DASH_NAV_ITEMS } from "@/lib/data/dashboard";
 
 export function DashSidebar() {
   const { sidebarCollapsed, setSidebarCollapsed, mobileMenuOpen } = useDashboardUI();

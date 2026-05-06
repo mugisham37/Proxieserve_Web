@@ -1,7 +1,7 @@
-import { PriceCard } from "@/src/components/molecules/PriceCard";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { PRICING_TIERS, CURRENCY_RATES, formatPrice } from "@/src/lib/data/pricing";
-import type { CurrencyCode, PlanType } from "@/src/types";
+import { PriceCard } from "@/components/molecules/PriceCard";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { PRICING_TIERS, CURRENCY_RATES, formatPrice } from "@/lib/data/pricing";
+import type { CurrencyCode, PlanType } from "@/types";
 
 interface PricingGridSectionProps {
   planType: PlanType;

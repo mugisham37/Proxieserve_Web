@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
+import { MkIcon } from "@/components/atoms/MkIcon";
 
 export function WhyDemoCard() {
   const [open, setOpen] = useState(false);

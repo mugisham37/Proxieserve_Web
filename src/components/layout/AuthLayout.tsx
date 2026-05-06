@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AuthLogo } from "@/src/components/atoms/AuthLogo";
+import { AuthLogo } from "@/components/atoms/AuthLogo";
 
 interface AuthLayoutProps {
   children: React.ReactNode;

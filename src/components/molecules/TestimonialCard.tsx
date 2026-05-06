@@ -1,4 +1,4 @@
-import type { TestimonialItem } from "@/src/types";
+import type { TestimonialItem } from "@/types";
 
 interface TestimonialCardProps {
   item: TestimonialItem;

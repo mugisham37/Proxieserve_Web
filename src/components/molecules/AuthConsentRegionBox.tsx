@@ -1,4 +1,4 @@
-import { MkIcon } from "@/src/components/atoms/MkIcon";
+import { MkIcon } from "@/components/atoms/MkIcon";
 
 export function AuthConsentRegionBox() {
   return (

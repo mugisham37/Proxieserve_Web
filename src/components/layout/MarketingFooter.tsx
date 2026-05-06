@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FOOTER_COLUMNS, COMPLIANCE_BADGES } from "@/src/lib/constants";
+import { FOOTER_COLUMNS, COMPLIANCE_BADGES } from "@/lib/constants";
 
 export function MarketingFooter() {
   return (

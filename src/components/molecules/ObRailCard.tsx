@@ -1,5 +1,5 @@
-import { ObSwitch } from "@/src/components/atoms/ObSwitch";
-import { ObStatusDot } from "@/src/components/atoms/ObStatusDot";
+import { ObSwitch } from "@/components/atoms/ObSwitch";
+import { ObStatusDot } from "@/components/atoms/ObStatusDot";
 
 interface ObRailCardProps {
   label: string;

@@ -1,5 +1,5 @@
-import { SectionLabel } from "@/src/components/atoms/SectionLabel";
-import { LOGO_ITEMS } from "@/src/lib/constants";
+import { SectionLabel } from "@/components/atoms/SectionLabel";
+import { LOGO_ITEMS } from "@/lib/constants";
 
 export function LogoStripSection() {
   return (

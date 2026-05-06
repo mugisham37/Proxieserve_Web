@@ -5,16 +5,16 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AuthLayout } from "@/src/components/layout/AuthLayout";
-import { AuthMethodTabs } from "@/src/components/molecules/AuthMethodTabs";
-import { AuthFieldInput } from "@/src/components/molecules/AuthFieldInput";
-import { PasswordFieldInput } from "@/src/components/molecules/PasswordFieldInput";
-import { AuthConsentRow } from "@/src/components/molecules/AuthConsentRow";
-import { AuthConsentRegionBox } from "@/src/components/molecules/AuthConsentRegionBox";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { SignUpPanel } from "@/src/components/sections/auth/SignUpPanel";
-import { signUpSchema, type SignUpInput } from "@/src/lib/auth/schemas";
-import type { AuthMethod } from "@/src/types";
+import { AuthLayout } from "@/components/layout/AuthLayout";
+import { AuthMethodTabs } from "@/components/molecules/AuthMethodTabs";
+import { AuthFieldInput } from "@/components/molecules/AuthFieldInput";
+import { PasswordFieldInput } from "@/components/molecules/PasswordFieldInput";
+import { AuthConsentRow } from "@/components/molecules/AuthConsentRow";
+import { AuthConsentRegionBox } from "@/components/molecules/AuthConsentRegionBox";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { SignUpPanel } from "@/components/sections/auth/SignUpPanel";
+import { signUpSchema, type SignUpInput } from "@/lib/auth/schemas";
+import type { AuthMethod } from "@/types";
 
 export function SignUpForm() {
   const router = useRouter();

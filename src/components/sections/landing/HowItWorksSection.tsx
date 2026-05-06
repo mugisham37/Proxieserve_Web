@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import { SectionLabel } from "@/src/components/atoms/SectionLabel";
-import { StepCard } from "@/src/components/molecules/StepCard";
-import { useGSAPScrollReveal } from "@/src/hooks/useGSAPScrollReveal";
-import { STEPS } from "@/src/lib/data/steps";
+import { SectionLabel } from "@/components/atoms/SectionLabel";
+import { StepCard } from "@/components/molecules/StepCard";
+import { useGSAPScrollReveal } from "@/hooks/useGSAPScrollReveal";
+import { STEPS } from "@/lib/data/steps";
 
 export function HowItWorksSection() {
   const ref = useRef<HTMLElement>(null);

@@ -3,15 +3,15 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AuthLayout } from "@/src/components/layout/AuthLayout";
-import { TwoFAOptionCard } from "@/src/components/molecules/TwoFAOptionCard";
-import { RecoveryCodesGrid } from "@/src/components/molecules/RecoveryCodesGrid";
-import { AuthConsentRow } from "@/src/components/molecules/AuthConsentRow";
-import { AuthFieldInput } from "@/src/components/molecules/AuthFieldInput";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { TwoFAPanel } from "@/src/components/sections/auth/TwoFAPanel";
-import { RECOVERY_CODES } from "@/src/lib/auth/data";
-import type { TwoFAStep, TwoFAMethod } from "@/src/types";
+import { AuthLayout } from "@/components/layout/AuthLayout";
+import { TwoFAOptionCard } from "@/components/molecules/TwoFAOptionCard";
+import { RecoveryCodesGrid } from "@/components/molecules/RecoveryCodesGrid";
+import { AuthConsentRow } from "@/components/molecules/AuthConsentRow";
+import { AuthFieldInput } from "@/components/molecules/AuthFieldInput";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { TwoFAPanel } from "@/components/sections/auth/TwoFAPanel";
+import { RECOVERY_CODES } from "@/lib/auth/data";
+import type { TwoFAStep, TwoFAMethod } from "@/types";
 import { useForm } from "react-hook-form";
 
 export function TwoFASetupForm() {

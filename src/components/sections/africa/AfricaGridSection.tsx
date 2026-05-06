@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { AfricaCard } from "@/src/components/molecules/AfricaCard";
-import { useGSAPScrollReveal } from "@/src/hooks/useGSAPScrollReveal";
-import { AFRICA_CARDS } from "@/src/lib/data/africa";
+import { AfricaCard } from "@/components/molecules/AfricaCard";
+import { useGSAPScrollReveal } from "@/hooks/useGSAPScrollReveal";
+import { AFRICA_CARDS } from "@/lib/data/africa";
 
 export function AfricaGridSection() {
   const ref = useRef<HTMLDivElement>(null);

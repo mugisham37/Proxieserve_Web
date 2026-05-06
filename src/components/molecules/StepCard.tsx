@@ -1,5 +1,5 @@
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import type { StepItem } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import type { StepItem } from "@/types";
 
 interface StepCardProps {
   item: StepItem;

@@ -1,5 +1,5 @@
-import { DashboardHome } from "@/src/components/sections/dashboard/DashboardHome";
-import { DashboardEmpty } from "@/src/components/sections/dashboard/DashboardEmpty";
+import { DashboardHome } from "@/components/sections/dashboard/DashboardHome";
+import { DashboardEmpty } from "@/components/sections/dashboard/DashboardEmpty";
 
 const HAS_DATA = true;
 

@@ -1,8 +1,8 @@
 "use client";
 
-import { ObRailCard } from "@/src/components/molecules/ObRailCard";
-import { ObInfoBanner } from "@/src/components/molecules/ObInfoBanner";
-import type { RailKey } from "@/src/types";
+import { ObRailCard } from "@/components/molecules/ObRailCard";
+import { ObInfoBanner } from "@/components/molecules/ObInfoBanner";
+import type { RailKey } from "@/types";
 
 interface RailConfig {
   key: RailKey;

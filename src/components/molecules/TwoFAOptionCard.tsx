@@ -1,7 +1,7 @@
 "use client";
 
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import type { TwoFAMethod, IconName } from "@/src/types";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import type { TwoFAMethod, IconName } from "@/types";
 
 const METHOD_CONFIG: Record<TwoFAMethod, { icon: IconName; title: string; desc: string }> = {
   app: {

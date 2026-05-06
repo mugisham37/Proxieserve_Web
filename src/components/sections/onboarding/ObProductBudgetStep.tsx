@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MkIcon } from "@/src/components/atoms/MkIcon";
-import { ObBudgetCard } from "@/src/components/molecules/ObBudgetCard";
-import { ObTagInput } from "@/src/components/molecules/ObTagInput";
-import { productBudgetSchema, type ProductBudgetInput } from "@/src/lib/onboarding/schemas";
+import { MkIcon } from "@/components/atoms/MkIcon";
+import { ObBudgetCard } from "@/components/molecules/ObBudgetCard";
+import { ObTagInput } from "@/components/molecules/ObTagInput";
+import { productBudgetSchema, type ProductBudgetInput } from "@/lib/onboarding/schemas";
 
 const CURRENCY_RATES: Record<string, number> = {
   "US$": 1,

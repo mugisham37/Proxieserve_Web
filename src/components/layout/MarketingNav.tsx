@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { NAV_LINKS } from "@/src/lib/constants";
-import { cn } from "@/src/lib/utils";
+import { NAV_LINKS } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 function SolLogo() {
   return (

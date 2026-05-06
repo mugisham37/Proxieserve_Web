@@ -1,1 +1,1 @@
-export { useDashboardUI } from "@/src/lib/dashboard/context";
+export { useDashboardUI } from "@/lib/dashboard/context";

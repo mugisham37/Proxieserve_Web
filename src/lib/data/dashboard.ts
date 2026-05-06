@@ -6,7 +6,7 @@ import type {
   DashNotification,
   CopilotMsg,
   DashNavItem,
-} from "@/src/types";
+} from "@/types";
 
 export const DASH_KPI_CARDS: KpiCard[] = [
   {

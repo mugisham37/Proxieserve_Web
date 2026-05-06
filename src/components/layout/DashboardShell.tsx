@@ -1,11 +1,11 @@
 "use client";
 
-import { DashboardUIProvider } from "@/src/lib/dashboard/context";
-import { DashSidebar } from "@/src/components/layout/DashSidebar";
-import { DashTopbar } from "@/src/components/layout/DashTopbar";
-import { DashNotificationsDrawer } from "@/src/components/layout/DashNotificationsDrawer";
-import { DashCopilot } from "@/src/components/layout/DashCopilot";
-import { useDashboardUI } from "@/src/hooks/useDashboardUI";
+import { DashboardUIProvider } from "@/lib/dashboard/context";
+import { DashSidebar } from "@/components/layout/DashSidebar";
+import { DashTopbar } from "@/components/layout/DashTopbar";
+import { DashNotificationsDrawer } from "@/components/layout/DashNotificationsDrawer";
+import { DashCopilot } from "@/components/layout/DashCopilot";
+import { useDashboardUI } from "@/hooks/useDashboardUI";
 
 function MobileOverlay() {
   const { mobileMenuOpen, setMobileMenuOpen } = useDashboardUI();

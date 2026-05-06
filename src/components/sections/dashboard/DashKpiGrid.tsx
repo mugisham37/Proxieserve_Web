@@ -1,5 +1,5 @@
-import { DashKpiCard } from "@/src/components/molecules/DashKpiCard";
-import { DASH_KPI_CARDS } from "@/src/lib/data/dashboard";
+import { DashKpiCard } from "@/components/molecules/DashKpiCard";
+import { DASH_KPI_CARDS } from "@/lib/data/dashboard";
 
 interface DashKpiGridProps {
   whyOpen: number | null;

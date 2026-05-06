@@ -1,4 +1,4 @@
-import type { PricingTier, CurrencyCode } from "@/src/types";
+import type { PricingTier, CurrencyCode } from "@/types";
 
 export const PRICING_TIERS: PricingTier[] = [
   {

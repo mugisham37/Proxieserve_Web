@@ -1,6 +1,6 @@
-import { SectionLabel } from "@/src/components/atoms/SectionLabel";
-import { ComparisonColumn } from "@/src/components/molecules/ComparisonColumn";
-import { COMPARISON_WITHOUT, COMPARISON_WITH } from "@/src/lib/constants";
+import { SectionLabel } from "@/components/atoms/SectionLabel";
+import { ComparisonColumn } from "@/components/molecules/ComparisonColumn";
+import { COMPARISON_WITHOUT, COMPARISON_WITH } from "@/lib/constants";
 
 export function ComparisonSection() {
   return (

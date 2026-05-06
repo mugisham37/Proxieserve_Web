@@ -1,4 +1,4 @@
-import type { IconName } from "@/src/types";
+import type { IconName } from "@/types";
 
 export const SIGNUP_PANEL_STEPS = [
   {
