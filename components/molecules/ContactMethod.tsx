@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-interface ContactMethodProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ContactMethodProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "content"> {
   label: string;
   content: React.ReactNode;
 }

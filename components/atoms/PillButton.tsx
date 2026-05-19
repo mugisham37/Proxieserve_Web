@@ -63,9 +63,11 @@ const PillButton = React.forwardRef<HTMLButtonElement, PillButtonProps>(
         ref={ref}
         {...props}
       >
-        {children}
-        {arrow && (
-          <span className="not-italic font-sans font-medium ml-0.5">→</span>
+        {asChild ? children : (
+          <>
+            {children}
+            {arrow && <span className="not-italic font-sans font-medium ml-0.5">→</span>}
+          </>
         )}
       </Comp>
     );

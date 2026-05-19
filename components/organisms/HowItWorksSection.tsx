@@ -41,6 +41,8 @@ export function HowItWorksSection({ className }: { className?: string }) {
       gsap.registerPlugin(ScrollTrigger);
       gsapLoaded = true;
 
+      if (!el) return;
+
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         el.style.transform = "scaleX(1)";
         return;

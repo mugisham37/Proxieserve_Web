@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Avatar } from "@/components/atoms/Avatar";
 
-interface QuoteCardProps extends React.HTMLAttributes<HTMLFigureElement> {
+interface QuoteCardProps extends React.HTMLAttributes<HTMLElement> {
   quote: string;
   authorName: string;
   authorInitials: string;

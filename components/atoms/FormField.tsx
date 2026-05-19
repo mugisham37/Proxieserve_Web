@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 type FieldType = "input" | "textarea" | "select";
 
-interface FormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
+interface FormFieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "onBlur"> {
   label: string;
   name: string;
   type?: FieldType;
