@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 import { Wordmark } from "@/components/atoms/Wordmark";
 import { LangSwitcher } from "@/components/atoms/LangSwitcher";
 
@@ -39,6 +40,25 @@ const FOOTER_COLS = [
     ],
   },
 ];
+
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  const isDark = theme === "dark";
+  return (
+    <button
+      type="button"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      className="inline-flex items-center gap-1.5 font-sans text-[12px] text-[var(--ink-subtle)] hover:text-[var(--ink)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)] rounded-sm"
+    >
+      <span aria-hidden="true">{isDark ? "☀" : "☾"}</span>
+      {isDark ? "Light" : "Dark"}
+    </button>
+  );
+}
 
 function FooterCol({ heading, links }: { heading: string; links: { label: string; href: string }[] }) {
   const [open, setOpen] = React.useState(false);
@@ -126,9 +146,10 @@ export function SiteFooter({ className }: { className?: string }) {
           <p className="font-sans text-[12px] text-[var(--ink-subtle)]">
             © {new Date().getFullYear()} ProxiServe Ltd. Kigali, Rwanda.
           </p>
-          <p className="font-mono text-[11px] text-[var(--ink-subtle)]">
-            v0.1.0
-          </p>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <p className="font-mono text-[11px] text-[var(--ink-subtle)]">v0.1.0</p>
+          </div>
         </div>
       </div>
     </footer>
