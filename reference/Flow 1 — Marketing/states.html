@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 1 — States gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--cream-2); }
+  .page-head {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--cream);
+  }
+  .page-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .page-head h1 { margin: 8px 0 12px; }
+  .page-head p { color: var(--ink-muted); margin: 0; max-width: 720px; }
+  .back-link { margin-bottom: 16px; }
+
+  .gallery {
+    padding: 56px 0 120px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 64px;
+  }
+  .tile {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .tile__head {
+    padding: 18px 24px;
+    display: flex; gap: 16px; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+  }
+  .tile__head h2 { margin: 0; font-size: 20px; font-family: var(--serif); font-weight: 500; }
+  .tile__head h2 em { font-style: italic; font-weight: 400; }
+  .tile__head .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .tile__head .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    padding: 3px 8px; border-radius: 999px;
+    background: var(--cream-2); color: var(--ink-muted);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .tag--brand { background: var(--brand-soft); color: var(--brand-ink); }
+  .tag--warn { background: var(--warn-soft); color: var(--warn); }
+  .tag--danger { background: var(--danger-soft); color: var(--danger); }
+  .tag--ok { background: var(--ok-soft); color: var(--ok); }
+  .tile__body { padding: 32px; }
+  .tile__notes {
+    padding: 16px 24px; background: var(--cream-2);
+    border-top: 1px solid var(--rule);
+    font-size: 13px; color: var(--ink-muted);
+    line-height: 1.6;
+  }
+  .tile__notes strong { color: var(--ink); font-weight: 600; }
+
+  /* --- State previews --- */
+
+  /* Offline banner */
+  .offline-banner {
+    background: var(--ink); color: var(--paper);
+    padding: 10px 16px;
+    display: flex; gap: 10px; align-items: center; justify-content: space-between;
+    font-family: var(--sans); font-size: 13px;
+    border-radius: var(--r-md);
+  }
+  .offline-banner .pulse {
+    width: 8px; height: 8px; border-radius: 999px; background: var(--warn);
+    flex-shrink: 0;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+  /* Loading skeleton */
+  .skeleton-block {
+    background: linear-gradient(90deg,
+      var(--cream-2) 0%, var(--paper-2) 50%, var(--cream-2) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+    border-radius: var(--r-md);
+  }
+  @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+  .skel-services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink); padding: 1px; border-radius: var(--r-lg); }
+  .skel-service { background: var(--cream); padding: 24px; min-height: 240px; display: flex; flex-direction: column; gap: 16px; }
+  .skel-service .a { height: 12px; width: 50%; }
+  .skel-service .b { height: 36px; width: 70%; margin: 24px auto; border-radius: 999px; }
+  .skel-service .c { height: 12px; width: 100%; margin-top: auto; }
+
+  /* Empty (no services) */
+  .empty-state {
+    border: 1px dashed var(--rule-strong);
+    border-radius: var(--r-lg);
+    padding: 56px 32px;
+    text-align: center;
+    background: var(--paper);
+  }
+  .empty-state .ico {
+    width: 56px; height: 56px;
+    border: 1.5px solid var(--ink-muted);
+    border-radius: 999px;
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-muted);
+    font-family: var(--serif); font-style: italic; font-size: 22px;
+  }
+  .empty-state h3 { margin: 0 0 8px; }
+  .empty-state p { color: var(--ink-muted); margin: 0 auto 24px; max-width: 480px; }
+  .empty-state form { display: flex; gap: 8px; max-width: 420px; margin: 0 auto; }
+  .empty-state input {
+    flex: 1; padding: 12px 14px; border-radius: var(--r-md);
+    border: 1px solid var(--rule-strong); background: var(--cream); font: inherit; font-size: 14px;
+  }
+
+  /* Error state */
+  .error-state {
+    border: 1px solid var(--danger);
+    background: var(--danger-soft);
+    border-radius: var(--r-lg);
+    padding: 32px;
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .error-state .ico {
+    width: 40px; height: 40px;
+    border-radius: 999px;
+    background: var(--danger); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 22px;
+    flex-shrink: 0;
+  }
+  .error-state h3 { margin: 0 0 6px; color: var(--danger); }
+  .error-state p { margin: 0 0 16px; color: #6a1f15; font-size: 14px; }
+  .error-state .row { gap: 10px; }
+  .error-state .btn { background: var(--cream); }
+
+  /* Offline grid (cached) */
+  .offline-grid { position: relative; }
+  .offline-grid::after {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0 12px, transparent 12px 24px);
+    pointer-events: none;
+    border-radius: var(--r-lg);
+  }
+  .offline-grid .service { opacity: 0.92; }
+  .offline-grid .service .service__pill { background: var(--cream-2); }
+
+  /* Mobile hamburger sheet */
+  .mobile-sheet {
+    width: 100%; max-width: 380px; margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: var(--r-xl);
+    padding: 24px;
+    display: flex; flex-direction: column;
+    min-height: 560px;
+  }
+  .mobile-sheet__head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 32px;
+  }
+  .mobile-sheet__close {
+    width: 36px; height: 36px; border-radius: 999px;
+    border: 1px solid var(--ink); background: transparent;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .mobile-sheet nav {
+    display: flex; flex-direction: column;
+    gap: 4px;
+    border-top: 1px solid var(--rule);
+    padding-top: 24px;
+  }
+  .mobile-sheet nav a {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--serif); font-size: 24px; font-weight: 500;
+    color: var(--ink);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .mobile-sheet nav a em { font-style: italic; font-weight: 400; }
+  .mobile-sheet nav a .arr { font-family: var(--sans); font-size: 14px; color: var(--ink-muted); }
+  .mobile-sheet__actions { margin-top: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 24px; }
+  .mobile-sheet__actions .pill { justify-content: center; }
+
+  /* Cookie banner */
+  .cookie-banner {
+    background: var(--ink); color: var(--paper);
+    padding: 20px 24px;
+    border-radius: var(--r-lg);
+    display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
+  }
+  .cookie-banner p { margin: 0; font-size: 14px; line-height: 1.5; color: rgba(246,236,210,0.85); max-width: 580px; }
+  .cookie-banner strong { color: var(--paper); font-weight: 500; }
+  .cookie-banner .row { gap: 8px; }
+  .cookie-banner .pill { padding: 10px 16px; font-size: 13px; background: transparent; color: var(--paper); border-color: rgba(246,236,210,0.4); }
+  .cookie-banner .pill--solid { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+  @media (max-width: 720px) {
+    .cookie-banner { grid-template-columns: 1fr; }
+    .cookie-banner .row { flex-wrap: wrap; }
+  }
+
+  /* Mini hero for "reduced motion" demo */
+  .rm-demo {
+    padding: 40px;
+    background: var(--paper);
+    border-radius: var(--r-lg);
+  }
+  .rm-demo .annot {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+  .rm-demo h1 { font-family: var(--serif); font-weight: 400; font-size: 56px; line-height: 1.02; letter-spacing: -0.02em; margin: 0 0 12px; }
+  .rm-demo h1 em { font-style: italic; }
+  .rm-demo p { font-family: var(--serif); font-size: 19px; line-height: 1.5; color: var(--ink-2); max-width: 520px; margin: 0 0 24px; }
+
+  /* Cards container demo (returning) */
+  .returning-demo {
+    background: var(--ink); color: var(--paper);
+    padding: 12px 24px;
+    border-radius: var(--r-md);
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    font-size: 13px;
+  }
+  .returning-demo a { color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }
+  .returning-demo .close {
+    background: transparent; border: 1px solid rgba(246,236,210,0.4); color: var(--paper);
+    border-radius: 999px; padding: 4px 10px; font-size: 11px;
+  }
+
+  /* Slow-3G LQIP */
+  .lqip-demo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink); padding: 1px; border-radius: var(--r-lg); }
+  .lqip-demo .cell { padding: 24px; min-height: 200px; background: var(--cream); display: flex; flex-direction: column; gap: 12px; position: relative; }
+  .lqip-demo .cell .placeholder {
+    flex: 1;
+    background: linear-gradient(120deg, rgba(201,67,122,0.18) 0%, rgba(233,181,48,0.18) 50%, rgba(45,79,204,0.18) 100%);
+    border-radius: 4px;
+    filter: blur(2px);
+  }
+  .lqip-demo .cell .label { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; }
+
+  /* Geo-blocked overlay */
+  .geo-card {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: var(--r-xl);
+    padding: 48px;
+    text-align: center;
+    max-width: 520px; margin: 0 auto;
+    --n: 28px;
+    clip-path: polygon(var(--n) 0, 100% 0, 100% calc(100% - var(--n)), calc(100% - var(--n)) 100%, 0 100%, 0 var(--n));
+  }
+  .geo-card .eyebrow { display: block; margin-bottom: 16px; }
+  .geo-card h2 { margin: 0 0 12px; }
+  .geo-card p { margin: 0 0 24px; color: var(--ink-muted); }
+  .geo-card form { display: flex; gap: 8px; max-width: 380px; margin: 0 auto; }
+  .geo-card input { flex: 1; padding: 12px 14px; border: 1px solid var(--rule-strong); border-radius: var(--r-md); font: inherit; font-size: 14px; background: var(--cream); }
+
+  /* Validation error in tracker */
+  .field--error .field__input { border-color: var(--danger); background: var(--danger-soft); }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="container">
+    <a href="index.html" class="lnk-arrow back-link" style="font-size:13px;"><span aria-hidden="true">←</span> Back to Flow 1 hub</a>
+    <div class="meta">FLOW 01 / STATES GALLERY · 12 STATES</div>
+    <h1 class="t-h1">Every state, <em>drawn out</em>.</h1>
+    <p>The landing page is server-rendered, so its hero text is always present. Loading, empty, error, offline, and edge-case states sit underneath — here's each one in isolation.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="gallery">
+
+    <!-- ============ 01 LOADING ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">01 / Loading — first paint</span>
+          <h2>Services grid <em>skeleton</em></h2>
+        </div>
+        <div class="tags"><span class="tag tag--brand">Loading</span><span class="tag">300–800 ms</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="skel-services">
+          <div class="skel-service">
+            <div class="skeleton-block a"></div>
+            <div class="skeleton-block b"></div>
+            <div class="skeleton-block c"></div>
+          </div>
+          <div class="skel-service">
+            <div class="skeleton-block a"></div>
+            <div class="skeleton-block b"></div>
+            <div class="skeleton-block c"></div>
+          </div>
+          <div class="skel-service">
+            <div class="skeleton-block a"></div>
+            <div class="skeleton-block b"></div>
+            <div class="skeleton-block c"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Behaviour.</strong> Skeleton shimmers only after 300 ms — quick fetches never flash a skeleton. Hero text and tracker quick-input stay visible (server-rendered) so the page never feels blank. Reduce-motion: static blocks, no shimmer.
+      </div>
+    </article>
+
+    <!-- ============ 02 EMPTY (no services) ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">02 / Empty — catalogue disabled by admin</span>
+          <h2>"Services are being <em>updated</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag">Empty</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="empty-state">
+          <div class="ico">∅</div>
+          <h3 class="t-h3">Services are being <em>updated</em></h3>
+          <p>We're refreshing the list. Check back shortly — or leave your email and we'll let you know the moment it's back.</p>
+          <form onsubmit="event.preventDefault();">
+            <input type="email" placeholder="you@example.com" required />
+            <button class="pill pill--brand pill--sm" type="submit">Notify me</button>
+          </form>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Why this exists.</strong> Admin may disable all services briefly during catalogue updates (Flow 9). The page still loads — services section becomes a capture moment instead of a dead row of skeletons.
+      </div>
+    </article>
+
+    <!-- ============ 03 ERROR (server) ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">03 / Error — services fetch failed</span>
+          <h2>Inline retry — <em>preserves the page</em></h2>
+        </div>
+        <div class="tags"><span class="tag tag--danger">Error 5xx</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="error-state">
+          <div class="ico">!</div>
+          <div style="flex:1;">
+            <h3 class="t-h3" style="color:inherit;">Couldn't load the services list</h3>
+            <p>Something on our end went wrong. Your tracker and account still work — try the services list again in a moment.</p>
+            <div class="row">
+              <button class="btn">Retry <span aria-hidden="true">↻</span></button>
+              <a class="lnk-arrow" href="#" style="font-size:13px;">What this means →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Resilience.</strong> The error replaces only the services grid — the hero, tracker, FAQ and footer stay rendered. Retry uses an idempotency key so double-clicks are safe. Failed fetches log to Sentry with an incident link surfaced via "What this means".
+      </div>
+    </article>
+
+    <!-- ============ 04 OFFLINE ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">04 / Offline — cached snapshot</span>
+          <h2>You're offline. <em>Here's what we know.</em></h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">Offline</span><span class="tag">PWA</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="stack--lg" style="gap:24px;">
+          <div class="offline-banner">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <span class="pulse"></span>
+              <span><strong>You're offline.</strong> Showing services saved on this device — they may be out of date.</span>
+            </div>
+            <button class="btn btn--ghost" style="background:transparent; color:var(--paper); border-color:rgba(246,236,210,0.4);">Retry</button>
+          </div>
+
+          <div class="offline-grid">
+            <div class="services" style="grid-template-columns: repeat(3, 1fr);">
+              <div class="service svc-marigold" tabindex="-1" style="cursor: not-allowed;">
+                <span class="service__cat">Tax &amp; revenue</span>
+                <span class="service__pill">Tax registration</span>
+                <div class="service__meta">
+                  <span><strong>RWF 12,000</strong></span>
+                  <span class="right"><strong>3–5 days</strong></span>
+                </div>
+              </div>
+              <div class="service svc-pink" tabindex="-1" style="cursor: not-allowed;">
+                <span class="service__cat">Identity</span>
+                <span class="service__pill">Passport renewal</span>
+                <div class="service__meta">
+                  <span><strong>RWF 15,000</strong></span>
+                  <span class="right"><strong>5–7 days</strong></span>
+                </div>
+              </div>
+              <div class="service svc-green" tabindex="-1" style="cursor: not-allowed; color: white;">
+                <span class="service__cat">Business</span>
+                <span class="service__pill">Business license</span>
+                <div class="service__meta">
+                  <span><strong>RWF 25,000</strong></span>
+                  <span class="right"><strong>7–10 days</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:14px; color:var(--ink-muted); margin:0;">
+            <strong style="color:var(--ink);">Starting a new application is disabled offline.</strong> The hover tooltip reads <em>"Connect to start a new application."</em> The tracker quick-input still accepts a code; on submit it shows a friendly offline modal: <em>"We'll check your status the moment you're back online."</em>
+          </p>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Service worker.</strong> The landing's service worker caches the last seen services list. Cards still render; clicking opens the offline modal. Reconnection auto-dismisses the banner with a 200 ms fade.
+      </div>
+    </article>
+
+    <!-- ============ 05 RETURNING VISITOR ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">05 / Returning visitor — code in localStorage</span>
+          <h2>"Pick up where you <em>left off</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--ok">Returning</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="returning-demo">
+          <span>Welcome back — pick up where you left off. <a href="#">Continue with PRX-2026-00483 →</a></span>
+          <button class="close" type="button">Dismiss</button>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>When this shows.</strong> A slim banner pinned above the top bar when <span class="mono">localStorage.proxi:lastCode</span> exists. Dismissable; respects the dismissal for 14 days. Goes away once they sign in (authenticated experience takes over).
+      </div>
+    </article>
+
+    <!-- ============ 06 VALIDATION ERROR ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">06 / Validation — tracker code wrong format</span>
+          <h2>Inline error on <em>submit attempt</em></h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">Validation</span></div>
+      </header>
+      <div class="tile__body">
+        <form class="tracker__form" style="display: flex; gap:10px; margin-bottom:8px;">
+          <label class="sr-only" for="x-track">Application code</label>
+          <input id="x-track" type="text" value="PRX-26-0483" class="field__input field__input--mono" style="flex:1; border-color:var(--danger); background: var(--danger-soft);" aria-invalid="true" aria-describedby="x-help" />
+          <button class="pill pill--brand" type="button">Track →</button>
+        </form>
+        <p id="x-help" style="font-size:13px; color:var(--danger); margin:8px 0 0; font-family:var(--sans);">
+          <strong>That doesn't look right.</strong> Codes look like <span class="mono">PRX-YYYY-NNNNN</span> — double-check yours.
+        </p>
+      </div>
+      <div class="tile__notes">
+        <strong>Friendly tone.</strong> Errors say what's wrong and how to fix it. The input keeps its value so the user can edit instead of retype. Auto-format on blur fixes most typos silently.
+      </div>
+    </article>
+
+    <!-- ============ 07 REDUCED MOTION ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">07 / Reduced motion — OS preference</span>
+          <h2>All motion <em>disabled or static</em></h2>
+        </div>
+        <div class="tags"><span class="tag">A11y</span><span class="tag">prefers-reduced-motion</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="rm-demo">
+          <span class="annot">REDUCED-MOTION MODE</span>
+          <h1>Hand it over.<br><em>We'll handle it.</em></h1>
+          <p>The hero renders without translate-Y or fade animation. Reveal-on-scroll classes are no-ops. The How-it-works connector line draws instantly. Status pulses become flat colour changes.</p>
+          <div class="row">
+            <a class="pill pill--solid" href="#">Start application <span class="arr">↗</span></a>
+            <a class="pill" href="#">Track <span class="arr">→</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Implementation.</strong> A single <span class="mono">@media (prefers-reduced-motion: reduce)</span> block in <span class="mono">tokens.css</span> overrides all transitions to <span class="mono">0.01ms</span>. No bespoke motion in JS — we let CSS rules win.
+      </div>
+    </article>
+
+    <!-- ============ 08 SLOW 3G ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">08 / Slow-3G — progressive image load</span>
+          <h2>LQIP blur, defer below-the-fold</h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">Slow network</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="lqip-demo">
+          <div class="cell">
+            <span class="label">testimonial · loading</span>
+            <div class="placeholder"></div>
+            <span class="label">aline k.</span>
+          </div>
+          <div class="cell">
+            <span class="label">testimonial · loaded</span>
+            <div class="placeholder" style="filter:none; background: var(--cream-2);"></div>
+            <span class="label">jean-paul n.</span>
+          </div>
+          <div class="cell">
+            <span class="label">testimonial · loading</span>
+            <div class="placeholder"></div>
+            <span class="label">marie u.</span>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Strategy.</strong> Hero photos and testimonial avatars use 20×20px AVIF LQIP, blurred until the full image loads. Below-the-fold images lazy-load via native <span class="mono">loading="lazy"</span>. WebP fallback for older browsers. No layout shift — placeholders match final dimensions.
+      </div>
+    </article>
+
+    <!-- ============ 09 MOBILE HAMBURGER SHEET ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">09 / Mobile menu — hamburger sheet</span>
+          <h2>Full-height, thumb-reachable</h2>
+        </div>
+        <div class="tags"><span class="tag">Mobile</span><span class="tag">≤ 920px</span></div>
+      </header>
+      <div class="tile__body" style="background: var(--cream-2);">
+        <div class="mobile-sheet">
+          <div class="mobile-sheet__head">
+            <a href="#" class="wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+            <button class="mobile-sheet__close" aria-label="Close menu">✕</button>
+          </div>
+          <nav>
+            <a href="#">Services <span class="arr">→</span></a>
+            <a href="#">How it works <span class="arr">→</span></a>
+            <a href="#">Pricing <span class="arr">→</span></a>
+            <a href="#">FAQ <span class="arr">→</span></a>
+            <a href="#">Contact <span class="arr">→</span></a>
+            <a href="#">About <span class="arr">→</span></a>
+          </nav>
+          <div class="mobile-sheet__actions">
+            <div class="lang" style="align-self: center; margin-bottom:8px;">
+              <button class="is-active">EN</button>
+              <button>RW</button>
+              <button>FR</button>
+            </div>
+            <a href="#" class="pill pill--solid">Start your application <span class="arr">↗</span></a>
+            <a href="#" class="pill">Track an application <span class="arr">→</span></a>
+            <a href="#" class="pill pill--brand">WhatsApp <span class="arr">↗</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Focus-trap.</strong> Opens with a 320 ms slide from the right. Traps focus inside; <span class="mono">Esc</span> closes; returns focus to the hamburger trigger. Body scroll-lock applied. Primary CTAs pinned to the bottom for thumb reach on tall phones.
+      </div>
+    </article>
+
+    <!-- ============ 10 COOKIE BANNER ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">10 / Cookies — first visit</span>
+          <h2>Bottom-anchored consent</h2>
+        </div>
+        <div class="tags"><span class="tag">Cookies</span><span class="tag">GDPR</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="cookie-banner">
+          <p><strong>Cookies, briefly:</strong> we use essential cookies to keep your tracking code, and optional analytics to make this page better. Your call.</p>
+          <div class="row">
+            <button class="pill pill--solid">Accept all</button>
+            <button class="pill">Reject non-essential</button>
+            <button class="pill">Customise</button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Not a modal.</strong> Banner, not overlay. Doesn't block content. "Customise" opens a sheet with toggles per category (Essential / Analytics / Marketing). Persisted in <span class="mono">localStorage</span>; revocable from the footer link.
+      </div>
+    </article>
+
+    <!-- ============ 11 GEO-BLOCKED ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">11 / Geo — accessed from outside Rwanda</span>
+          <h2>"Coming soon to your <em>country</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag">Geo</span></div>
+      </header>
+      <div class="tile__body" style="background: var(--cream-2); padding: 64px 32px;">
+        <div class="geo-card">
+          <span class="eyebrow">For now, we serve Rwanda</span>
+          <h2 class="t-h2"><em>Coming soon</em> to your country.</h2>
+          <p>ProxiServe is currently available to applicants in Rwanda. Leave your email and we'll let you know when we reach you.</p>
+          <form onsubmit="event.preventDefault();">
+            <input type="email" placeholder="you@example.com" required />
+            <button class="pill pill--brand pill--sm" type="submit">Notify me</button>
+          </form>
+          <p style="font-size:13px; color:var(--ink-subtle); margin: 24px 0 0;">
+            <a href="#" class="linked">Legal pages remain accessible</a> · <a href="#" class="linked">Contact us</a>
+          </p>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Soft-block.</strong> Detected by IP + Accept-Language. Overlay is dismissible — legal pages and contact remain reachable underneath. No hard-block: if someone needs ProxiServe and they're abroad, support takes it on.
+      </div>
+    </article>
+
+    <!-- ============ 12 ARCHIVED CODE ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">12 / Tracker — archived code (retention expired)</span>
+          <h2>Graceful explanation, <em>not a dead end</em></h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">Archived</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="stack">
+          <div class="code-chip code-chip--lg" style="align-self: flex-start;">
+            PRX-2023-00148
+            <span class="status s-warn"><span class="dot"></span> Archived</span>
+          </div>
+          <div style="background:var(--warn-soft); border-radius:var(--r-lg); padding:24px;">
+            <h3 class="t-h3" style="margin:0 0 8px;">This application has been <em>archived</em></h3>
+            <p style="margin:0 0 16px; color: #6a4d10; font-size:14px;">
+              Applications are kept for 24 months after completion. Yours finished in March 2024. The outcome document and full history are no longer available online, but our team can still help.
+            </p>
+            <div class="row">
+              <a href="#" class="pill pill--brand pill--sm">Contact support</a>
+              <a href="#" class="pill pill--sm">Start a new application</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Retention policy.</strong> Configurable by admin (default 24 months from completion). Personal data purged; only the code and metadata remain so the user understands why it's gone.
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<footer style="background:var(--cream); padding: 40px 0; border-top: 1px solid var(--rule);">
+  <div class="container">
+    <div class="foot__bottom" style="margin-top:0; padding-top:0; border-top:none;">
+      <span>PROXISERVE / FLOW 01 / STATES / v0.1</span>
+      <a href="index.html" class="lnk-arrow" style="font-size:12px;">Back to Flow 1 hub →</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Step 4 of 5 — Review · Passport renewal · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="wizard.css" />
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="wiz-topbar" data-screen-label="F3 Step 4">
+  <div class="container">
+    <div class="wiz-topbar__inner">
+      <a href="../Flow 1 — Marketing/landing.html" class="wiz-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div class="wiz-crumb">
+        <a href="../Flow 2 — Service Discovery/service-detail.html">Passport renewal</a>
+        <span class="sep">/</span>
+        <strong>Application</strong>
+      </div>
+      <div style="display:flex; gap:14px; align-items:center;">
+        <span class="wiz-savestate"><span class="dot"></span> Saved just now</span>
+        <a href="../Flow 2 — Service Discovery/service-detail.html" class="wiz-exit">Save &amp; exit</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="stepper-strip">
+  <div class="container">
+    <div class="stepper-strip__inner">
+
+      <div class="stepper-mobile">
+        <span class="stepper-mobile__pill">Step 4 / 5</span>
+        <span class="stepper-mobile__label">Review &amp; <em>send</em></span>
+        <span class="stepper-mobile__bar">
+          <span class="is-done"></span><span class="is-done"></span><span class="is-done"></span><span class="is-active"></span><span></span>
+        </span>
+      </div>
+
+      <div class="stepper">
+        <div class="stepper__node is-done"><span class="stepper__num">01</span><span class="stepper__label">Your details</span><span class="stepper__line"></span></div>
+        <div class="stepper__node is-done"><span class="stepper__num">02</span><span class="stepper__label">Service details</span><span class="stepper__line"></span></div>
+        <div class="stepper__node is-done"><span class="stepper__num">03</span><span class="stepper__label">Documents</span><span class="stepper__line"></span></div>
+        <div class="stepper__node is-active"><span class="stepper__num">04</span><span class="stepper__label">Review</span><span class="stepper__line"></span></div>
+        <div class="stepper__node"><span class="stepper__num">05</span><span class="stepper__label">Done</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="main" class="wiz-shell">
+  <div class="container">
+    <div class="wiz-page">
+
+      <div class="wiz-main">
+
+        <header class="wiz-head">
+          <span class="wiz-head__num">Step 04 / 05 · Review &amp; confirm</span>
+          <h1>Check everything <em>once more</em>.</h1>
+          <p class="wiz-head__lede">When you send this, an agent picks it up within one working day. <em>You can still edit anything before sending.</em></p>
+        </header>
+
+        <form id="step4" onsubmit="event.preventDefault(); window.location.href='step-5-confirmation.html';">
+
+          <!-- ============ Personal info card ============ -->
+          <div class="review-card">
+            <div class="review-card__head">
+              <h3>Your <em>details</em></h3>
+              <a href="step-1-personal.html" class="review-card__edit">Edit step 1 →</a>
+            </div>
+
+            <div class="review-row"><span class="l">Full name</span><span class="v">Aline Mukamana</span></div>
+            <div class="review-row"><span class="l">National ID</span><span class="v mono">1 1992 8 0042847 0 31</span></div>
+            <div class="review-row"><span class="l">Date of birth</span><span class="v">14 March 1992</span></div>
+            <div class="review-row"><span class="l">Phone</span><span class="v mono">+250 78 8 123 456 · <em style="font-family: var(--serif); font-style: italic;">WhatsApp on</em></span></div>
+            <div class="review-row"><span class="l">Email</span><span class="v" style="color: var(--ink-muted);">— not provided</span></div>
+            <div class="review-row"><span class="l">Preferred language</span><span class="v">English</span></div>
+          </div>
+
+          <!-- ============ Service details card ============ -->
+          <div class="review-card">
+            <div class="review-card__head">
+              <h3>Service <em>details</em></h3>
+              <a href="step-2-service.html" class="review-card__edit">Edit step 2 →</a>
+            </div>
+
+            <div class="review-row"><span class="l">Reason for renewal</span><span class="v">Expired (or about to)</span></div>
+            <div class="review-row"><span class="l">Current passport no.</span><span class="v mono">PC284615</span></div>
+            <div class="review-row"><span class="l">Expiry date</span><span class="v">12 August 2026</span></div>
+            <div class="review-row"><span class="l">Place of issue</span><span class="v">Kigali — Dept. of Immigration</span></div>
+            <div class="review-row"><span class="l">Travel plans</span><span class="v">Within 1–2 months</span></div>
+            <div class="review-row"><span class="l">Notes for agent</span><span class="v" style="color: var(--ink-muted);">— none added</span></div>
+          </div>
+
+          <!-- ============ Documents card ============ -->
+          <div class="review-card">
+            <div class="review-card__head">
+              <h3>Your <em>documents</em></h3>
+              <a href="step-3-documents.html" class="review-card__edit">Edit step 3 →</a>
+            </div>
+
+            <div style="display: grid; gap: 12px; grid-template-columns: 1fr;">
+              <div class="file-row">
+                <div class="file-row__thumb" style="background: var(--ok-soft); color: var(--ok);">JPG</div>
+                <div>
+                  <div class="file-row__name">passport-bio-page.jpg</div>
+                  <div class="file-row__meta">1.2 MB · current passport</div>
+                </div>
+                <div class="file-row__actions"><button type="button">Preview</button></div>
+              </div>
+              <div class="file-row">
+                <div class="file-row__thumb" style="background: var(--ok-soft); color: var(--ok);">JPG</div>
+                <div>
+                  <div class="file-row__name">national-id-front.jpg</div>
+                  <div class="file-row__meta">980 KB · national ID</div>
+                </div>
+                <div class="file-row__actions"><button type="button">Preview</button></div>
+              </div>
+              <div class="file-row">
+                <div class="file-row__thumb" style="background: var(--ok-soft); color: var(--ok);">JPG</div>
+                <div>
+                  <div class="file-row__name">national-id-back.jpg</div>
+                  <div class="file-row__meta">1.2 MB · national ID</div>
+                </div>
+                <div class="file-row__actions"><button type="button">Preview</button></div>
+              </div>
+              <div class="file-row">
+                <div class="file-row__thumb" style="background: var(--ok-soft); color: var(--ok);">JPG</div>
+                <div>
+                  <div class="file-row__name">portrait-may-2026.jpg</div>
+                  <div class="file-row__meta">2.4 MB · passport photo</div>
+                </div>
+                <div class="file-row__actions"><button type="button">Preview</button></div>
+              </div>
+            </div>
+
+            <p style="margin-top: 16px; font-size: 13px; color: var(--ink-muted);">
+              All <strong style="color: var(--ok);">4 files</strong> uploaded · total size 5.8 MB. Encrypted at rest.
+            </p>
+          </div>
+
+          <!-- ============ Fee summary ============ -->
+          <div class="fee-summary">
+            <h3>What it'll <em>cost</em></h3>
+            <div class="fee-row"><span class="l">ProxiServe service fee (standard)</span><span class="v">RWF 15,000</span></div>
+            <div class="fee-row"><span class="l">Government printing fee (Immigration)</span><span class="v">RWF 75,000</span></div>
+            <div class="fee-row"><span class="l">VAT (included in service fee)</span><span class="v" style="color: rgba(246,236,210,0.5)">incl.</span></div>
+            <div class="fee-row total"><span class="l">Estimated total</span><span class="v">RWF <em>90,000</em></span></div>
+            <p class="note">This is the standard fee. Your agent will confirm before any payment is collected. <em>You pay nothing now.</em></p>
+          </div>
+
+          <!-- ============ Final consents ============ -->
+          <div class="final-consent">
+            <h4 class="t-h4">Two last things</h4>
+
+            <label class="fld-check">
+              <input type="checkbox" required />
+              <span class="fld-check__label">
+                Everything above is <strong>correct to the best of my knowledge</strong>. If something changes (phone, travel plans), I'll let my agent know.
+              </span>
+            </label>
+
+            <label class="fld-check">
+              <input type="checkbox" required />
+              <span class="fld-check__label">
+                I agree to the <a href="../Flow 1 — Marketing/supporting.html#legal-terms">Terms of Service</a> and <a href="../Flow 1 — Marketing/supporting.html#legal-privacy">Privacy Policy</a>.
+              </span>
+            </label>
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- ============ ASIDE ============ -->
+      <aside class="wiz-aside" aria-label="What happens next">
+        <div class="summary-card">
+          <div class="strip"></div>
+          <span class="summary-card__cat">Identity &amp; civil</span>
+          <h3>Passport <em>renewal</em></h3>
+          <div class="summary-line"><span class="l">Service fee</span><span class="v">RWF 15,000</span></div>
+          <div class="summary-line"><span class="l">Gov. printing fee</span><span class="v">RWF 75,000</span></div>
+          <div class="summary-line" style="border-bottom: 1px solid var(--rule);"><span class="l"><strong style="color: var(--ink);">Estimated total</strong></span><span class="v" style="font-size: 17px;">RWF 90,000</span></div>
+        </div>
+
+        <div class="tips-card">
+          <h4 class="t-h4">What happens after you send</h4>
+          <ul>
+            <li>You get a <strong style="color: var(--ink);">tracking code</strong> in mono on the next screen — save it.</li>
+            <li>An agent is assigned within <strong style="color: var(--ink);">1 working day</strong>.</li>
+            <li>Your agent contacts you via WhatsApp to confirm and quote the final fee.</li>
+            <li>Payment happens <strong style="color: var(--ink);">after</strong> the fee is confirmed.</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<div class="wiz-footer">
+  <div class="container">
+    <div class="wiz-footer__inner">
+      <div class="wiz-footer__left">
+        <a href="step-3-documents.html" class="back-link">← Back</a>
+        <span class="wiz-footer__step-meta">Step 4 of 5 · Review</span>
+      </div>
+      <button type="submit" form="step4" class="pill pill--brand">Send application <span class="arr">↗</span></button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

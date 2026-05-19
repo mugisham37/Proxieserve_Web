@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProxiServe — How it works, Pricing, FAQ, Contact, About, Legal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+
+  /* sub-page top bar (lighter than landing) */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    padding: 14px 0;
+    background: rgba(242,235,215,0.96);
+    backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .topbar__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .wordmark {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--serif); font-weight: 500; font-size: 20px;
+    padding: 6px 16px; border: 1px solid var(--ink); border-radius: 999px;
+  }
+  .wordmark .ico { width: 9px; height: 9px; border-radius: 999px; background: var(--brand); }
+  .wordmark em { font-style: italic; }
+  .crumb {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em;
+  }
+  .crumb a { color: inherit; border-bottom: 1px solid transparent; padding-bottom: 1px; }
+  .crumb a:hover { border-bottom-color: var(--ink); color: var(--ink); }
+  .topbar__actions .pill { padding: 10px 18px; font-size: 14px; }
+
+  /* on-page nav strip */
+  .page-nav {
+    background: var(--cream-2);
+    border-bottom: 1px solid var(--rule);
+    position: sticky; top: 71px;
+    z-index: 40;
+  }
+  .page-nav__inner {
+    display: flex; gap: 4px; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .page-nav__inner::-webkit-scrollbar { display: none; }
+  .page-nav a {
+    flex-shrink: 0;
+    padding: 14px 18px;
+    font-family: var(--serif); font-style: italic; font-size: 15px;
+    color: var(--ink-muted);
+    border-bottom: 2px solid transparent;
+    transition: color var(--m-fast), border-color var(--m-fast);
+  }
+  .page-nav a:hover { color: var(--ink); }
+  .page-nav a.is-active { color: var(--ink); border-bottom-color: var(--ink); }
+
+  /* page sections */
+  section.pg {
+    padding: 96px 0 64px;
+    border-bottom: 1px solid var(--rule);
+  }
+  section.pg:last-of-type { border-bottom: none; }
+  .pg__head {
+    margin-bottom: 48px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 800px) {
+    .pg__head { grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .pg__num { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .pg__title { margin: 0; }
+  .pg__lede { margin: 16px 0 0; max-width: 720px; }
+
+  /* ============== How it works ============== */
+  .how-detail {
+    display: grid; grid-template-columns: 1fr; gap: 24px;
+  }
+  @media (min-width: 900px) { .how-detail { grid-template-columns: 200px 1fr; gap: 64px; } }
+  .how-step-num {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    font-size: 80px; line-height: 1; color: var(--ink);
+  }
+  .how-step h3 { margin: 0 0 12px; font-size: 28px; font-family: var(--serif); font-weight: 500; }
+  .how-step h3 em { font-style: italic; font-weight: 400; }
+  .how-step p { margin: 0 0 14px; color: var(--ink-2); font-size: 16px; line-height: 1.6; max-width: 640px; }
+  .how-step .demo {
+    margin-top: 24px;
+    padding: 24px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    display: flex; flex-direction: column; gap: 12px;
+    max-width: 480px;
+  }
+  .how-step .demo .field__label { font-size: 13px; }
+  .how-step .demo .field__input { background: var(--cream); }
+  .how-step-divider { border-top: 1px solid var(--rule); padding-top: 64px; margin-top: 64px; }
+  .how-step-divider:first-of-type { padding-top: 0; margin-top: 0; border-top: none; }
+
+  /* ============== Pricing ============== */
+  .filter-chips {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px;
+  }
+  .chip-btn {
+    padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--rule-strong); background: transparent;
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  .chip-btn.is-active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .pricing-full {
+    border-top: 1px solid var(--rule-strong);
+  }
+  .pricing-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: center;
+  }
+  @media (min-width: 800px) {
+    .pricing-row {
+      grid-template-columns: minmax(0,1.8fr) 1fr 1fr 1fr 1fr 80px;
+      gap: 24px;
+    }
+  }
+  .pricing-head {
+    font-family: var(--sans); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-muted);
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  @media (max-width: 799px) {
+    .pricing-head { display: none; }
+    .pricing-row .label { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-subtle); margin-right: 8px; }
+  }
+  .pricing-row .svc { font-family: var(--serif); font-size: 19px; font-weight: 500; }
+  .pricing-row .svc em { font-style: italic; font-weight: 400; }
+  .pricing-row .fee { font-family: var(--mono); font-size: 15px; font-weight: 500; }
+  .pricing-row .fee.urgent { color: var(--warn); }
+  .pricing-row .eta { font-size: 14px; color: var(--ink-muted); }
+  .pricing-row .cat { font-size: 13px; color: var(--ink-muted); }
+  .pricing-row .act { justify-self: end; }
+
+  /* ============== FAQ ============== */
+  .faq-search {
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-pill);
+    display: flex; align-items: center;
+    padding: 0 8px 0 20px;
+    max-width: 480px;
+    margin-bottom: 40px;
+  }
+  .faq-search input {
+    flex: 1; border: none; background: transparent; padding: 16px 12px;
+    font: inherit; font-size: 15px; color: var(--ink); outline: none;
+  }
+  .faq-search .pill { padding: 10px 16px; font-size: 13px; }
+  .faq-categories {
+    display: grid; grid-template-columns: 1fr; gap: 0;
+  }
+  @media (min-width: 900px) {
+    .faq-categories { grid-template-columns: 240px 1fr; gap: 56px; }
+  }
+  .faq-toc {
+    position: sticky; top: 128px; align-self: start;
+    border-left: 1px solid var(--rule); padding-left: 16px;
+  }
+  .faq-toc h4 { margin: 0 0 12px; }
+  .faq-toc ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .faq-toc a { font-size: 14px; color: var(--ink-muted); }
+  .faq-toc a:hover { color: var(--ink); }
+  .faq-cat { margin-bottom: 56px; }
+  .faq-cat h3 { font-family: var(--serif); font-size: 24px; margin: 0 0 16px; font-weight: 500; }
+  .faq-cat h3 em { font-style: italic; font-weight: 400; }
+  .faq-item {
+    border-bottom: 1px solid var(--rule);
+  }
+  .faq-item summary {
+    list-style: none; cursor: pointer; padding: 18px 0;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    font-family: var(--serif); font-size: 18px; font-weight: 500;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary em { font-style: italic; font-weight: 400; }
+  .faq-item summary .plus { font-family: var(--sans); font-size: 22px; transition: transform var(--m-base); flex-shrink: 0; }
+  .faq-item[open] summary .plus { transform: rotate(45deg); }
+  .faq-item__body { padding: 0 0 20px; color: var(--ink-muted); font-size: 14.5px; line-height: 1.65; max-width: 660px; }
+
+  /* ============== Contact ============== */
+  .contact-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
+  @media (min-width: 900px) { .contact-grid { grid-template-columns: 1fr 1fr; gap: 64px; } }
+  .wa-card {
+    background: #25D366; color: var(--ink);
+    padding: 32px;
+    border-radius: var(--r-2xl);
+    --n: 22px;
+    clip-path: polygon(var(--n) 0, 100% 0, 100% calc(100% - var(--n)), calc(100% - var(--n)) 100%, 0 100%, 0 var(--n));
+  }
+  .wa-card h3 { font-family: var(--serif); font-size: 28px; font-weight: 500; margin: 0 0 8px; }
+  .wa-card h3 em { font-style: italic; font-weight: 400; }
+  .wa-card p { margin: 0 0 20px; font-size: 15px; }
+  .contact-method {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid; grid-template-columns: 120px 1fr; gap: 16px;
+  }
+  .contact-method:last-child { border-bottom: none; }
+  .contact-method h4 { margin: 0; }
+  .contact-method p { margin: 0; font-size: 15px; line-height: 1.5; }
+  .contact-method .mono { font-family: var(--mono); font-size: 14px; }
+  .contact-form { background: var(--paper); padding: 32px; border-radius: var(--r-lg); border: 1px solid var(--rule); }
+  .contact-form h3 { font-family: var(--serif); font-size: 24px; font-weight: 500; margin: 0 0 20px; }
+  .contact-form h3 em { font-style: italic; font-weight: 400; }
+  .contact-form .row-2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 600px) { .contact-form .row-2 { grid-template-columns: 1fr 1fr; } }
+
+  /* ============== About ============== */
+  .about-grid { display: grid; grid-template-columns: 1fr; gap: 48px; }
+  @media (min-width: 900px) { .about-grid { grid-template-columns: 1fr 1fr; gap: 64px; } }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (min-width: 700px) { .team-grid { grid-template-columns: repeat(4, 1fr); } }
+  .team-card {
+    background: var(--paper);
+    padding: 24px;
+    border-radius: var(--r-lg);
+    border: 1px solid var(--rule);
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .team-card .avatar { width: 64px; height: 64px; font-size: 22px; }
+  .team-card h4 { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--ink); margin: 0; text-transform: none; letter-spacing: 0; }
+  .team-card .role { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .team-card p { margin: 0; font-size: 14px; color: var(--ink-muted); line-height: 1.5; }
+
+  .mission-card {
+    background: var(--ink); color: var(--paper);
+    padding: 48px;
+    --n: 22px;
+    clip-path: polygon(var(--n) 0, 100% 0, 100% calc(100% - var(--n)), calc(100% - var(--n)) 100%, 0 100%, 0 var(--n));
+  }
+  .mission-card .eyebrow { color: rgba(246,236,210,0.7); margin-bottom: 16px; }
+  .mission-card h3 { font-family: var(--serif); font-size: clamp(28px, 4vw, 44px); font-weight: 400; line-height: 1.1; margin: 0 0 16px; color: var(--paper); }
+  .mission-card h3 em { font-style: italic; }
+  .mission-card p { margin: 0; font-size: 17px; line-height: 1.55; color: rgba(246,236,210,0.85); }
+
+  /* ============== Legal ============== */
+  .legal-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 760px) { .legal-grid { grid-template-columns: 240px 1fr; gap: 48px; } }
+  .legal-toc {
+    position: sticky; top: 128px; align-self: start;
+    border-left: 1px solid var(--rule); padding-left: 16px;
+  }
+  .legal-toc ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .legal-toc a { font-size: 14px; color: var(--ink-muted); }
+  .legal-toc a:hover { color: var(--ink); }
+  .legal-body {
+    font-size: 15px; line-height: 1.7;
+    max-width: 640px;
+  }
+  .legal-body h3 { font-family: var(--serif); font-size: 24px; font-weight: 500; margin: 32px 0 12px; }
+  .legal-body h3 em { font-style: italic; font-weight: 400; }
+  .legal-body h3:first-child { margin-top: 0; }
+  .legal-body p { margin: 0 0 16px; color: var(--ink-2); }
+  .legal-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; margin-bottom: 24px; }
+  .legal-summary {
+    background: var(--brand-soft); color: var(--brand-ink);
+    padding: 16px 20px;
+    border-radius: var(--r-md);
+    font-family: var(--serif); font-style: italic; font-size: 16px;
+    margin: 0 0 24px;
+    max-width: 640px;
+  }
+
+  /* Avatars colour-rotated */
+  .av-1 { background: var(--brand); }
+  .av-2 { background: var(--b-green); }
+  .av-3 { background: var(--b-blue); }
+  .av-4 { background: var(--b-marigold); color: var(--ink); }
+
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="container">
+    <div class="topbar__inner">
+      <div style="display:flex; align-items:center; gap:24px;">
+        <a href="landing.html" class="wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+        <span class="crumb"><a href="landing.html">Home</a> / Supporting pages</span>
+      </div>
+      <div class="topbar__actions" style="display:flex; gap:10px;">
+        <a href="landing.html#track" class="pill pill--sm pill--ghost">Track</a>
+        <a href="#" class="pill pill--sm pill--solid">Start application <span class="arr">↗</span></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="page-nav" aria-label="On this page">
+  <div class="container">
+    <div class="page-nav__inner">
+      <a href="#how" class="is-active">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+      <a href="#about">About</a>
+      <a href="#legal-privacy">Privacy</a>
+      <a href="#legal-terms">Terms</a>
+      <a href="#legal-accessibility">Accessibility</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- ============== HOW IT WORKS ============== -->
+  <section class="pg" id="how">
+    <div class="container">
+      <div class="pg__head">
+        <div class="pg__num">01 / How it works</div>
+        <div>
+          <h1 class="t-h1 pg__title">From <em>your phone</em> to the government office, on your behalf.</h1>
+          <p class="t-lede pg__lede">Five things happen between you tapping "start" and receiving your outcome. We promise: no surprises, no hidden fees, no documents leaving the country.</p>
+        </div>
+      </div>
+
+      <div class="how-step how-step-divider">
+        <div class="how-detail">
+          <div class="how-step-num">01</div>
+          <div>
+            <h3>You tell us what you <em>need</em></h3>
+            <p>Pick a service from our catalogue. Each one has a clear page explaining what document you'll get, what the government office requires, and how long it usually takes. Free to browse — no account needed.</p>
+            <div class="demo">
+              <span class="t-h4">Example — passport renewal</span>
+              <div class="field" style="margin:0;">
+                <label class="field__label">Service <span class="req">required</span></label>
+                <input class="field__input" type="text" value="Passport renewal" readonly />
+              </div>
+              <div class="t-caption">Fee: RWF 15,000 · ETA: 5–7 working days</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-step how-step-divider">
+        <div class="how-detail">
+          <div class="how-step-num">02</div>
+          <div>
+            <h3>You share what <em>only you</em> can give us</h3>
+            <p>Your name as it appears on your ID. Your phone number. The documents the office needs — a photo of your existing ID, proof of address, your most recent payslip. Each one is encrypted the moment you upload it.</p>
+            <p>If you can't take a clear photo, we'll tell you and help you try again. If you don't have one of the documents, we'll tell you what to do.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-step how-step-divider">
+        <div class="how-detail">
+          <div class="how-step-num">03</div>
+          <div>
+            <h3>An agent is <em>assigned</em></h3>
+            <p>Within one working day, a trained ProxiServe agent is assigned to your case. They reach out by your preferred channel — WhatsApp, SMS, or email — to introduce themselves and confirm the fee.</p>
+            <p>Every agent is ID-verified, bound by confidentiality, and reviewed by our team. You can see their photo and response time on your tracker page.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-step how-step-divider">
+        <div class="how-detail">
+          <div class="how-step-num">04</div>
+          <div>
+            <h3>We <em>apply</em> on your behalf</h3>
+            <p>Your agent fills out the official forms, prepares the supporting documents, and walks them to the right government office (or submits online where supported). You don't queue. You don't fill paper forms. You don't lose half a day at Kacyiru.</p>
+            <p>If the office asks for something extra, your agent will ask you for it through the tracker — you don't have to monitor email.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-step how-step-divider">
+        <div class="how-detail">
+          <div class="how-step-num">05</div>
+          <div>
+            <h3>You <em>receive</em> the result</h3>
+            <p>When the government office issues a result — approval, the printed document, a rejection with reason — your agent updates the status and uploads any official paperwork to your tracker. You get the file and the explanation in plain language.</p>
+            <p>If something can be collected in person, your agent does that too and arranges hand-off at our office or a courier delivery.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== PRICING ============== -->
+  <section class="pg" id="pricing" style="background: var(--cream-2);">
+    <div class="container">
+      <div class="pg__head">
+        <div class="pg__num">02 / Pricing</div>
+        <div>
+          <h1 class="t-h1 pg__title">Every fee, <em>up front</em>.</h1>
+          <p class="t-lede pg__lede">Standard rates cover the most common services. Urgent options exist for some — they're shown alongside. Government fees are passed through at cost and shown separately at checkout.</p>
+        </div>
+      </div>
+
+      <div class="filter-chips" role="group" aria-label="Filter by category">
+        <button class="chip-btn is-active">All</button>
+        <button class="chip-btn">Tax &amp; revenue</button>
+        <button class="chip-btn">Identity &amp; civil</button>
+        <button class="chip-btn">Business</button>
+        <button class="chip-btn">Welfare</button>
+        <button class="chip-btn">Permits</button>
+      </div>
+
+      <div class="pricing-full">
+        <div class="pricing-row pricing-head">
+          <div>Service</div>
+          <div>Category</div>
+          <div>Standard fee</div>
+          <div>Urgent fee</div>
+          <div>Turnaround</div>
+          <div></div>
+        </div>
+        <div class="pricing-row">
+          <div class="svc">Tax <em>registration</em></div>
+          <div class="cat"><span class="label">Cat:</span>Tax &amp; revenue</div>
+          <div class="fee"><span class="label">Fee:</span>RWF 12,000</div>
+          <div class="fee urgent"><span class="label">Urgent:</span>RWF 25,000</div>
+          <div class="eta"><span class="label">ETA:</span>3–5 days</div>
+          <div class="act"><a class="lnk-arrow" href="#" style="font-size:13px;">Details</a></div>
+        </div>
+        <div class="pricing-row">
+          <div class="svc">Passport <em>renewal</em></div>
+          <div class="cat"><span class="label">Cat:</span>Identity &amp; civil</div>
+          <div class="fee"><span class="label">Fee:</span>RWF 15,000</div>
+          <div class="fee urgent"><span class="label">Urgent:</span>RWF 35,000</div>
+          <div class="eta"><span class="label">ETA:</span>5–7 days</div>
+          <div class="act"><a class="lnk-arrow" href="#" style="font-size:13px;">Details</a></div>
+        </div>
+        <div class="pricing-row">
+          <div class="svc">Business <em>license</em></div>
+          <div class="cat"><span class="label">Cat:</span>Business</div>
+          <div class="fee"><span class="label">Fee:</span>RWF 25,000</div>
+          <div class="fee urgent"><span class="label">Urgent:</span>RWF 60,000</div>
+          <div class="eta"><span class="label">ETA:</span>7–10 days</div>
+          <div class="act"><a class="lnk-arrow" href="#" style="font-size:13px;">Details</a></div>
+        </div>
+        <div class="pricing-row">
+          <div class="svc">National <em>ID</em></div>
+          <div class="cat"><span class="label">Cat:</span>Identity &amp; civil</div>
+          <div class="fee"><span class="label">Fee:</span>RWF 8,000</div>
+          <div class="fee urgent" style="color: var(--ink-subtle)"><span class="label">Urgent:</span>—</div>
+          <div class="eta"><span class="label">ETA:</span>2–4 days</div>
+          <div class="act"><a class="lnk-arrow" href="#" style="font-size:13px;">Details</a></div>
+        </div>
+        <div class="pricing-row">
+          <div class="svc">Construction <em>permit</em></div>
+          <div class="cat"><span class="label">Cat:</span>Permits</div>
+          <div class="fee"><span class="label">Fee:</span>RWF 35,000</div>
+          <div class="fee urgent" style="color: var(--ink-subtle)"><span class="label">Urgent:</span>—</div>
+          <div class="eta"><span class="label">ETA:</span>10–14 days</div>
+          <div class="act"><a class="lnk-arrow" href="#" style="font-size:13px;">Details</a></div>
+        </div>
+        <div class="pricing-row">
+          <div class="svc">Mutuelle <em>de Santé</em></div>
+          <div class="cat"><span class="label">Cat:</span>Welfare</div>
+          <div class="fee"><span class="label">Fee:</span>RWF 6,000</div>
+          <div class="fee urgent" style="color: var(--ink-subtle)"><span class="label">Urgent:</span>—</div>
+          <div class="eta"><span class="label">ETA:</span>2–3 days</div>
+          <div class="act"><a class="lnk-arrow" href="#" style="font-size:13px;">Details</a></div>
+        </div>
+        <div class="pricing-row">
+          <div class="svc">Driver's <em>license</em></div>
+          <div class="cat"><span class="label">Cat:</span>Identity &amp; civil</div>
+          <div class="fee"><span class="label">Fee:</span>RWF 18,000</div>
+          <div class="fee urgent"><span class="label">Urgent:</span>RWF 45,000</div>
+          <div class="eta"><span class="label">ETA:</span>5–9 days</div>
+          <div class="act"><a class="lnk-arrow" href="#" style="font-size:13px;">Details</a></div>
+        </div>
+        <div class="pricing-row">
+          <div class="svc">Trading <em>license</em></div>
+          <div class="cat"><span class="label">Cat:</span>Business</div>
+          <div class="fee"><span class="label">Fee:</span>RWF 28,000</div>
+          <div class="fee urgent"><span class="label">Urgent:</span>RWF 55,000</div>
+          <div class="eta"><span class="label">ETA:</span>7–12 days</div>
+          <div class="act"><a class="lnk-arrow" href="#" style="font-size:13px;">Details</a></div>
+        </div>
+      </div>
+
+      <p style="margin-top:32px; font-size:13px; color:var(--ink-muted); max-width: 720px;">
+        Fees include VAT where applicable. Government office fees are passed through at cost and shown separately before payment. We accept MTN Mobile Money, Airtel Money, Visa &amp; Mastercard. You can also pay your agent directly — they'll issue a receipt.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============== FAQ ============== -->
+  <section class="pg" id="faq">
+    <div class="container">
+      <div class="pg__head">
+        <div class="pg__num">03 / FAQ</div>
+        <div>
+          <h1 class="t-h1 pg__title">Questions, <em>answered</em>.</h1>
+          <p class="t-lede pg__lede">Search below, or browse by category. Still stuck? Our team is on WhatsApp — usual reply in under 30 minutes during business hours.</p>
+        </div>
+      </div>
+
+      <div class="faq-search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Search FAQ — e.g. 'refund', 'passport'..." aria-label="Search FAQ" />
+        <button class="pill pill--brand pill--sm">Search</button>
+      </div>
+
+      <div class="faq-categories">
+        <aside class="faq-toc" aria-label="FAQ categories">
+          <h4 class="t-h4">Categories</h4>
+          <ul>
+            <li><a href="#faq-account">Account &amp; access</a></li>
+            <li><a href="#faq-app">Applications</a></li>
+            <li><a href="#faq-pay">Payments</a></li>
+            <li><a href="#faq-docs">Documents</a></li>
+            <li><a href="#faq-privacy">Privacy &amp; security</a></li>
+            <li><a href="#faq-refunds">Refunds</a></li>
+          </ul>
+        </aside>
+
+        <div class="faq-content">
+          <div class="faq-cat" id="faq-account">
+            <h3>Account &amp; <em>access</em></h3>
+            <details class="faq-item">
+              <summary>Do I need an account? <span class="plus">+</span></summary>
+              <div class="faq-item__body">No. You can apply as a guest. We give you a tracking code (PRX-YYYY-NNNNN) and that's all you need to check progress. Creating an account is optional and helps if you have multiple applications.</div>
+            </details>
+            <details class="faq-item">
+              <summary>I lost my tracking code. What now? <span class="plus">+</span></summary>
+              <div class="faq-item__body">From the track page, click "I lost my code". Enter the phone or email you applied with and we'll send the code by SMS or email. If we can't verify it's you, contact support — your agent can confirm your identity another way.</div>
+            </details>
+            <details class="faq-item">
+              <summary>Can I share my code with my spouse? <span class="plus">+</span></summary>
+              <div class="faq-item__body">Yes, but treat it like a password. Anyone with the code can see your application's progress. For sensitive cases, we add a phone-verification step before showing details.</div>
+            </details>
+          </div>
+
+          <div class="faq-cat" id="faq-app">
+            <h3><em>Applications</em></h3>
+            <details class="faq-item">
+              <summary>How long does an application usually take? <span class="plus">+</span></summary>
+              <div class="faq-item__body">Most services finish in 2–10 working days. Each service page shows the typical turnaround. If the office is slower than usual, we'll tell you in your tracker.</div>
+            </details>
+            <details class="faq-item">
+              <summary>Can I cancel after submitting? <span class="plus">+</span></summary>
+              <div class="faq-item__body">Yes, anytime before we submit to the government office. After submission, withdrawal is sometimes possible — your agent can advise. Government fees may not be refundable depending on the office.</div>
+            </details>
+            <details class="faq-item">
+              <summary>What if I started but didn't finish? <span class="plus">+</span></summary>
+              <div class="faq-item__body">Your draft is saved automatically on your device for 30 days. Come back to <a href="landing.html">proxiserve.rw</a> and you'll see a banner offering to resume. If you signed up partway through, the draft is also saved to your account.</div>
+            </details>
+          </div>
+
+          <div class="faq-cat" id="faq-pay">
+            <h3><em>Payments</em></h3>
+            <details class="faq-item">
+              <summary>How do I pay? <span class="plus">+</span></summary>
+              <div class="faq-item__body">MTN Mobile Money, Airtel Money, Visa or Mastercard. You can also pay your assigned agent directly — they'll issue a printed or PDF receipt. Off-platform payments take longer to confirm but are fully supported.</div>
+            </details>
+            <details class="faq-item">
+              <summary>When am I charged? <span class="plus">+</span></summary>
+              <div class="faq-item__body">Never before we agree. After you submit, your agent confirms the final fee (sometimes lower than the standard rate). You only pay once you've approved.</div>
+            </details>
+          </div>
+
+          <div class="faq-cat" id="faq-docs">
+            <h3><em>Documents</em></h3>
+            <details class="faq-item">
+              <summary>What if my photo isn't clear? <span class="plus">+</span></summary>
+              <div class="faq-item__body">Our system flags blurry or dark photos before you submit. You can retake without losing the rest of your form. If your agent later needs a clearer version, you'll get a request through the tracker — no need to start over.</div>
+            </details>
+            <details class="faq-item">
+              <summary>Where are my documents stored? <span class="plus">+</span></summary>
+              <div class="faq-item__body">On servers in Kigali, encrypted at rest. Only the agent assigned to your application can decrypt them. Documents are deleted 24 months after completion unless you ask us to keep them longer.</div>
+            </details>
+          </div>
+
+          <div class="faq-cat" id="faq-privacy">
+            <h3><em>Privacy</em> &amp; security</h3>
+            <details class="faq-item">
+              <summary>Is my data really safe? <span class="plus">+</span></summary>
+              <div class="faq-item__body">Yes. Documents are encrypted in transit (TLS 1.3) and at rest (AES-256). Access is logged. Agents are ID-verified and bound by confidentiality. We comply with Rwanda's Data Protection &amp; Privacy Law. <a href="#legal-privacy" class="linked">Read the full privacy policy</a>.</div>
+            </details>
+          </div>
+
+          <div class="faq-cat" id="faq-refunds">
+            <h3><em>Refunds</em></h3>
+            <details class="faq-item">
+              <summary>What if my application is rejected? <span class="plus">+</span></summary>
+              <div class="faq-item__body">If the rejection was an error on our side (bad form preparation, missing document), we refund our service fee in full. Government fees follow the office's own refund rules. Your agent will explain what's recoverable.</div>
+            </details>
+            <details class="faq-item">
+              <summary>How long do refunds take? <span class="plus">+</span></summary>
+              <div class="faq-item__body">Mobile Money refunds: same day, usually within 2 hours. Card refunds: 5–10 business days depending on your bank. We'll confirm the refund in your tracker the moment we send it.</div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CONTACT ============== -->
+  <section class="pg" id="contact" style="background: var(--cream-2);">
+    <div class="container">
+      <div class="pg__head">
+        <div class="pg__num">04 / Contact</div>
+        <div>
+          <h1 class="t-h1 pg__title">We're easy to <em>reach</em>.</h1>
+          <p class="t-lede pg__lede">WhatsApp is fastest. Phone lines are answered during business hours. If you'd rather write, the form below routes to support — we reply within one working day.</p>
+        </div>
+      </div>
+
+      <div class="contact-grid">
+        <div>
+          <div class="wa-card">
+            <h3>WhatsApp is our <em>fastest channel</em>.</h3>
+            <p>Send a message — our team picks up within 30 minutes during business hours (Mon–Sat, 8:00–18:00 CAT).</p>
+            <a href="https://wa.me/250788123456" class="pill pill--solid">Open WhatsApp <span class="arr">↗</span></a>
+          </div>
+
+          <div style="margin-top: 32px;">
+            <div class="contact-method">
+              <h4 class="t-h4">Phone</h4>
+              <div>
+                <p class="mono">+250 788 123 456</p>
+                <p style="color:var(--ink-muted); font-size:13px; margin-top:4px;">Kigali · Mon–Sat 8:00–18:00 CAT</p>
+              </div>
+            </div>
+            <div class="contact-method">
+              <h4 class="t-h4">Email</h4>
+              <div>
+                <p class="mono">hello@proxiserve.rw</p>
+                <p style="color:var(--ink-muted); font-size:13px; margin-top:4px;">For general questions</p>
+              </div>
+            </div>
+            <div class="contact-method">
+              <h4 class="t-h4">Office</h4>
+              <div>
+                <p>KG 7 Ave, Kigali</p>
+                <p style="color:var(--ink-muted); font-size:13px; margin-top:4px;">Visits by appointment</p>
+              </div>
+            </div>
+            <div class="contact-method">
+              <h4 class="t-h4">Press</h4>
+              <div>
+                <p class="mono">press@proxiserve.rw</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" onsubmit="event.preventDefault(); alert('Form would submit to support inbox.');">
+          <h3>Or send us a <em>message</em>.</h3>
+
+          <div class="row-2">
+            <div class="field">
+              <label class="field__label" for="c-name">Your name <span class="req">*</span></label>
+              <input class="field__input" id="c-name" type="text" required />
+            </div>
+            <div class="field">
+              <label class="field__label" for="c-phone">Phone or email <span class="req">*</span></label>
+              <input class="field__input" id="c-phone" type="text" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="c-topic">What's it about?</label>
+            <select class="field__input" id="c-topic">
+              <option>General question</option>
+              <option>I'm stuck on an application</option>
+              <option>Payment issue</option>
+              <option>Partnership / press</option>
+              <option>Report a problem</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="c-msg">Tell us what's going on <span class="req">*</span></label>
+            <textarea class="field__input" id="c-msg" rows="5" required></textarea>
+            <span class="field__help">Include your tracking code if you have one — we can help faster.</span>
+          </div>
+
+          <button type="submit" class="pill pill--brand">Send message <span class="arr">→</span></button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ABOUT ============== -->
+  <section class="pg" id="about">
+    <div class="container">
+      <div class="pg__head">
+        <div class="pg__num">05 / About</div>
+        <div>
+          <h1 class="t-h1 pg__title">A small team in Kigali, helping people <em>skip the queue</em>.</h1>
+          <p class="t-lede pg__lede">We started ProxiServe in 2024 after spending too many days at government offices on behalf of family members who couldn't take time off work. We thought there had to be a better way. There is.</p>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <div class="mission-card">
+          <span class="eyebrow">Our mission</span>
+          <h3>Make public services feel like <em>any other service.</em></h3>
+          <p>You should be able to renew your passport from your phone, on your lunch break, without asking your employer for half a day off. That's the goal. The technology to do it already exists — what's missing is someone willing to do the work on your behalf. That's us.</p>
+        </div>
+
+        <div>
+          <h3 class="t-h2" style="margin: 0 0 24px;">Who we are</h3>
+          <div class="team-grid">
+            <div class="team-card">
+              <div class="avatar av-1">EH</div>
+              <span class="role">Founder</span>
+              <h4>Eric Habimana</h4>
+              <p>Former government IT consultant. Watches African football.</p>
+            </div>
+            <div class="team-card">
+              <div class="avatar av-2">CN</div>
+              <span class="role">Operations</span>
+              <h4>Claudine Niyonshuti</h4>
+              <p>Runs the agent team. Speaks four languages.</p>
+            </div>
+            <div class="team-card">
+              <div class="avatar av-3">PM</div>
+              <span class="role">Product</span>
+              <h4>Patrick Manzi</h4>
+              <p>Builds the platform. Believes typography matters.</p>
+            </div>
+            <div class="team-card">
+              <div class="avatar av-4">DI</div>
+              <span class="role">Trust &amp; safety</span>
+              <h4>Diane Ingabire</h4>
+              <p>Keeps our agents trained and our users safe.</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 32px;">
+            <a href="#" class="lnk-arrow">We're hiring — see open roles <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== LEGAL — PRIVACY ============== -->
+  <section class="pg" id="legal-privacy" style="background: var(--cream-2);">
+    <div class="container">
+      <div class="pg__head">
+        <div class="pg__num">06 / Privacy</div>
+        <div>
+          <h1 class="t-h1 pg__title">Privacy <em>policy</em></h1>
+          <p class="t-lede pg__lede">A short summary at each section. The full legal language sits beneath. Last updated: 19 May 2026.</p>
+        </div>
+      </div>
+
+      <div class="legal-grid">
+        <aside class="legal-toc">
+          <h4 class="t-h4">On this page</h4>
+          <ul>
+            <li><a href="#p-1">What we collect</a></li>
+            <li><a href="#p-2">How we use it</a></li>
+            <li><a href="#p-3">Who sees it</a></li>
+            <li><a href="#p-4">How long we keep it</a></li>
+            <li><a href="#p-5">Your rights</a></li>
+            <li><a href="#p-6">Contact our DPO</a></li>
+          </ul>
+        </aside>
+
+        <article class="legal-body">
+          <div class="legal-meta">Effective 19 May 2026 · Replaces previous version dated 12 January 2026</div>
+
+          <h3 id="p-1">What we <em>collect</em></h3>
+          <div class="legal-summary">In plain words: your name, your contact details, your ID number, and the documents the government office needs to process your application. Nothing more.</div>
+          <p>We collect personal information you provide directly during an application: your full name as it appears on government-issued identification, your national ID or passport number, your date of birth, your contact phone number, optionally your email address, and the supporting documents required for the specific service you've requested.</p>
+          <p>We also collect technical information automatically: the IP address you connect from, the browser you use, the timestamps of your visits, and your preferred language. This information is used to keep the service secure and improve it.</p>
+
+          <h3 id="p-2">How we <em>use</em> it</h3>
+          <div class="legal-summary">To do exactly what you asked us to do — apply on your behalf — and to confirm it's still you when you come back.</div>
+          <p>Personal information is used solely to prepare and submit your application to the relevant government office, to communicate with you about the status of that application, and to verify your identity when you return to check progress. We do not use your information for marketing purposes. We do not sell or rent your data to third parties.</p>
+
+          <h3 id="p-3">Who <em>sees</em> it</h3>
+          <div class="legal-summary">Your assigned agent. The government office your application goes to. Nobody else inside the company without an audit-logged reason.</div>
+          <p>Within ProxiServe, only the agent assigned to your case can decrypt and view your documents. Administrative staff may access metadata (status, timestamps, application code) for oversight purposes — every such access is logged and auditable. Outside ProxiServe, we share the specific information the government office requires to process your application, and nothing else.</p>
+
+          <h3 id="p-4">How <em>long</em> we keep it</h3>
+          <div class="legal-summary">Twenty-four months after your application finishes, unless you ask us to keep it longer or delete it sooner.</div>
+          <p>Personal documents and application data are retained for twenty-four (24) months after the application reaches a terminal state (Completed or Rejected). After that period, we permanently delete the documents and personal details. Application metadata (tracking code, dates, status) is retained anonymously for legal and audit purposes.</p>
+
+          <h3 id="p-5">Your <em>rights</em></h3>
+          <div class="legal-summary">Access, correct, delete, or take your data elsewhere — any time.</div>
+          <p>You may, at any time: request a copy of all personal information we hold about you (data portability), request correction of inaccurate information, request deletion of your information (right to be forgotten, subject to legal retention obligations), object to specific processing activities, and withdraw consent for any processing that was based on your consent. To exercise any of these rights, contact our Data Protection Officer below.</p>
+
+          <h3 id="p-6">Contact our <em>DPO</em></h3>
+          <p>Data Protection Officer<br>
+            <span class="mono">dpo@proxiserve.rw</span><br>
+            ProxiServe Ltd, KG 7 Ave, Kigali, Rwanda</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== LEGAL — TERMS ============== -->
+  <section class="pg" id="legal-terms">
+    <div class="container">
+      <div class="pg__head">
+        <div class="pg__num">07 / Terms</div>
+        <div>
+          <h1 class="t-h1 pg__title">Terms of <em>service</em></h1>
+          <p class="t-lede pg__lede">The agreement between you and ProxiServe Ltd when you use the service. Plain language summaries on each section.</p>
+        </div>
+      </div>
+
+      <div class="legal-grid">
+        <aside class="legal-toc">
+          <h4 class="t-h4">On this page</h4>
+          <ul>
+            <li><a href="#t-1">What ProxiServe is</a></li>
+            <li><a href="#t-2">Your responsibilities</a></li>
+            <li><a href="#t-3">Our responsibilities</a></li>
+            <li><a href="#t-4">Fees &amp; refunds</a></li>
+            <li><a href="#t-5">When we stop service</a></li>
+            <li><a href="#t-6">Disputes</a></li>
+          </ul>
+        </aside>
+
+        <article class="legal-body">
+          <div class="legal-meta">Effective 19 May 2026</div>
+
+          <h3 id="t-1">What ProxiServe <em>is</em></h3>
+          <div class="legal-summary">A platform that lets you hire a trained agent to apply for government services on your behalf.</div>
+          <p>ProxiServe is a digital intermediary service. We do not issue government documents. We submit applications to the relevant authorities and act as your authorised representative for that specific purpose. Approval of any application remains the sole discretion of the issuing authority.</p>
+
+          <h3 id="t-2">Your <em>responsibilities</em></h3>
+          <div class="legal-summary">Give us accurate information. Don't ask us to break the law. Pay agreed fees.</div>
+          <p>You agree to provide accurate and complete information, to upload only documents that are genuinely yours or that you are authorised to submit, to use the service for lawful purposes only, and to pay the fees agreed at confirmation.</p>
+
+          <h3 id="t-3">Our <em>responsibilities</em></h3>
+          <div class="legal-summary">Do the work competently. Keep your data safe. Be honest about what's happening.</div>
+          <p>We will assign a trained agent to your case, prepare your application with reasonable care, keep your information secure as described in the Privacy Policy, and keep you informed of progress and outcomes truthfully.</p>
+
+          <h3 id="t-4">Fees &amp; <em>refunds</em></h3>
+          <p>Our service fee is shown before payment. Government fees are passed through at cost. If we fail to deliver due to error on our side, we refund our service fee in full. Government fees follow each authority's own refund rules.</p>
+
+          <h3 id="t-5">When we <em>stop</em> service</h3>
+          <p>We may terminate service to any user who provides false information, attempts to defraud the government, or repeatedly violates these terms. We'll explain why and refund any unused portion of fees paid.</p>
+
+          <h3 id="t-6">Disputes</h3>
+          <p>We aim to resolve disputes informally first — contact support. If informal resolution fails, disputes are subject to the laws of Rwanda and the courts of Kigali.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== LEGAL — ACCESSIBILITY ============== -->
+  <section class="pg" id="legal-accessibility" style="background: var(--cream-2);">
+    <div class="container">
+      <div class="pg__head">
+        <div class="pg__num">08 / Accessibility</div>
+        <div>
+          <h1 class="t-h1 pg__title">Accessibility <em>statement</em></h1>
+          <p class="t-lede pg__lede">We've designed ProxiServe to work for everyone — including users on low-end devices, slow networks, and users who rely on assistive technology.</p>
+        </div>
+      </div>
+
+      <div class="legal-grid">
+        <aside class="legal-toc">
+          <h4 class="t-h4">On this page</h4>
+          <ul>
+            <li><a href="#a-1">Conformance level</a></li>
+            <li><a href="#a-2">What works well</a></li>
+            <li><a href="#a-3">Known issues</a></li>
+            <li><a href="#a-4">Report a problem</a></li>
+          </ul>
+        </aside>
+
+        <article class="legal-body">
+          <div class="legal-meta">Last audited 04 May 2026</div>
+
+          <h3 id="a-1">Conformance <em>level</em></h3>
+          <p>ProxiServe aims to meet WCAG 2.1 Level AA across all public-facing pages and the authenticated client experience. Agent and admin workspaces target Level AA with documented exceptions for dense data tables.</p>
+
+          <h3 id="a-2">What works <em>well</em></h3>
+          <p>The full landing flow is keyboard navigable, with visible focus rings on every interactive element. All form fields have real labels. Status changes announce themselves through ARIA live regions. We respect <span class="mono">prefers-reduced-motion</span> and offer a high-contrast mode in user settings. Mobile touch targets are at least 44×44 px.</p>
+
+          <h3 id="a-3">Known <em>issues</em></h3>
+          <p>The admin schema-builder drag-and-drop is not fully usable with screen readers below Windows; a keyboard alternative is available. PDF outcome documents are not always tagged for accessibility — we're working with the government offices that issue them.</p>
+
+          <h3 id="a-4">Report a <em>problem</em></h3>
+          <p>If you find an accessibility issue, we want to know. Email <span class="mono">a11y@proxiserve.rw</span> or use the <a href="#contact" class="linked">contact form</a>. We reply within two business days.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer style="background:var(--cream); padding: 40px 0; border-top: 1px solid var(--rule);">
+  <div class="container">
+    <div class="foot__bottom" style="margin-top:0; padding-top:0; border-top:none;">
+      <span>PROXISERVE / FLOW 01 / SUPPORTING PAGES / v0.1</span>
+      <a href="index.html" class="lnk-arrow" style="font-size:12px;">Back to Flow 1 hub →</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Highlight active section in page-nav
+  const navLinks = document.querySelectorAll('.page-nav a');
+  const sections = document.querySelectorAll('section.pg');
+  const setActive = () => {
+    const y = window.scrollY + 200;
+    let active = sections[0];
+    sections.forEach(s => { if (s.offsetTop <= y) active = s; });
+    navLinks.forEach(a => {
+      a.classList.toggle('is-active', a.getAttribute('href') === '#' + active.id ||
+        // map sub-anchors back to their parent section
+        (a.getAttribute('href').startsWith('#legal-') && active.id === a.getAttribute('href').slice(1)));
+    });
+  };
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+</script>
+
+</body>
+</html>

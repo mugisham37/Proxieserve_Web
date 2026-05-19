@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProxiServe — Style Analysis & Token Extraction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Surfaces */
+    --cream:        #F2EBD7;   /* page bg, warm cream */
+    --cream-2:      #EFE6CC;   /* secondary surface */
+    --paper:        #FBF6E8;   /* card / surface */
+    --paper-2:      #F7F0DB;   /* raised hover */
+    --ink:          #1A1612;   /* primary text, near-black warm */
+    --ink-2:        #2E2823;
+    --ink-muted:    #6B6056;
+    --ink-subtle:   #9A8E80;
+    --hairline:     #1A1612;   /* used at 18% via border-color */
+    --rule:         rgba(26,22,18,0.18);
+    --rule-strong:  rgba(26,22,18,0.55);
+
+    /* Brand — one confident colour, calm magenta-pink (refined from refs) */
+    --brand:        #C9437A;
+    --brand-ink:    #8E2A56;
+    --brand-soft:   #F6DCE7;
+    --brand-contrast:#FFFFFF;
+
+    /* Accents (used sparingly, for status only) */
+    --warn:         #C97A1F;
+    --warn-soft:    #F6E6CD;
+    --ok:           #3F7A4E;
+    --ok-soft:      #DDEBDB;
+    --danger:       #B83A2A;
+    --danger-soft:  #F4D9D2;
+    --info:         #2E5E8E;
+    --info-soft:    #D7E2EE;
+
+    /* Marketing-only colour blocks (for landing colour grid moments) */
+    --block-marigold: #E9B530;
+    --block-pink:     #E78BB4;
+    --block-green:    #2D7A3E;
+    --block-blue:     #2F4FCC;
+    --block-red:      #D5341E;
+
+    /* Focus */
+    --focus:        #2F4FCC;
+
+    /* Type */
+    --serif: "Fraunces", "Times New Roman", Georgia, serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--cream);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .doc { max-width: 1240px; margin: 0 auto; padding: 80px 40px 160px; }
+  @media (max-width: 760px) { .doc { padding: 48px 20px 96px; } }
+
+  /* Top label bar */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+  }
+  .topbar .brand { display: flex; align-items: center; gap: 10px; font-style: normal; }
+  .topbar .mark {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 18px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .topbar .mark .dot { width: 7px; height: 7px; border-radius: 999px; background: var(--brand); display: inline-block; }
+  .topbar .meta { color: var(--ink-muted); }
+
+  /* Hero */
+  h1.display {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(48px, 7vw, 92px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 56px 0 16px;
+    text-wrap: balance;
+  }
+  h1.display em { font-style: italic; font-weight: 400; }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+  .lede {
+    font-family: var(--serif);
+    font-size: clamp(20px, 2.2vw, 26px);
+    line-height: 1.45;
+    color: var(--ink-2);
+    max-width: 760px;
+    margin: 0 0 40px;
+    text-wrap: pretty;
+  }
+  .lede em { font-style: italic; }
+
+  /* Section */
+  section { margin-top: 96px; }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin: 0 0 8px;
+  }
+  h2 em { font-style: italic; }
+  .section-sub {
+    color: var(--ink-muted);
+    font-size: 15px;
+    margin: 0 0 32px;
+    max-width: 640px;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    margin: 0 0 8px;
+  }
+  h4 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    margin: 0 0 12px;
+  }
+  p { margin: 0 0 12px; }
+  p.body-lg { font-size: 17px; line-height: 1.6; color: var(--ink-2); }
+
+  /* Notched card — the signature motif. Implemented with clip-path. */
+  .notch {
+    --n: 22px;
+    clip-path: polygon(
+      var(--n) 0, 100% 0, 100% calc(100% - var(--n)),
+      calc(100% - var(--n)) 100%, 0 100%, 0 var(--n)
+    );
+  }
+  .notch-tr-bl {
+    --n: 22px;
+    clip-path: polygon(
+      0 0, calc(100% - var(--n)) 0, 100% var(--n),
+      100% 100%, var(--n) 100%, 0 calc(100% - var(--n))
+    );
+  }
+
+  /* Card */
+  .card {
+    background: var(--paper);
+    padding: 28px;
+    border: 1px solid var(--rule);
+  }
+  .card.notch { border: none; } /* clip-path eats the border */
+  .card-row { display: grid; gap: 20px; grid-template-columns: repeat(12, 1fr); }
+  .col-4 { grid-column: span 4; }
+  .col-6 { grid-column: span 6; }
+  .col-12 { grid-column: span 12; }
+  @media (max-width: 900px) {
+    .col-4, .col-6 { grid-column: span 12; }
+  }
+
+  /* Style analysis intro */
+  .observations { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 32px; }
+  @media (max-width: 760px) { .observations { grid-template-columns: 1fr; } }
+  .obs {
+    background: var(--paper);
+    padding: 24px;
+    position: relative;
+  }
+  .obs h3 { display: flex; gap: 12px; align-items: baseline; }
+  .obs h3 .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-subtle);
+    font-weight: 500;
+  }
+  .obs p { color: var(--ink-2); font-size: 15px; margin: 0; }
+
+  /* Token tables */
+  table.tokens {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+  table.tokens th, table.tokens td {
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: middle;
+  }
+  table.tokens th {
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    background: var(--cream-2);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  table.tokens td.mono, table.tokens td .mono { font-family: var(--mono); font-size: 13px; }
+  table.tokens .swatch {
+    display: inline-block; width: 26px; height: 26px; border-radius: 6px;
+    border: 1px solid var(--rule); vertical-align: middle; margin-right: 12px;
+  }
+
+  /* Palette grid */
+  .palette {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+    margin-top: 16px;
+    border: 1px solid var(--rule);
+  }
+  .palette > div {
+    aspect-ratio: 1;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 14px;
+    font-family: var(--mono); font-size: 11px;
+    border-right: 1px solid rgba(0,0,0,0.08);
+  }
+  .palette > div:last-child { border-right: none; }
+  .palette .label { color: rgba(255,255,255,0.85); font-weight: 500; letter-spacing: 0.04em; }
+  .palette .label.dark { color: rgba(0,0,0,0.7); }
+  .palette .hex { font-size: 10px; opacity: 0.7; }
+  @media (max-width: 760px) { .palette { grid-template-columns: repeat(3, 1fr); } .palette > div:nth-child(3) { border-right: none; } }
+
+  /* Type scale */
+  .type-row {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-meta {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-muted); line-height: 1.6;
+  }
+  .type-meta strong { color: var(--ink); font-weight: 500; }
+  .type-sample { color: var(--ink); }
+  @media (max-width: 760px) { .type-row { grid-template-columns: 1fr; } }
+
+  /* Spacing visualization */
+  .spacing-grid { display: flex; gap: 24px; align-items: flex-end; flex-wrap: wrap; }
+  .spacing-grid .bar { background: var(--ink); border-radius: 2px; }
+  .spacing-grid .item { text-align: center; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); }
+
+  /* Radii */
+  .radii { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  @media (max-width: 760px) { .radii { grid-template-columns: repeat(3, 1fr); } }
+  .radii .r {
+    aspect-ratio: 1; background: var(--paper); border: 1px solid var(--rule);
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 10px; font-family: var(--mono); font-size: 11px; color: var(--ink-muted);
+  }
+
+  /* Components preview */
+  .pill-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 16px;
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .pill-btn.solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .pill-btn.brand { background: var(--brand); color: white; border-color: var(--brand); }
+  .pill-btn .arrow { font-style: normal; }
+  .btn-sans {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-family: var(--sans); font-weight: 500; font-size: 14px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .btn-sans.solid { background: var(--ink); color: var(--paper); }
+  .btn-sans.brand { background: var(--brand); color: white; border-color: var(--brand); }
+
+  /* Status pill */
+  .status {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+  }
+  .status .ico { width: 12px; height: 12px; border-radius: 999px; display: inline-block; }
+  .s-info    { background: var(--info-soft); color: var(--info); }      .s-info .ico { background: var(--info); }
+  .s-brand   { background: var(--brand-soft); color: var(--brand-ink); } .s-brand .ico { background: var(--brand); }
+  .s-warn    { background: var(--warn-soft); color: var(--warn); }      .s-warn .ico { background: var(--warn); }
+  .s-ok      { background: var(--ok-soft); color: var(--ok); }          .s-ok .ico { background: var(--ok); }
+  .s-danger  { background: var(--danger-soft); color: var(--danger); }  .s-danger .ico { background: var(--danger); }
+
+  /* Application code chip */
+  .code-chip {
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 14px 22px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    background: var(--paper);
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .code-chip .copy {
+    font-family: var(--sans); font-size: 12px;
+    color: var(--ink-muted); font-weight: 500;
+    border-left: 1px solid var(--rule); padding-left: 14px;
+    cursor: pointer;
+  }
+
+  /* Hairline rule heading style */
+  .rule-section {
+    display: flex; align-items: baseline; gap: 16px;
+    border-bottom: 1px solid var(--rule-strong);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  .rule-section .num {
+    font-family: var(--mono); font-size: 13px; color: var(--ink-muted); letter-spacing: 0.04em;
+    width: 60px; flex-shrink: 0;
+  }
+  .rule-section .label {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    font-size: clamp(28px, 3.5vw, 40px);
+    flex: 1;
+  }
+
+  /* Marketing block sample */
+  .mk-blocks {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+    border: 1px solid var(--ink);
+    overflow: hidden;
+  }
+  .mk-blocks > div {
+    height: 220px;
+    display: flex; align-items: center; justify-content: center;
+    border-right: 1px solid var(--ink);
+    position: relative;
+  }
+  .mk-blocks > div:last-child { border-right: none; }
+  .mk-blocks .b1 { background: var(--block-marigold); }
+  .mk-blocks .b2 { background: var(--block-pink); }
+  .mk-blocks .b3 { background: var(--block-green); }
+  .mk-blocks .pill {
+    background: var(--paper); color: var(--ink);
+    padding: 14px 30px; border-radius: 999px; border: 1px solid var(--ink);
+    font-family: var(--serif); font-style: italic; font-size: 20px;
+  }
+
+  /* Closing gradient band sample */
+  .gradient-band {
+    background: linear-gradient(95deg, #C9437A 0%, #D5341E 100%);
+    color: var(--ink);
+    padding: 64px 48px;
+    margin-top: 32px;
+    position: relative;
+  }
+  .gradient-band h3 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 400;
+    margin: 0 0 12px;
+    line-height: 1.05;
+  }
+  .gradient-band em { font-style: italic; }
+  .gradient-band p { color: rgba(26,22,18,0.85); max-width: 540px; }
+
+  /* Anti-pattern list */
+  .ban {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px;
+    margin-top: 16px;
+    font-family: var(--sans); font-size: 14px;
+  }
+  .ban li { padding: 6px 0; border-bottom: 1px solid var(--rule); list-style: none; color: var(--ink-2); }
+  .ban li::before { content: "—  "; color: var(--ink-subtle); font-family: var(--mono); }
+  @media (max-width: 760px) { .ban { grid-template-columns: 1fr; } }
+  ul { padding: 0; margin: 0; }
+
+  /* Flow plan */
+  .flows {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
+    border-top: 1px solid var(--rule-strong);
+  }
+  @media (max-width: 760px) { .flows { grid-template-columns: 1fr; } }
+  .flow-item {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 20px;
+    padding-right: 24px;
+  }
+  .flow-item:nth-child(odd) { border-right: 1px solid var(--rule); padding-right: 24px; }
+  .flow-item:nth-child(even) { padding-left: 24px; }
+  @media (max-width: 760px) { .flow-item:nth-child(odd) { border-right: none; padding-right: 0; } .flow-item:nth-child(even) { padding-left: 0; } }
+  .flow-num {
+    font-family: var(--mono); font-size: 13px;
+    color: var(--ink-muted); padding-top: 4px;
+  }
+  .flow-title { font-family: var(--serif); font-size: 22px; margin: 0 0 4px; font-weight: 500; }
+  .flow-title em { font-style: italic; font-weight: 400; }
+  .flow-body { font-size: 14px; color: var(--ink-muted); margin: 0; line-height: 1.5; }
+  .flow-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); margin-top: 6px; letter-spacing: 0.04em; }
+
+  /* Big quote in dark notched card (matching reference 3) */
+  .quote {
+    background: #1A1612;
+    color: var(--paper);
+    padding: 56px;
+    position: relative;
+    margin-top: 24px;
+  }
+  .quote-inner {
+    border: 1px solid rgba(246,236,210,0.25);
+    padding: 36px;
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.5;
+    max-width: 720px;
+  }
+  .quote-inner em { font-style: italic; }
+  .quote .attr {
+    margin-top: 24px;
+    font-family: var(--sans); font-size: 13px;
+    color: rgba(246,236,210,0.7);
+    text-align: right;
+  }
+
+  /* Token export pill */
+  .export-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 16px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    font-family: var(--mono); font-size: 12px;
+    background: transparent;
+  }
+
+  footer {
+    margin-top: 120px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule-strong);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+  footer .next {
+    font-family: var(--serif); font-style: italic; font-size: 18px;
+    color: var(--ink);
+  }
+
+  /* Two-column comparison */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 760px) { .compare { grid-template-columns: 1fr; } }
+  .compare > div { background: var(--paper); padding: 24px; }
+  .compare h4 { color: var(--ink-2); }
+  .compare ul li { padding: 6px 0; list-style: none; font-size: 14px; color: var(--ink-2); border-bottom: 1px dashed var(--rule); }
+  .compare ul li:last-child { border-bottom: none; }
+
+  /* Notch demo strip */
+  .notch-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 16px;
+  }
+  @media (max-width: 760px) { .notch-strip { grid-template-columns: 1fr; } }
+  .notch-strip .demo {
+    padding: 28px; height: 180px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    font-family: var(--mono); font-size: 11px;
+  }
+  .notch-strip .d1 { background: var(--block-marigold); color: var(--ink); }
+  .notch-strip .d2 { background: var(--brand); color: white; }
+  .notch-strip .d3 { background: var(--ink); color: var(--paper); }
+
+  .small-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); letter-spacing: 0.05em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="mark"><span class="dot"></span> ProxiServe</span>
+    <span class="meta">— Design system foundations</span>
+  </div>
+  <div class="meta">v0.1 · Token extraction</div>
+</div>
+
+<div class="doc">
+
+  <div class="eyebrow">00 — Foundations</div>
+  <h1 class="display">A calm <em>public-service</em> product, dressed in editorial.</h1>
+  <p class="lede">Before designing a single screen, this document does three things: <em>analyzes</em> the visual language from your references, <em>extracts</em> a token set that respects ProxiServe's brief (warm, trustworthy, government-adjacent, used on cheap Android phones), and <em>plans</em> the ten-flow delivery.</p>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top: 8px;">
+    <span class="export-pill">font / Fraunces + Inter + JetBrains Mono</span>
+    <span class="export-pill">colour / cream + ink + magenta</span>
+    <span class="export-pill">motif / notched corners + pill buttons</span>
+  </div>
+
+  <!-- ==================== REFERENCE ANALYSIS ==================== -->
+  <section>
+    <div class="rule-section">
+      <span class="num">01 /</span>
+      <span class="label">What the references are <em>actually</em> doing</span>
+    </div>
+
+    <p class="body-lg" style="max-width: 800px;">Your four reference images share a coherent set of moves that I'll lift directly. They also share some agency-website energy that would be wrong for a government-adjacent product — I'll filter those out. Here's the breakdown.</p>
+
+    <div class="observations">
+      <div class="obs">
+        <h3><span class="num">01.</span> Editorial serif as the personality</h3>
+        <p>All headings, nav, button labels, and even body quotes use a high-contrast didone-style serif (Bodoni / Fraunces feel) — frequently in italic. Sans-serif is reserved for utility text, microcopy, and the monospace-like labels in dense rows. This single decision makes the product feel <em>considered</em> rather than templated.</p>
+      </div>
+      <div class="obs">
+        <h3><span class="num">02.</span> The notched corner motif</h3>
+        <p>Multiple references use chamfered / notched corners — opposite-corner notches on color blocks (workplace block), one-corner notch on dark testimonial cards, full-radius pills on buttons. This is the signature we'll carry into ProxiServe as the brand mark for cards, status hero, document slots, and the receipt.</p>
+      </div>
+      <div class="obs">
+        <h3><span class="num">03.</span> Warm cream over flat colour blocks</h3>
+        <p>Backgrounds are a warm desaturated cream (<span class="mono">~#F2EBD7</span>), not paper-white. Bold colour blocks (marigold, magenta, kelly green, red, royal blue) sit on top in flat rectangles — never gradient, never glossy. We'll keep the cream foundation everywhere and limit the bold colour blocks to <em>marketing surfaces</em> only.</p>
+      </div>
+      <div class="obs">
+        <h3><span class="num">04.</span> Pill buttons with italic serif labels</h3>
+        <p>White or cream pills with a 1px dark border, italic serif label, optional small arrow glyph. This is the marketing CTA. For dense app surfaces (agent dashboard, admin) we'll mirror this energy with rounded-rectangle sans buttons so density doesn't suffer.</p>
+      </div>
+      <div class="obs">
+        <h3><span class="num">05.</span> Hairline rules + monospace labels</h3>
+        <p>Lists (awards, services) use thin hairline rules with mono-style metadata and pink underlines for inline links. We'll use the same recipe for status timelines, activity logs, audit trails, and pricing rows.</p>
+      </div>
+      <div class="obs">
+        <h3><span class="num">06.</span> Closing gradient band</h3>
+        <p>The "Let's connect" magenta→orange gradient band is the one place gradients are allowed. We'll allow exactly one closing band per long marketing page (landing, service detail, pricing) and never inside the app shell.</p>
+      </div>
+    </div>
+
+    <h4 style="margin-top: 56px;">What we are <em>not</em> taking from the references</h4>
+    <ul class="ban">
+      <li>Six-up candy-bright service grid — too playful for ID documents</li>
+      <li>Display-size playfulness on form pages — calm wins over clever</li>
+      <li>Bright color blocks behind dashboard chrome — agent + admin stay neutral</li>
+      <li>Decorative line patterns — only used in the landing hero, not elsewhere</li>
+      <li>Italic serif buttons inside dense tables — sans buttons there for speed</li>
+      <li>Agency-style asymmetric nav — we keep nav predictable for low-literacy users</li>
+    </ul>
+  </section>
+
+  <!-- ==================== TOKENS ==================== -->
+  <section>
+    <div class="rule-section">
+      <span class="num">02 /</span>
+      <span class="label"><em>Color</em> tokens</span>
+    </div>
+
+    <p class="section-sub">A warm cream foundation, a confident pink-magenta brand, and a small accent set that exists only to carry status. Light is default everywhere; agent and admin support a dark mode (not previewed here).</p>
+
+    <h4>Surfaces &amp; ink</h4>
+    <div class="palette" style="margin-bottom: 24px;">
+      <div style="background:#F2EBD7"><span class="label dark">cream / bg</span><span class="hex" style="color:rgba(0,0,0,0.55)">#F2EBD7</span></div>
+      <div style="background:#FBF6E8"><span class="label dark">paper / surface</span><span class="hex" style="color:rgba(0,0,0,0.55)">#FBF6E8</span></div>
+      <div style="background:#EFE6CC"><span class="label dark">cream-2 / sub</span><span class="hex" style="color:rgba(0,0,0,0.55)">#EFE6CC</span></div>
+      <div style="background:#1A1612"><span class="label">ink / text</span><span class="hex">#1A1612</span></div>
+      <div style="background:#6B6056"><span class="label">ink-muted</span><span class="hex">#6B6056</span></div>
+      <div style="background:#9A8E80"><span class="label">ink-subtle</span><span class="hex">#9A8E80</span></div>
+    </div>
+
+    <h4>Brand</h4>
+    <div class="palette" style="margin-bottom: 24px; grid-template-columns: repeat(3, 1fr);">
+      <div style="background:#C9437A"><span class="label">brand</span><span class="hex">#C9437A</span></div>
+      <div style="background:#8E2A56"><span class="label">brand-ink</span><span class="hex">#8E2A56</span></div>
+      <div style="background:#F6DCE7"><span class="label dark">brand-soft</span><span class="hex" style="color:rgba(0,0,0,0.55)">#F6DCE7</span></div>
+    </div>
+
+    <h4>Status accents (used in status pills, banners — never decoratively)</h4>
+    <div class="palette" style="margin-bottom: 24px; grid-template-columns: repeat(4, 1fr);">
+      <div style="background:#2E5E8E"><span class="label">info</span><span class="hex">#2E5E8E</span></div>
+      <div style="background:#3F7A4E"><span class="label">ok / success</span><span class="hex">#3F7A4E</span></div>
+      <div style="background:#C97A1F"><span class="label">warn</span><span class="hex">#C97A1F</span></div>
+      <div style="background:#B83A2A"><span class="label">danger</span><span class="hex">#B83A2A</span></div>
+    </div>
+
+    <h4>Marketing color blocks (landing / service detail / pricing only — never in-app)</h4>
+    <div class="palette" style="grid-template-columns: repeat(5, 1fr);">
+      <div style="background:#E9B530"><span class="label dark">marigold</span><span class="hex" style="color:rgba(0,0,0,0.55)">#E9B530</span></div>
+      <div style="background:#E78BB4"><span class="label dark">pink</span><span class="hex" style="color:rgba(0,0,0,0.55)">#E78BB4</span></div>
+      <div style="background:#2D7A3E"><span class="label">green</span><span class="hex">#2D7A3E</span></div>
+      <div style="background:#2F4FCC"><span class="label">blue</span><span class="hex">#2F4FCC</span></div>
+      <div style="background:#D5341E"><span class="label">red</span><span class="hex">#D5341E</span></div>
+    </div>
+  </section>
+
+  <!-- ==================== TYPE ==================== -->
+  <section>
+    <div class="rule-section">
+      <span class="num">03 /</span>
+      <span class="label"><em>Type</em> system</span>
+    </div>
+
+    <p class="section-sub">Two families. Fraunces (a Bodoni-flavoured variable serif with a true italic) carries personality. Inter does the heavy lifting for UI. JetBrains Mono is reserved for application codes and table metadata.</p>
+
+    <div class="card" style="background: var(--paper);">
+
+      <div class="type-row">
+        <div class="type-meta"><strong>display</strong><br>Fraunces · 72/76<br>weight 400 + italic</div>
+        <div class="type-sample" style="font-family: var(--serif); font-weight: 400; font-size: 64px; line-height: 1.05; letter-spacing: -0.02em;">Hand it over.<br><em>We'll handle it.</em></div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta"><strong>h1 / page</strong><br>Fraunces · 44/50<br>weight 400</div>
+        <div class="type-sample" style="font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 1.1; letter-spacing: -0.015em;">Check your application</div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta"><strong>h2 / section</strong><br>Fraunces · 28/34<br>weight 500</div>
+        <div class="type-sample" style="font-family: var(--serif); font-weight: 500; font-size: 28px; line-height: 1.2;">Services we handle today</div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta"><strong>h3 / card</strong><br>Fraunces · 22/28<br>weight 500</div>
+        <div class="type-sample" style="font-family: var(--serif); font-weight: 500; font-size: 22px;">Passport renewal</div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta"><strong>lede / quote</strong><br>Fraunces · 22/32<br>weight 400 italic</div>
+        <div class="type-sample" style="font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 22px; line-height: 1.45; color: var(--ink-2);">Skip the queues and the confusing forms — a trained agent applies on your behalf.</div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta"><strong>body</strong><br>Inter · 16/26<br>weight 400</div>
+        <div class="type-sample" style="font-family: var(--sans); font-size: 16px; line-height: 1.55; color: var(--ink-2);">We use this to apply on your behalf. It's encrypted and only your assigned agent sees it. You'll get a tracking code as soon as you send it.</div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta"><strong>body-sm / helper</strong><br>Inter · 14/22<br>weight 400</div>
+        <div class="type-sample" style="font-family: var(--sans); font-size: 14px; color: var(--ink-muted);">As it appears on your ID — 16 digits, no spaces.</div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta"><strong>caption / label</strong><br>Inter · 12/18<br>weight 600 · uppercase · 0.12em tracking</div>
+        <div class="type-sample" style="font-family: var(--sans); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-muted);">Application code</div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta"><strong>mono / code</strong><br>JetBrains Mono · 16/22<br>weight 500</div>
+        <div class="type-sample" style="font-family: var(--mono); font-size: 18px; font-weight: 500; letter-spacing: 0.04em;">PRX-2026-00483</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SPACING + RADII ==================== -->
+  <section>
+    <div class="rule-section">
+      <span class="num">04 /</span>
+      <span class="label"><em>Spacing</em>, radii, shadow</span>
+    </div>
+
+    <h4>Spacing scale — 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128 px</h4>
+    <p class="section-sub">No in-between values. If a screen feels cramped, the answer is more space.</p>
+
+    <div class="spacing-grid">
+      <div class="item"><div class="bar" style="width:4px;height:60px"></div>4</div>
+      <div class="item"><div class="bar" style="width:8px;height:60px"></div>8</div>
+      <div class="item"><div class="bar" style="width:12px;height:60px"></div>12</div>
+      <div class="item"><div class="bar" style="width:16px;height:60px"></div>16</div>
+      <div class="item"><div class="bar" style="width:24px;height:60px"></div>24</div>
+      <div class="item"><div class="bar" style="width:32px;height:60px"></div>32</div>
+      <div class="item"><div class="bar" style="width:48px;height:60px"></div>48</div>
+      <div class="item"><div class="bar" style="width:64px;height:60px"></div>64</div>
+      <div class="item"><div class="bar" style="width:96px;height:60px"></div>96</div>
+      <div class="item"><div class="bar" style="width:128px;height:60px"></div>128</div>
+    </div>
+
+    <h4 style="margin-top: 48px;">Radii — and the signature notch</h4>
+    <div class="radii">
+      <div class="r" style="border-radius: 0;">none</div>
+      <div class="r" style="border-radius: 6px;">sm · 6</div>
+      <div class="r" style="border-radius: 10px;">md · 10</div>
+      <div class="r" style="border-radius: 14px;">lg · 14</div>
+      <div class="r" style="border-radius: 20px;">xl · 20</div>
+      <div class="r" style="border-radius: 999px;">pill · ∞</div>
+    </div>
+
+    <p class="section-sub" style="margin-top: 24px;">Default app radius is <strong>lg / 14 px</strong>. Buttons in app chrome use <strong>md / 10 px</strong>. Marketing CTAs are full pills.</p>
+
+    <h4 style="margin-top: 48px;">The notch — applied to specific surfaces only</h4>
+    <p class="section-sub">A 22 px chamfer on two opposite corners. Used for: hero status card, application code chip, document outcome card, receipt, marketing color blocks. NOT used on every card (would become noisy).</p>
+
+    <div class="notch-strip">
+      <div class="demo d1 notch">
+        <span>marketing block / 22px notch tl + br</span>
+        <span>01</span>
+      </div>
+      <div class="demo d2 notch-tr-bl">
+        <span>status hero / 22px notch tr + bl</span>
+        <span>02</span>
+      </div>
+      <div class="demo d3 notch">
+        <span>dark quote / 22px notch tl + br</span>
+        <span>03</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PRIMITIVES PREVIEW ==================== -->
+  <section>
+    <div class="rule-section">
+      <span class="num">05 /</span>
+      <span class="label">Cross-flow <em>primitives</em>, in their first dressing</span>
+    </div>
+
+    <p class="section-sub">A first pass on the components every flow will reuse. These will be finalized inside Flow 1.</p>
+
+    <h4>Buttons — marketing vs app chrome</h4>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; padding: 24px; background: var(--paper); margin-bottom: 32px;">
+      <a class="pill-btn solid">Start your application <span class="arrow">↗</span></a>
+      <a class="pill-btn">Track an application <span class="arrow">→</span></a>
+      <a class="pill-btn brand">Talk to us on WhatsApp</a>
+      <span style="width: 100%; height: 1px; background: var(--rule); margin: 8px 0;"></span>
+      <button class="btn-sans solid">Save and continue</button>
+      <button class="btn-sans">Save and exit</button>
+      <button class="btn-sans brand">Send application</button>
+    </div>
+
+    <h4>Application code chip</h4>
+    <div style="padding: 24px; background: var(--paper); margin-bottom: 32px;">
+      <div class="code-chip">
+        PRX-2026-00483
+        <span class="copy">Copy code</span>
+      </div>
+    </div>
+
+    <h4>Status pills (every status from B.4.8)</h4>
+    <div style="padding: 24px; background: var(--paper); display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px;">
+      <span class="status s-info"><span class="ico"></span>Received</span>
+      <span class="status s-info"><span class="ico"></span>Under review</span>
+      <span class="status s-brand"><span class="ico"></span>In progress</span>
+      <span class="status s-brand"><span class="ico"></span>Submitted to authority</span>
+      <span class="status s-warn"><span class="ico"></span>Awaiting response</span>
+      <span class="status s-warn"><span class="ico"></span>Action required</span>
+      <span class="status s-ok"><span class="ico"></span>Completed</span>
+      <span class="status s-danger"><span class="ico"></span>Rejected</span>
+    </div>
+
+    <h4>Marketing color block sample (landing services preview)</h4>
+    <div class="mk-blocks" style="margin-bottom: 32px;">
+      <div class="b1"><span class="pill">Tax registration</span></div>
+      <div class="b2"><span class="pill">Passport renewal</span></div>
+      <div class="b3" style="color: white;"><span class="pill">Business license</span></div>
+    </div>
+
+    <h4>Dark notched testimonial card</h4>
+    <div class="quote notch">
+      <div class="quote-inner">"I sent my documents through ProxiServe and forgot about it. Two days later my business license was ready. <em>I did not stand in a single queue.</em>"</div>
+      <div class="attr">Aline · Kigali · Business registration</div>
+    </div>
+
+    <h4 style="margin-top: 40px;">Closing gradient band (landing footer)</h4>
+    <div class="gradient-band notch">
+      <h3>Ready to <em>hand it over?</em></h3>
+      <p>Pick a service, share what we need, and one of our agents will take it from there. Free to start.</p>
+      <div style="display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap;">
+        <a class="pill-btn solid">Start your application <span class="arrow">↗</span></a>
+        <a class="pill-btn" style="background: rgba(255,255,255,0.95);">Talk to us on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ZONES ==================== -->
+  <section>
+    <div class="rule-section">
+      <span class="num">06 /</span>
+      <span class="label">Three <em>zones</em>, one system</span>
+    </div>
+
+    <p class="section-sub">ProxiServe lives in three visual zones that share tokens but vary density and chrome.</p>
+
+    <div class="compare">
+      <div>
+        <h4>Public + client</h4>
+        <h3 style="font-family: var(--serif); font-weight: 500;">Warm, generous, marketing-quality</h3>
+        <ul>
+          <li>Cream background everywhere</li>
+          <li>Display serif allowed</li>
+          <li>Pill buttons with italic serif labels</li>
+          <li>Notched color blocks on landing only</li>
+          <li>Generous whitespace (96+ px section padding)</li>
+          <li>Light by default; no dark mode for public landing</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Agent</h4>
+        <h3 style="font-family: var(--serif); font-weight: 500;">Dense, utilitarian, fast</h3>
+        <ul>
+          <li>Cream background, same surfaces, no marketing blocks</li>
+          <li>Sans-serif page titles (Fraunces only on key h1)</li>
+          <li>Sans buttons, 10px radius, no italic labels</li>
+          <li>Compact 12px row padding in tables</li>
+          <li>Keyboard shortcuts, dense filters</li>
+          <li>Dark mode supported as user preference</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Admin</h4>
+        <h3 style="font-family: var(--serif); font-weight: 500;">Most stripped-down, table-heavy</h3>
+        <ul>
+          <li>Same surfaces; even less decoration</li>
+          <li>No notched corners; flat rectangles + hairlines</li>
+          <li>Audit-first interaction (confirm-by-typing for destructive)</li>
+          <li>Desktop-only for schema builder</li>
+          <li>Dark mode default for power users (toggleable)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Shared across all three</h4>
+        <h3 style="font-family: var(--serif); font-weight: 500;">Tokens, primitives, voice</h3>
+        <ul>
+          <li>Status pills identical everywhere</li>
+          <li>Document Card identical everywhere</li>
+          <li>Form Field component identical everywhere</li>
+          <li>Application code chip identical everywhere</li>
+          <li>Microcopy register identical (plain, second-person)</li>
+          <li>Accessibility floor identical (a11y checklist D.5)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FLOW PLAN ==================== -->
+  <section>
+    <div class="rule-section">
+      <span class="num">07 /</span>
+      <span class="label">The ten-flow <em>delivery plan</em></span>
+    </div>
+
+    <p class="section-sub">Each flow is its own self-contained HTML file with every screen, every state, every breakpoint, and the 10-section deliverable from A.1. Flows 1, 2, and 5 share the public/client zone; 6/7 add the authenticated client zone; 8 is agent; 9 is admin; 10 is cross-cutting.</p>
+
+    <div class="flows">
+      <div class="flow-item">
+        <div class="flow-num">F1</div>
+        <div>
+          <h3 class="flow-title">Marketing &amp; <em>landing</em></h3>
+          <p class="flow-body">Landing, How it works, Pricing, FAQ, Contact, About, Legal. The most ambitious visual surface — sets the brand.</p>
+          <p class="flow-meta">7 pages · public zone · next up after tokens confirmed</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">F2</div>
+        <div>
+          <h3 class="flow-title">Service <em>discovery</em></h3>
+          <p class="flow-body">Services index with search + filters, service detail with requirements / pricing / FAQ, archived / waitlisted states.</p>
+          <p class="flow-meta">2+ pages · public zone</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">F3</div>
+        <div>
+          <h3 class="flow-title">Application <em>submission</em></h3>
+          <p class="flow-body">5-step wizard (personal, service-specific, documents, review, confirmation). Auto-save, schema migration, offline queue.</p>
+          <p class="flow-meta">5 steps · client zone · most state-heavy flow</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">F4</div>
+        <div>
+          <h3 class="flow-title">Auth &amp; <em>role routing</em></h3>
+          <p class="flow-body">Client login + signup, agent + admin staff entry, OTP, 2FA, password reset, email verify, claim-by-code.</p>
+          <p class="flow-meta">11 pages · public + staff zones</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">F5</div>
+        <div>
+          <h3 class="flow-title">Public <em>tracker</em></h3>
+          <p class="flow-body">No account required. Code entry, status hero, timeline, agent contact, documents, restricted preview.</p>
+          <p class="flow-meta">3 pages · public zone</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">F6</div>
+        <div>
+          <h3 class="flow-title">Client <em>dashboard</em></h3>
+          <p class="flow-body">Authenticated home, app detail, messages, documents library, profile + settings, help.</p>
+          <p class="flow-meta">7 sub-pages · client zone</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">F7</div>
+        <div>
+          <h3 class="flow-title"><em>Payments</em></h3>
+          <p class="flow-body">Overview, mobile-money push flow, card + 3DS, pay-agent-directly, receipt, dispute.</p>
+          <p class="flow-meta">6 pages · client zone</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">F8</div>
+        <div>
+          <h3 class="flow-title">Agent <em>workspace</em></h3>
+          <p class="flow-body">Today, case queue, case detail (two-column work surface), document viewer, performance, settings.</p>
+          <p class="flow-meta">5+ pages · agent zone · keyboard-first</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">F9</div>
+        <div>
+          <h3 class="flow-title">Admin <em>panel</em></h3>
+          <p class="flow-body">Analytics, agents, services + schema builder, pricing, oversight, broadcasts, audit log, settings, users.</p>
+          <p class="flow-meta">9 pages · admin zone · desktop-first</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">F10</div>
+        <div>
+          <h3 class="flow-title">Cross-cutting <em>systems</em></h3>
+          <p class="flow-body">Notifications (in-app, email, SMS, WhatsApp, push), 404/500/maintenance, cookies, PWA shell, status page, onboarding, RTL, print, dark mode.</p>
+          <p class="flow-meta">system spec · ships last</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== HOW THE AUDIENCES MEET ==================== -->
+  <section>
+    <div class="rule-section">
+      <span class="num">08 /</span>
+      <span class="label">How the <em>three audiences</em> meet</span>
+    </div>
+
+    <p class="section-sub">Where client, agent, and admin connect — the seams that have to hold for the value (someone competent will handle this for me) to actually reach the user.</p>
+
+    <div class="card-row">
+      <div class="card col-6">
+        <h4>Client → Agent</h4>
+        <h3 style="font-family: var(--serif); font-weight: 500;">The application code is the contract</h3>
+        <p style="color: var(--ink-2); font-size: 15px;">When a client submits via Flow 3, a code (PRX-YYYY-NNNNN) is generated. That same code is the row in the agent's case queue (Flow 8). Every message, every document, every status change flows through this single identifier. The client sees Flow 5's calm status view; the agent sees Flow 8's dense case detail. <em>The data is the same — the chrome is different.</em></p>
+      </div>
+      <div class="card col-6">
+        <h4>Agent ↔ Client (messaging)</h4>
+        <h3 style="font-family: var(--serif); font-weight: 500;">One conversation, two surfaces</h3>
+        <p style="color: var(--ink-2); font-size: 15px;">The Conversation primitive is the same component in Flow 5 (guest), Flow 6 (authenticated client) and Flow 8 (agent), with role-specific affordances: internal notes only for agents, WhatsApp deep-link only for clients, read receipts on both sides. <em>An agent never sees their internal notes mixed with client messages — visually impossible.</em></p>
+      </div>
+      <div class="card col-6">
+        <h4>Admin → Service catalogue → Client</h4>
+        <h3 style="font-family: var(--serif); font-weight: 500;">Schema is the funnel</h3>
+        <p style="color: var(--ink-2); font-size: 15px;">When an admin builds a service in Flow 9, the schema renders directly as the dynamic step 2 in Flow 3. Pricing edits with effective dates surface in Flow 1's pricing page and Flow 2's detail page. Service archive states gracefully degrade Flow 3 drafts (schema-mismatch migration).</p>
+      </div>
+      <div class="card col-6">
+        <h4>Admin → Agent</h4>
+        <h3 style="font-family: var(--serif); font-weight: 500;">Oversight without surveillance</h3>
+        <p style="color: var(--ink-2); font-size: 15px;">Admins see all cases in Flow 9 oversight, but with a clear "you are viewing as admin" indicator. Performance dashboards (Flow 8.5 vs 9.2) share metrics — agents see their own, admins see everyone's. Audit log records every privileged action with no ability to delete entries.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== NEXT ==================== -->
+  <section>
+    <div class="rule-section">
+      <span class="num">09 /</span>
+      <span class="label">Confirm these tokens, then I'll design Flow 1</span>
+    </div>
+
+    <p class="body-lg" style="max-width: 760px;">If this token set lands, the next response designs Flow 1 in full: the landing page, How it works, Pricing, FAQ, Contact, About, and Legal — at hi-fi for mobile (320, 375), tablet (768, 1024), and desktop (1280, 1440, 1920) — with every state (empty, loading, error, offline, first-time, returning, reduced-motion) drawn, the responsive matrix filled, the accessibility checklist signed, and the 15-item self-review scored.</p>
+
+    <p class="body-lg" style="max-width: 760px;">Things I'd like you to either confirm or correct before I start:</p>
+
+    <ol style="font-family: var(--serif); font-size: 20px; line-height: 1.5; padding-left: 20px; max-width: 760px;">
+      <li style="margin-bottom: 8px;">The <em>magenta-pink #C9437A</em> as the single brand colour — too playful, too quiet, or right?</li>
+      <li style="margin-bottom: 8px;">Fraunces (serif) + Inter (sans) + JetBrains Mono — or do you want to push more towards Bodoni-style high contrast?</li>
+      <li style="margin-bottom: 8px;">Notched corners as the signature, used <em>sparingly</em> (status hero, code chip, marketing blocks, receipts) — agreed?</li>
+      <li style="margin-bottom: 8px;">Marketing colour blocks (marigold, pink, green, blue, red) on landing only — agreed?</li>
+      <li style="margin-bottom: 8px;">Italic-serif pill buttons on marketing surfaces, sans rounded-rectangle buttons in app chrome — agreed?</li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>PROXISERVE / 00 — FOUNDATIONS / v0.1</span>
+    <span class="next">Type "Design Flow 1." when ready.</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
