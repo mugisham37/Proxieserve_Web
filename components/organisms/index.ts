@@ -13,7 +13,6 @@ export { SiteFooter } from "./SiteFooter";
 export { StickyMobileCTA } from "./StickyMobileCTA";
 
 // Flow 2 — Service Discovery
-export { ServicesTopBar } from "./ServicesTopBar";
 export { ServicesCatalogueGrid } from "./ServicesCatalogueGrid";
 export { ServiceDetailHero } from "./ServiceDetailHero";
 export { ServiceSubNav } from "./ServiceSubNav";

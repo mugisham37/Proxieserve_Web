@@ -11,8 +11,8 @@ import { ServiceFAQsSection } from "@/components/organisms/ServiceFAQsSection";
 import { RelatedServicesSection } from "@/components/organisms/RelatedServicesSection";
 import { ServicesHelpBand } from "@/components/organisms/ServicesHelpBand";
 import { StickyServiceBar } from "@/components/organisms/StickyServiceBar";
+import { SiteFooter } from "@/components/organisms/SiteFooter";
 
-// Next.js 16: params is a Promise — must be awaited
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -38,7 +38,6 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <>
-      {/* Overview anchor — sub-nav scroll target */}
       <div id="overview" aria-hidden="true" />
       <ServiceDetailHero service={service} />
       <ServiceSubNav />
@@ -48,6 +47,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       <ServiceFAQsSection service={service} />
       <RelatedServicesSection service={service} />
       <ServicesHelpBand />
+      <SiteFooter />
       <StickyServiceBar service={service} />
     </>
   );

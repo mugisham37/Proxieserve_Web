@@ -2,6 +2,7 @@ import * as React from "react";
 import { Suspense } from "react";
 import { type Metadata } from "next";
 import { ServicesCatalogueGrid } from "@/components/organisms/ServicesCatalogueGrid";
+import { SiteFooter } from "@/components/organisms/SiteFooter";
 
 export const metadata: Metadata = {
   title: "All Services — ProxiServe",
@@ -11,8 +12,11 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <Suspense>
-      <ServicesCatalogueGrid />
-    </Suspense>
+    <>
+      <Suspense>
+        <ServicesCatalogueGrid />
+      </Suspense>
+      <SiteFooter />
+    </>
   );
 }
