@@ -50,12 +50,11 @@ function FieldRenderer({
     switch (field.type) {
       case "text":
       case "date":
-      case "email":
         return (
           <FormField
             id={field.id}
             label={field.label}
-            type={field.type === "date" ? "date" : "text"}
+            inputType={field.type === "date" ? "date" : "text"}
             required={field.required}
             placeholder={field.placeholder}
             help={field.help}
@@ -73,7 +72,7 @@ function FieldRenderer({
           <FormField
             id={field.id}
             label={field.label}
-            as="textarea"
+            type="textarea"
             required={field.required}
             placeholder={field.placeholder}
             help={field.help}
@@ -92,7 +91,7 @@ function FieldRenderer({
           <FormField
             id={field.id}
             label={field.label}
-            as="select"
+            type="select"
             required={field.required}
             error={errorMsg}
             {...register(field.id, {
@@ -118,22 +117,24 @@ function FieldRenderer({
             <Controller
               name={field.id}
               control={control}
-              render={({ field: f }) =>
-                field.options?.map((opt) => (
-                  <RadioCard
-                    key={opt.value}
-                    name={field.id}
-                    value={opt.value}
-                    label={opt.label}
-                    description={opt.description}
-                    checked={f.value === opt.value}
-                    onChange={(v) => {
-                      f.onChange(v);
-                      onPatch(field.id, v);
-                    }}
-                  />
-                )) ?? null
-              }
+              render={({ field: f }) => (
+                <>
+                  {field.options?.map((opt) => (
+                    <RadioCard
+                      key={opt.value}
+                      name={field.id}
+                      value={opt.value}
+                      label={opt.label}
+                      description={opt.description}
+                      checked={f.value === opt.value}
+                      onChange={(v) => {
+                        f.onChange(v);
+                        onPatch(field.id, v);
+                      }}
+                    />
+                  ))}
+                </>
+              )}
             />
             {errorMsg && <p role="alert" className="font-sans text-[12px] text-[var(--danger)]">{errorMsg}</p>}
           </div>

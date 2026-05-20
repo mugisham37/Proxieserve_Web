@@ -41,7 +41,7 @@ function WizShellInner({ service, step, children }: WizShellInnerProps) {
   };
 
   const handleReset = () => {
-    dispatch({ type: "RESET" });
+    dispatch({ type: "RESET", payload: { slug: service.slug } });
     setUiState((s) => ({ ...s, schemaMigrationRequired: false }));
   };
 

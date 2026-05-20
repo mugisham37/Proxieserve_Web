@@ -9,7 +9,7 @@ interface ReviewRowProps {
 }
 
 export function ReviewRow({ label, value, mono, className }: ReviewRowProps) {
-  const isEmpty = !value || value === "" || value === false;
+  const isEmpty = !value || value === "";
 
   return (
     <div className={cn("flex items-start justify-between gap-4 py-2.5", className)}>

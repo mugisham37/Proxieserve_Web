@@ -139,7 +139,7 @@ export function WizStep1Personal({ service }: WizStep1PersonalProps) {
             <FormField
               id="dob"
               label="Date of birth"
-              type="date"
+              inputType="date"
               required
               error={errors.dob?.message}
               {...register("dob", {
@@ -185,7 +185,7 @@ export function WizStep1Personal({ service }: WizStep1PersonalProps) {
             <FormField
               id="email"
               label="Email address"
-              type="email"
+              inputType="email"
               placeholder="Optional — for email notifications"
               help="We'll use this for backup notifications only"
               error={errors.email?.message}
