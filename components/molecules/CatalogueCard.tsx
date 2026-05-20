@@ -51,13 +51,14 @@ export function CatalogueCard({ service, className }: CatalogueCardProps) {
                   : "info"
               }
               size="md"
-            >
-              {service.status === "paused"
-                ? "Paused"
-                : service.status === "archived"
-                ? "Archived"
-                : "Unavailable"}
-            </StatusPill>
+              label={
+                service.status === "paused"
+                  ? "Paused"
+                  : service.status === "archived"
+                  ? "Archived"
+                  : "Unavailable"
+              }
+            />
           )}
         </div>
 

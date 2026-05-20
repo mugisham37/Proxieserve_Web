@@ -49,7 +49,8 @@ export function WaitlistCard({ serviceName, className }: WaitlistCardProps) {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <FormField
             label="Email address"
-            type="email"
+            name="email"
+            inputType="email"
             value={email}
             onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
             placeholder="you@example.com"

@@ -73,9 +73,7 @@ export function ServiceDetailHero({ service, className }: ServiceDetailHeroProps
               <h1 id="service-hero-heading" className="t-h1 text-[var(--ink)]">
                 {service.name}
               </h1>
-              <StatusPill variant={statusVariant} size="lg" className="mt-1.5">
-                {statusLabel}
-              </StatusPill>
+              <StatusPill variant={statusVariant} size="lg" label={statusLabel} className="mt-1.5" />
             </motion.div>
 
             {/* Lede */}

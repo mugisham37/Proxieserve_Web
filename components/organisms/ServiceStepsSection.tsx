@@ -90,7 +90,7 @@ export function ServiceStepsSection({ service, id = "how-it-works", className }:
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.4, delay: i * 0.08, ease: [0.2, 0, 0, 1] as [number, number, number, number] }}
               >
-                <StepCard num={String(step.num).padStart(2, "0")} title={step.title} body={step.body} />
+                <StepCard num={step.num} title={step.title} body={step.body} />
               </motion.div>
             ))}
           </div>
