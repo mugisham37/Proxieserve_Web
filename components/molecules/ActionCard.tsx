@@ -1,6 +1,5 @@
 import * as React from "react";
 import Link from "next/link";
-import { Clock, Banknote } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PillButton } from "@/components/atoms/PillButton";
 import { type Service } from "@/lib/services-data";
@@ -11,6 +10,8 @@ interface ActionCardProps {
 }
 
 export function ActionCard({ service, className }: ActionCardProps) {
+  const isDisabled = service.status !== "active";
+
   return (
     <div
       className={cn(
@@ -18,28 +19,30 @@ export function ActionCard({ service, className }: ActionCardProps) {
         className
       )}
       style={{ "--n": "20px" } as React.CSSProperties}
+      aria-label="Start this service"
     >
       {/* Fee summary */}
       <div className="flex flex-col gap-1">
-        <span className="eyebrow text-[var(--ink-muted)]">Service fee</span>
-        <div className="flex items-end gap-2 flex-wrap">
-          <span className="font-mono text-[28px] font-medium text-[var(--ink)] leading-none">
+        <span className="eyebrow text-[var(--ink-muted)]">Standard fee</span>
+        <div className="flex items-end gap-3 flex-wrap">
+          <span className="font-mono text-[30px] font-medium text-[var(--ink)] leading-none">
             RWF {service.fee.toLocaleString()}
           </span>
-          {service.urgentFee && (
-            <span className="font-mono text-[13px] text-[var(--ink-muted)] pb-0.5">
-              Urgent: RWF {service.urgentFee.toLocaleString()}
-            </span>
-          )}
         </div>
+        {service.urgentFee && (
+          <span className="font-sans text-[12px] text-[var(--ink-muted)]">
+            Urgent: RWF {service.urgentFee.toLocaleString()}
+          </span>
+        )}
       </div>
 
-      {/* ETA */}
-      <div className="flex items-center gap-2 font-sans text-[13px] text-[var(--ink-muted)]">
-        <Clock size={14} className="shrink-0 text-[var(--ink-subtle)]" aria-hidden="true" />
-        Typical turnaround: <strong className="text-[var(--ink)] font-medium">{service.eta}</strong>
+      {/* Turnaround */}
+      <div className="flex items-center justify-between text-[13px] font-sans border-t border-[var(--rule-soft)] pt-3">
+        <span className="text-[var(--ink-muted)]">Turnaround</span>
+        <span className="font-medium text-[var(--ink)]">{service.eta}</span>
       </div>
 
+      {/* CTAs */}
       <div className="flex flex-col gap-2.5">
         <PillButton
           variant="brand"
@@ -47,8 +50,11 @@ export function ActionCard({ service, className }: ActionCardProps) {
           asChild
           arrow
           className="justify-center"
+          disabled={isDisabled}
         >
-          <Link href={`/services/${service.slug}/apply`}>Start application</Link>
+          <Link href={isDisabled ? "#" : `/services/${service.slug}/apply`}>
+            Start application
+          </Link>
         </PillButton>
         <PillButton
           variant="ghost"
@@ -56,12 +62,12 @@ export function ActionCard({ service, className }: ActionCardProps) {
           asChild
           className="justify-center"
         >
-          <Link href="/contact">Ask a question</Link>
+          <Link href="/contact">WhatsApp first ↗</Link>
         </PillButton>
       </div>
 
-      <p className="font-sans text-[11px] text-[var(--ink-subtle)] leading-relaxed">
-        Payment collected after your application is accepted.
+      <p className="font-sans text-[11px] text-[var(--ink-subtle)] leading-relaxed text-center">
+        Free to start — you pay once we confirm your application.
       </p>
     </div>
   );

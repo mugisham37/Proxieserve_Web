@@ -6,6 +6,7 @@ export interface ServiceRequirement {
   label: string;
   docType: "id" | "certificate" | "photo" | "form" | "proof" | "other";
   note?: string;
+  status?: "required" | "optional" | "conditional";
 }
 
 export interface ServiceStep {
@@ -68,7 +69,7 @@ export const SERVICES: Service[] = [
       { label: "Proposed company name (3 options)", docType: "form", note: "We check availability" },
       { label: "Shareholders list with % ownership", docType: "form" },
       { label: "Physical address / plot number", docType: "proof" },
-      { label: "Articles of Association (or we draft them)", docType: "certificate", note: "Optional — we can draft" },
+      { label: "Articles of Association (or we draft them)", docType: "certificate", note: "We can draft these for you", status: "optional" },
     ],
     steps: [
       { num: 1, title: "Submit your details", body: "Fill in the online form with your company name, shareholders, and address. We'll confirm everything is complete." },
@@ -328,8 +329,8 @@ export const SERVICES: Service[] = [
       { label: "National ID", docType: "id" },
       { label: "Birth certificate", docType: "certificate" },
       { label: "Passport-size photos (4 copies)", docType: "photo" },
-      { label: "Old passport (for renewal)", docType: "id", note: "Only for renewals" },
-      { label: "Proof of citizenship", docType: "proof", note: "If born outside Rwanda" },
+      { label: "Old passport (for renewal)", docType: "id", note: "Only for renewals", status: "conditional" },
+      { label: "Proof of citizenship", docType: "proof", note: "If born outside Rwanda", status: "conditional" },
     ],
     steps: [
       { num: 1, title: "Document review", body: "We verify your documents meet Immigration requirements before submission." },
@@ -473,7 +474,7 @@ export const SERVICES: Service[] = [
     requirements: [
       { label: "Documents to be notarised", docType: "form" },
       { label: "National ID or Passport of signatories", docType: "id" },
-      { label: "Witness IDs (if required)", docType: "id", note: "Required for some document types" },
+      { label: "Witness IDs (if required)", docType: "id", note: "Required for some document types", status: "conditional" },
     ],
     steps: [
       { num: 1, title: "Document assessment", body: "We review your documents and confirm the notarisation type required." },
@@ -586,7 +587,7 @@ export const SERVICES: Service[] = [
       { label: "Commercial invoice for goods", docType: "form" },
       { label: "Packing list", docType: "form" },
       { label: "Bill of lading or airway bill", docType: "proof" },
-      { label: "Sector permit (food, pharmaceuticals, etc.)", docType: "certificate", note: "If applicable" },
+      { label: "Sector permit (food, pharmaceuticals, etc.)", docType: "certificate", note: "If applicable to your goods", status: "conditional" },
     ],
     steps: [
       { num: 1, title: "Goods classification", body: "We classify your goods under the Rwanda tariff system and identify all required permits." },
@@ -621,7 +622,7 @@ export const SERVICES: Service[] = [
       { label: "National ID", docType: "id" },
       { label: "RSSB member number", docType: "other" },
       { label: "Employment records (payslips or employer letter)", docType: "proof" },
-      { label: "Benefit-specific documentation (medical, birth, etc.)", docType: "certificate", note: "Depends on benefit type" },
+      { label: "Benefit-specific documentation (medical, birth, etc.)", docType: "certificate", note: "Depends on benefit type", status: "conditional" },
     ],
     steps: [
       { num: 1, title: "Benefit assessment", body: "We review your RSSB record and identify which benefits you are eligible to claim." },

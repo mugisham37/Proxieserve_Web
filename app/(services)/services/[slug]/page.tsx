@@ -12,8 +12,9 @@ import { RelatedServicesSection } from "@/components/organisms/RelatedServicesSe
 import { ServicesHelpBand } from "@/components/organisms/ServicesHelpBand";
 import { StickyServiceBar } from "@/components/organisms/StickyServiceBar";
 
+// Next.js 16: params is a Promise — must be awaited
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -21,7 +22,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const service = getServiceBySlug(params.slug);
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
   if (!service) return {};
   return {
     title: `${service.name} — ProxiServe`,
@@ -29,8 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ServiceDetailPage({ params }: Props) {
-  const service = getServiceBySlug(params.slug);
+export default async function ServiceDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
   if (!service) notFound();
 
   return (
