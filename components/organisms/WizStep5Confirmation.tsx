@@ -1,0 +1,179 @@
+"use client";
+
+import * as React from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import type { Service } from "@/lib/services-data";
+import { useApplication } from "@/lib/application-context";
+import { BigCodeChip } from "@/components/molecules/BigCodeChip";
+import { ChannelPill } from "@/components/molecules/ChannelPill";
+import { WhatNextItem } from "@/components/molecules/WhatNextItem";
+import { ConfirmPrefCard } from "@/components/molecules/ConfirmPrefCard";
+
+interface WizStep5ConfirmationProps {
+  service: Service;
+}
+
+export function WizStep5Confirmation({ service }: WizStep5ConfirmationProps) {
+  const { uiState, draft, dispatch } = useApplication();
+  const [waStatus, setWaStatus] = React.useState<"pending" | "delivering" | "delivered">("pending");
+  const code = uiState.confirmedCode ?? "PRX-2026-00000";
+
+  // WhatsApp delivery simulation — delivers after 2.4s
+  React.useEffect(() => {
+    const t1 = setTimeout(() => setWaStatus("delivering"), 800);
+    const t2 = setTimeout(() => setWaStatus("delivered"), 2400);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center gap-12 py-8 max-w-[640px] mx-auto text-center">
+      {/* Animated checkmark */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.4, ease: [0.2, 0, 0, 1] }}
+        className="flex flex-col items-center gap-6"
+      >
+        <div className="relative flex items-center justify-center w-20 h-20">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.15, duration: 0.3, ease: [0.2, 0, 0, 1] }}
+            className="absolute inset-0 rounded-full bg-[var(--ok-soft)]"
+          />
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
+            fill="none"
+            className="relative z-10"
+            aria-hidden="true"
+          >
+            <motion.path
+              d="M8 20l8 8 16-16"
+              stroke="var(--ok)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ delay: 0.3, duration: 0.4, ease: "easeOut" }}
+            />
+          </svg>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <h1 className="font-serif text-[clamp(28px,5vw,48px)] font-medium italic text-[var(--ink)]">
+            You&apos;re <em>all set.</em>
+          </h1>
+          <p className="font-sans text-[15px] text-[var(--ink-muted)] max-w-[440px]">
+            Your {service.name} application has been received. Your agent will be in touch within 2 business hours.
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Tracking code */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.3, ease: [0.2, 0, 0, 1] }}
+        className="w-full"
+      >
+        <BigCodeChip code={code} />
+      </motion.div>
+
+      {/* Channel status */}
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 0.3, ease: [0.2, 0, 0, 1] }}
+        className="flex flex-wrap items-center justify-center gap-3"
+      >
+        <ChannelPill
+          channel="sms"
+          status="delivered"
+          value={draft.personal.phone ? `+250 ${draft.personal.phone}` : undefined}
+        />
+        {draft.personal.whatsapp && (
+          <ChannelPill
+            channel="whatsapp"
+            status={waStatus}
+            value={draft.personal.phone ? `+250 ${draft.personal.phone}` : undefined}
+          />
+        )}
+        {draft.personal.email && (
+          <ChannelPill
+            channel="email"
+            status="delivered"
+            value={draft.personal.email}
+          />
+        )}
+      </motion.div>
+
+      {/* What happens next */}
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.85, duration: 0.3, ease: [0.2, 0, 0, 1] }}
+        className="w-full bg-[var(--paper)] border border-[var(--rule)] rounded-[var(--r-lg)] p-6 text-left"
+      >
+        <span className="eyebrow text-[var(--ink-subtle)] block mb-5">What happens next</span>
+        <div className="flex flex-col gap-5">
+          <WhatNextItem
+            num={1}
+            title="Agent review"
+            body="Your assigned agent reviews your application and contacts you within 2 business hours to confirm details."
+          />
+          <WhatNextItem
+            num={2}
+            title="Track your application"
+            body={`Use code ${code} at any time on the ProxiServe website to check your application status.`}
+          />
+          <WhatNextItem
+            num={3}
+            title="Payment confirmation"
+            body="Your agent confirms the total cost before collecting any payment. You pay nothing until you approve."
+          />
+        </div>
+      </motion.div>
+
+      {/* CTA row */}
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.3, ease: [0.2, 0, 0, 1] }}
+        className="flex flex-wrap items-center justify-center gap-3"
+      >
+        <Link
+          href={`/?track=${code}`}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] bg-[var(--ink)] text-[var(--paper)] font-serif italic text-[15px] hover:opacity-90 transition-opacity"
+        >
+          Track my application →
+        </Link>
+        <Link
+          href="/services"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] border border-[var(--rule-strong)] font-serif italic text-[15px] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
+        >
+          Browse services
+        </Link>
+      </motion.div>
+
+      {/* Notification preference */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 0.3 }}
+        className="w-full"
+      >
+        <ConfirmPrefCard
+          whatsappEnabled={draft.personal.whatsapp}
+          phone={draft.personal.phone ? `+250 ${draft.personal.phone}` : undefined}
+          onToggle={(v) =>
+            dispatch({ type: "PATCH_PERSONAL", payload: { whatsapp: v } })
+          }
+        />
+      </motion.div>
+    </div>
+  );
+}
