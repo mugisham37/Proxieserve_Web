@@ -28,3 +28,5 @@ export { Wordmark } from "./Wordmark";
 export { SectionNum } from "./SectionNum";
 
 export { Divider } from "./Divider";
+
+export { SearchInput } from "./SearchInput";
