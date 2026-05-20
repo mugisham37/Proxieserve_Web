@@ -18,3 +18,18 @@ export { ArchivedCodeCard } from "./ArchivedCodeCard";
 export { TeamCard } from "./TeamCard";
 export { ContactMethod } from "./ContactMethod";
 export { MissionCard } from "./MissionCard";
+
+// Flow 2 — Service Discovery
+export { CatalogueCard } from "./CatalogueCard";
+export { ServiceFilterBar } from "./ServiceFilterBar";
+export { InfoChip } from "./InfoChip";
+export { RequirementRow } from "./RequirementRow";
+export { ActionCard } from "./ActionCard";
+export { PricingTierCard } from "./PricingTierCard";
+export { EligibilityGate } from "./EligibilityGate";
+export { InPersonCallout } from "./InPersonCallout";
+export { WaitlistCard } from "./WaitlistCard";
+export { ArchivedServiceCard } from "./ArchivedServiceCard";
+export { EmptySearch } from "./EmptySearch";
+export { ServiceSkeletonCard } from "./ServiceSkeletonCard";
+export { Service404Card } from "./Service404Card";
