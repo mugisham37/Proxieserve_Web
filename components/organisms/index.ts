@@ -11,3 +11,16 @@ export { FAQSection } from "./FAQSection";
 export { CTABand } from "./CTABand";
 export { SiteFooter } from "./SiteFooter";
 export { StickyMobileCTA } from "./StickyMobileCTA";
+
+// Flow 2 — Service Discovery
+export { ServicesTopBar } from "./ServicesTopBar";
+export { ServicesCatalogueGrid } from "./ServicesCatalogueGrid";
+export { ServiceDetailHero } from "./ServiceDetailHero";
+export { ServiceSubNav } from "./ServiceSubNav";
+export { ServiceRequirementsSection } from "./ServiceRequirementsSection";
+export { ServiceStepsSection } from "./ServiceStepsSection";
+export { ServicePricingSection } from "./ServicePricingSection";
+export { ServiceFAQsSection } from "./ServiceFAQsSection";
+export { RelatedServicesSection } from "./RelatedServicesSection";
+export { ServicesHelpBand } from "./ServicesHelpBand";
+export { StickyServiceBar } from "./StickyServiceBar";
