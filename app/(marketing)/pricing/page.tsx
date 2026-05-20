@@ -1,8 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { SupportingTopBar } from "@/components/supporting/SupportingTopBar";
-import { PageNav } from "@/components/supporting/PageNav";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { Tag } from "@/components/atoms/Tag";
 import { SiteFooter } from "@/components/organisms/SiteFooter";
@@ -41,9 +39,6 @@ export default function PricingPage() {
 
   return (
     <>
-      <SupportingTopBar breadcrumb={[{ label: "Pricing" }]} />
-      <PageNav items={NAV_ITEMS} />
-
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 py-16">
         <Eyebrow withLine className="text-[var(--ink-muted)] mb-4">Pricing</Eyebrow>
         <h1 className="t-h1 text-[var(--ink)] mb-4">No surprises. Ever.</h1>
@@ -70,7 +65,7 @@ export default function PricingPage() {
         </div>
 
         {/* Table */}
-        <section id="pricing-table" className="scroll-mt-28 border border-[var(--rule)] rounded-[var(--r-xl)] overflow-hidden mb-16">
+        <section id="pricing-table" className="scroll-mt-20 border border-[var(--rule)] rounded-[var(--r-xl)] overflow-hidden mb-16">
           {/* Header */}
           <div className="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-4 px-5 py-3 bg-[var(--cream-2)] border-b border-[var(--rule)]">
             {["Service", "Category", "Standard Fee", "Urgent Fee", "Est. Time"].map((h) => (
@@ -102,7 +97,7 @@ export default function PricingPage() {
         </section>
 
         {/* Payment info */}
-        <section id="payment-info" className="scroll-mt-28 grid md:grid-cols-2 gap-8 mb-16">
+        <section id="payment-info" className="scroll-mt-20 grid md:grid-cols-2 gap-8 mb-16">
           <div className="bg-[var(--paper)] border border-[var(--rule)] rounded-[var(--r-xl)] p-8">
             <h2 className="t-h3 text-[var(--ink)] mb-3">Payment methods</h2>
             <ul className="flex flex-col gap-2">
@@ -113,7 +108,7 @@ export default function PricingPage() {
               ))}
             </ul>
           </div>
-          <div id="urgent-info" className="scroll-mt-28 bg-[var(--warn-soft)] border border-[var(--warn)] rounded-[var(--r-xl)] p-8">
+          <div id="urgent-info" className="scroll-mt-20 bg-[var(--warn-soft)] border border-[var(--warn)] rounded-[var(--r-xl)] p-8">
             <h2 className="t-h3 text-[var(--ink)] mb-3">Urgent processing</h2>
             <p className="font-sans text-[14px] text-[var(--ink-muted)] leading-relaxed mb-3">
               Urgent fees apply when you need processing within 24–48 hours. Availability is subject to government office capacity and is not always guaranteed.

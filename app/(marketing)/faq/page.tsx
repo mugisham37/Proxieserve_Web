@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { SupportingTopBar } from "@/components/supporting/SupportingTopBar";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { FAQItem } from "@/components/molecules/FAQItem";
 import { SiteFooter } from "@/components/organisms/SiteFooter";
@@ -70,8 +69,6 @@ export default function FAQPage() {
 
   return (
     <>
-      <SupportingTopBar breadcrumb={[{ label: "FAQ" }]} />
-
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 py-16">
         <Eyebrow withLine className="text-[var(--ink-muted)] mb-4">FAQ</Eyebrow>
         <h1 className="t-h1 text-[var(--ink)] mb-4">Frequently asked questions</h1>
@@ -96,7 +93,7 @@ export default function FAQPage() {
         ) : (
           <div className="grid lg:grid-cols-[220px_1fr] gap-10 lg:gap-20 items-start">
             {/* TOC sidebar */}
-            <aside className="hidden lg:block sticky top-28">
+            <aside className="hidden lg:block sticky top-20">
               <nav aria-label="FAQ categories">
                 <ul className="flex flex-col gap-1">
                   {FAQ_CATEGORIES.map(({ id, label }) => (
@@ -124,7 +121,7 @@ export default function FAQPage() {
             {/* FAQ categories */}
             <div className="flex flex-col gap-14">
               {filtered.map((cat) => (
-                <section key={cat.id} id={cat.id} className="scroll-mt-28">
+                <section key={cat.id} id={cat.id} className="scroll-mt-20">
                   <h2 className="t-h3 text-[var(--ink)] mb-4 border-b border-[var(--rule)] pb-3">{cat.label}</h2>
                   {cat.items.map((item) => (
                     <FAQItem key={item.q} question={item.q} answer={item.a} />

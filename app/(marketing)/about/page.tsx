@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { SupportingTopBar } from "@/components/supporting/SupportingTopBar";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { PillButton } from "@/components/atoms/PillButton";
 import { TeamCard } from "@/components/molecules/TeamCard";
@@ -46,8 +45,6 @@ const TEAM = [
 export default function AboutPage() {
   return (
     <>
-      <SupportingTopBar breadcrumb={[{ label: "About" }]} />
-
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 py-16">
         <Eyebrow withLine className="text-[var(--ink-muted)] mb-4">About us</Eyebrow>
         <h1 className="t-h1 text-[var(--ink)] mb-4 max-w-xl">We believe paperwork shouldn&apos;t slow Rwanda down.</h1>

@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { SupportingTopBar } from "@/components/supporting/SupportingTopBar";
-import { PageNav } from "@/components/supporting/PageNav";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { SiteFooter } from "@/components/organisms/SiteFooter";
 
@@ -60,8 +58,7 @@ const SECTIONS = [
 export default function PrivacyPage() {
   return (
     <>
-      <SupportingTopBar breadcrumb={[{ label: "Legal", href: "/" }, { label: "Privacy Policy" }]} />
-      <PageNav items={NAV_ITEMS} />
+
 
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 py-16">
         <Eyebrow withLine className="text-[var(--ink-muted)] mb-4">Legal</Eyebrow>
@@ -70,7 +67,7 @@ export default function PrivacyPage() {
 
         <div className="grid lg:grid-cols-[220px_1fr] gap-10 lg:gap-20 items-start">
           {/* Sticky TOC */}
-          <aside className="hidden lg:block sticky top-28">
+          <aside className="hidden lg:block sticky top-20">
             <nav aria-label="Section navigation">
               <ul className="flex flex-col gap-1">
                 {NAV_ITEMS.map(({ id, label }) => (
@@ -90,7 +87,7 @@ export default function PrivacyPage() {
           {/* Content */}
           <div className="flex flex-col gap-12">
             {SECTIONS.map((sec) => (
-              <section key={sec.id} id={sec.id} className="scroll-mt-28">
+              <section key={sec.id} id={sec.id} className="scroll-mt-20">
                 <h2 className="t-h3 text-[var(--ink)] mb-4">{sec.title}</h2>
                 {/* Plain language summary */}
                 <blockquote className="bg-[var(--brand-soft)] border-l-4 border-[var(--brand)] px-4 py-3 rounded-r-[var(--r-md)] mb-4">

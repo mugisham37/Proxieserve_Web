@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { SupportingTopBar } from "@/components/supporting/SupportingTopBar";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { FormField } from "@/components/atoms/FormField";
 import { PillButton } from "@/components/atoms/PillButton";
@@ -48,8 +47,6 @@ export default function ContactPage() {
 
   return (
     <>
-      <SupportingTopBar breadcrumb={[{ label: "Contact" }]} />
-
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 py-16">
         <Eyebrow withLine className="text-[var(--ink-muted)] mb-4">Contact</Eyebrow>
         <h1 className="t-h1 text-[var(--ink)] mb-12">Get in touch</h1>

@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { SupportingTopBar } from "@/components/supporting/SupportingTopBar";
-import { PageNav } from "@/components/supporting/PageNav";
 import { Eyebrow } from "@/components/atoms/Eyebrow";
 import { PillButton } from "@/components/atoms/PillButton";
 import { SiteFooter } from "@/components/organisms/SiteFooter";
@@ -54,9 +52,6 @@ const NAV_ITEMS = STEPS.map((s) => ({ id: s.id, label: s.title }));
 export default function HowItWorksPage() {
   return (
     <>
-      <SupportingTopBar breadcrumb={[{ label: "How it works" }]} />
-      <PageNav items={NAV_ITEMS} />
-
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 py-16">
         <Eyebrow withLine className="text-[var(--ink-muted)] mb-4">Process</Eyebrow>
         <h1 className="t-h1 text-[var(--ink)] mb-4 max-w-xl">Simple from start to finish</h1>
@@ -69,7 +64,7 @@ export default function HowItWorksPage() {
             <section
               key={step.id}
               id={step.id}
-              className="grid md:grid-cols-[80px_1fr_1fr] gap-6 md:gap-12 py-14 scroll-mt-28"
+              className="grid md:grid-cols-[80px_1fr_1fr] gap-6 md:gap-12 py-14 scroll-mt-20"
             >
               <span className="font-serif italic text-[56px] leading-none text-[var(--brand)]">{step.num}</span>
               <div>
