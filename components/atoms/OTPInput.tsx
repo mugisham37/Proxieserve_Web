@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface OTPInputProps {
@@ -20,6 +21,17 @@ export function OTPInput({
 }: OTPInputProps) {
   const inputRefs = React.useRef<Array<HTMLInputElement | null>>([]);
   const digits = Array.from({ length: 6 }, (_, i) => value[i] ?? "");
+  const shouldReduceMotion = useReducedMotion();
+
+  // Track shake trigger — increments each time error becomes true
+  const [shakeKey, setShakeKey] = React.useState(0);
+  const prevError = React.useRef(false);
+  React.useEffect(() => {
+    if (error && !prevError.current) {
+      setShakeKey((k) => k + 1);
+    }
+    prevError.current = error;
+  }, [error]);
 
   function focusCell(index: number) {
     inputRefs.current[index]?.focus();
@@ -29,11 +41,9 @@ export function OTPInput({
     if (e.key === "Backspace") {
       e.preventDefault();
       if (digits[idx]) {
-        // Clear this cell
         const next = digits.map((d, i) => (i === idx ? "" : d)).join("");
         onChange(next);
       } else if (idx > 0) {
-        // Move to previous cell and clear it
         const next = digits.map((d, i) => (i === idx - 1 ? "" : d)).join("");
         onChange(next);
         focusCell(idx - 1);
@@ -50,7 +60,6 @@ export function OTPInput({
   function handleInput(e: React.ChangeEvent<HTMLInputElement>, idx: number) {
     const raw = e.target.value.replace(/\D/g, "");
     if (!raw) return;
-    // Take last digit typed (handles mobile autocomplete duplicating)
     const digit = raw.slice(-1);
     const next = digits.map((d, i) => (i === idx ? digit : d)).join("");
     onChange(next);
@@ -76,46 +85,59 @@ export function OTPInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const shakeVariants = {
+    shake: {
+      x: shouldReduceMotion ? 0 : [0, -6, 6, -4, 4, -2, 2, 0],
+      transition: { duration: 0.32, ease: "easeInOut" as const },
+    },
+  };
+
   return (
-    <div
+    <motion.div
+      key={shakeKey}
+      animate={shakeKey > 0 ? "shake" : undefined}
+      variants={shakeVariants}
       className={cn("flex gap-2 sm:gap-3", className)}
       role="group"
       aria-label="6-digit verification code"
     >
       {digits.map((digit, idx) => (
-        <input
+        <motion.span
           key={idx}
-          ref={(el) => {
-            inputRefs.current[idx] = el;
-          }}
-          type="text"
-          inputMode="numeric"
-          maxLength={1}
-          pattern="[0-9]"
-          autoComplete={idx === 0 ? "one-time-code" : "off"}
-          aria-label={`Digit ${idx + 1}`}
-          value={digit}
-          disabled={disabled}
-          onChange={(e) => handleInput(e, idx)}
-          onKeyDown={(e) => handleKeyDown(e, idx)}
-          onPaste={handlePaste}
-          className={cn(
-            "h-12 w-10 sm:h-14 sm:w-12 rounded-[var(--r-md)] border text-center",
-            "font-mono text-[20px] font-medium text-[var(--ink)]",
-            "bg-[var(--paper)] transition-[border-color,box-shadow]",
-            "focus:outline-none focus:shadow-[var(--focus-ring)]",
-            "disabled:opacity-40 disabled:cursor-not-allowed",
-            // Normal: rule border, filled: ink border
-            digit
-              ? "border-[var(--ink)]"
-              : "border-[var(--rule-strong)]",
-            // Error state: all cells danger border
-            error && "border-[var(--danger)] shadow-[0_0_0_3px_rgba(184,58,42,0.2)]",
-            // Transition
-            "duration-[120ms]"
-          )}
-        />
+          animate={digit ? { scale: [0.88, 1] } : { scale: 1 }}
+          transition={shouldReduceMotion ? { duration: 0.01 } : { duration: 0.08, ease: [0.2, 0, 0, 1] }}
+          className="relative"
+        >
+          <input
+            ref={(el) => {
+              inputRefs.current[idx] = el;
+            }}
+            type="text"
+            inputMode="numeric"
+            maxLength={1}
+            pattern="[0-9]"
+            autoComplete={idx === 0 ? "one-time-code" : "off"}
+            aria-label={`Digit ${idx + 1}`}
+            value={digit}
+            disabled={disabled}
+            onChange={(e) => handleInput(e, idx)}
+            onKeyDown={(e) => handleKeyDown(e, idx)}
+            onPaste={handlePaste}
+            className={cn(
+              "h-12 w-10 sm:h-14 sm:w-12 rounded-[var(--r-md)] border text-center",
+              "font-mono text-[20px] font-medium text-[var(--ink)]",
+              "bg-[var(--paper)] transition-[border-color,box-shadow]",
+              "focus:outline-none focus:shadow-[var(--focus-ring)]",
+              "disabled:opacity-40 disabled:cursor-not-allowed",
+              digit
+                ? "border-[var(--ink)]"
+                : "border-[var(--rule-strong)]",
+              error && "border-[var(--danger)] shadow-[0_0_0_3px_rgba(184,58,42,0.2)]",
+              "duration-[120ms]"
+            )}
+          />
+        </motion.span>
       ))}
-    </div>
+    </motion.div>
   );
 }
