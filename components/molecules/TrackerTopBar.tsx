@@ -2,17 +2,24 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useScrolled } from "@/hooks/useScrolled";
 import { PillButton } from "@/components/atoms/PillButton";
 
 interface TrackerTopBarProps {
-  breadcrumb?: string;
   className?: string;
 }
 
-export function TrackerTopBar({ breadcrumb, className }: TrackerTopBarProps) {
+export function TrackerTopBar({ className }: TrackerTopBarProps) {
   const scrolled = useScrolled();
+  const pathname = usePathname();
+
+  // Derive breadcrumb from pathname: /track/PRX-2026-00483 → "PRX-2026-00483"
+  const codeSegment = pathname.startsWith("/track/")
+    ? decodeURIComponent(pathname.slice("/track/".length))
+    : null;
+  const breadcrumb = codeSegment || null;
 
   return (
     <header
