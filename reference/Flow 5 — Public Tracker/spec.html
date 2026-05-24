@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 5 — Engineering spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--paper); }
+  .doc { max-width: 920px; margin: 0 auto; padding: 64px 32px 120px; }
+  @media (max-width: 720px) { .doc { padding: 32px 20px 80px; } }
+  .doc-head { border-bottom: 1px solid var(--rule-strong); padding-bottom: 24px; margin-bottom: 48px; }
+  .doc-head .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .doc-head h1 { margin: 12px 0; }
+  .doc-head p { margin: 0; color: var(--ink-muted); }
+  section.spec { padding: 48px 0; border-bottom: 1px solid var(--rule); }
+  section.spec:last-of-type { border-bottom: none; }
+  .spec-head { display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 24px; align-items: baseline; }
+  .spec-num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .spec-title { font-family: var(--serif); font-weight: 500; font-size: 32px; margin: 0; line-height: 1.1; }
+  .spec-title em { font-style: italic; font-weight: 400; }
+  .spec-body { padding-left: 104px; }
+  @media (max-width: 720px) { .spec-head { grid-template-columns: 1fr; } .spec-body { padding-left: 0; } }
+  .spec-body p { margin: 0 0 14px; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
+  pre.ascii { font-family: var(--mono); font-size: 12px; line-height: 1.45; background: var(--cream-2); padding: 20px 24px; border-radius: var(--r-md); overflow-x: auto; border: 1px solid var(--rule); color: var(--ink-2); }
+  table.t { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 16px 0; }
+  .t th, .t td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  .t th { background: var(--cream-2); border-bottom: 1px solid var(--rule-strong); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); }
+  .t tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
+  .t td.mono { font-family: var(--mono); font-size: 12px; }
+  ul.l { padding-left: 20px; margin: 0 0 16px; }
+  ul.l li { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin-bottom: 6px; }
+  .check { display: grid; grid-template-columns: 24px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--rule-soft); font-size: 14px; }
+  .check.pass::before { content: "✓"; color: var(--ok); font-weight: 600; }
+  .score { display: inline-flex; align-items: baseline; gap: 4px; padding: 8px 16px; background: var(--ok-soft); color: var(--ok); border-radius: 999px; font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; }
+  .score .big { font-family: var(--serif); font-style: italic; font-size: 24px; }
+  .callout { background: var(--brand-soft); color: var(--brand-ink); border-left: 3px solid var(--brand); padding: 14px 18px; font-family: var(--serif); font-style: italic; font-size: 15px; margin: 16px 0; }
+  .callout strong { font-style: normal; font-weight: 600; }
+  code, .mono { font-family: var(--mono); font-size: 13px; }
+  .comp-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+  .comp-list .chip { background: var(--cream-2); color: var(--ink-2); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); font-family: var(--mono); font-size: 11px; }
+  .comp-list .chip.new { background: var(--brand-soft); color: var(--brand-ink); border-color: transparent; }
+  .toc { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; padding: 20px 0; border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); margin-bottom: 32px; }
+  .toc a { display: flex; gap: 16px; align-items: baseline; padding: 8px 0; font-size: 14px; color: var(--ink-2); border-bottom: 1px solid var(--rule-soft); }
+  .toc a .num { font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); }
+  @media (max-width: 600px) { .toc { grid-template-columns: 1fr; } }
+
+  /* Status color matrix for spec */
+  .status-matrix {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin: 16px 0;
+  }
+  .status-cell {
+    padding: 12px 14px;
+    border-radius: var(--r-md);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    display: flex; justify-content: space-between; align-items: center;
+    color: white;
+  }
+  .status-cell.s-info { background: var(--info); }
+  .status-cell.s-brand { background: var(--brand); }
+  .status-cell.s-warn { background: var(--warn); color: var(--ink); }
+  .status-cell.s-ok { background: var(--ok); }
+  .status-cell.s-danger { background: var(--danger); }
+  .status-cell.s-ink { background: var(--ink); }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-head">
+    <a href="index.html" class="lnk-arrow" style="font-size:13px; margin-bottom: 16px; display: inline-flex;"><span aria-hidden="true">←</span> Back to Flow 5 hub</a>
+    <div class="meta">FLOW 05 / PUBLIC TRACKER / ENGINEERING SPEC · v0.1</div>
+    <h1 class="t-h1">Flow 5 — <em>Public Tracker</em>.</h1>
+    <p>The most-visited page after a successful submission. No account required — your tracking code is the entire credential.</p>
+  </div>
+
+  <div class="toc">
+    <a href="#s1"><span class="num">01</span> Flow map</a>
+    <a href="#s2"><span class="num">02</span> IA</a>
+    <a href="#s3"><span class="num">03</span> Wireframes</a>
+    <a href="#s4"><span class="num">04</span> Hi-fi screens</a>
+    <a href="#s5"><span class="num">05</span> Components</a>
+    <a href="#s6"><span class="num">06</span> Motion</a>
+    <a href="#s7"><span class="num">07</span> Responsive</a>
+    <a href="#s8"><span class="num">08</span> States</a>
+    <a href="#s9"><span class="num">09</span> A11y</a>
+    <a href="#s10"><span class="num">10</span> Hand-off</a>
+  </div>
+
+  <section class="spec" id="s1">
+    <div class="spec-head"><span class="spec-num">01 /</span><h2 class="spec-title"><em>Flow</em> map</h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+  Entries:
+   - landing tracker block (F1)
+   - confirmation page (F3.5) "Track my application"
+   - SMS / WhatsApp deep link (proxi.rw/t/PRX-…)
+   - dashboard click-through (F6) → opens read-only guest view of any code
+
+                ┌──────────────────────┐
+                │  /track  Code entry  │
+                │  notched cream card  │
+                │  big mono input      │
+                └──────────┬───────────┘
+                           │ valid PRX-YYYY-NNNNN
+                           ▼
+              ┌──────────────────────────┐
+              │  /track/PRX-2026-NNNNN   │
+              │  - status hero (color)    │
+              │  - 7-step timeline        │
+              │  - agent card (sidebar)   │
+              │  - docs (restricted)      │
+              │  - notification prefs     │
+              │  - outcome card (if done) │
+              └──────────────┬───────────┘
+                             │
+            ┌────────────────┼─────────────────┐
+            ▼                ▼                 ▼
+   ┌────────────────┐  ┌──────────────┐  ┌─────────────┐
+   │ Claim → F4     │  │ WhatsApp →   │  │ Pay /       │
+   │ (Save account) │  │ external     │  │ Collect →F7 │
+   └────────────────┘  └──────────────┘  └─────────────┘
+
+  Lost-code path:
+    /track → "Lost code?" → /track/recover (phone) →
+    SMS sent → /track (with code prefilled)
+</pre>
+    </div>
+  </section>
+
+  <section class="spec" id="s2">
+    <div class="spec-head"><span class="spec-num">02 /</span><h2 class="spec-title">Information <em>architecture</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Route</th><th>Page</th><th>Auth</th><th>SSR</th><th>Indexed</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">/track</td><td>Code entry</td><td>Public</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td class="mono">/track/PRX-YYYY-NNNNN</td><td>Tracker view</td><td>Code as bearer</td><td>Yes</td><td>No (noindex)</td></tr>
+          <tr><td class="mono">/track/recover</td><td>Lost code recovery</td><td>Public</td><td>Yes</td><td>No</td></tr>
+          <tr><td class="mono">GET /api/track/[code]</td><td>Live status</td><td>Code</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="t-h4" style="margin: 16px 0 6px;">Status enum — the canonical 9</h4>
+      <div class="status-matrix">
+        <div class="status-cell s-info">RECEIVED <span>info</span></div>
+        <div class="status-cell s-info">UNDER_REVIEW <span>info</span></div>
+        <div class="status-cell s-brand">IN_PROGRESS <span>brand magenta</span></div>
+        <div class="status-cell s-brand">SUBMITTED <span>brand magenta</span></div>
+        <div class="status-cell s-warn">AWAITING_AUTHORITY <span>warn / on hold</span></div>
+        <div class="status-cell s-warn">ACTION_REQUIRED <span>warn</span></div>
+        <div class="status-cell s-ok">COMPLETED <span>ok / green</span></div>
+        <div class="status-cell s-danger">REJECTED <span>danger</span></div>
+        <div class="status-cell s-ink">CANCELLED <span>ink (neutral)</span></div>
+      </div>
+      <p>Status drives the hero color and copy template, the timeline node, the SMS/WhatsApp template, and the dashboard chip. <strong>One enum, six rendering surfaces.</strong></p>
+    </div>
+  </section>
+
+  <section class="spec" id="s3">
+    <div class="spec-head"><span class="spec-num">03 /</span><h2 class="spec-title">Low-fi <em>wireframes</em></h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+─── /track  CODE ENTRY ──────────────────────────────────
+┌────────────────────────────────────────────────────────┐
+│ ● ProxiServe  Home / Track          Sign in · Start    │
+└────────────────────────────────────────────────────────┘
+            ┌──────────────────────────────┐
+            │   ─ Public tracker            │
+            │                               │
+            │   CHECK YOUR APPLICATION.     │
+            │   Enter the code we sent.     │
+            │                               │
+            │   [ PRX-YYYY-NNNNN _______ ]  │
+            │   16 chars · starts PRX   Lost? │
+            │   [Track my application →]    │
+            │   ─── divider ───             │
+            │   Have account? Sign in →     │
+            └──────────────────────────────┘
+            [Where to find it]  [Safe to share?]
+
+
+─── /track/PRX-YYYY-NNNNN  TRACKER VIEW (≥980 px) ───────
+┌────────────────────────────────────────────────────────┐
+│ ● ProxiServe  Track / PRX-…    Refresh · Save account  │
+└────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────┬─────────────────┐
+│ STATUS HERO (color = status)         │  AGENT CARD     │
+│  PRX-2026-00483 · UPDATED 12m        │  - avatar       │
+│  IN PROGRESS.                        │  - role/online  │
+│  Lede 1-2 sentences w/ agent name    │  - stats        │
+│  ┌─ submitted ─┬─ est. completion ─┐ │  - WhatsApp btn │
+│  └─────────────┴───────────────────┘ │  - in-app chat  │
+│                                       │                 │
+│ TIMELINE — 7 step nodes               │  APP META       │
+│  ● done   Received          19 MAY    │  - service      │
+│  ● done   Agent assigned    19 MAY    │  - tier         │
+│  ● done   Under review      20 MAY    │  - submitted    │
+│  ◉ now    In progress       CURRENT   │  - fees         │
+│  ○ next   Submitted         EST 22    │                 │
+│  ○ next   Awaiting auth.    EST 23-26 │  NOTIF PREFS    │
+│  ○ next   Ready             EST 26    │  - WA toggle    │
+│                                       │  - SMS toggle   │
+│ DOCUMENTS (restricted, sign-in to view)│  - email toggle │
+│  [4 files listed, View buttons disabled]│               │
+└──────────────────────────────────────┴─────────────────┘
+</pre>
+    </div>
+  </section>
+
+  <section class="spec" id="s4">
+    <div class="spec-head"><span class="spec-num">04 /</span><h2 class="spec-title">Hi-fi <em>screens</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Screen</th><th>File</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Code entry</td><td class="mono"><a href="code-entry.html" class="linked">code-entry.html</a></td><td>Notched cream card · big mono input · auto-format · 2 tip cards</td></tr>
+          <tr><td>Tracker — In progress</td><td class="mono"><a href="tracker.html" class="linked">tracker.html</a></td><td>Magenta hero · 7-step timeline · agent card · restricted docs · prefs</td></tr>
+          <tr><td>All 10 states</td><td class="mono"><a href="states.html" class="linked">states.html</a></td><td>Not found, recovery, received, action required, completed, rejected, on hold, snapshot, save modal, off-platform SMS</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <strong>Hero decisions worth flagging.</strong> The status hero is the entire emotional load of the page. It uses the notched motif (top-right + bottom-left notch — distinct from the marketing block direction). Color is status-driven, not decorative — magenta = in progress, info-blue = received, ok-green = completed, warn-yellow = action required / on hold, danger-red = rejected. <em>The hero copy template is templated per status — agents don't write it.</em>
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s5">
+    <div class="spec-head"><span class="spec-num">05 /</span><h2 class="spec-title">Component <em>inventory</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin: 0 0 6px;">Reused</h4>
+      <div class="comp-list">
+        <span class="chip">PillButton</span>
+        <span class="chip">StatusPill</span>
+        <span class="chip">ApplicationCodeChip</span>
+        <span class="chip">Notification toggle (Switch)</span>
+        <span class="chip">FormField</span>
+        <span class="chip">PhoneFieldWithCountryCode</span>
+      </div>
+
+      <h4 class="t-h4" style="margin: 16px 0 6px;">New in Flow 5</h4>
+      <div class="comp-list">
+        <span class="chip new">StatusHero (5 variants)</span>
+        <span class="chip new">CodeEntryInput (big mono)</span>
+        <span class="chip new">StatusTimeline (7 nodes)</span>
+        <span class="chip new">TimelineNode (done/current/upcoming)</span>
+        <span class="chip new">AgentCard (avatar + stats + contact)</span>
+        <span class="chip new">OutcomeReadyCard</span>
+        <span class="chip new">RejectionPanel</span>
+        <span class="chip new">RestrictedDocsList</span>
+        <span class="chip new">NotificationPrefsCard</span>
+        <span class="chip new">LostCodeRecoveryCard</span>
+        <span class="chip new">ClaimToAccountModal</span>
+        <span class="chip new">SMSPreview</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s6">
+    <div class="spec-head"><span class="spec-num">06 /</span><h2 class="spec-title">Interaction &amp; <em>motion</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Element</th><th>Trigger</th><th>Spec</th><th>Reduced-motion</th></tr></thead>
+        <tbody>
+          <tr><td>Code input format</td><td>oninput</td><td class="mono">live cursor preserved during dash insertion</td><td>Identical</td></tr>
+          <tr><td>Refresh button</td><td>click / auto every 60s</td><td class="mono">spinner 600 ms + cross-fade hero</td><td>No spinner, instant swap</td></tr>
+          <tr><td>Status change</td><td>polled update</td><td class="mono">hero bg cross-fade 480 ms + checkmark draw on newly-done node</td><td>Hero swaps instantly</td></tr>
+          <tr><td>Current node dot</td><td>always</td><td class="mono">subtle 4 px halo pulse 1.6 s loop</td><td>Static halo</td></tr>
+          <tr><td>Notification switch</td><td>tap</td><td class="mono">slide 200 ms</td><td>Instant swap</td></tr>
+          <tr><td>Claim modal enter</td><td>second-view trigger</td><td class="mono">scrim fade-in 200 ms + scale-up 240 ms</td><td>Instant overlay</td></tr>
+          <tr><td>Outcome card enter</td><td>status → completed</td><td class="mono">slide-in from above 320 ms</td><td>Instant show</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="t-h4" style="margin: 16px 0 6px;">Real-time updates</h4>
+      <p>The tracker polls <span class="mono">GET /api/track/[code]</span> every 60 s while the tab is visible (Page Visibility API). Server returns a <span class="mono">lastModified</span> header; client only re-renders if the timestamp changed. WebSocket upgrade for the same endpoint is available — fallback to polling if connection fails.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s7">
+    <div class="spec-head"><span class="spec-num">07 /</span><h2 class="spec-title">Responsive <em>matrix</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Element</th><th>320–767</th><th>768–979</th><th>980+</th></tr></thead>
+        <tbody>
+          <tr><td>Code entry card</td><td>full bleed minus 40 px</td><td>520 px max</td><td>580 px max, centered</td></tr>
+          <tr><td>Code input font</td><td>20 px mono</td><td>24 px</td><td>28 px</td></tr>
+          <tr><td>Tracker layout</td><td>1 col stacked</td><td>1 col</td><td>main + 340 px aside</td></tr>
+          <tr><td>Status hero h1</td><td>36 px</td><td>48 px</td><td>56–64 px clamp</td></tr>
+          <tr><td>Status hero inner card</td><td>1 col</td><td>2 col</td><td>2 col</td></tr>
+          <tr><td>Timeline node</td><td>2-col (dot + body), date wraps below</td><td>3-col (dot + body + date)</td><td>3-col</td></tr>
+          <tr><td>Agent card</td><td>full width</td><td>full width</td><td>fixed in aside</td></tr>
+          <tr><td>Documents</td><td>full row</td><td>full row</td><td>full row</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s8">
+    <div class="spec-head"><span class="spec-num">08 /</span><h2 class="spec-title">All <em>states</em></h2></div>
+    <div class="spec-body">
+      <p>10 documented in <a href="states.html" class="linked">states.html</a>: code not found, lost-code recovery, Received (info-blue), Action required (warn — with inline CTAs), Completed (ok — with outcome card), Rejected (danger — with reason + recourse), On hold (warn — with original/new ETA), embeddable mini snapshot, "save to account" conversion modal, off-platform SMS+WhatsApp preview.</p>
+
+      <h4 class="t-h4" style="margin: 16px 0 6px;">Hero copy templates (excerpt)</h4>
+      <table class="t">
+        <thead><tr><th>Status</th><th>H1 template</th><th>Sub template</th></tr></thead>
+        <tbody>
+          <tr><td>RECEIVED</td><td class="mono">Received.</td><td>We've got your application and documents. An agent will be assigned within 1 working day.</td></tr>
+          <tr><td>IN_PROGRESS</td><td class="mono">In progress.</td><td>{agent} is preparing your application at {authority}.</td></tr>
+          <tr><td>ACTION_REQUIRED</td><td class="mono">Action required.</td><td>{agent} needs {what}. Once you upload it, we'll keep going.</td></tr>
+          <tr><td>COMPLETED</td><td class="mono">Your {service} is ready.</td><td>We've collected it from {authority}. {collectionInstructions}</td></tr>
+          <tr><td>REJECTED</td><td class="mono">Application declined.</td><td>{authority} couldn't process your renewal this time. It's almost always fixable.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s9">
+    <div class="spec-head"><span class="spec-num">09 /</span><h2 class="spec-title">Accessibility <em>checklist</em></h2></div>
+    <div class="spec-body">
+      <div class="check pass">Page <span class="mono">&lt;title&gt;</span> includes status: "PRX-… — In progress · …"</div>
+      <div class="check pass">Status hero h1 announces the status verbally (not just colour)</div>
+      <div class="check pass">Live region announces status changes on poll</div>
+      <div class="check pass">Timeline nodes have <span class="mono">aria-current="step"</span> on the current node</div>
+      <div class="check pass">Done nodes have checkmark icons (not just colour)</div>
+      <div class="check pass">Upcoming nodes use dashed border + lower contrast text + "EST." prefix</div>
+      <div class="check pass">Restricted docs use real <span class="mono">&lt;button disabled&gt;</span> with explanatory text</div>
+      <div class="check pass">Notification switches use <span class="mono">role="switch"</span> + <span class="mono">aria-checked</span></div>
+      <div class="check pass">Agent card avatar has alt text matching agent name initial</div>
+      <div class="check pass">"Refresh" announces "Status updated" via live region</div>
+      <div class="check pass">All status hero variants meet WCAG AA contrast against body text</div>
+      <div class="check pass">Code entry input auto-formats without trapping the user's cursor</div>
+      <div class="check pass">Mobile sticky elements respect <span class="mono">env(safe-area-inset-bottom)</span></div>
+      <div class="check pass">Reduced motion: hero pulse + checkmark draw + refresh spinner all disabled</div>
+    </div>
+  </section>
+
+  <section class="spec" id="s10">
+    <div class="spec-head"><span class="spec-num">10 /</span><h2 class="spec-title">Hand-off &amp; <em>self-review</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin: 0 0 6px;">Engineering notes</h4>
+      <ul class="l">
+        <li><strong>Code as bearer token.</strong> The PRX code is treated like a session token — short URL safe, log-rotated, and never sent in URL query strings (always path segment or POST body). 14 chars with checksum digit makes brute-force impractical.</li>
+        <li><strong>Restricted view scope.</strong> Guest tracker shows status, timeline, agent identity, document <em>list</em> (names, dates), but never document <em>previews</em> — that requires authentication.</li>
+        <li><strong>Status state machine.</strong> 9 statuses with allowed transitions; agents in F8 can only set the next valid status. The server enforces — admin can override with audit log entry.</li>
+        <li><strong>SMS/WhatsApp parity.</strong> Every status change sends a templated SMS (always) and a WhatsApp template (if opted in). Both link to <span class="mono">proxi.rw/t/PRX-…</span>. Off-platform users get same info.</li>
+        <li><strong>Polling.</strong> 60s interval while visible. Long-poll fallback if browser supports <span class="mono">fetch keepalive</span>. WebSocket upgrade gated by feature flag.</li>
+        <li><strong>Caching.</strong> Tracker response has <span class="mono">Cache-Control: private, max-age=30</span> + <span class="mono">ETag</span>. Reduces server load on shared codes during peak.</li>
+        <li><strong>Rate limiting.</strong> Code entry endpoint: 5 attempts per IP per minute, then 1 per minute for 5 minutes. Per-code reads: unlimited (it's the rightful user's own check).</li>
+        <li><strong>Analytics events.</strong> track_entry_view, track_code_submit {valid:bool}, track_view {code, status}, track_refresh {manual:bool}, track_agent_contact_click {channel}, track_doc_view_attempt, track_claim_modal_view, track_claim_modal_action {action}, track_pref_change {channel,on:bool}, track_lost_code_request.</li>
+      </ul>
+
+      <h4 class="t-h4" style="margin: 24px 0 12px;">Designer self-review rubric (D.8)</h4>
+      <div class="check pass">01 — Real content (real PRX format, RWF, +250 phones, RNP/RDB references)</div>
+      <div class="check pass">02 — Spacing scale obeyed</div>
+      <div class="check pass">03 — Semantic tokens only</div>
+      <div class="check pass">04 — Mobile-first; status hero readable on 320 px</div>
+      <div class="check pass">05 — Safe-area + sticky bottom bar consideration</div>
+      <div class="check pass">06 — 10 states drawn</div>
+      <div class="check pass">07 — Reduced-motion variant via tokens.css</div>
+      <div class="check pass">08 — A11y 14/14</div>
+      <div class="check pass">09 — i18n length budget honoured</div>
+      <div class="check pass">10 — Icon family consistent (Lucide)</div>
+      <div class="check pass">11 — Banned patterns absent (no glass, no rainbow charts)</div>
+      <div class="check pass">12 — Hierarchy obvious; one h1 (status), one h2 (timeline title)</div>
+      <div class="check pass">13 — CTAs unambiguous ("Track my application", "Save to my account", "Upload new photo", "Talk to Aline", "Arrange collection")</div>
+      <div class="check pass">14 — Edge cases (10 documented; biggest collection so far)</div>
+      <div class="check pass">15 — Final line invites next flow</div>
+
+      <p style="margin-top: 24px;"><span class="score">Score · <span class="big">15</span> / 15</span></p>
+
+      <div class="callout" style="margin-top: 32px;">
+        Flow 5 is complete. Type "Design Flow 6." to continue with the Client Dashboard — the authenticated home where applications live alongside messages, documents, and settings. Or correct anything here first.
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

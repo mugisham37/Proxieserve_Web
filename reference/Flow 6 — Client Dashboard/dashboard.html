@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Dashboard · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="app-shell" data-screen-label="F6 Dashboard home">
+
+  <!-- ============ Side nav (desktop) ============ -->
+  <aside class="app-sidenav" aria-label="Primary navigation">
+    <a href="../Flow 1 — Marketing/landing.html" class="app-sidenav__brand">
+      <span class="ico"></span> Proxi<em>Serve</em>
+    </a>
+
+    <div class="app-sidenav__group">
+      <a href="dashboard.html" class="nav-link is-active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="application-detail.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Applications
+        <span class="badge">3</span>
+      </a>
+      <a href="application-detail.html#messages" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>
+        Messages
+        <span class="badge">2</span>
+      </a>
+      <a href="application-detail.html#documents" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg>
+        Documents
+      </a>
+    </div>
+
+    <div class="app-sidenav__group">
+      <h5>Account</h5>
+      <a href="settings.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9 1.65 1.65 0 0 0 4.27 7.18l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+      <a href="../Flow 1 — Marketing/supporting.html#contact" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+        Help
+      </a>
+    </div>
+
+    <div class="app-sidenav__bottom">
+      <a href="settings.html" class="user-chip">
+        <span class="avatar">AM</span>
+        <div>
+          <div class="name">Aline Mukamana</div>
+          <div class="role">CLIENT · KIGALI</div>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============ Mobile top bar ============ -->
+  <header class="app-mobiletop">
+    <a href="../Flow 1 — Marketing/landing.html" class="app-mobiletop__brand">
+      <span class="ico"></span> Proxi<em>Serve</em>
+    </a>
+    <a href="settings.html" class="app-mobiletop__avatar" aria-label="Account">AM</a>
+  </header>
+
+  <!-- ============ Main column ============ -->
+  <main id="main" class="app-main">
+
+    <header class="app-header">
+      <div class="app-header__row">
+        <span class="meta">DASHBOARD · 23 MAY 2026</span>
+        <a href="../Flow 2 — Service Discovery/services-index.html" class="pill pill--sm pill--solid">New application <span class="arr">↗</span></a>
+      </div>
+      <h1>Welcome back, <em>Aline</em>.</h1>
+      <p class="lede">You have <strong style="color: var(--ink);">2 unread messages</strong> and <strong style="color: var(--ink);">1 action waiting</strong>. <em>Everything else is on track.</em></p>
+    </header>
+
+    <div class="app-body">
+
+      <!-- Welcome banner if action required -->
+      <div class="welcome-banner">
+        <div>
+          <h3>Aline needs <em>a clearer photo</em> for your passport renewal</h3>
+          <p>Upload it from your phone — takes 30 seconds. Once we have it, we'll keep going.</p>
+        </div>
+        <a href="application-detail.html" class="pill">Upload now <span class="arr">→</span></a>
+      </div>
+
+      <!-- Quick stats -->
+      <div class="stat-row">
+        <div class="stat stat--brand">
+          <span class="l">Active</span>
+          <span class="v">2</span>
+          <span class="delta">in progress · 1 action needed</span>
+        </div>
+        <div class="stat">
+          <span class="l">Completed</span>
+          <span class="v">3</span>
+          <span class="delta ok">+1 this month</span>
+        </div>
+        <div class="stat">
+          <span class="l">Documents</span>
+          <span class="v">14</span>
+          <span class="delta">on file · 18 MB</span>
+        </div>
+        <div class="stat">
+          <span class="l">Avg. turnaround</span>
+          <span class="v">5d</span>
+          <span class="delta ok">faster than typical</span>
+        </div>
+      </div>
+
+      <!-- Quick action chips -->
+      <div class="qa-row">
+        <a href="../Flow 2 — Service Discovery/services-index.html" class="qa-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M12 5v14"/></svg>
+          Apply for another service
+        </a>
+        <a href="../Flow 5 — Public Tracker/code-entry.html" class="qa-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          Track another code
+        </a>
+        <a href="../Flow 1 — Marketing/supporting.html#contact" class="qa-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>
+          WhatsApp support
+        </a>
+      </div>
+
+      <!-- Active applications -->
+      <div class="section-head">
+        <div>
+          <span class="num">01 / Active</span>
+          <h2 style="margin-top:4px;">Your <em>applications</em></h2>
+        </div>
+        <a href="#" class="more">See all</a>
+      </div>
+
+      <div class="cards-grid" style="margin-bottom: 48px;">
+
+        <a href="application-detail.html" class="app-card app-card--warn">
+          <div class="app-card__strip"></div>
+          <div class="app-card__body">
+            <div class="app-card__top">
+              <span class="app-card__cat">Identity &amp; civil</span>
+              <span class="status s-warn"><span class="dot"></span> Action required</span>
+            </div>
+            <h3 class="app-card__name">Passport <em>renewal</em></h3>
+            <div class="app-card__code">PRX-2026-00483</div>
+            <div class="app-card__progress" aria-label="Progress: 3 of 7 steps done">
+              <span class="is-done"></span><span class="is-done"></span><span class="is-done"></span><span class="is-active"></span><span></span><span></span><span></span>
+            </div>
+            <div class="app-card__meta">
+              <div><span class="l">Agent</span><span class="v">Aline M.</span></div>
+              <div><span class="l">Est.</span><span class="v">26 May</span></div>
+              <div><span class="l">Fee</span><span class="v mono">RWF 15K</span></div>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="app-card">
+          <div class="app-card__strip"></div>
+          <div class="app-card__body">
+            <div class="app-card__top">
+              <span class="app-card__cat">Tax &amp; revenue</span>
+              <span class="status s-brand"><span class="dot"></span> In progress</span>
+            </div>
+            <h3 class="app-card__name">Tax <em>registration</em></h3>
+            <div class="app-card__code">PRX-2026-00516</div>
+            <div class="app-card__progress">
+              <span class="is-done"></span><span class="is-done"></span><span class="is-active"></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="app-card__meta">
+              <div><span class="l">Agent</span><span class="v">Jean N.</span></div>
+              <div><span class="l">Est.</span><span class="v">28 May</span></div>
+              <div><span class="l">Fee</span><span class="v mono">RWF 12K</span></div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Two-col bottom: messages + completed -->
+      <div style="display: grid; gap: 16px; grid-template-columns: 1fr;" class="bottom-grid">
+        <style>
+          @media (min-width: 980px) { .bottom-grid { grid-template-columns: 1fr 1fr !important; } }
+        </style>
+
+        <!-- Recent messages -->
+        <div class="list-card">
+          <div class="list-card__head">
+            <h2><em>Recent</em> messages</h2>
+            <a href="application-detail.html#messages" class="more">All →</a>
+          </div>
+          <ul>
+            <li style="background: var(--brand-soft); border-bottom-color: rgba(0,0,0,0.05);">
+              <span style="width: 32px; height: 32px; border-radius: 999px; background: var(--brand); color: white; display: inline-flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 500; font-size: 13px;">AM</span>
+              <div style="min-width: 0;">
+                <div style="display: flex; gap: 8px; align-items: baseline;">
+                  <strong style="font-family: var(--sans); font-weight: 600; font-size: 13.5px; color: var(--brand-ink);">Aline M.</strong>
+                  <span style="font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.05em;">2h AGO · PASSPORT</span>
+                </div>
+                <p style="margin: 2px 0 0; font-size: 13px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Hi Aline — your bio-page photo came out a bit dark. Could you retake it in better light?</p>
+              </div>
+              <span style="width: 8px; height: 8px; border-radius: 999px; background: var(--brand);" aria-label="Unread"></span>
+            </li>
+            <li>
+              <span style="width: 32px; height: 32px; border-radius: 999px; background: var(--ink); color: var(--paper); display: inline-flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 500; font-size: 13px;">JN</span>
+              <div style="min-width: 0;">
+                <div style="display: flex; gap: 8px; align-items: baseline;">
+                  <strong style="font-family: var(--sans); font-weight: 600; font-size: 13.5px;">Jean N.</strong>
+                  <span style="font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.05em;">YESTERDAY · TAX</span>
+                </div>
+                <p style="margin: 2px 0 0; font-size: 13px; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Submitted to RRA today. They confirm in 1-2 working days.</p>
+              </div>
+              <span style="width: 8px; height: 8px; border-radius: 999px; background: var(--brand);" aria-label="Unread"></span>
+            </li>
+            <li>
+              <span style="width: 32px; height: 32px; border-radius: 999px; background: var(--ok); color: white; display: inline-flex; align-items: center; justify-content: center; font-family: var(--sans); font-weight: 600; font-size: 11px;">PS</span>
+              <div style="min-width: 0;">
+                <div style="display: flex; gap: 8px; align-items: baseline;">
+                  <strong style="font-family: var(--sans); font-weight: 600; font-size: 13.5px;">ProxiServe</strong>
+                  <span style="font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.05em;">2 DAYS AGO · SYSTEM</span>
+                </div>
+                <p style="margin: 2px 0 0; font-size: 13px; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Your Mutuelle application was completed.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Completed history -->
+        <div class="list-card">
+          <div class="list-card__head">
+            <h2><em>Completed</em></h2>
+            <a href="#" class="more">All 3 →</a>
+          </div>
+          <ul>
+            <li>
+              <span style="font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.06em;">21 MAY</span>
+              <div style="min-width: 0;">
+                <div style="font-family: var(--serif); font-size: 14.5px; font-weight: 500;">Mutuelle <em style="font-style: italic; font-weight: 400;">de Santé</em></div>
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.05em; margin-top: 2px;">PRX-2026-00412 · RWF 6,000</div>
+              </div>
+              <span class="status s-ok" style="padding: 3px 10px; font-size: 11px;"><span class="dot"></span> Done</span>
+            </li>
+            <li>
+              <span style="font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.06em;">04 APR</span>
+              <div style="min-width: 0;">
+                <div style="font-family: var(--serif); font-size: 14.5px; font-weight: 500;">National <em style="font-style: italic; font-weight: 400;">ID</em></div>
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.05em; margin-top: 2px;">PRX-2026-00194 · RWF 8,000</div>
+              </div>
+              <span class="status s-ok" style="padding: 3px 10px; font-size: 11px;"><span class="dot"></span> Done</span>
+            </li>
+            <li>
+              <span style="font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.06em;">19 FEB</span>
+              <div style="min-width: 0;">
+                <div style="font-family: var(--serif); font-size: 14.5px; font-weight: 500;">Birth <em style="font-style: italic; font-weight: 400;">certificate</em></div>
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.05em; margin-top: 2px;">PRX-2026-00057 · RWF 5,000</div>
+              </div>
+              <span class="status s-ok" style="padding: 3px 10px; font-size: 11px;"><span class="dot"></span> Done</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- Mobile tab bar -->
+<nav class="app-tabbar" aria-label="Bottom navigation">
+  <a href="dashboard.html" class="is-active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+    Home
+  </a>
+  <a href="application-detail.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+    Apps
+  </a>
+  <a href="application-detail.html#messages" style="position: relative;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>
+    Messages
+    <span class="badge">2</span>
+  </a>
+  <a href="settings.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></svg>
+    Me
+  </a>
+</nav>
+
+</body>
+</html>

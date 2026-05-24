@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProxiServe — Flow 5 / Public Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--cream); }
+  .topstrip { border-bottom: 1px solid var(--rule); padding: 16px 0; background: var(--cream); }
+  .topstrip__inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .breadcrumb a { color: inherit; border-bottom: 1px solid transparent; padding-bottom: 1px; }
+  .breadcrumb a:hover { border-bottom-color: var(--ink); color: var(--ink); }
+
+  .hub-head { padding: 80px 0 56px; }
+  .hub-head .eyebrow { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .hub-head .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ink); }
+  .hub-head h1 { margin: 0 0 24px; }
+  .hub-head p { max-width: 720px; margin: 0; }
+  .hub-meta { display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .hub-meta span strong { color: var(--ink); font-weight: 600; }
+
+  .cards {
+    display: grid; grid-template-columns: 1fr; gap: 1px;
+    background: var(--ink); border: 1px solid var(--ink);
+    border-radius: var(--r-lg); overflow: hidden; margin-bottom: 80px;
+  }
+  @media (min-width: 760px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card {
+    background: var(--paper); padding: 40px 32px;
+    display: flex; flex-direction: column; min-height: 240px;
+    color: var(--ink); text-decoration: none;
+    transition: background var(--m-fast);
+    position: relative;
+  }
+  .card:hover { background: var(--paper-2); }
+  .card__num { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; margin-bottom: 12px; }
+  .card__title { font-family: var(--serif); font-weight: 500; font-size: 28px; line-height: 1.15; margin: 0 0 12px; }
+  .card__title em { font-style: italic; font-weight: 400; }
+  .card__desc { font-size: 14px; color: var(--ink-muted); line-height: 1.6; margin: 0 0 24px; flex: 1; max-width: 480px; }
+  .card__cta { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-weight: 500; font-size: 14px; }
+  .card__cta::after { content: "→"; transition: transform var(--m-fast); }
+  .card:hover .card__cta::after { transform: translateX(4px); }
+
+  .card--feature {
+    background: var(--brand); color: white;
+    grid-column: 1 / -1; padding: 64px 48px; min-height: 320px;
+    overflow: hidden;
+    position: relative;
+  }
+  .card--feature .card__num { color: rgba(255,255,255,0.7); }
+  .card--feature .card__title { color: white; font-size: 48px; max-width: 720px; }
+  .card--feature .card__desc { color: rgba(255,255,255,0.85); font-size: 16px; max-width: 640px; }
+  .card--feature .card__cta { color: white; }
+  .card--feature:hover { background: var(--brand-ink); }
+  @media (max-width: 760px) { .card--feature { padding: 40px 28px; } .card--feature .card__title { font-size: 36px; } }
+
+  .card--brand { background: var(--brand-soft); }
+  .card--brand:hover { background: #F0CFE0; }
+  .card--brand .card__title { color: var(--brand-ink); }
+
+  /* Mini hero preview inside feature */
+  .feature-mini {
+    position: absolute; right: 32px; bottom: 32px;
+    width: 320px;
+    background: rgba(0,0,0,0.18);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 10px;
+    padding: 16px 18px;
+    pointer-events: none;
+  }
+  @media (max-width: 1100px) { .feature-mini { display: none; } }
+  .feature-mini .row1 { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); }
+  .feature-mini .code { font-family: var(--mono); font-size: 13px; font-weight: 500; margin: 6px 0; }
+  .feature-mini .h { font-family: var(--serif); font-size: 22px; font-weight: 400; line-height: 1.1; margin: 4px 0 0; }
+  .feature-mini .h em { font-style: italic; }
+  .feature-mini .nodes { display: flex; gap: 6px; margin-top: 12px; align-items: center; }
+  .feature-mini .nodes .d { width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.4); }
+  .feature-mini .nodes .d.done { background: white; }
+  .feature-mini .nodes .d.now { background: white; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
+  .feature-mini .nodes .seg { flex: 1; height: 1px; background: rgba(255,255,255,0.35); }
+  .feature-mini .nodes .seg.done { background: white; }
+
+  .deci-band { background: var(--ink); color: var(--paper); padding: 80px 0; }
+  .deci-band h2 { color: var(--paper); margin: 0 0 16px; }
+  .deci-band h2 em { font-style: italic; font-weight: 400; }
+  .deci-band p { color: rgba(246,236,210,0.75); max-width: 640px; margin: 0; }
+  .decisions { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: 56px; border-top: 1px solid rgba(246,236,210,0.18); }
+  @media (min-width: 760px) { .decisions { grid-template-columns: repeat(3, 1fr); } }
+  .dec { padding: 32px 28px; border-right: 1px solid rgba(246,236,210,0.12); border-bottom: 1px solid rgba(246,236,210,0.12); }
+  @media (max-width: 759px) { .dec { border-right: none; } }
+  .dec .num { font-family: var(--mono); font-size: 11px; color: rgba(246,236,210,0.4); letter-spacing: 0.06em; margin-bottom: 12px; display: block; }
+  .dec h4 { color: var(--paper); font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 0 0 8px; text-transform: none; letter-spacing: 0; }
+  .dec h4 em { font-style: italic; font-weight: 400; }
+  .dec p { color: rgba(246,236,210,0.75); font-size: 14px; line-height: 1.55; margin: 0; }
+
+  .next-band { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .next-band h2 { margin: 0 0 16px; }
+  .next-band p { max-width: 640px; margin: 0 0 32px; color: var(--ink-muted); }
+  .flow-list { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--rule-strong); }
+  .flow-row { display: grid; grid-template-columns: 60px 1fr auto; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); align-items: center; }
+  .flow-row .num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .flow-row h3 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 19px; }
+  .flow-row h3 em { font-style: italic; font-weight: 400; }
+  .flow-row p { margin: 4px 0 0; font-size: 13px; color: var(--ink-muted); }
+  .flow-row .status { padding: 4px 12px; font-size: 11px; }
+  .flow-row.done { background: var(--ok-soft); }
+
+  .foot { border-top: 1px solid var(--rule); padding: 32px 0; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<div class="topstrip">
+  <div class="container">
+    <div class="topstrip__inner">
+      <a href="../Flow 4 — Auth/index.html" class="breadcrumb"><span aria-hidden="true">←</span> Flow 4 — Auth</a>
+      <span class="breadcrumb">PROXISERVE / DESIGN / FLOW 05 — PUBLIC TRACKER / v0.1</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="hub-head">
+    <span class="eyebrow">Flow 05 / 10 — public tracker</span>
+    <h1 class="t-display">The <em>tracker</em>.</h1>
+    <p class="t-lede">No account required. The PRX code is the entire credential. <em>The most-visited page after submission</em> — calm, accurate, status-driven, with the agent always one tap away. Designed so a worried applicant on a market-vendor's phone gets the same clarity as one on a laptop in Kigali.</p>
+    <div class="hub-meta">
+      <span><strong>2 pages</strong> · entry + tracker</span>
+      <span><strong>10 states</strong> · across 9 statuses</span>
+      <span><strong>12 new components</strong> · StatusHero + Timeline core</span>
+      <span><strong>15 / 15</strong> self-review score</span>
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <a href="tracker.html" class="card card--feature">
+      <span class="card__num">01 / Primary deliverable</span>
+      <h2 class="card__title">The <em>tracker</em>, status-driven and live.</h2>
+      <p class="card__desc">Status hero with notched corners (color = status). 7-step timeline with done/current/upcoming variants. Agent card with WhatsApp + in-app chat. Restricted document list. Notification preferences for guests. Polls every 60 s while tab is visible.</p>
+      <span class="card__cta">Open the tracker</span>
+
+      <div class="feature-mini" aria-hidden="true">
+        <div class="row1"><span>PASSPORT RENEWAL</span><span>12m AGO</span></div>
+        <div class="code">PRX-2026-00483</div>
+        <p class="h">In <em>progress</em>.</p>
+        <div class="nodes">
+          <span class="d done"></span><span class="seg done"></span>
+          <span class="d done"></span><span class="seg done"></span>
+          <span class="d done"></span><span class="seg done"></span>
+          <span class="d now"></span><span class="seg"></span>
+          <span class="d"></span><span class="seg"></span>
+          <span class="d"></span><span class="seg"></span>
+          <span class="d"></span>
+        </div>
+      </div>
+    </a>
+
+    <a href="code-entry.html" class="card">
+      <span class="card__num">02 / Entry point</span>
+      <h2 class="card__title">Code <em>entry</em>.</h2>
+      <p class="card__desc">A single notched cream card. The 28 px mono input is the visual focus — auto-formats as PRX-YYYY-NNNNN as you type. "Lost code?" link routes to recovery. Two helper tip cards reinforce that this is private and shareable like a password.</p>
+      <span class="card__cta">Open code entry</span>
+    </a>
+
+    <a href="states.html" class="card">
+      <span class="card__num">03 / Every state</span>
+      <h2 class="card__title">10 states — <em>drawn out</em>.</h2>
+      <p class="card__desc">Code not found, lost-code recovery, Received (info), Action required (warn + inline CTAs), Completed (ok + outcome card), Rejected (danger + reason + recourse), On hold (warn + ETA shift), embeddable snapshot, claim-to-account modal, off-platform SMS+WhatsApp preview.</p>
+      <span class="card__cta">Open states gallery</span>
+    </a>
+
+    <a href="spec.html" class="card card--brand">
+      <span class="card__num">04 / Engineering spec</span>
+      <h2 class="card__title">The <em>10-section</em> deliverable.</h2>
+      <p class="card__desc">Flow map · IA + status enum (9 statuses across 6 surfaces) · wireframes · hi-fi index · 12 new components · motion + polling · responsive · state matrix + hero copy templates · a11y 14/14 · session/rate-limit/SMS parity.</p>
+      <span class="card__cta">Read the spec</span>
+    </a>
+
+  </div>
+
+</div>
+
+<div class="deci-band">
+  <div class="container">
+    <span class="eyebrow" style="color: rgba(246,236,210,0.6);">Key design decisions</span>
+    <h2 class="t-h2">Three calls <em>worth flagging</em>.</h2>
+    <p>The tracker is the most-revisited page in ProxiServe — most applicants check daily. These three calls keep the experience calm even when the news isn't.</p>
+
+    <div class="decisions">
+      <div class="dec">
+        <span class="num">01 / Status drives color</span>
+        <h4>One <em>enum</em>, five hero variants</h4>
+        <p>Magenta for in-progress, info-blue for received, ok-green for completed, warn-yellow for action required and on-hold, danger-red for rejected. Color is functional, not decorative — a user can identify their status by glance, even before reading.</p>
+      </div>
+      <div class="dec">
+        <span class="num">02 / Always actionable</span>
+        <h4>Hero + <em>next step</em></h4>
+        <p>Action required and Rejected states never just describe — they always show the next button (Upload, Talk to agent, Request refund). Completed shows an outcome card with collection options. Even On-hold gets a "talk to your agent" affordance.</p>
+      </div>
+      <div class="dec">
+        <span class="num">03 / Off-platform parity</span>
+        <h4>SMS + WhatsApp = <em>same info</em></h4>
+        <p>Every status change fires a templated SMS (always) and WhatsApp template (if opted in), both linking to the public tracker URL. Half our users never visit the web tracker — they live in WhatsApp. The status is everywhere it needs to be.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="next-band">
+  <div class="container">
+    <span class="eyebrow">Where we are in the ten-flow plan</span>
+    <h2 class="t-h2">Flow 05 of 10 — <em>complete</em>.</h2>
+    <p>The StatusHero, StatusTimeline, and AgentCard primitives introduced here are used by Flow 6 (client dashboard cards), Flow 8 (agent case detail header), and the status emails / SMS templates in Flow 10.</p>
+
+    <div class="flow-list">
+      <div class="flow-row done"><span class="num">F1</span><div><h3>Marketing &amp; <em>landing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F2</span><div><h3>Service <em>discovery</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F3</span><div><h3>Application <em>submission</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F4</span><div><h3>Auth &amp; <em>role routing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F5</span><div><h3>Public <em>tracker</em></h3><p>Code entry, magenta status hero, 7-step timeline, agent card, 10 states</p></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row"><span class="num">F6</span><div><h3>Client <em>dashboard</em></h3><p>Authenticated home, messages, documents library, settings</p></div><span class="status s-info"><span class="dot"></span> Next</span></div>
+      <div class="flow-row"><span class="num">F7</span><div><h3><em>Payments</em></h3></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+      <div class="flow-row"><span class="num">F8</span><div><h3>Agent <em>workspace</em></h3></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+      <div class="flow-row"><span class="num">F9</span><div><h3>Admin <em>panel</em></h3></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+      <div class="flow-row"><span class="num">F10</span><div><h3>Cross-cutting <em>systems</em></h3></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+    </div>
+
+    <div style="margin-top: 48px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href="code-entry.html" class="pill pill--solid">Open code entry <span class="arr">↗</span></a>
+      <a href="tracker.html" class="pill">Open the tracker <span class="arr">→</span></a>
+      <a href="spec.html" class="pill">Read the spec <span class="arr">→</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="foot container">
+  <span>PROXISERVE / FLOW 05 — PUBLIC TRACKER / v0.1</span>
+  <span>Type "Design Flow 6." when ready.</span>
+</div>
+
+</body>
+</html>

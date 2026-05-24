@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProxiServe — Flow 6 / Client Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--cream); }
+  .topstrip { border-bottom: 1px solid var(--rule); padding: 16px 0; background: var(--cream); }
+  .topstrip__inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .breadcrumb a { color: inherit; }
+  .breadcrumb a:hover { color: var(--ink); }
+
+  .hub-head { padding: 80px 0 56px; }
+  .hub-head .eyebrow { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .hub-head .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ink); }
+  .hub-head h1 { margin: 0 0 24px; }
+  .hub-head p { max-width: 720px; margin: 0; }
+  .hub-meta { display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .hub-meta span strong { color: var(--ink); font-weight: 600; }
+
+  .cards {
+    display: grid; grid-template-columns: 1fr; gap: 1px;
+    background: var(--ink); border: 1px solid var(--ink);
+    border-radius: var(--r-lg); overflow: hidden; margin-bottom: 80px;
+  }
+  @media (min-width: 760px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card {
+    background: var(--paper); padding: 40px 32px;
+    display: flex; flex-direction: column; min-height: 240px;
+    color: var(--ink); text-decoration: none;
+    transition: background var(--m-fast);
+    position: relative;
+  }
+  .card:hover { background: var(--paper-2); }
+  .card__num { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; margin-bottom: 12px; }
+  .card__title { font-family: var(--serif); font-weight: 500; font-size: 28px; line-height: 1.15; margin: 0 0 12px; }
+  .card__title em { font-style: italic; font-weight: 400; }
+  .card__desc { font-size: 14px; color: var(--ink-muted); line-height: 1.6; margin: 0 0 24px; flex: 1; max-width: 480px; }
+  .card__cta { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-weight: 500; font-size: 14px; }
+  .card__cta::after { content: "→"; transition: transform var(--m-fast); }
+  .card:hover .card__cta::after { transform: translateX(4px); }
+  .card--feature {
+    background: var(--ink); color: var(--paper);
+    grid-column: 1 / -1; padding: 56px 48px; min-height: 280px;
+    overflow: hidden;
+  }
+  .card--feature .card__num { color: rgba(246,236,210,0.6); }
+  .card--feature .card__title { color: var(--paper); font-size: 44px; max-width: 720px; }
+  .card--feature .card__desc { color: rgba(246,236,210,0.75); font-size: 16px; max-width: 640px; }
+  .card--feature .card__cta { color: var(--paper); }
+  .card--feature:hover { background: #2A231C; }
+  .card--brand { background: var(--brand-soft); }
+  .card--brand:hover { background: #F0CFE0; }
+  .card--brand .card__title { color: var(--brand-ink); }
+
+  /* Mini dashboard preview */
+  .feature-illo {
+    position: absolute; right: 32px; bottom: 32px;
+    display: grid; gap: 8px;
+    width: 280px;
+    pointer-events: none;
+    opacity: 0.92;
+  }
+  @media (max-width: 1100px) { .feature-illo { display: none; } }
+  .feature-illo .mini-app {
+    background: var(--paper); color: var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+  .feature-illo .mini-app .strip { height: 5px; background: var(--brand); }
+  .feature-illo .mini-app.warn .strip { background: var(--warn); }
+  .feature-illo .mini-app .body { padding: 10px 12px; }
+  .feature-illo .mini-app .top { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 8px; color: var(--ink-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .feature-illo .mini-app .name { font-family: var(--serif); font-weight: 500; font-size: 13px; margin: 6px 0; line-height: 1.2; }
+  .feature-illo .mini-app .nodes { display: flex; gap: 2px; }
+  .feature-illo .mini-app .nodes span { flex: 1; height: 3px; border-radius: 999px; background: var(--rule); }
+  .feature-illo .mini-app .nodes span.done { background: var(--ink); }
+  .feature-illo .mini-app .nodes span.now { background: var(--brand); }
+  .feature-illo .mini-app.warn .nodes span.now { background: var(--warn); }
+
+  .deci-band { background: var(--ink); color: var(--paper); padding: 80px 0; }
+  .deci-band h2 { color: var(--paper); margin: 0 0 16px; }
+  .deci-band h2 em { font-style: italic; font-weight: 400; }
+  .deci-band p { color: rgba(246,236,210,0.75); max-width: 640px; margin: 0; }
+  .decisions { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: 56px; border-top: 1px solid rgba(246,236,210,0.18); }
+  @media (min-width: 760px) { .decisions { grid-template-columns: repeat(3, 1fr); } }
+  .dec { padding: 32px 28px; border-right: 1px solid rgba(246,236,210,0.12); border-bottom: 1px solid rgba(246,236,210,0.12); }
+  @media (max-width: 759px) { .dec { border-right: none; } }
+  .dec .num { font-family: var(--mono); font-size: 11px; color: rgba(246,236,210,0.4); letter-spacing: 0.06em; margin-bottom: 12px; display: block; }
+  .dec h4 { color: var(--paper); font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 0 0 8px; text-transform: none; letter-spacing: 0; }
+  .dec h4 em { font-style: italic; font-weight: 400; }
+  .dec p { color: rgba(246,236,210,0.75); font-size: 14px; line-height: 1.55; margin: 0; }
+
+  .next-band { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .next-band h2 { margin: 0 0 16px; }
+  .next-band p { max-width: 640px; margin: 0 0 32px; color: var(--ink-muted); }
+  .flow-list { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--rule-strong); }
+  .flow-row { display: grid; grid-template-columns: 60px 1fr auto; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); align-items: center; }
+  .flow-row .num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .flow-row h3 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 19px; }
+  .flow-row h3 em { font-style: italic; font-weight: 400; }
+  .flow-row p { margin: 4px 0 0; font-size: 13px; color: var(--ink-muted); }
+  .flow-row .status { padding: 4px 12px; font-size: 11px; }
+  .flow-row.done { background: var(--ok-soft); }
+
+  .foot { border-top: 1px solid var(--rule); padding: 32px 0; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<div class="topstrip">
+  <div class="container">
+    <div class="topstrip__inner">
+      <a href="../Flow 5 — Public Tracker/index.html" class="breadcrumb"><span aria-hidden="true">←</span> Flow 5 — Public Tracker</a>
+      <span class="breadcrumb">PROXISERVE / DESIGN / FLOW 06 — CLIENT DASHBOARD / v0.1</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="hub-head">
+    <span class="eyebrow">Flow 06 / 10 — client dashboard</span>
+    <h1 class="t-display">The <em>home</em>.</h1>
+    <p class="t-lede">Where signed-in clients live. Persistent side nav on desktop, bottom tab bar on mobile, app cards instead of a long list, and an in-app version of the tracker hero on every application detail. <em>Authenticated parity</em> with the public tracker — same status enum, deeper functionality.</p>
+    <div class="hub-meta">
+      <span><strong>3 pages</strong> · home, detail, settings</span>
+      <span><strong>10 states</strong> · across the app shell</span>
+      <span><strong>16 new components</strong> · reused by F8, F9</span>
+      <span><strong>15 / 15</strong> self-review score</span>
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <a href="dashboard.html" class="card card--feature">
+      <span class="card__num">01 / Primary deliverable</span>
+      <h2 class="card__title">The <em>dashboard</em>, signed in.</h2>
+      <p class="card__desc">Welcome banner with the most urgent action. 4 stat tiles. Quick action chips. Two-up app cards with category colored strip + 7-step progress bar. Recent messages with unread dots. Completed history list.</p>
+      <span class="card__cta">Open dashboard</span>
+
+      <div class="feature-illo" aria-hidden="true">
+        <div class="mini-app warn">
+          <div class="strip"></div>
+          <div class="body">
+            <div class="top"><span>IDENTITY</span><span>ACTION</span></div>
+            <div class="name">Passport <em style="font-style:italic;font-weight:400;">renewal</em></div>
+            <div class="nodes"><span class="done"></span><span class="done"></span><span class="done"></span><span class="now"></span><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="mini-app">
+          <div class="strip"></div>
+          <div class="body">
+            <div class="top"><span>TAX</span><span>IN PROGRESS</span></div>
+            <div class="name">Tax <em style="font-style:italic;font-weight:400;">registration</em></div>
+            <div class="nodes"><span class="done"></span><span class="done"></span><span class="now"></span><span></span><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <a href="application-detail.html" class="card">
+      <span class="card__num">02 / Application detail</span>
+      <h2 class="card__title">One application, <em>everything in it</em>.</h2>
+      <p class="card__desc">In-app status hero (yellow when action required) with inline CTAs. Tabs for Overview / Messages / Documents / Payment / History. Full conversation thread with system messages, my replies, agent replies. Inline document replace with progress.</p>
+      <span class="card__cta">Open application detail</span>
+    </a>
+
+    <a href="settings.html" class="card">
+      <span class="card__num">03 / Settings</span>
+      <h2 class="card__title">Profile, contact, <em>devices</em>.</h2>
+      <p class="card__desc">Profile (request-change flow for legal fields), contact (phone/email/language), notifications (WhatsApp/SMS/Email toggles), sign-in &amp; security (password, 2FA, trusted devices with revoke), privacy (data export, retention), danger zone (delete account).</p>
+      <span class="card__cta">Open settings</span>
+    </a>
+
+    <a href="states.html" class="card card--brand">
+      <span class="card__num">04 / Every edge case</span>
+      <h2 class="card__title">10 states — <em>drawn out</em>.</h2>
+      <p class="card__desc">Empty (no apps yet), loading skeleton, offline cached snapshot, email verification banner, optimistic message send, document upload with chunked progress, multi-tab BroadcastChannel conflict, session expired re-auth modal, service archived after submission, returning after long absence.</p>
+      <span class="card__cta">Open states gallery</span>
+    </a>
+
+  </div>
+
+</div>
+
+<div class="deci-band">
+  <div class="container">
+    <span class="eyebrow" style="color: rgba(246,236,210,0.6);">Key design decisions</span>
+    <h2 class="t-h2">Three calls <em>worth flagging</em>.</h2>
+    <p>The dashboard is where loyalty is built or lost — open daily by anyone with an active case. These calls keep it usable on both a 5-inch Android and a 27-inch monitor.</p>
+
+    <div class="decisions">
+      <div class="dec">
+        <span class="num">01 / Two-shell pattern</span>
+        <h4>Side nav on <em>desktop</em>, tab bar on <em>mobile</em></h4>
+        <p>Persistent 240 px sidebar with grouped links + user chip on desktop. Sticky bottom tab bar (Home / Apps / Messages / Me) on mobile. They share routes but never both render. Top bar on mobile carries only brand + avatar to free up vertical space.</p>
+      </div>
+      <div class="dec">
+        <span class="num">02 / Welcome banner = most urgent action</span>
+        <h4>One thing that <em>matters now</em></h4>
+        <p>The dark ink banner at the top of the dashboard surfaces the one action that needs the user (upload photo, confirm fee, etc.). Replaces the generic "welcome back" string. Empty dashboards show a "let's get started" instead.</p>
+      </div>
+      <div class="dec">
+        <span class="num">03 / In-app status hero</span>
+        <h4>Same enum, <em>compressed</em></h4>
+        <p>The application detail uses a shorter version of the F5 public tracker hero — same colors, same status enum, but inline buttons replace the agent-card link (because the agent card sits in the right column already).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="next-band">
+  <div class="container">
+    <span class="eyebrow">Where we are in the ten-flow plan</span>
+    <h2 class="t-h2">Flow 06 of 10 — <em>complete</em>.</h2>
+    <p>The Dashboard introduces the app shell that Flow 8 (agent workspace) and Flow 9 (admin panel) inherit — same sidenav primitives, same nav-link styling, same user-chip in the corner. App cards become case cards in F8.</p>
+
+    <div class="flow-list">
+      <div class="flow-row done"><span class="num">F1</span><div><h3>Marketing &amp; <em>landing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F2</span><div><h3>Service <em>discovery</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F3</span><div><h3>Application <em>submission</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F4</span><div><h3>Auth &amp; <em>role routing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F5</span><div><h3>Public <em>tracker</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F6</span><div><h3>Client <em>dashboard</em></h3><p>Home + detail + settings, two-shell pattern, 10 states</p></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row"><span class="num">F7</span><div><h3><em>Payments</em></h3><p>Mobile money push, card 3DS, off-platform, receipt, dispute</p></div><span class="status s-info"><span class="dot"></span> Next</span></div>
+      <div class="flow-row"><span class="num">F8</span><div><h3>Agent <em>workspace</em></h3></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+      <div class="flow-row"><span class="num">F9</span><div><h3>Admin <em>panel</em></h3></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+      <div class="flow-row"><span class="num">F10</span><div><h3>Cross-cutting <em>systems</em></h3></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+    </div>
+
+    <div style="margin-top: 48px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href="dashboard.html" class="pill pill--solid">Open the dashboard <span class="arr">↗</span></a>
+      <a href="application-detail.html" class="pill">Open application detail <span class="arr">→</span></a>
+      <a href="settings.html" class="pill">Open settings <span class="arr">→</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="foot container">
+  <span>PROXISERVE / FLOW 06 — CLIENT DASHBOARD / v0.1</span>
+  <span>Type "Design Flow 7." when ready.</span>
+</div>
+
+</body>
+</html>

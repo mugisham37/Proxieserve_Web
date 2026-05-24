@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Track your application · ProxiServe</title>
+<meta name="description" content="Check the status of your ProxiServe application using your tracking code." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="tracker.css" />
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="tk-topbar">
+  <div class="container">
+    <div class="tk-topbar__inner">
+      <a href="../Flow 1 — Marketing/landing.html" class="tk-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div class="tk-crumb">
+        <a href="../Flow 1 — Marketing/landing.html">Home</a><span class="sep">/</span><strong>Track</strong>
+      </div>
+      <div class="tk-actions">
+        <a href="../Flow 4 — Auth/client-login.html" class="pill pill--sm pill--ghost">Sign in</a>
+        <a href="../Flow 2 — Service Discovery/services-index.html" class="pill pill--sm pill--solid">Start application <span class="arr">↗</span></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="entry-shell" data-screen-label="F5 Code entry">
+    <div class="container" style="width: 100%;">
+
+      <div class="entry-card">
+        <div class="eyebrow">
+          <span class="t-h4" style="margin: 0; color: var(--ink-muted);">Public tracker</span>
+        </div>
+
+        <h1>Check your <em>application</em>.</h1>
+        <p class="sub">Enter the code we sent when you applied. <em>No account needed.</em></p>
+
+        <form id="code-form" onsubmit="event.preventDefault(); window.location.href='tracker.html';">
+          <label for="tk-code" class="sr-only">Tracking code</label>
+          <input
+            id="tk-code"
+            type="text"
+            class="code-input"
+            placeholder="PRX-YYYY-NNNNN"
+            autocomplete="off"
+            autocapitalize="characters"
+            inputmode="text"
+            maxlength="14"
+            required
+            aria-describedby="tk-code-help"
+          />
+
+          <div class="helper">
+            <span class="h-left" id="tk-code-help">
+              16 characters · starts with <strong style="font-family: var(--mono); color: var(--ink);">PRX</strong>
+            </span>
+            <a href="#" onclick="event.preventDefault();">Lost your code?</a>
+          </div>
+
+          <div class="cta-row">
+            <button type="submit" class="pill pill--solid pill--lg">Track my application <span class="arr">→</span></button>
+          </div>
+        </form>
+
+        <div class="alt-row">
+          <span style="color: var(--ink-muted);">Have an account?</span>
+          <a href="../Flow 4 — Auth/client-login.html">Sign in to see all your applications →</a>
+        </div>
+      </div>
+
+      <!-- Helpful sub-card -->
+      <div class="entry-tips">
+        <div class="entry-tip">
+          <span class="n">1</span>
+          <div>
+            <h4>Where to <em>find it</em></h4>
+            <p>Check your SMS or WhatsApp from when you applied. The code starts with PRX.</p>
+          </div>
+        </div>
+        <div class="entry-tip">
+          <span class="n">2</span>
+          <div>
+            <h4>Safe to <em>share</em>?</h4>
+            <p>Treat it like a password — anyone with the code can see your application's progress.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer style="background: var(--cream-2); border-top: 1px solid var(--rule); padding: 32px 0;">
+  <div class="container" style="display: flex; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; flex-wrap: wrap;">
+    <span>PROXISERVE / FLOW 05 / TRACK</span>
+    <a href="../Flow 1 — Marketing/supporting.html#contact" style="color: inherit; text-decoration: underline;">Need help? Contact support →</a>
+  </div>
+</footer>
+
+<script>
+  // Auto-format code as user types: PRX-YYYY-NNNNN
+  const codeInput = document.getElementById('tk-code');
+  codeInput.addEventListener('input', () => {
+    let v = codeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (v.startsWith('PRX')) {
+      const parts = [v.slice(0, 3)];
+      if (v.length > 3) parts.push(v.slice(3, 7));
+      if (v.length > 7) parts.push(v.slice(7, 12));
+      v = parts.join('-');
+    }
+    codeInput.value = v;
+  });
+  codeInput.focus();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Settings · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="dashboard.css" />
+<style>
+  .danger-zone {
+    background: var(--paper);
+    border: 1px solid var(--danger);
+    border-radius: var(--r-lg);
+    padding: 28px;
+    margin-top: 16px;
+  }
+  .danger-zone h2 { color: var(--danger); font-family: var(--serif); font-weight: 500; font-size: 22px; margin: 0 0 4px; }
+  .danger-zone h2 em { font-style: italic; font-weight: 400; }
+  .danger-zone .sub { font-size: 13.5px; color: var(--ink-muted); margin: 0 0 24px; }
+  .danger-zone .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 10px 18px; border-radius: var(--r-md); font-family: var(--sans); font-weight: 500; font-size: 13px; cursor: pointer; }
+  .danger-zone .btn-danger:hover { background: var(--danger); color: white; }
+
+  .seg-group {
+    display: inline-flex; border: 1px solid var(--ink); border-radius: 999px; overflow: hidden;
+  }
+  .seg-group button {
+    border: none; background: transparent;
+    font-family: var(--serif); font-size: 13px; font-weight: 500;
+    padding: 8px 14px; color: var(--ink); cursor: pointer;
+  }
+  .seg-group button + button { border-left: 1px solid var(--ink); }
+  .seg-group button.is-active { background: var(--ink); color: var(--paper); }
+
+  .device-tile {
+    display: grid; grid-template-columns: 32px 1fr auto; gap: 12px;
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+    align-items: center;
+  }
+  .device-tile:first-of-type { border-top: none; }
+  .device-tile .ico { color: var(--ink-muted); }
+  .device-tile .name { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .device-tile .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.04em; margin-top: 2px; }
+  .device-tile .this { background: var(--ok-soft); color: var(--ok); padding: 2px 8px; border-radius: 999px; font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.06em; }
+  .device-tile .revoke { background: transparent; border: 1px solid var(--rule); padding: 4px 12px; border-radius: 999px; font-family: var(--sans); font-size: 11px; cursor: pointer; }
+  .device-tile .revoke:hover { border-color: var(--danger); color: var(--danger); }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="app-shell" data-screen-label="F6 Settings">
+
+  <aside class="app-sidenav" aria-label="Primary navigation">
+    <a href="../Flow 1 — Marketing/landing.html" class="app-sidenav__brand"><span class="ico"></span> Proxi<em>Serve</em></a>
+    <div class="app-sidenav__group">
+      <a href="dashboard.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="application-detail.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Applications
+        <span class="badge">3</span>
+      </a>
+    </div>
+    <div class="app-sidenav__group">
+      <h5>Account</h5>
+      <a href="settings.html" class="nav-link is-active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3"/></svg>
+        Settings
+      </a>
+    </div>
+    <div class="app-sidenav__bottom">
+      <a href="settings.html" class="user-chip">
+        <span class="avatar">AM</span>
+        <div>
+          <div class="name">Aline Mukamana</div>
+          <div class="role">CLIENT</div>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <header class="app-mobiletop">
+    <a href="dashboard.html" class="app-mobiletop__brand"><span style="font-family: var(--sans);">←</span> Back</a>
+    <span style="font-family: var(--mono); font-size: 12px; color: var(--ink-muted);">Settings</span>
+    <a href="settings.html" class="app-mobiletop__avatar">AM</a>
+  </header>
+
+  <main id="main" class="app-main">
+
+    <header class="app-header">
+      <div class="app-header__row">
+        <span class="meta">ACCOUNT · SETTINGS</span>
+      </div>
+      <h1>Your <em>settings</em>.</h1>
+      <p class="lede">Manage how we reach you, your sign-in, and what we keep on file. <em>Changes save instantly.</em></p>
+    </header>
+
+    <div class="app-body">
+
+      <!-- Profile -->
+      <section class="set-card">
+        <h2>Your <em>profile</em></h2>
+        <p class="sub">As it appears on government documents. Changes are reviewed by an agent before applying.</p>
+        <div class="set-row">
+          <div>
+            <div class="l">Full name</div>
+            <div class="desc">Aline Mukamana</div>
+          </div>
+          <a href="#" style="font-size: 12px; color: var(--brand-ink); text-decoration: underline;">Request change</a>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="l">National ID</div>
+            <div class="desc">1 1992 8 0042847 0 31</div>
+          </div>
+          <span class="v" style="font-family: var(--sans); color: var(--ok); font-size: 12px;">Verified ✓</span>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="l">Date of birth</div>
+            <div class="desc">14 March 1992</div>
+          </div>
+          <a href="#" style="font-size: 12px; color: var(--brand-ink); text-decoration: underline;">Request change</a>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section class="set-card">
+        <h2>Contact <em>details</em></h2>
+        <p class="sub">Where your agent and our system reach you.</p>
+        <div class="set-row">
+          <div>
+            <div class="l">Phone</div>
+            <div class="desc">+250 78 8 *** 456 · WhatsApp on</div>
+          </div>
+          <a href="#" style="font-size: 12px; color: var(--brand-ink); text-decoration: underline;">Update</a>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="l">Email</div>
+            <div class="desc">aline.m@example.com · Verified</div>
+          </div>
+          <a href="#" style="font-size: 12px; color: var(--brand-ink); text-decoration: underline;">Update</a>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="l">Language</div>
+            <div class="desc">Used in messages from us</div>
+          </div>
+          <div class="seg-group">
+            <button class="is-active">English</button>
+            <button>RW</button>
+            <button>FR</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Notifications -->
+      <section class="set-card">
+        <h2><em>Notifications</em></h2>
+        <p class="sub">Pick how we let you know about status changes and messages.</p>
+        <div class="set-row">
+          <div>
+            <div class="l">WhatsApp updates</div>
+            <div class="desc">Status changes, agent replies, action needed</div>
+          </div>
+          <button class="switch is-on" role="switch" aria-checked="true"></button>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="l">SMS updates</div>
+            <div class="desc">Critical updates only — always on</div>
+          </div>
+          <button class="switch is-on" role="switch" aria-checked="true" style="opacity: 0.5; pointer-events: none;"></button>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="l">Email updates</div>
+            <div class="desc">Weekly summary of your applications</div>
+          </div>
+          <button class="switch" role="switch" aria-checked="false"></button>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="l">Tips &amp; product news</div>
+            <div class="desc">New services and helpful guides</div>
+          </div>
+          <button class="switch" role="switch" aria-checked="false"></button>
+        </div>
+      </section>
+
+      <!-- Sign-in & security -->
+      <section class="set-card">
+        <h2>Sign-in &amp; <em>security</em></h2>
+        <p class="sub">How you get into your ProxiServe account.</p>
+
+        <div class="set-row">
+          <div>
+            <div class="l">Password</div>
+            <div class="desc">Last changed 3 months ago</div>
+          </div>
+          <a href="../Flow 4 — Auth/forgot-reset.html" style="font-size: 12px; color: var(--brand-ink); text-decoration: underline;">Change password</a>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="l">Two-factor authentication</div>
+            <div class="desc">Optional for clients · recommended</div>
+          </div>
+          <button class="switch" role="switch" aria-checked="false"></button>
+        </div>
+
+        <h4 class="t-h4" style="margin: 24px 0 12px;">Trusted devices</h4>
+        <div class="device-tile">
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+          <div>
+            <div class="name">iPhone 12 — Safari</div>
+            <div class="meta">Kigali · last used today 14:32</div>
+          </div>
+          <span class="this">THIS DEVICE</span>
+        </div>
+        <div class="device-tile">
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M2 20h20"/></svg>
+          <div>
+            <div class="name">Chrome on Windows</div>
+            <div class="meta">Kigali · last used 22 May 09:18</div>
+          </div>
+          <button class="revoke">Revoke</button>
+        </div>
+        <div class="device-tile">
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+          <div>
+            <div class="name">Android phone — Chrome</div>
+            <div class="meta">Musanze · last used 14 May</div>
+          </div>
+          <button class="revoke">Revoke</button>
+        </div>
+      </section>
+
+      <!-- Privacy & data -->
+      <section class="set-card">
+        <h2>Privacy &amp; <em>your data</em></h2>
+        <p class="sub">We follow Rwanda's Data Protection &amp; Privacy Law. <a href="../Flow 1 — Marketing/supporting.html#legal-privacy" style="color: var(--brand-ink); text-decoration: underline;">Read full policy</a>.</p>
+
+        <div class="set-row">
+          <div>
+            <div class="l">Download my data</div>
+            <div class="desc">Get a JSON copy of everything we have on you</div>
+          </div>
+          <a href="#" style="font-size: 12px; padding: 8px 14px; border: 1px solid var(--rule); border-radius: 999px; text-decoration: none; color: var(--ink); font-weight: 500;">Request export</a>
+        </div>
+        <div class="set-row">
+          <div>
+            <div class="l">Document retention</div>
+            <div class="desc">Documents auto-delete 24 months after completion</div>
+          </div>
+          <span style="font-family: var(--mono); font-size: 12px; color: var(--ink-muted);">DEFAULT</span>
+        </div>
+      </section>
+
+      <!-- Danger zone -->
+      <section class="danger-zone">
+        <h2>Delete my <em>account</em></h2>
+        <p class="sub">Permanently removes your profile, applications, and documents. Some legal records are kept for 5 years by law.</p>
+        <button class="btn-danger">Delete account…</button>
+      </section>
+
+      <!-- Sign out -->
+      <section style="text-align: center; padding: 32px 0 16px;">
+        <a href="../Flow 4 — Auth/client-login.html" style="font-family: var(--sans); font-size: 14px; font-weight: 500; color: var(--ink-muted); text-decoration: underline; text-underline-offset: 3px;">
+          Sign out
+        </a>
+      </section>
+
+    </div>
+  </main>
+
+</div>
+
+<nav class="app-tabbar">
+  <a href="dashboard.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+    Home
+  </a>
+  <a href="application-detail.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+    Apps
+  </a>
+  <a href="application-detail.html#messages" style="position: relative;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>
+    Messages
+  </a>
+  <a href="settings.html" class="is-active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></svg>
+    Me
+  </a>
+</nav>
+
+<script>
+  document.querySelectorAll('.switch').forEach(sw => sw.addEventListener('click', () => {
+    if (sw.style.opacity) return;
+    sw.classList.toggle('is-on');
+    sw.setAttribute('aria-checked', sw.classList.contains('is-on'));
+  }));
+  document.querySelectorAll('.seg-group').forEach(g => g.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      g.querySelectorAll('button').forEach(b => b.classList.remove('is-active'));
+      e.target.classList.add('is-active');
+    }
+  }));
+</script>
+
+</body>
+</html>

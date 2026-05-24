@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 5 — States gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="tracker.css" />
+<style>
+  body { background: var(--cream-2); }
+  .page-head { padding: 48px 0 32px; border-bottom: 1px solid var(--rule); background: var(--cream); }
+  .page-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .page-head h1 { margin: 8px 0 12px; }
+  .page-head p { color: var(--ink-muted); margin: 0; max-width: 720px; }
+
+  .gallery { padding: 56px 0 120px; display: grid; grid-template-columns: 1fr; gap: 56px; }
+  .tile { background: var(--cream); border: 1px solid var(--rule); border-radius: var(--r-lg); overflow: hidden; }
+  .tile__head {
+    padding: 18px 24px;
+    display: flex; gap: 16px; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--rule); background: var(--paper); flex-wrap: wrap;
+  }
+  .tile__head h2 { margin: 0; font-size: 20px; font-family: var(--serif); font-weight: 500; }
+  .tile__head h2 em { font-style: italic; font-weight: 400; }
+  .tile__head .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .tile__head .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-family: var(--mono); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: var(--cream-2); color: var(--ink-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .tag--brand { background: var(--brand-soft); color: var(--brand-ink); }
+  .tag--warn  { background: var(--warn-soft); color: var(--warn); }
+  .tag--danger{ background: var(--danger-soft); color: var(--danger); }
+  .tag--ok    { background: var(--ok-soft); color: var(--ok); }
+  .tag--info  { background: var(--info-soft); color: var(--info); }
+  .tile__body { padding: 32px; }
+  .tile__notes { padding: 16px 24px; background: var(--cream-2); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
+  .tile__notes strong { color: var(--ink); font-weight: 600; }
+
+  /* Inline status hero adjustments for tiles */
+  .tile .status-hero { margin-bottom: 0; max-width: none; }
+
+  /* Code entry error */
+  .entry-error {
+    max-width: 520px; margin: 0 auto;
+    background: var(--paper); border: 1px solid var(--ink);
+    border-radius: var(--r-xl);
+    padding: 32px;
+    --n: 22px;
+    clip-path: polygon(var(--n) 0, 100% 0, 100% calc(100% - var(--n)), calc(100% - var(--n)) 100%, 0 100%, 0 var(--n));
+  }
+  .entry-error h2 { font-family: var(--serif); font-weight: 400; font-size: 28px; margin: 0 0 8px; }
+  .entry-error h2 em { font-style: italic; }
+  .entry-error .sub { font-family: var(--serif); font-size: 16px; color: var(--ink-2); margin: 0 0 16px; }
+  .entry-error .code-input {
+    width: 100%; padding: 16px 20px;
+    font-family: var(--mono); font-size: 22px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase; text-align: center;
+    background: var(--danger-soft); border: 1.5px solid var(--danger); border-radius: var(--r-pill); color: var(--ink);
+  }
+  .entry-error .err { color: var(--danger); font-size: 13.5px; margin: 12px 4px 16px; }
+
+  /* Lost code recovery */
+  .recovery-card {
+    max-width: 520px; margin: 0 auto;
+    background: var(--paper); border: 1px solid var(--ink);
+    border-radius: var(--r-xl);
+    padding: 32px;
+  }
+  .recovery-card h3 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0 0 8px; }
+  .recovery-card h3 em { font-style: italic; }
+  .recovery-card .sub { font-family: var(--serif); font-size: 15px; color: var(--ink-2); margin: 0 0 20px; }
+  .recovery-card label { display: block; margin-bottom: 12px; }
+  .recovery-card label span { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .recovery-card input { width: 100%; padding: 12px 14px; border: 1px solid var(--rule-strong); border-radius: var(--r-md); background: var(--cream); font: inherit; font-size: 15px; }
+
+  /* Brief snapshot version of tracker */
+  .mini-tracker { max-width: 720px; margin: 0 auto; }
+  .mini-tracker .status-hero { padding: 24px; margin-bottom: 16px; }
+  .mini-tracker .status-hero h1 { font-size: 32px; }
+  .mini-tracker .timeline-card { padding: 20px; }
+  .mini-tracker .timeline-card h2 { font-size: 18px; margin-bottom: 8px; }
+  .mini-tracker .tl-node__title { font-size: 14.5px; }
+  .mini-tracker .tl-node__desc { font-size: 12.5px; }
+
+  /* Confirmation modal */
+  .modal {
+    max-width: 460px; margin: 0 auto;
+    background: var(--paper); border: 1px solid var(--ink);
+    border-radius: var(--r-lg);
+    padding: 28px;
+  }
+  .modal h3 { font-family: var(--serif); font-weight: 500; font-size: 22px; margin: 0 0 8px; }
+  .modal h3 em { font-style: italic; font-weight: 400; }
+  .modal p { font-size: 14px; color: var(--ink-muted); margin: 0 0 16px; line-height: 1.5; }
+  .modal .row { display: flex; gap: 8px; }
+
+  /* Action required hero */
+  .ar-inline-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .ar-inline-actions .pill { padding: 11px 20px; font-size: 14px; }
+
+  /* Rejection panel */
+  .reject-panel {
+    background: var(--paper); border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    padding: 24px; margin-top: 16px;
+  }
+  .reject-panel h3 { font-family: var(--serif); font-size: 18px; font-weight: 500; margin: 0 0 6px; }
+  .reject-panel h3 em { font-style: italic; font-weight: 400; }
+  .reject-panel p { font-size: 13.5px; color: var(--ink-muted); margin: 0; line-height: 1.55; }
+  .reject-panel .reason {
+    margin-top: 14px; padding: 14px;
+    background: var(--cream-2); border-radius: var(--r-md);
+    font-family: var(--serif); font-style: italic; font-size: 14.5px;
+    color: var(--ink-2);
+  }
+
+  /* SMS preview */
+  .sms-preview {
+    max-width: 360px; margin: 0 auto;
+    background: var(--paper); border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    padding: 16px;
+  }
+  .sms-preview .sender {
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+  .sms-preview .bubble {
+    background: var(--cream-2);
+    padding: 12px 14px;
+    border-radius: 12px 12px 12px 4px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  .sms-preview .bubble strong { color: var(--ink); font-family: var(--mono); }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="container">
+    <a href="index.html" class="lnk-arrow" style="font-size:13px; margin-bottom: 16px; display: inline-flex;"><span aria-hidden="true">←</span> Back to Flow 5 hub</a>
+    <div class="meta">FLOW 05 / STATES GALLERY · 10 STATES</div>
+    <h1 class="t-h1">Public tracker — <em>edge cases</em>.</h1>
+    <p>The tracker is the most visited surface after landing — most ProxiServe applicants check it daily. These ten variants cover the moments where calm, accurate communication makes the difference between "I trust this" and "I'll just call them".</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="gallery">
+
+    <!-- 01 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">01 / Code not found</span>
+          <h2>"That doesn't <em>match</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--danger">Not found</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="entry-error">
+          <h2>That code <em>didn't match</em>.</h2>
+          <p class="sub">Double-check the digits and dashes.</p>
+          <input class="code-input" value="PRX-2026-99999" />
+          <div class="err">
+            <strong>We couldn't find any application with that code.</strong> Make sure you copied it right — codes look like <span style="font-family: var(--mono); color: var(--ink);">PRX-YYYY-NNNNN</span>.
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="pill pill--solid" style="flex: 1; justify-content: center;">Try again</button>
+            <a href="#" style="font-size: 13px; padding: 10px 0; color: var(--brand-ink); text-decoration: underline; align-self: center;">Lost your code?</a>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Privacy first.</strong> We never reveal whether a code <em>used to exist</em> — that would leak account info to anyone guessing. After 5 wrong attempts in a row, we throttle to one attempt per minute per IP.
+      </div>
+    </article>
+
+    <!-- 02 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">02 / Lost code — recovery flow</span>
+          <h2>"Find my <em>code</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--info">Recovery</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="recovery-card">
+          <h3>Lost your <em>code?</em></h3>
+          <p class="sub">Enter the phone you applied with — we'll send the code by SMS.</p>
+
+          <label>
+            <span>Phone number</span>
+            <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px;">
+              <button type="button" style="display: flex; align-items: center; gap: 6px; padding: 12px 14px; background: var(--cream); border: 1px solid var(--rule-strong); border-radius: var(--r-md); font: inherit; font-size: 15px; cursor: pointer;">
+                <span style="font-size: 18px;">🇷🇼</span><span style="font-family: var(--mono); font-size: 14px;">+250</span>
+              </button>
+              <input type="tel" placeholder="78 8 *** 456" inputmode="numeric" />
+            </div>
+          </label>
+
+          <button class="pill pill--solid" style="width: 100%; justify-content: center; margin-top: 8px;">Send my code by SMS</button>
+
+          <p style="font-size: 12.5px; color: var(--ink-muted); margin: 14px 0 0; line-height: 1.5;">
+            We send the same response whether the phone is registered or not — for privacy. Check your SMS within 60 seconds.
+          </p>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>The recovery channel is the application channel.</strong> The phone you used to apply is the one that proves ownership. No password needed — the SMS is the proof. If they no longer have that phone, they're routed to support for manual ID verification.
+      </div>
+    </article>
+
+    <!-- 03 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">03 / Status: Received (just submitted)</span>
+          <h2>"<em>Received</em>" hero state"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--info">Received</span></div>
+      </header>
+      <div class="tile__body">
+        <section class="status-hero status-hero--info" style="max-width: 760px; margin: 0 auto;">
+          <div class="status-hero__top">
+            <span class="status-hero__service">Identity &amp; civil · Passport renewal</span>
+            <span class="status-hero__updated">UPDATED JUST NOW</span>
+          </div>
+          <div class="status-hero__code">PRX-2026-00483</div>
+          <h1><em>Received.</em></h1>
+          <p class="status-hero__sub">
+            We've got your application and documents. <strong>An agent will be assigned within 1 working day</strong> — usually faster. <em>Sit tight.</em>
+          </p>
+        </section>
+      </div>
+      <div class="tile__notes">
+        <strong>Hero colour.</strong> Status drives the magenta hero by default; <em>info-blue</em> only for the brand-new "Received" status (calmer, conveys "the system has you"). Switches to magenta once an agent picks up.
+      </div>
+    </article>
+
+    <!-- 04 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">04 / Status: Action required</span>
+          <h2>"We need <em>something else</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">Action required</span></div>
+      </header>
+      <div class="tile__body">
+        <section class="status-hero status-hero--warn" style="max-width: 760px; margin: 0 auto;">
+          <div class="status-hero__top">
+            <span class="status-hero__service">Identity &amp; civil · Passport renewal</span>
+            <span class="status-hero__updated">UPDATED 2h AGO</span>
+          </div>
+          <div class="status-hero__code">PRX-2026-00483</div>
+          <h1>Action <em>required</em>.</h1>
+          <p class="status-hero__sub">
+            <strong>Aline</strong> needs <strong>a clearer photo of your passport bio page</strong> — yours is too dark to read. <em>Once you upload it, we'll keep going.</em>
+          </p>
+
+          <div class="ar-inline-actions">
+            <a href="#" class="pill pill--solid" style="background: var(--ink); color: var(--paper);">Upload new photo <span class="arr">↗</span></a>
+            <a href="https://wa.me/250788123456" class="pill" style="background: var(--paper);">Talk to Aline <span class="arr">→</span></a>
+          </div>
+        </section>
+      </div>
+      <div class="tile__notes">
+        <strong>Always actionable.</strong> Action-required states never just describe — they always show the next button. The status carries forward to SMS + WhatsApp with the same CTA URL. Tracker keeps showing this state until the document is replaced.
+      </div>
+    </article>
+
+    <!-- 05 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">05 / Status: Completed — outcome ready</span>
+          <h2>"Your <em>passport</em> is ready"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--ok">Completed</span></div>
+      </header>
+      <div class="tile__body">
+        <div style="max-width: 760px; margin: 0 auto;">
+          <section class="status-hero status-hero--ok">
+            <div class="status-hero__top">
+              <span class="status-hero__service">Identity &amp; civil · Passport renewal</span>
+              <span class="status-hero__updated">COMPLETED 12 MIN AGO</span>
+            </div>
+            <div class="status-hero__code">PRX-2026-00483</div>
+            <h1>Your passport is <em>ready</em>.</h1>
+            <p class="status-hero__sub">
+              We've collected it from Immigration. <strong>Come by our Kigali office</strong> with your national ID, or <em>we'll courier it to you for RWF 2,000</em>.
+            </p>
+          </section>
+
+          <div class="outcome-card" style="margin-top: 16px;">
+            <div class="outcome-card__ico">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg>
+            </div>
+            <div>
+              <h3>Outcome <em>ready for collection</em></h3>
+              <p>New passport · expires 22 May 2036 · ID-PA-9384521</p>
+            </div>
+            <a href="#" class="pill pill--solid">Arrange collection <span class="arr">→</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Outcome card.</strong> The outcome chip sits below the hero. Has the actual reference number, the document name, and the next step. Sticks around in the user's account history for 24 months.
+      </div>
+    </article>
+
+    <!-- 06 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">06 / Status: Rejected — with reason</span>
+          <h2>"Application <em>declined</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--danger">Rejected</span></div>
+      </header>
+      <div class="tile__body">
+        <div style="max-width: 760px; margin: 0 auto;">
+          <section class="status-hero status-hero--danger">
+            <div class="status-hero__top">
+              <span class="status-hero__service">Identity &amp; civil · Passport renewal</span>
+              <span class="status-hero__updated">DECLINED 3h AGO</span>
+            </div>
+            <div class="status-hero__code">PRX-2026-00483</div>
+            <h1>Application <em>declined</em>.</h1>
+            <p class="status-hero__sub">
+              Immigration couldn't process your renewal this time. <strong>It's almost always fixable</strong> — Aline has explained why and what's next.
+            </p>
+          </section>
+
+          <div class="reject-panel">
+            <h3>Why it was <em>declined</em></h3>
+            <div class="reason">
+              "Your passport photo doesn't meet the new biometric standard (ICAO 9303). The Immigration office requires the photo taken less than 30 days before submission. Yours was from January."
+            </div>
+            <p style="margin-top: 14px;">
+              <strong style="color: var(--ink);">What now?</strong> Take a new photo, and Aline will resubmit at no extra service fee. Government printing fee (RWF 75,000) is non-refundable — Immigration's rule.
+            </p>
+            <div style="display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap;">
+              <a href="#" class="pill pill--solid">Upload new photo <span class="arr">↗</span></a>
+              <a href="#" class="pill">Talk to Aline <span class="arr">→</span></a>
+              <a href="#" class="pill" style="background: transparent;">Request refund <span class="arr">→</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Tone for rejection.</strong> Lead with empathy ("it's almost always fixable"), then the specific reason in italic-serif (humanises a bureaucratic line), then concrete options. Government fees follow the office's own refund rules; we explain rather than apologise.
+      </div>
+    </article>
+
+    <!-- 07 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">07 / Status: On hold — external dependency</span>
+          <h2>"<em>Waiting</em> on Immigration"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">On hold</span></div>
+      </header>
+      <div class="tile__body">
+        <section class="status-hero status-hero--warn" style="max-width: 760px; margin: 0 auto;">
+          <div class="status-hero__top">
+            <span class="status-hero__service">Identity &amp; civil · Passport renewal</span>
+            <span class="status-hero__updated">UPDATED YESTERDAY</span>
+          </div>
+          <div class="status-hero__code">PRX-2026-00483</div>
+          <h1>Waiting on <em>Immigration</em>.</h1>
+          <p class="status-hero__sub">
+            Submitted 3 days ago — the Immigration office is currently <strong>2–3 days slower than usual</strong>. <em>No action needed from you.</em>
+          </p>
+
+          <div class="status-hero__inner-card">
+            <div>
+              <span class="lab">Original ETA</span>
+              <span class="v">23 May 2026</span>
+            </div>
+            <div>
+              <span class="lab">New ETA</span>
+              <span class="v">26 May 2026 <em>(+3 days)</em></span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="tile__notes">
+        <strong>Transparent about delays.</strong> When an external office is slow, the user sees both the original promise and the new estimate. Honesty preserves trust — silently shifting the ETA is the fastest way to lose it. WhatsApp push fires the moment the new ETA is set.
+      </div>
+    </article>
+
+    <!-- 08 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">08 / Mini snapshot — embeddable preview</span>
+          <h2>"Compact <em>view</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag">Snapshot</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="mini-tracker">
+          <section class="status-hero">
+            <div class="status-hero__top">
+              <span class="status-hero__service">PASSPORT RENEWAL</span>
+              <span class="status-hero__updated">12 MIN AGO</span>
+            </div>
+            <div class="status-hero__code">PRX-2026-00483</div>
+            <h1>In <em>progress</em>.</h1>
+          </section>
+          <div class="timeline-card">
+            <h2>Where we <em>are</em></h2>
+            <div class="timeline">
+              <div class="tl-node tl-node--done"><span class="tl-node__dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg></span><div class="tl-node__body"><p class="tl-node__title">Received</p></div><span class="tl-node__when">19 MAY</span></div>
+              <div class="tl-node tl-node--done"><span class="tl-node__dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg></span><div class="tl-node__body"><p class="tl-node__title">Under review</p></div><span class="tl-node__when">20 MAY</span></div>
+              <div class="tl-node tl-node--current"><span class="tl-node__dot"></span><div class="tl-node__body"><p class="tl-node__title">In progress</p></div><span class="tl-node__when">NOW</span></div>
+              <div class="tl-node tl-node--upcoming"><span class="tl-node__dot"></span><div class="tl-node__body"><p class="tl-node__title">Ready</p></div><span class="tl-node__when">EST. 26 MAY</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Embeddable.</strong> Used in F6 dashboard (under each application card), in agent's case-detail header (Flow 8), and inline in confirmation emails. The same status hero + 4-step timeline, compressed.
+      </div>
+    </article>
+
+    <!-- 09 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">09 / Save to account — modal prompt</span>
+          <h2>"Don't <em>lose</em> this code"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--brand">Prompt</span></div>
+      </header>
+      <div class="tile__body" style="background: rgba(26,22,18,0.45); padding: 64px 24px;">
+        <div class="modal">
+          <h3>Save this to your <em>account?</em></h3>
+          <p>You're tracking as a guest. <em>One click</em> to claim this application to your ProxiServe account — so you never lose it.</p>
+          <div class="row">
+            <button class="pill" style="flex: 1; justify-content: center;">Maybe later</button>
+            <a href="../Flow 4 — Auth/claim-by-code.html" class="pill pill--solid" style="flex: 1; justify-content: center;">Save it <span class="arr">↗</span></a>
+          </div>
+          <p style="font-size: 12px; color: var(--ink-muted); margin: 14px 0 0; text-align: center;">
+            Free. Takes 60 seconds. Links all your applications under one sign-in.
+          </p>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Soft conversion.</strong> Appears once per session, only on second/third view of the same code. Never on first view (don't interrupt). "Maybe later" remembers the choice for 7 days.
+      </div>
+    </article>
+
+    <!-- 10 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">10 / SMS / WhatsApp push — the off-platform tracker</span>
+          <h2>"<em>Status update</em> via SMS"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--info">Off-platform</span></div>
+      </header>
+      <div class="tile__body" style="background: var(--cream-2); padding: 32px;">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 800px; margin: 0 auto;">
+          <div class="sms-preview" style="margin-left: 0;">
+            <div class="sender">
+              <span>PROXISERVE</span>
+              <span>14:43</span>
+            </div>
+            <div class="bubble">
+              ProxiServe: Your application <strong>PRX-2026-00483</strong> is now <strong>In progress</strong>. Your agent Aline will submit to Immigration tomorrow. Track: proxi.rw/t/PRX-2026-00483
+            </div>
+          </div>
+
+          <div class="sms-preview" style="margin-right: 0;">
+            <div class="sender">
+              <span>WHATSAPP · ALINE M.</span>
+              <span>14:45</span>
+            </div>
+            <div class="bubble" style="background: #DCF8C6; border-radius: 12px 12px 4px 12px;">
+              👋 Hi Aline here — I just submitted your forms for the next round of review. Will let you know once Immigration confirms (usually tomorrow afternoon).
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>The tracker is everywhere.</strong> Every status change sends an SMS with the tracker URL (and a WhatsApp template if opted in). Users who never open the web tracker still get the same information — half our users live entirely in WhatsApp.
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<footer style="background:var(--cream); padding: 40px 0; border-top: 1px solid var(--rule);">
+  <div class="container" style="display:flex; justify-content:space-between; font-family: var(--mono); font-size:11px; color:var(--ink-muted); letter-spacing:0.06em;">
+    <span>PROXISERVE / FLOW 05 / STATES / v0.1</span>
+    <a href="index.html" style="color: inherit; text-decoration: underline;">Back to Flow 5 hub →</a>
+  </div>
+</footer>
+
+</body>
+</html>

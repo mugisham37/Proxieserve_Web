@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>2FA challenge · ProxiServe staff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="auth.css" />
+<style>
+  body { background: var(--cream-2); }
+  .method-toggle {
+    display: flex; gap: 4px; padding: 4px;
+    background: var(--cream-2); border-radius: var(--r-md);
+    margin-bottom: 20px;
+  }
+  .method-toggle button {
+    flex: 1; background: transparent; border: none;
+    padding: 10px 8px;
+    border-radius: var(--r-sm);
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    color: var(--ink-muted); cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .method-toggle button.is-active { background: var(--paper); color: var(--ink); box-shadow: var(--sh-subtle); }
+  .method-toggle button svg { width: 16px; height: 16px; }
+</style>
+</head>
+<body>
+
+<header class="auth-topbar">
+  <div class="container">
+    <div class="auth-topbar__inner">
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="../Flow 1 — Marketing/landing.html" class="auth-wordmark auth-wordmark--staff"><span class="ico"></span> Proxi<em>Serve</em></a>
+        <span class="staff-chip">Staff</span>
+      </div>
+      <div style="font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em;">eric.habimana@proxiserve.rw</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="auth-shell auth-shell--staff" data-screen-label="F4 Staff 2FA">
+    <div class="auth-main">
+      <div class="auth-card auth-card--staff" style="max-width: 420px;">
+
+        <h1 style="font-size: 26px;">Two-factor <em>required</em></h1>
+        <p class="sub" style="font-size: 14px;">Enter the 6-digit code from your authenticator app, or use a backup method.</p>
+
+        <div class="method-toggle" role="tablist">
+          <button class="is-active" data-method="totp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/></svg>
+            Authenticator
+          </button>
+          <button data-method="sms">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            SMS
+          </button>
+          <button data-method="backup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3.4-7.1"/><path d="M21 4v5h-5"/></svg>
+            Backup
+          </button>
+        </div>
+
+        <form onsubmit="event.preventDefault(); window.location.href='../Flow 8 — Agent Workspace/index.html';">
+
+          <div class="otp-input" role="group" aria-label="Six digit authenticator code">
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="one-time-code" aria-label="Digit 1" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 2" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 3" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 4" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 5" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 6" />
+          </div>
+
+          <p style="font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; text-align: center; margin: 0 0 24px;">
+            Code rotates every 30 seconds
+          </p>
+
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); margin-bottom: 20px;">
+            <input type="checkbox" style="accent-color: var(--ink);" />
+            Trust this device for 7 days
+          </label>
+
+          <button type="submit" class="auth-cta" style="border-radius: var(--r-md); font-family: var(--sans); font-style: normal; font-size: 14px; padding: 12px 18px;">
+            Verify
+            <span>→</span>
+          </button>
+
+        </form>
+
+        <div class="help-row" style="margin-top: 24px; display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em;">
+          <a href="staff-login.html" style="color: var(--ink); text-decoration: underline; text-underline-offset: 3px;">← Back to sign in</a>
+          <a href="#" style="color: var(--ink); text-decoration: underline; text-underline-offset: 3px;">Lost your device?</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const inputs = document.querySelectorAll('.otp-input input');
+  inputs.forEach((input, i) => {
+    input.addEventListener('input', e => {
+      const v = input.value.replace(/\D/g, '');
+      input.value = v;
+      if (v) {
+        input.classList.add('filled');
+        if (i < inputs.length - 1) inputs[i + 1].focus();
+      }
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !input.value && i > 0) inputs[i - 1].focus();
+    });
+  });
+  inputs[0].focus();
+
+  document.querySelectorAll('.method-toggle button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.method-toggle button').forEach(x => x.classList.remove('is-active'));
+    b.classList.add('is-active');
+  }));
+</script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 6 — States gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="dashboard.css" />
+<style>
+  body { background: var(--cream-2); }
+  .page-head { padding: 48px 0 32px; border-bottom: 1px solid var(--rule); background: var(--cream); }
+  .page-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .page-head h1 { margin: 8px 0 12px; }
+  .page-head p { color: var(--ink-muted); margin: 0; max-width: 720px; }
+
+  .gallery { padding: 56px 0 120px; display: grid; grid-template-columns: 1fr; gap: 56px; }
+  .tile { background: var(--cream); border: 1px solid var(--rule); border-radius: var(--r-lg); overflow: hidden; }
+  .tile__head { padding: 18px 24px; display: flex; gap: 16px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--rule); background: var(--paper); flex-wrap: wrap; }
+  .tile__head h2 { margin: 0; font-size: 20px; font-family: var(--serif); font-weight: 500; }
+  .tile__head h2 em { font-style: italic; font-weight: 400; }
+  .tile__head .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .tag { font-family: var(--mono); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: var(--cream-2); color: var(--ink-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .tag--brand { background: var(--brand-soft); color: var(--brand-ink); }
+  .tag--ok { background: var(--ok-soft); color: var(--ok); }
+  .tag--warn { background: var(--warn-soft); color: var(--warn); }
+  .tag--info { background: var(--info-soft); color: var(--info); }
+  .tile__body { padding: 32px; }
+  .tile__notes { padding: 16px 24px; background: var(--cream-2); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
+  .tile__notes strong { color: var(--ink); font-weight: 600; }
+
+  /* Empty dashboard */
+  .empty-illust {
+    width: 64px; height: 64px;
+    margin: 0 auto 20px;
+    border: 1.5px dashed var(--rule-strong);
+    border-radius: var(--r-md);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-subtle);
+  }
+
+  /* Skeleton */
+  .skel { background: linear-gradient(90deg, var(--cream-2) 0%, var(--paper-2) 50%, var(--cream-2) 100%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; border-radius: 4px; }
+  @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+  /* Offline banner */
+  .offline-banner {
+    background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: var(--r-md);
+    display: flex; gap: 10px; align-items: center; justify-content: space-between;
+  }
+  .offline-banner .dot {
+    width: 8px; height: 8px; border-radius: 999px; background: var(--warn);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+  /* Email verify banner */
+  .verify-banner {
+    background: var(--brand-soft); color: var(--brand-ink); padding: 14px 20px;
+    border-radius: var(--r-md);
+    display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center;
+  }
+  .verify-banner strong { font-weight: 600; }
+  @media (max-width: 600px) { .verify-banner { grid-template-columns: 1fr; } }
+
+  /* Multi-tab */
+  .session-warn {
+    background: var(--warn-soft); color: var(--warn);
+    border-left: 3px solid var(--warn);
+    padding: 18px 22px; border-radius: var(--r-md);
+  }
+  .session-warn h4 { color: inherit; margin: 0 0 6px; font-family: var(--serif); font-size: 17px; font-weight: 600; text-transform: none; letter-spacing: 0; }
+  .session-warn p { font-size: 13.5px; margin: 0 0 14px; line-height: 1.55; }
+
+  /* Inline reply / sending */
+  .sending-msg {
+    background: var(--brand-soft); border-radius: 14px 14px 4px 14px;
+    padding: 12px 16px;
+    color: var(--brand-ink);
+    font-size: 14px;
+    display: flex; gap: 10px; align-items: center; justify-content: space-between;
+    max-width: 70%;
+    margin-left: auto;
+  }
+  .sending-msg .spinner {
+    width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent;
+    border-radius: 999px; animation: spin 800ms linear infinite; opacity: 0.7;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Document upload progress */
+  .upload-row {
+    background: var(--paper); border: 1px solid var(--brand); border-radius: var(--r-md);
+    padding: 14px 16px;
+    display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center;
+  }
+  .upload-row .progress { grid-column: 2 / -1; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; margin-top: 6px; }
+  .upload-row .progress > span { display: block; height: 100%; background: var(--brand); width: 64%; }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="container">
+    <a href="index.html" class="lnk-arrow" style="font-size:13px; margin-bottom: 16px; display: inline-flex;"><span aria-hidden="true">←</span> Back to Flow 6 hub</a>
+    <div class="meta">FLOW 06 / STATES GALLERY · 10 STATES</div>
+    <h1 class="t-h1">Client dashboard — <em>edge cases</em>.</h1>
+    <p>The authenticated home is where loyal users live. These ten cover the moments where it's empty, broken, contested, or asking for trust again.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="gallery">
+
+    <!-- 01 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">01 / Empty — no applications yet</span>
+          <h2>"Let's get <em>started</em>"</h2>
+        </div>
+        <span class="tag">Empty</span>
+      </header>
+      <div class="tile__body">
+        <div class="empty">
+          <div class="empty-illust">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          </div>
+          <h3>No applications <em>yet</em></h3>
+          <p>Pick a service and we'll help you apply on your behalf. <em>Free to start</em> — you only pay once we agree on the fee.</p>
+          <a href="../Flow 2 — Service Discovery/services-index.html" class="pill pill--solid">Browse services <span class="arr">↗</span></a>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>First-run.</strong> New account with no apps. Stats row hides; quick action chips stay. Banner above hero reads "Welcome to ProxiServe, Aline — your dashboard will populate as you apply."
+      </div>
+    </article>
+
+    <!-- 02 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">02 / Loading — first paint</span>
+          <h2>Skeleton <em>shimmer</em></h2>
+        </div>
+        <span class="tag tag--brand">Loading</span>
+      </header>
+      <div class="tile__body">
+        <div style="display: grid; gap: 12px;">
+          <div class="skel" style="height: 80px; border-radius: var(--r-lg);"></div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+            <div class="skel" style="height: 90px;"></div>
+            <div class="skel" style="height: 90px;"></div>
+            <div class="skel" style="height: 90px;"></div>
+            <div class="skel" style="height: 90px;"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="skel" style="height: 200px; border-radius: var(--r-lg);"></div>
+            <div class="skel" style="height: 200px; border-radius: var(--r-lg);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Order matters.</strong> Hero text is server-rendered, never blank. Skeletons only over data-dependent areas (stats, app cards, messages list). Reduced-motion: static blocks, no shimmer.
+      </div>
+    </article>
+
+    <!-- 03 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">03 / Offline — cached snapshot</span>
+          <h2>"You're <em>offline</em>"</h2>
+        </div>
+        <span class="tag tag--warn">Offline</span>
+      </header>
+      <div class="tile__body">
+        <div class="offline-banner">
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <span class="dot"></span>
+            <span><strong>You're offline.</strong> Showing what we saved last time — last sync 14:32.</span>
+          </div>
+          <button style="background: transparent; color: var(--paper); border: 1px solid rgba(246,236,210,0.4); border-radius: 999px; padding: 4px 12px; font-family: var(--sans); font-size: 12px; cursor: pointer;">Retry</button>
+        </div>
+        <p style="margin-top: 16px; font-size: 13px; color: var(--ink-muted);">
+          <strong style="color: var(--ink);">Sending messages and uploading documents is disabled offline.</strong> The dashboard otherwise renders from cache; refresh button enabled.
+        </p>
+      </div>
+      <div class="tile__notes">
+        <strong>PWA caching.</strong> Service worker caches dashboard shell + last response. New application button stays enabled but routes to "Connect to start an application" modal — same pattern as F1.
+      </div>
+    </article>
+
+    <!-- 04 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">04 / Email verification banner</span>
+          <h2>"Just one <em>thing</em>"</h2>
+        </div>
+        <span class="tag tag--brand">Pending verify</span>
+      </header>
+      <div class="tile__body">
+        <div class="verify-banner">
+          <div>
+            <strong>Confirm your email to unlock everything.</strong> We sent a link to <span style="font-family: var(--mono);">aline.m@example.com</span> — click it to verify. Without it, you can read but not start new applications.
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="pill pill--sm" style="background: var(--paper);">Resend</button>
+            <button class="pill pill--sm" style="background: transparent;">Change email</button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Persistent until verified.</strong> Sits above the welcome banner across every dashboard page. Dismissible per-session but reappears next visit. Read-only mode applies (no new apps, no payments) until clicked.
+      </div>
+    </article>
+
+    <!-- 05 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">05 / Message sending</span>
+          <h2>Optimistic <em>send</em></h2>
+        </div>
+        <span class="tag tag--info">Pending</span>
+      </header>
+      <div class="tile__body">
+        <div class="sending-msg">
+          <span>Got it, I'll retake the photo and upload now.</span>
+          <span class="spinner" aria-label="Sending"></span>
+        </div>
+        <p style="margin-top: 16px; font-size: 12.5px; color: var(--ink-muted);">
+          The reply appears optimistically — fades to fully opaque once delivered. If sending fails, a "Retry" link replaces the spinner.
+        </p>
+      </div>
+      <div class="tile__notes">
+        <strong>Why optimistic.</strong> Half our users are on 3G — a 2-second sync delay before message appears feels broken. Pessimistic locks (waiting for server) are worse than retry on rare failure. Idempotency key handles double-sends.
+      </div>
+    </article>
+
+    <!-- 06 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">06 / Document upload progress</span>
+          <h2>In-place <em>replace</em></h2>
+        </div>
+        <span class="tag tag--info">Uploading</span>
+      </header>
+      <div class="tile__body">
+        <div class="upload-row">
+          <div class="doc-tile__thumb">JPG</div>
+          <div>
+            <div class="doc-tile__name">portrait-may-2026-v2.jpg</div>
+            <div class="doc-tile__meta">2.6 MB · 64% — uploading…</div>
+            <div class="progress"><span></span></div>
+          </div>
+          <button style="background: transparent; border: 1px solid var(--rule); padding: 4px 12px; border-radius: 999px; font-family: var(--sans); font-size: 11px; cursor: pointer;">Cancel</button>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Resumable.</strong> Chunked uploads via tus protocol. If connection drops mid-upload, retry resumes from last completed chunk. Status notifies your agent automatically on success.
+      </div>
+    </article>
+
+    <!-- 07 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">07 / Multi-tab — same draft elsewhere</span>
+          <h2>"You're <em>also signed in</em>"</h2>
+        </div>
+        <span class="tag tag--warn">Conflict</span>
+      </header>
+      <div class="tile__body">
+        <div class="session-warn">
+          <h4>You're signed in to ProxiServe on <em>another tab</em></h4>
+          <p>If you change settings here, the other tab will refresh to match. We don't want your data to fork.</p>
+          <div style="display: flex; gap: 10px;">
+            <button class="pill pill--sm" style="background: var(--paper);">Switch to other tab</button>
+            <button class="pill pill--sm pill--solid">Use this tab</button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>BroadcastChannel.</strong> Other tabs go read-only with a "your work was paused" banner — refreshing resumes. Last-writer-wins is unacceptable when settings are involved.
+      </div>
+    </article>
+
+    <!-- 08 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">08 / Session expired</span>
+          <h2>"Sign in <em>again</em>"</h2>
+        </div>
+        <span class="tag">Re-auth</span>
+      </header>
+      <div class="tile__body">
+        <div style="background: rgba(26,22,18,0.45); padding: 64px 24px; border-radius: var(--r-lg);">
+          <div style="max-width: 420px; margin: 0 auto; background: var(--paper); border: 1px solid var(--ink); border-radius: var(--r-lg); padding: 28px; text-align: center;">
+            <h3 style="font-family: var(--serif); font-weight: 400; font-size: 24px; margin: 0 0 8px;">Your session <em>expired</em></h3>
+            <p style="font-size: 14px; color: var(--ink-muted); margin: 0 0 24px; line-height: 1.5;">For your security, you've been signed out after 30 days of inactivity. Your work is saved.</p>
+            <a href="../Flow 4 — Auth/client-login.html" class="pill pill--solid" style="display: inline-flex; justify-content: center; width: 100%;">Sign back in <span class="arr">→</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Not destructive.</strong> Draft applications stay; payments don't fail; agents keep the case. Re-auth restores the same URL on success.
+      </div>
+    </article>
+
+    <!-- 09 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">09 / Service archived after submission</span>
+          <h2>"Service <em>discontinued</em>"</h2>
+        </div>
+        <span class="tag tag--warn">Archived</span>
+      </header>
+      <div class="tile__body">
+        <div class="app-card app-card--cream" style="max-width: 360px;">
+          <div class="app-card__strip"></div>
+          <div class="app-card__body">
+            <div class="app-card__top">
+              <span class="app-card__cat" style="color: var(--ink-subtle);">Welfare</span>
+              <span class="status" style="background: var(--cream-2); color: var(--ink-muted); padding: 3px 10px; font-size: 11px;"><span class="dot" style="background: var(--ink-subtle);"></span> Discontinued</span>
+            </div>
+            <h3 class="app-card__name" style="color: var(--ink-muted);">RSSB <em>pilot claim</em></h3>
+            <div class="app-card__code">PRX-2026-00387</div>
+            <p style="font-size: 12.5px; color: var(--ink-muted); margin: 8px 0 0; line-height: 1.5;">
+              We've discontinued this pilot. Your submission was preserved — contact support for next steps.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Read-only.</strong> Card renders but isn't actionable; agents see the same. Status migrates from In-progress → Cancelled with reason "Service archived". User gets WhatsApp + email explanation.
+      </div>
+    </article>
+
+    <!-- 10 -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">10 / Returning after long absence</span>
+          <h2>"Welcome <em>back</em>"</h2>
+        </div>
+        <span class="tag tag--ok">Returning</span>
+      </header>
+      <div class="tile__body">
+        <div class="welcome-banner">
+          <div>
+            <h3>Welcome back, Aline. <em>It's been 4 months.</em></h3>
+            <p>Your account is the same — and your last completed application (Mutuelle de Santé) is up for renewal in 2 months. Want us to remind you?</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="pill" style="background: rgba(246,236,210,0.15); color: var(--paper); border-color: rgba(246,236,210,0.4);">Dismiss</button>
+            <button class="pill" style="background: var(--paper); color: var(--ink);">Remind me</button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Re-engagement.</strong> Triggered if last_seen > 90 days. Pulls one personalised hook from history. Dismissable for 90 days. Never shown for users in active state.
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<footer style="background:var(--cream); padding: 40px 0; border-top: 1px solid var(--rule);">
+  <div class="container" style="display:flex; justify-content:space-between; font-family: var(--mono); font-size:11px; color:var(--ink-muted); letter-spacing:0.06em;">
+    <span>PROXISERVE / FLOW 06 / STATES / v0.1</span>
+    <a href="index.html" style="color: inherit; text-decoration: underline;">Back to Flow 6 hub →</a>
+  </div>
+</footer>
+
+</body>
+</html>

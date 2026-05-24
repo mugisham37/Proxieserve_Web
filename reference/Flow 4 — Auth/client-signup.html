@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Create account · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="auth.css" />
+<style>
+  .seg-group {
+    display: inline-flex; border: 1px solid var(--ink); border-radius: 999px; overflow: hidden;
+  }
+  .seg-group button {
+    border: none; background: transparent;
+    font-family: var(--serif); font-size: 14px; font-weight: 500;
+    padding: 9px 16px; color: var(--ink); cursor: pointer;
+  }
+  .seg-group button + button { border-left: 1px solid var(--ink); }
+  .seg-group button.is-active { background: var(--ink); color: var(--paper); }
+
+  .fld-check {
+    display: grid; grid-template-columns: 24px 1fr; gap: 12px;
+    align-items: start; padding: 4px 0;
+  }
+  .fld-check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--ink); cursor: pointer; }
+  .fld-check__label { font-size: 14px; line-height: 1.5; }
+  .fld-check__label a { color: var(--brand-ink); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="auth-topbar">
+  <div class="container">
+    <div class="auth-topbar__inner">
+      <a href="../Flow 1 — Marketing/landing.html" class="auth-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div style="display:flex; gap: 14px; align-items: center;">
+        <div class="lang">
+          <button class="is-active">EN</button><button>RW</button><button>FR</button>
+        </div>
+        <span class="t-body-sm" style="color: var(--ink-muted);">Got an account? <a href="client-login.html" style="color: var(--ink); text-decoration: underline; text-underline-offset: 3px;">Sign in</a></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="auth-shell auth-shell--client" data-screen-label="F4 Client signup">
+
+    <aside class="auth-rail">
+      <div>
+        <span class="eyebrow" style="margin-bottom: 32px; display: block;">Why create an account?</span>
+        <p class="auth-rail__quote" style="font-size: clamp(22px, 2.4vw, 28px);">
+          Manage all your applications in <em>one place</em>. See messages from every agent. Never type your details twice.
+        </p>
+        <ul style="margin: 32px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 16px;">
+          <li style="display: grid; grid-template-columns: 28px 1fr; gap: 12px; font-size: 14px; color: var(--ink-2); line-height: 1.5;">
+            <span style="width: 24px; height: 24px; border-radius: 999px; background: var(--brand-soft); color: var(--brand-ink); display: inline-flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-size: 13px; font-weight: 600;">1</span>
+            <span><strong style="color: var(--ink); font-weight: 500;">Skip re-typing.</strong> Your details auto-fill on every new application.</span>
+          </li>
+          <li style="display: grid; grid-template-columns: 28px 1fr; gap: 12px; font-size: 14px; color: var(--ink-2); line-height: 1.5;">
+            <span style="width: 24px; height: 24px; border-radius: 999px; background: var(--brand-soft); color: var(--brand-ink); display: inline-flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-size: 13px; font-weight: 600;">2</span>
+            <span><strong style="color: var(--ink); font-weight: 500;">All applications in one dashboard.</strong> Past, present, and outcomes archived.</span>
+          </li>
+          <li style="display: grid; grid-template-columns: 28px 1fr; gap: 12px; font-size: 14px; color: var(--ink-2); line-height: 1.5;">
+            <span style="width: 24px; height: 24px; border-radius: 999px; background: var(--brand-soft); color: var(--brand-ink); display: inline-flex; align-items: center; justify-content: center; font-family: var(--serif); font-style: italic; font-size: 13px; font-weight: 600;">3</span>
+            <span><strong style="color: var(--ink); font-weight: 500;">Faster support.</strong> Your agent already knows you when you message.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="auth-rail__seal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+          <span><strong>Free, always.</strong> Accounts cost nothing — you only ever pay our service fee per application.</span>
+        </div>
+      </div>
+    </aside>
+
+    <div class="auth-main">
+      <div class="auth-card auth-card--lg">
+        <h1>Create your <em>account</em>.</h1>
+        <p class="sub">Manage your applications in one place. <em>Free, always.</em></p>
+
+        <div class="auth-tabs" role="tablist">
+          <button class="is-active" data-tab="email">Email</button>
+          <button data-tab="phone">Phone</button>
+        </div>
+
+        <form onsubmit="event.preventDefault(); window.location.href='verify-otp.html';">
+
+          <div class="auth-field">
+            <label class="auth-field__label" for="su-name">Your name</label>
+            <input class="auth-field__input" id="su-name" type="text" autocomplete="name" required placeholder="As it appears on your ID" />
+          </div>
+
+          <div class="tab-pane is-active" data-pane="email">
+            <div class="auth-field">
+              <label class="auth-field__label" for="su-email">Email</label>
+              <input class="auth-field__input" id="su-email" type="email" autocomplete="email" required placeholder="you@example.com" />
+            </div>
+          </div>
+
+          <div class="tab-pane" data-pane="phone" style="display: none;">
+            <div class="auth-field">
+              <label class="auth-field__label" for="su-phone">Phone</label>
+              <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px;">
+                <button type="button" style="display: flex; align-items: center; gap: 6px; padding: 12px 14px; background: var(--cream); border: 1px solid var(--rule-strong); border-radius: var(--r-md); font: inherit; font-size: 15px; cursor: pointer;">
+                  <span style="font-size: 18px;">🇷🇼</span><span style="font-family: var(--mono); font-size: 14px;">+250</span>
+                </button>
+                <input class="auth-field__input" type="tel" id="su-phone" inputmode="numeric" placeholder="78 8 123 456" />
+              </div>
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label class="auth-field__label" for="su-pass">Password</label>
+            <div class="password-wrap">
+              <input class="auth-field__input" id="su-pass" type="password" required placeholder="At least 8 characters" minlength="8" autocomplete="new-password" />
+              <button type="button" class="password-toggle" aria-label="Show password">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="strength" id="strength">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <span class="strength-label" id="strength-label">Use at least 8 characters · mix letters &amp; numbers helps</span>
+          </div>
+
+          <div class="auth-field">
+            <label class="auth-field__label">Preferred language</label>
+            <div class="seg-group" role="radiogroup" aria-label="Language">
+              <button type="button" class="is-active">English</button>
+              <button type="button">Kinyarwanda</button>
+              <button type="button">Français</button>
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label class="auth-field__label" for="su-code">
+              Tracking code
+              <span style="color: var(--ink-subtle); font-weight: 400; font-size: 11px; font-family: var(--mono); letter-spacing: 0.04em;">optional</span>
+            </label>
+            <input class="auth-field__input claim-code-input" id="su-code" type="text" placeholder="PRX-YYYY-NNNNN" value="PRX-2026-00483" />
+            <span style="display: block; font-size: 12.5px; color: var(--ink-muted); margin-top: 6px;">
+              We pre-filled this because you came from a guest submission. <em>Linking it to your account lets you manage it from your dashboard.</em>
+            </span>
+          </div>
+
+          <label class="fld-check" style="margin: 16px 0 24px;">
+            <input type="checkbox" required />
+            <span class="fld-check__label">
+              I agree to the <a href="../Flow 1 — Marketing/supporting.html#legal-terms">Terms of Service</a> and <a href="../Flow 1 — Marketing/supporting.html#legal-privacy">Privacy Policy</a>.
+            </span>
+          </label>
+
+          <button type="submit" class="auth-cta">
+            Create account
+            <span style="font-style: normal;">→</span>
+          </button>
+
+        </form>
+
+        <div class="auth-footer">
+          Already have an account? <a href="client-login.html">Sign in</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  const tabs = document.querySelectorAll('.auth-tabs button');
+  tabs.forEach(btn => btn.addEventListener('click', () => {
+    tabs.forEach(b => { b.classList.remove('is-active'); });
+    btn.classList.add('is-active');
+    document.querySelectorAll('.tab-pane').forEach(p => p.style.display = 'none');
+    document.querySelector('[data-pane="'+btn.dataset.tab+'"]').style.display = '';
+  }));
+
+  document.querySelectorAll('.password-toggle').forEach(btn => btn.addEventListener('click', () => {
+    const input = btn.parentElement.querySelector('input');
+    input.type = input.type === 'text' ? 'password' : 'text';
+  }));
+
+  document.querySelectorAll('.seg-group').forEach(g => g.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      g.querySelectorAll('button').forEach(b => b.classList.remove('is-active'));
+      e.target.classList.add('is-active');
+    }
+  }));
+
+  // Password strength
+  const pass = document.getElementById('su-pass');
+  const strength = document.getElementById('strength');
+  const strengthLabel = document.getElementById('strength-label');
+  pass.addEventListener('input', () => {
+    const v = pass.value;
+    let score = 0;
+    if (v.length >= 8) score++;
+    if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+    if (/\d/.test(v)) score++;
+    if (/[^A-Za-z0-9]/.test(v) || v.length >= 12) score++;
+    strength.className = 'strength';
+    if (v.length === 0) {
+      strengthLabel.textContent = 'Use at least 8 characters · mix letters & numbers helps';
+    } else if (score < 2) {
+      strength.classList.add('weak');
+      strengthLabel.textContent = 'WEAK — add length or symbols';
+    } else if (score < 4) {
+      strength.classList.add('okay');
+      strengthLabel.textContent = 'OKAY — good enough, but you can do better';
+    } else {
+      strength.classList.add('strong');
+      strengthLabel.textContent = 'STRONG — well done';
+    }
+  });
+</script>
+
+</body>
+</html>
