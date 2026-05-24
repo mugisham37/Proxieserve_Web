@@ -113,16 +113,17 @@ export function ClientSignupForm() {
           />
 
           {/* Full name */}
-          <FormField
-            label="Full name"
-            name="name"
-            type="input"
-            inputType="text"
-            autoComplete="name"
-            placeholder="Amina Nkurunziza"
-            error={errors.name?.message}
-            {...register("name")}
-          />
+          {(() => { const { name: _n, ...r } = register("name"); return (
+            <FormField
+              label="Full name"
+              name="name"
+              type="input"
+              inputType="text"
+              placeholder="Amina Nkurunziza"
+              error={errors.name?.message}
+              {...r}
+            />
+          ); })()}
 
           {/* Email / Phone tabs */}
           <div>
@@ -134,16 +135,17 @@ export function ClientSignupForm() {
               transition={{ duration: 0.12, ease: [0.2, 0, 0, 1] }}
             >
               {tab === "email" ? (
-                <FormField
-                  label="Email address"
-                  name="identifier"
-                  type="input"
-                  inputType="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  error={errors.identifier?.message}
-                  {...register("identifier")}
-                />
+                (() => { const { name: _n, ...r } = register("identifier"); return (
+                  <FormField
+                    label="Email address"
+                    name="identifier"
+                    type="input"
+                    inputType="email"
+                    placeholder="you@example.com"
+                    error={errors.identifier?.message}
+                    {...r}
+                  />
+                ); })()
               ) : (
                 <PhoneInputWithCountry
                   id="su-phone"
@@ -187,21 +189,24 @@ export function ClientSignupForm() {
           </div>
 
           {/* Optional tracking code */}
-          <FormField
-            label="Tracking code (optional)"
-            name="code"
-            type="input"
-            inputType="text"
-            placeholder="PRX-YYYY-NNNNN"
-            mono
-            error={errors.code?.message}
-            help="Already started an application? Link it to your new account."
-            {...register("code", {
-              onChange: (e) => {
-                e.target.value = formatTrackerCode(e.target.value);
-              },
-            })}
-          />
+          {(() => {
+            const { name: _n, ...r } = register("code", {
+              onChange: (e) => { e.target.value = formatTrackerCode(e.target.value); },
+            });
+            return (
+              <FormField
+                label="Tracking code (optional)"
+                name="code"
+                type="input"
+                inputType="text"
+                placeholder="PRX-YYYY-NNNNN"
+                mono
+                error={errors.code?.message}
+                help="Already started an application? Link it to your new account."
+                {...r}
+              />
+            );
+          })()}
 
           {/* Terms */}
           <div className="flex items-start gap-3 mt-1">

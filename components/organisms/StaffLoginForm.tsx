@@ -99,16 +99,17 @@ export function StaffLoginForm() {
           </div>
 
           {/* Work email */}
-          <FormField
-            label="Work email"
-            name="email"
-            type="input"
-            inputType="email"
-            autoComplete="email"
-            placeholder="you@proxiserve.rw"
-            error={errors.email?.message}
-            {...register("email")}
-          />
+          {(() => { const { name: _n, ...r } = register("email"); return (
+            <FormField
+              label="Work email"
+              name="email"
+              type="input"
+              inputType="email"
+              placeholder="you@proxiserve.rw"
+              error={errors.email?.message}
+              {...r}
+            />
+          ); })()}
 
           {/* Password */}
           <div className="flex flex-col gap-1">

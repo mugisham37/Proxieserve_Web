@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -16,35 +16,36 @@ import { FormField } from "@/components/atoms/FormField";
 import { PhoneInputWithCountry } from "@/components/molecules/PhoneCountryButton";
 import { loginSchema, type LoginData } from "@/lib/auth-schema";
 import { useAuth } from "@/lib/auth-context";
-import {
-  MOCK,
-  AUTH_LOCKOUT_KEY,
-  type AuthSession,
-} from "@/lib/auth-types";
+import { MOCK, AUTH_LOCKOUT_KEY, type AuthSession } from "@/lib/auth-types";
 import { setItem, getItem } from "@/lib/storage";
 import { cn } from "@/lib/utils";
 
 export function ClientLoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { dispatch } = useAuth();
+
   const [tab, setTab] = React.useState<AuthTabValue>("email");
   const [bannerState, setBannerState] = React.useState<{
     type: "invalid-credentials" | "account-locked" | null;
     lockoutUntil?: string;
   }>({ type: null });
 
+  // Query-param driven success banners
+  const resetSuccess = searchParams.get("reset") === "success";
+  const claimedSuccess = searchParams.get("claimed") === "1";
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    watch,
     setValue,
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { identifierType: "email", identifier: "", password: "", rememberMe: true },
   });
 
-  // Sync tab → form field
+  // Sync tab → identifierType field
   React.useEffect(() => {
     setValue("identifierType", tab);
     setValue("identifier", "");
@@ -53,19 +54,21 @@ export function ClientLoginForm() {
   async function onSubmit(data: LoginData) {
     setBannerState({ type: null });
 
-    // Check for existing lockout
+    // Check existing lockout in localStorage
     const lockoutRaw = getItem(AUTH_LOCKOUT_KEY);
     if (lockoutRaw) {
-      const { until } = JSON.parse(lockoutRaw) as { until: string };
-      if (new Date(until) > new Date()) {
-        setBannerState({ type: "account-locked", lockoutUntil: until });
-        return;
-      }
+      try {
+        const { until } = JSON.parse(lockoutRaw) as { until: string };
+        if (new Date(until) > new Date()) {
+          setBannerState({ type: "account-locked", lockoutUntil: until });
+          return;
+        }
+      } catch {}
     }
 
     await new Promise((r) => setTimeout(r, 900));
 
-    // Mock: trigger account-locked
+    // Mock: locked email
     if (data.identifier === MOCK.LOCKED_EMAIL) {
       const until = new Date(Date.now() + 15 * 60 * 1000).toISOString();
       setItem(AUTH_LOCKOUT_KEY, JSON.stringify({ until }));
@@ -73,14 +76,13 @@ export function ClientLoginForm() {
       return;
     }
 
-    // Mock: 20% chance of invalid credentials (deterministic for testing)
-    const shouldFail = data.password === "wrongpassword";
-    if (shouldFail) {
+    // Mock: wrong password triggers invalid-credentials
+    if (data.password === "wrongpassword") {
       setBannerState({ type: "invalid-credentials" });
       return;
     }
 
-    // Success — create mock session
+    // Success — create mock session, redirect to OTP
     const session: AuthSession = {
       userId: "usr_" + Math.random().toString(36).slice(2),
       name: "Test Client",
@@ -93,7 +95,6 @@ export function ClientLoginForm() {
     };
     dispatch({ type: "SET_SESSION", payload: session });
 
-    // Redirect to OTP verification
     const encoded = encodeURIComponent(
       data.identifierType === "email"
         ? data.identifier.replace(/(.{2}).*(@.*)/, "$1•••$2")
@@ -102,7 +103,8 @@ export function ClientLoginForm() {
     router.push(`/verify?next=/&email=${encoded}`);
   }
 
-  const password = watch("password");
+  // Destructure register results to avoid name duplication on FormField
+  const { name: _emailName, ...emailRegister } = register("identifier");
 
   return (
     <motion.div
@@ -113,6 +115,18 @@ export function ClientLoginForm() {
     >
       <AuthCard variant="client" title="Welcome back" subtitle="Sign in to your ProxiServe account.">
         <div className="flex flex-col gap-4">
+          {/* Success banners from redirects */}
+          <AuthBanner
+            variant="ok"
+            message="Your password has been reset. Sign in with your new password."
+            visible={resetSuccess}
+          />
+          <AuthBanner
+            variant="ok"
+            message="Application linked! Sign in to view it in your dashboard."
+            visible={claimedSuccess}
+          />
+
           {/* Error banners */}
           <AuthBanner
             variant="danger"
@@ -122,13 +136,12 @@ export function ClientLoginForm() {
           {bannerState.type === "account-locked" && bannerState.lockoutUntil && (
             <div className="rounded-[var(--r-md)] bg-[var(--danger-soft)] border-l-[3px] border-[var(--danger)] px-4 py-3">
               <p className="font-sans text-[13px] text-[var(--danger)]">
-                Your account has been locked.{" "}
-                Try again in{" "}
+                Your account has been locked. Try again in{" "}
                 <LockoutClock
                   until={bannerState.lockoutUntil}
                   onExpired={() => setBannerState({ type: null })}
                 />
-                {" or "}
+                {" "}or{" "}
                 <Link href="/forgot-password" className="underline">reset your password</Link>.
               </p>
             </div>
@@ -137,7 +150,7 @@ export function ClientLoginForm() {
           {/* Tab switcher */}
           <AuthTabs active={tab} onChange={setTab} />
 
-          {/* Identifier field */}
+          {/* Identifier input — tab-driven */}
           <motion.div
             key={tab}
             initial={{ opacity: 0, x: tab === "email" ? -8 : 8 }}
@@ -150,10 +163,9 @@ export function ClientLoginForm() {
                 name="identifier"
                 type="input"
                 inputType="email"
-                autoComplete="email"
                 placeholder="you@example.com"
                 error={errors.identifier?.message}
-                {...register("identifier")}
+                {...emailRegister}
               />
             ) : (
               <PhoneInputWithCountry
@@ -166,15 +178,13 @@ export function ClientLoginForm() {
           </motion.div>
 
           {/* Password */}
-          <div className="flex flex-col gap-1">
-            <PasswordField
-              id="ci-pass"
-              label="Password"
-              autoComplete="current-password"
-              error={errors.password?.message}
-              {...register("password")}
-            />
-          </div>
+          <PasswordField
+            id="ci-pass"
+            label="Password"
+            autoComplete="current-password"
+            error={errors.password?.message}
+            {...register("password")}
+          />
 
           {/* Remember me + forgot */}
           <div className="flex items-center justify-between">
@@ -219,13 +229,10 @@ export function ClientLoginForm() {
             )}
           </button>
 
-          {/* Footer */}
+          {/* Footer link */}
           <p className="font-sans text-[13px] text-center text-[var(--ink-muted)]">
             Don&apos;t have an account?{" "}
-            <Link
-              href="/signup"
-              className="text-[var(--brand-ink)] hover:text-[var(--brand)] transition-colors font-medium"
-            >
+            <Link href="/signup" className="text-[var(--brand-ink)] hover:text-[var(--brand)] transition-colors font-medium">
               Create one →
             </Link>
           </p>

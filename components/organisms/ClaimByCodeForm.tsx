@@ -93,20 +93,23 @@ export function ClaimByCodeForm() {
           />
 
           {/* PRX code input */}
-          <FormField
-            label="Tracking code"
-            name="code"
-            type="input"
-            inputType="text"
-            placeholder="PRX-YYYY-NNNNN"
-            mono
-            error={errors.code?.message}
-            {...register("code", {
-              onChange: (e) => {
-                e.target.value = formatTrackerCode(e.target.value);
-              },
-            })}
-          />
+          {(() => {
+            const { name: _n, ...codeReg } = register("code", {
+              onChange: (e) => { e.target.value = formatTrackerCode(e.target.value); },
+            });
+            return (
+              <FormField
+                label="Tracking code"
+                name="code"
+                type="input"
+                inputType="text"
+                placeholder="PRX-YYYY-NNNNN"
+                mono
+                error={errors.code?.message}
+                {...codeReg}
+              />
+            );
+          })()}
 
           {/* Found card */}
           <AnimatePresence>

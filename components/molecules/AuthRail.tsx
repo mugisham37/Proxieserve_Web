@@ -33,7 +33,7 @@ export function AuthRail({ className }: AuthRailProps) {
             </p>
           </blockquote>
           <figcaption className="flex items-center gap-3">
-            <Avatar size="md" color="brand" monogram="AN" />
+            <Avatar size="md" color="brand" initials="AN" />
             <div className="flex flex-col gap-0.5">
               <span className="font-sans text-[13px] font-semibold text-[var(--ink)]">
                 Amina Nkurunziza

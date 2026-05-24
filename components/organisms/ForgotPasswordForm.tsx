@@ -84,16 +84,17 @@ export function ForgotPasswordForm() {
                 transition={{ duration: 0.12, ease: [0.2, 0, 0, 1] }}
               >
                 {tab === "email" ? (
-                  <FormField
-                    label="Email address"
-                    name="identifier"
-                    type="input"
-                    inputType="email"
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    error={errors.identifier?.message}
-                    {...register("identifier")}
-                  />
+                  (() => { const { name: _n, ...r } = register("identifier"); return (
+                    <FormField
+                      label="Email address"
+                      name="identifier"
+                      type="input"
+                      inputType="email"
+                      placeholder="you@example.com"
+                      error={errors.identifier?.message}
+                      {...r}
+                    />
+                  ); })()
                 ) : (
                   <PhoneInputWithCountry
                     id="r-phone"
