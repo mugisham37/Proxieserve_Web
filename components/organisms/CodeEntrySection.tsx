@@ -12,13 +12,15 @@ import { getApplicationByCode } from "@/lib/tracker-data";
 
 interface CodeEntrySectionProps {
   initialCode?: string;
+  /** Auto-open the lost-code recovery card (from not-found redirect) */
+  autoRecover?: boolean;
 }
 
-export function CodeEntrySection({ initialCode = "" }: CodeEntrySectionProps) {
+export function CodeEntrySection({ initialCode = "", autoRecover = false }: CodeEntrySectionProps) {
   const router = useRouter();
   const [code, setCode] = React.useState(initialCode);
   const [error, setError] = React.useState<string | null>(null);
-  const [showRecovery, setShowRecovery] = React.useState(false);
+  const [showRecovery, setShowRecovery] = React.useState(autoRecover);
   const [loading, setLoading] = React.useState(false);
 
   function handleSubmit(e: React.FormEvent) {

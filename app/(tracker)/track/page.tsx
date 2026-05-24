@@ -10,14 +10,14 @@ export const metadata: Metadata = {
 };
 
 interface Props {
-  searchParams: Promise<{ code?: string }>;
+  searchParams: Promise<{ code?: string; recover?: string }>;
 }
 
 export default async function TrackPage({ searchParams }: Props) {
-  const { code } = await searchParams;
+  const { code, recover } = await searchParams;
   return (
     <Suspense>
-      <CodeEntrySection initialCode={code ?? ""} />
+      <CodeEntrySection initialCode={code ?? ""} autoRecover={recover === "1"} />
     </Suspense>
   );
 }
