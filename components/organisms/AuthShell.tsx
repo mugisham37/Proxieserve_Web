@@ -23,6 +23,11 @@ export function AuthShell({
         zone === "client" ? "bg-[var(--cream)]" : "bg-[var(--cream-2)]"
       )}
     >
+      {/* Skip to main content */}
+      <a href="#main-content" className="skip">
+        Skip to main content
+      </a>
+
       <AuthTopBar zone={zone} rightSlot={topBarRight} />
 
       {/* Main content area */}
@@ -32,6 +37,8 @@ export function AuthShell({
 
         {/* Form area */}
         <main
+          id="main-content"
+          tabIndex={-1}
           className={cn(
             "flex-1 flex items-start justify-center px-5 py-10 sm:py-14",
             zone === "client" ? "lg:items-center" : "items-center"

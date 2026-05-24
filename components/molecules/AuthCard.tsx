@@ -37,21 +37,25 @@ export function AuthCard({
         className
       )}
     >
-      <header className="mb-7">
-        <h1
-          className={cn(
-            "font-serif text-[var(--ink)] leading-tight",
-            variant === "client" ? "text-[28px] sm:text-[32px]" : "text-[22px]"
+      {(title || subtitle) && (
+        <header className="mb-7">
+          {title && (
+            <h1
+              className={cn(
+                "font-serif text-[var(--ink)] leading-tight",
+                variant === "client" ? "text-[28px] sm:text-[32px]" : "text-[22px]"
+              )}
+            >
+              {title}
+            </h1>
           )}
-        >
-          {title}
-        </h1>
-        {subtitle && (
-          <p className="font-sans text-[14px] text-[var(--ink-muted)] mt-1.5 leading-snug">
-            {subtitle}
-          </p>
-        )}
-      </header>
+          {subtitle && (
+            <p className="font-sans text-[14px] text-[var(--ink-muted)] mt-1.5 leading-snug">
+              {subtitle}
+            </p>
+          )}
+        </header>
+      )}
       {children}
     </div>
   );
