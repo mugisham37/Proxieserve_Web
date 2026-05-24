@@ -1,0 +1,270 @@
+"use client";
+
+import * as React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { AuthCard } from "@/components/molecules/AuthCard";
+import { AuthTabs, type AuthTabValue } from "@/components/molecules/AuthTabs";
+import { AuthBanner } from "@/components/molecules/AuthBanner";
+import { AuthFooterLinks } from "@/components/molecules/AuthFooterLinks";
+import { PasswordField } from "@/components/atoms/PasswordField";
+import { PasswordStrengthMeter } from "@/components/atoms/PasswordStrengthMeter";
+import { FormField } from "@/components/atoms/FormField";
+import { SegmentedGroup } from "@/components/atoms/SegmentedGroup";
+import { PhoneInputWithCountry } from "@/components/molecules/PhoneCountryButton";
+import { signupSchema, type SignupData } from "@/lib/auth-schema";
+import { useAuth } from "@/lib/auth-context";
+import { MOCK, type AuthSession } from "@/lib/auth-types";
+import { formatTrackerCode } from "@/lib/tracker";
+import { cn } from "@/lib/utils";
+
+const LANGUAGE_OPTIONS = [
+  { value: "en", label: "English" },
+  { value: "rw", label: "Kinyarwanda" },
+  { value: "fr", label: "Français" },
+];
+
+export function ClientSignupForm() {
+  const router = useRouter();
+  const { dispatch } = useAuth();
+  const [tab, setTab] = React.useState<AuthTabValue>("email");
+  const [accountExists, setAccountExists] = React.useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+  } = useForm<SignupData>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      name: "",
+      identifierType: "email",
+      identifier: "",
+      password: "",
+      language: "en",
+      code: "",
+      terms: false,
+    },
+  });
+
+  React.useEffect(() => {
+    setValue("identifierType", tab);
+    setValue("identifier", "");
+  }, [tab, setValue]);
+
+  const password = watch("password");
+
+  async function onSubmit(data: SignupData) {
+    setAccountExists(false);
+    await new Promise((r) => setTimeout(r, 900));
+
+    // Mock: account-exists state
+    if (data.identifier === MOCK.EXISTING_EMAIL) {
+      setAccountExists(true);
+      return;
+    }
+
+    // Success
+    const session: AuthSession = {
+      userId: "usr_" + Math.random().toString(36).slice(2),
+      name: data.name,
+      email: data.identifierType === "email" ? data.identifier : "new@user.rw",
+      phone: data.identifierType === "phone" ? data.identifier : undefined,
+      role: "client",
+      isEmailVerified: false,
+      language: data.language,
+      createdAt: new Date().toISOString(),
+    };
+    dispatch({ type: "SET_SESSION", payload: session });
+
+    const encoded = encodeURIComponent(
+      data.identifierType === "email"
+        ? data.identifier.replace(/(.{2}).*(@.*)/, "$1•••$2")
+        : "+250 78 ••• •••"
+    );
+    router.push(`/verify?next=/&email=${encoded}`);
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+      className="w-full max-w-[520px]"
+    >
+      <AuthCard
+        variant="client"
+        size="lg"
+        title="Create your account"
+        subtitle="ProxiServe handles your applications — you just fill in the form."
+      >
+        <div className="flex flex-col gap-4">
+          <AuthBanner
+            variant="info"
+            message="An account with this email already exists."
+            action={{ label: "Sign in instead →", href: "/login" }}
+            visible={accountExists}
+          />
+
+          {/* Full name */}
+          <FormField
+            label="Full name"
+            name="name"
+            type="input"
+            inputType="text"
+            autoComplete="name"
+            placeholder="Amina Nkurunziza"
+            error={errors.name?.message}
+            {...register("name")}
+          />
+
+          {/* Email / Phone tabs */}
+          <div>
+            <AuthTabs active={tab} onChange={setTab} />
+            <motion.div
+              key={tab}
+              initial={{ opacity: 0, x: tab === "email" ? -8 : 8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.12, ease: [0.2, 0, 0, 1] }}
+            >
+              {tab === "email" ? (
+                <FormField
+                  label="Email address"
+                  name="identifier"
+                  type="input"
+                  inputType="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  error={errors.identifier?.message}
+                  {...register("identifier")}
+                />
+              ) : (
+                <PhoneInputWithCountry
+                  id="su-phone"
+                  label="Phone number"
+                  error={errors.identifier?.message}
+                  {...register("identifier")}
+                />
+              )}
+            </motion.div>
+          </div>
+
+          {/* Password + strength */}
+          <div className="flex flex-col gap-2">
+            <PasswordField
+              id="su-pass"
+              label="Password"
+              autoComplete="new-password"
+              placeholder="Min. 8 characters"
+              error={errors.password?.message}
+              {...register("password")}
+            />
+            {password && <PasswordStrengthMeter password={password} />}
+          </div>
+
+          {/* Language preference */}
+          <div className="flex flex-col gap-1.5">
+            <span className="font-sans text-[13px] font-medium text-[var(--ink)] leading-none">
+              Preferred language
+            </span>
+            <Controller
+              name="language"
+              control={control}
+              render={({ field }) => (
+                <SegmentedGroup
+                  options={LANGUAGE_OPTIONS}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          </div>
+
+          {/* Optional tracking code */}
+          <FormField
+            label="Tracking code (optional)"
+            name="code"
+            type="input"
+            inputType="text"
+            placeholder="PRX-YYYY-NNNNN"
+            mono
+            error={errors.code?.message}
+            help="Already started an application? Link it to your new account."
+            {...register("code", {
+              onChange: (e) => {
+                e.target.value = formatTrackerCode(e.target.value);
+              },
+            })}
+          />
+
+          {/* Terms */}
+          <div className="flex items-start gap-3 mt-1">
+            <input
+              type="checkbox"
+              id="su-terms"
+              {...register("terms")}
+              className="mt-0.5 w-4 h-4 rounded accent-[var(--ink)] cursor-pointer shrink-0"
+            />
+            <label htmlFor="su-terms" className={cn(
+              "font-sans text-[13px] leading-snug cursor-pointer",
+              errors.terms ? "text-[var(--danger)]" : "text-[var(--ink-muted)]"
+            )}>
+              I agree to ProxiServe handling my information in accordance with the{" "}
+              <Link href="/legal/privacy" className="text-[var(--brand-ink)] underline underline-offset-2">
+                Privacy Policy
+              </Link>{" "}
+              and{" "}
+              <Link href="/legal/terms" className="text-[var(--brand-ink)] underline underline-offset-2">
+                Terms of Service
+              </Link>.
+            </label>
+          </div>
+          {errors.terms && (
+            <p role="alert" className="font-sans text-[12px] text-[var(--danger)] -mt-2">
+              {errors.terms.message}
+            </p>
+          )}
+
+          {/* Submit */}
+          <button
+            type="button"
+            onClick={handleSubmit(onSubmit)}
+            disabled={isSubmitting}
+            className={cn(
+              "w-full h-12 rounded-[var(--r-pill)] mt-1",
+              "font-serif italic text-[17px] text-[var(--paper)]",
+              "bg-[var(--brand)] hover:bg-[var(--brand-ink)]",
+              "transition-colors duration-[120ms] outline-none",
+              "focus-visible:shadow-[var(--focus-ring)]",
+              "disabled:opacity-60 disabled:cursor-not-allowed",
+              "flex items-center justify-center gap-2"
+            )}
+          >
+            {isSubmitting ? (
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-[var(--paper)] border-t-transparent rounded-full animate-spin" />
+                Creating account…
+              </span>
+            ) : (
+              "Create account →"
+            )}
+          </button>
+
+          <p className="font-sans text-[13px] text-center text-[var(--ink-muted)]">
+            Already have an account?{" "}
+            <Link href="/login" className="text-[var(--brand-ink)] hover:text-[var(--brand)] transition-colors font-medium">
+              Sign in →
+            </Link>
+          </p>
+        </div>
+        <AuthFooterLinks className="mt-4" />
+      </AuthCard>
+    </motion.div>
+  );
+}
