@@ -44,7 +44,7 @@ export function CTABand({ className }: { className?: string }) {
                 arrow
                 className="bg-white text-[var(--brand)] border-white hover:bg-[var(--brand)] hover:text-white hover:border-white"
               >
-                <Link href="/get-started">Get started today</Link>
+                <Link href="/signup">Get started today</Link>
               </PillButton>
               <PillButton
                 variant="ghost"

@@ -61,7 +61,7 @@ export function TopBar({ onMenuOpen, menuOpen = false }: TopBarProps) {
               <Link href="/track">Track</Link>
             </PillButton>
             <PillButton variant="solid" size="sm" asChild>
-              <Link href="/get-started">Get started</Link>
+              <Link href="/signup">Get started</Link>
             </PillButton>
           </div>
 

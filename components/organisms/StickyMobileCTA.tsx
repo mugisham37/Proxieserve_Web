@@ -47,7 +47,7 @@ export function StickyMobileCTA({ className }: { className?: string }) {
             <Link href="/track">Track</Link>
           </PillButton>
           <PillButton variant="solid" size="sm" asChild className="flex-1 justify-center" arrow>
-            <Link href="/get-started">Get started</Link>
+            <Link href="/signup">Get started</Link>
           </PillButton>
         </motion.div>
       )}

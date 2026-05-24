@@ -63,7 +63,7 @@ export function HeroSection({ className }: { className?: string }) {
 
             <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-3 pt-1">
               <PillButton variant="solid" size="lg" asChild arrow>
-                <Link href="/get-started">Get started</Link>
+                <Link href="/signup">Get started</Link>
               </PillButton>
               <PillButton variant="ghost" size="lg" asChild>
                 <Link href="/how-it-works">See how it works</Link>

@@ -134,7 +134,7 @@ export function MobileSheet({ open, onClose, triggerRef }: MobileSheetProps) {
                 <Link href="/track" onClick={onClose}>Track application</Link>
               </PillButton>
               <PillButton variant="solid" size="md" asChild className="w-full justify-center">
-                <Link href="/get-started" onClick={onClose}>Get started →</Link>
+                <Link href="/signup" onClick={onClose}>Get started →</Link>
               </PillButton>
             </div>
           </motion.div>
