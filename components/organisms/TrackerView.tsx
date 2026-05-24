@@ -79,7 +79,7 @@ export function TrackerView({ application }: TrackerViewProps) {
       {/* Two-column grid: 1-col mobile, 1fr+340px at 980px+ */}
       <div className="grid grid-cols-1 gap-6 [--aside-w:340px] lg:grid-cols-[minmax(0,1fr)_var(--aside-w)] lg:gap-8">
         {/* ── MAIN COLUMN ── */}
-        <main id="main-content" tabIndex={-1}>
+        <div>
           {/* Completed outcome card */}
           {application.outcomeData && (
             <OutcomeCard outcome={application.outcomeData} />
@@ -138,7 +138,7 @@ export function TrackerView({ application }: TrackerViewProps) {
 
           <TimelineCard steps={application.timeline} />
           <DocsCard docs={application.documents} isGuest={true} />
-        </main>
+        </div>
 
         {/* ── ASIDE COLUMN ── */}
         <aside>
