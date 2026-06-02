@@ -21,16 +21,6 @@ export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const isAuthenticated = hasAuthCookie(request);
 
-  if (pathname.startsWith("/dashboard")) {
-    if (!isAuthenticated) {
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("next", `${pathname}${search}`);
-      return NextResponse.redirect(loginUrl);
-    }
-
-    return NextResponse.next();
-  }
-
   if (pathname === "/verify") {
     if (!isAuthenticated) {
       const loginUrl = new URL("/login", request.url);
@@ -43,14 +33,14 @@ export function proxy(request: NextRequest) {
 
   if (pathname === "/staff/2fa") {
     if (isAuthenticated) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
 
     return NextResponse.next();
   }
 
   if (guestOnlyRoutes.has(pathname) && isAuthenticated) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
@@ -58,7 +48,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/dashboard/:path*",
     "/verify",
     "/staff/2fa",
     "/login",

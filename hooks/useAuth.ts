@@ -77,7 +77,7 @@ export function useSignup() {
     mutationFn: (payload: SignupRequest) => signupRequest(payload),
     onSuccess: (data) => {
       syncSession(data.session);
-      router.push(buildVerifyUrl(data.maskedEmail, "/dashboard"));
+      router.push(buildVerifyUrl(data.maskedEmail, "/"));
     },
   });
 }
@@ -92,7 +92,7 @@ export function useLogin() {
     onSuccess: (data) => {
       syncSession(data.session);
 
-      const nextPath = searchParams.get("next") ?? "/dashboard";
+      const nextPath = searchParams.get("next") ?? "/";
       if (!data.session.isEmailVerified) {
         router.push(buildVerifyUrl(data.maskedEmail, nextPath));
         return;
@@ -129,7 +129,7 @@ export function useVerifyOtp() {
 
         return { ...current, isEmailVerified: true };
       });
-      router.push(searchParams.get("next") ?? "/dashboard");
+      router.push(searchParams.get("next") ?? "/");
     },
   });
 }
@@ -210,7 +210,7 @@ export function useStaffTwoFactor() {
       }
 
       syncSession(data.session);
-      router.push("/dashboard");
+      router.push("/");
     },
     onError: (error) => {
       if (isApiError(error) && error.errorType === "otp-expired") {
