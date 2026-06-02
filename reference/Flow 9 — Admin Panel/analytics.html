@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Analytics · Admin · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+<div class="ag">
+
+  <!-- ===== ADMIN SIDE NAV ===== -->
+  <nav class="ag-nav" aria-label="Admin navigation" id="adminnav">
+    <div class="ag-nav__brand"><span class="ico admin"></span> Proxi<em>Serve</em><span class="ag-nav__role admin">Admin</span></div>
+
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Overview</div>
+      <a href="analytics.html" class="ag-nav__link is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Analytics</a>
+      <a href="oversight.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversight <span class="ag-nav__count">2</span></a>
+    </div>
+
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Configure</div>
+      <a href="services-schema.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Services</a>
+      <a href="pricing-agents.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5a2.5 2.5 0 0 0-5 0c0 1.5 1 2 2.5 2.5s2.5 1 2.5 2.5a2.5 2.5 0 0 1-5 0M12 6v1.5M12 16.5V18"/></svg> Pricing</a>
+      <a href="pricing-agents.html#agents" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg> Agents</a>
+      <a href="broadcasts.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg> Broadcasts</a>
+    </div>
+
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Govern</div>
+      <a href="oversight.html#audit" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg> Audit log</a>
+      <a href="broadcasts.html#settings" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Settings</a>
+    </div>
+
+    <div class="ag-nav__spacer"></div>
+    <div class="ag-nav__user"><span class="av" style="background: var(--brand);">EH</span><div><div class="nm">Eric H.</div><div class="mt">admin · owner</div></div></div>
+  </nav>
+
+  <div class="ag-main">
+    <header class="ag-top">
+      <span class="ag-top__mobile-brand"><span class="ico" style="background:var(--brand);"></span>ProxiServe Admin</span>
+      <label class="ag-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Search cases, agents, services…" aria-label="Search" /><kbd>/</kbd>
+      </label>
+      <div class="ag-top__actions">
+        <span class="env-badge" style="display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:var(--ok-soft);color:var(--ok);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.06em;"><span style="width:7px;height:7px;border-radius:999px;background:currentColor;"></span>PRODUCTION</span>
+        <button class="ag-iconbtn" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="badge">2</span></button>
+      </div>
+    </header>
+
+    <div class="ag-content">
+
+      <div class="ag-h">
+        <div>
+          <h1 class="ag-h__t">Analytics <em>overview</em></h1>
+          <div class="ag-h__meta">LAST 30 DAYS · UPDATED 14:32 CAT · ALL SERVICES, ALL AGENTS</div>
+        </div>
+        <div class="ag-h__actions">
+          <button class="ag-chip is-active">30 days</button>
+          <button class="ag-chip">Quarter</button>
+          <button class="ag-chip">Year</button>
+          <button class="btn-sm btn-sm--ghost">Export CSV</button>
+        </div>
+      </div>
+
+      <!-- KPI row -->
+      <div class="kpi">
+        <div class="kpi-card"><div class="l">Applications</div><div class="v">487</div><div class="d up">↑ 18% vs prev</div></div>
+        <div class="kpi-card"><div class="l">Completed</div><div class="v">411</div><div class="d up">↑ 12%</div></div>
+        <div class="kpi-card"><div class="l">Revenue</div><div class="v" style="font-size:24px;">RWF 7.1M</div><div class="d up">↑ 21%</div></div>
+        <div class="kpi-card"><div class="l">Avg turnaround</div><div class="v">5.4<span style="font-size:15px;color:var(--ink-muted);">d</span></div><div class="d up">↓ 0.6d</div></div>
+        <div class="kpi-card"><div class="l">SLA on-time</div><div class="v">89<span style="font-size:15px;color:var(--ink-muted);">%</span></div><div class="d down">↓ 2pts</div></div>
+        <div class="kpi-card"><div class="l">Rejection rate</div><div class="v">4.3<span style="font-size:15px;color:var(--ink-muted);">%</span></div><div class="d up">↓ 0.8pts</div></div>
+      </div>
+
+      <!-- charts -->
+      <div class="adm-grid adm-grid--2">
+        <div class="chart-card">
+          <div class="chart-card__h"><h3>Applications <em>per week</em></h3><span class="chart-card__sub">LAST 10 WEEKS</span></div>
+          <div class="barchart" id="weekly"></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card__h"><h3>Service <em>mix</em></h3><span class="chart-card__sub">SHARE OF VOLUME</span></div>
+          <div style="margin-top: 12px;">
+            <div class="stack-row"><span class="nm">Passport renewal</span><div class="track"><div class="fill" style="width:32%; background: var(--b-pink);"></div></div><span class="pct">32%</span></div>
+            <div class="stack-row"><span class="nm">Tax registration</span><div class="track"><div class="fill" style="width:24%; background: var(--b-marigold);"></div></div><span class="pct">24%</span></div>
+            <div class="stack-row"><span class="nm">Business license</span><div class="track"><div class="fill" style="width:18%; background: var(--b-green);"></div></div><span class="pct">18%</span></div>
+            <div class="stack-row"><span class="nm">National ID</span><div class="track"><div class="fill" style="width:14%; background: var(--b-blue);"></div></div><span class="pct">14%</span></div>
+            <div class="stack-row"><span class="nm">Other (10)</span><div class="track"><div class="fill" style="width:12%; background: var(--ink-subtle);"></div></div><span class="pct">12%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- secondary -->
+      <div class="adm-grid adm-grid--3" style="margin-top: 16px;">
+        <div class="chart-card">
+          <div class="chart-card__h"><h3>By <em>status</em></h3></div>
+          <div style="margin-top: 12px; display:flex; flex-direction: column; gap: 10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;"><span class="status s-ok" style="padding:4px 12px;"><span class="dot"></span> Completed</span><span class="mono" style="font-size:13px;">411</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;"><span class="status s-brand" style="padding:4px 12px;"><span class="dot"></span> In progress</span><span class="mono" style="font-size:13px;">48</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;"><span class="status s-info" style="padding:4px 12px;"><span class="dot"></span> Awaiting authority</span><span class="mono" style="font-size:13px;">19</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;"><span class="status s-danger" style="padding:4px 12px;"><span class="dot"></span> Rejected</span><span class="mono" style="font-size:13px;">9</span></div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card__h"><h3>Payment <em>methods</em></h3></div>
+          <div style="margin-top: 12px;">
+            <div class="stack-row" style="grid-template-columns: 90px 1fr 40px;"><span class="nm" style="font-size:13px;">MTN MoMo</span><div class="track"><div class="fill" style="width:64%; background: #FFCC00;"></div></div><span class="pct">64%</span></div>
+            <div class="stack-row" style="grid-template-columns: 90px 1fr 40px;"><span class="nm" style="font-size:13px;">Airtel</span><div class="track"><div class="fill" style="width:18%; background: #E40000;"></div></div><span class="pct">18%</span></div>
+            <div class="stack-row" style="grid-template-columns: 90px 1fr 40px;"><span class="nm" style="font-size:13px;">Card</span><div class="track"><div class="fill" style="width:11%; background: var(--ink);"></div></div><span class="pct">11%</span></div>
+            <div class="stack-row" style="grid-template-columns: 90px 1fr 40px;"><span class="nm" style="font-size:13px;">Pay agent</span><div class="track"><div class="fill" style="width:7%; background: var(--brand);"></div></div><span class="pct">7%</span></div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card__h"><h3>Needs <em>attention</em></h3></div>
+          <div style="margin-top: 12px; display:flex; flex-direction: column; gap: 10px;">
+            <a href="oversight.html" style="display:flex; justify-content:space-between; align-items:center; text-decoration:none; color:inherit; padding: 8px 10px; background: var(--danger-soft); border-radius: var(--r-sm);"><span style="font-size:13px; color: var(--danger); font-weight:500;">SLA breaches</span><span class="mono" style="font-size:13px; color: var(--danger);">2 →</span></a>
+            <a href="oversight.html" style="display:flex; justify-content:space-between; align-items:center; text-decoration:none; color:inherit; padding: 8px 10px; background: var(--warn-soft); border-radius: var(--r-sm);"><span style="font-size:13px; color: var(--warn); font-weight:500;">Open disputes</span><span class="mono" style="font-size:13px; color: var(--warn);">1 →</span></a>
+            <a href="pricing-agents.html#agents" style="display:flex; justify-content:space-between; align-items:center; text-decoration:none; color:inherit; padding: 8px 10px; background: var(--cream-2); border-radius: var(--r-sm);"><span style="font-size:13px; font-weight:500;">Agents over capacity</span><span class="mono" style="font-size:13px;">1 →</span></a>
+            <a href="services-schema.html" style="display:flex; justify-content:space-between; align-items:center; text-decoration:none; color:inherit; padding: 8px 10px; background: var(--cream-2); border-radius: var(--r-sm);"><span style="font-size:13px; font-weight:500;">Service requests</span><span class="mono" style="font-size:13px;">14 →</span></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- agent leaderboard table -->
+      <div class="adm-sec"><h2>Agent <em>performance</em></h2><a href="pricing-agents.html#agents" class="btn-sm btn-sm--ghost">Manage agents →</a></div>
+      <div class="dtable-wrap">
+        <table class="dtable">
+          <thead><tr><th>Agent</th><th>Active</th><th>Completed (30d)</th><th>Avg turnaround</th><th>SLA</th><th>Rating</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini" style="background:var(--b-green);">CN</span> <span class="nm" style="font-size:14px;">Claudine N.</span></div></td><td class="mono">12</td><td class="mono">15</td><td class="mono">4.8d</td><td><span class="tpill on"><span class="dot"></span>94%</span></td><td class="mono">4.9</td><td><span class="tpill on"><span class="dot"></span>Available</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini" style="background:var(--b-blue);">PM</span> <span class="nm" style="font-size:14px;">Patrick M.</span></div></td><td class="mono">10</td><td class="mono">13</td><td class="mono">5.1d</td><td><span class="tpill on"><span class="dot"></span>91%</span></td><td class="mono">4.7</td><td><span class="tpill on"><span class="dot"></span>Available</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini" style="background:var(--brand);">AM</span> <span class="nm" style="font-size:14px;">Aline M.</span></div></td><td class="mono">14</td><td class="mono">11</td><td class="mono">5.2d</td><td><span class="tpill on"><span class="dot"></span>92%</span></td><td class="mono">4.8</td><td><span class="tpill pilot"><span class="dot"></span>Over cap</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini" style="background:var(--b-marigold);color:var(--ink);">DI</span> <span class="nm" style="font-size:14px;">Diane I.</span></div></td><td class="mono">8</td><td class="mono">9</td><td class="mono">5.6d</td><td><span class="tpill on"><span class="dot"></span>88%</span></td><td class="mono">4.6</td><td><span class="tpill off"><span class="dot"></span>Away</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini">TG</span> <span class="nm" style="font-size:14px;">Thierry G.</span></div></td><td class="mono">6</td><td class="mono">7</td><td class="mono">6.1d</td><td><span class="tpill pilot"><span class="dot"></span>82%</span></td><td class="mono">4.5</td><td><span class="tpill on"><span class="dot"></span>Available</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="kbd-hints">
+      <span><kbd>/</kbd> search</span>
+      <span><kbd>G</kbd> then <kbd>A</kbd> analytics</span>
+      <span><kbd>G</kbd> then <kbd>O</kbd> oversight</span>
+      <span><kbd>?</kbd> all shortcuts</span>
+    </div>
+  </div>
+
+  <nav class="ag-tabbar" aria-label="Admin tabs">
+    <a href="analytics.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Stats</a>
+    <a href="oversight.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversee</a>
+    <a href="services-schema.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> Services</a>
+    <a href="broadcasts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/></svg> Send</a>
+  </nav>
+
+</div>
+
+<script>
+  const data = [210,240,225,260,280,255,300,290,320,340];
+  const max = Math.max(...data);
+  document.getElementById('weekly').innerHTML = data.map((v,i) =>
+    `<div class="b"><div class="f" style="height:${(v/max*100).toFixed(0)}%"></div><span class="lab">W${i+10}</span></div>`).join('');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProxiServe — Flow 7 / Payments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--cream); }
+  .topstrip { border-bottom: 1px solid var(--rule); padding: 16px 0; background: var(--cream); }
+  .topstrip__inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .breadcrumb a { color: inherit; }
+  .breadcrumb a:hover { color: var(--ink); }
+
+  .hub-head { padding: 80px 0 56px; }
+  .hub-head .eyebrow { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .hub-head .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ink); }
+  .hub-head h1 { margin: 0 0 24px; }
+  .hub-head p { max-width: 720px; margin: 0; }
+  .hub-meta { display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .hub-meta span strong { color: var(--ink); font-weight: 600; }
+
+  .cards { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--ink); border: 1px solid var(--ink); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 80px; }
+  @media (min-width: 760px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card { background: var(--paper); padding: 40px 32px; display: flex; flex-direction: column; min-height: 230px; color: var(--ink); text-decoration: none; transition: background var(--m-fast); position: relative; }
+  .card:hover { background: var(--paper-2); }
+  .card__num { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; margin-bottom: 12px; }
+  .card__title { font-family: var(--serif); font-weight: 500; font-size: 26px; line-height: 1.15; margin: 0 0 12px; }
+  .card__title em { font-style: italic; font-weight: 400; }
+  .card__desc { font-size: 14px; color: var(--ink-muted); line-height: 1.6; margin: 0 0 24px; flex: 1; max-width: 480px; }
+  .card__cta { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-weight: 500; font-size: 14px; }
+  .card__cta::after { content: "→"; transition: transform var(--m-fast); }
+  .card:hover .card__cta::after { transform: translateX(4px); }
+  .card--feature { background: var(--ink); color: var(--paper); grid-column: 1 / -1; padding: 56px 48px; min-height: 260px; overflow: hidden; }
+  .card--feature .card__num { color: rgba(246,236,210,0.6); }
+  .card--feature .card__title { color: var(--paper); font-size: 42px; max-width: 640px; }
+  .card--feature .card__desc { color: rgba(246,236,210,0.75); font-size: 16px; max-width: 600px; }
+  .card--feature .card__cta { color: var(--paper); }
+  .card--feature:hover { background: #2A231C; }
+  .card--brand { background: var(--brand-soft); }
+  .card--brand:hover { background: #F0CFE0; }
+  .card--brand .card__title { color: var(--brand-ink); }
+
+  /* mini receipt illo */
+  .feature-illo { position: absolute; right: 40px; bottom: 40px; width: 220px; pointer-events: none; opacity: 0.95; }
+  @media (max-width: 1100px) { .feature-illo { display: none; } }
+  .mini-receipt { background: var(--paper); color: var(--ink); border-radius: 10px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
+  .mini-receipt .top { text-align: center; padding: 18px 16px 14px; border-bottom: 1px dashed var(--rule-strong); }
+  .mini-receipt .chk { width: 36px; height: 36px; border-radius: 999px; background: var(--ok-soft); color: var(--ok); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+  .mini-receipt .amt { font-family: var(--serif); font-size: 24px; }
+  .mini-receipt .amt em { font-style: italic; }
+  .mini-receipt .lbl { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); }
+  .mini-receipt .body { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .mini-receipt .r { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 9px; color: var(--ink-muted); }
+  .mini-receipt .r .v { color: var(--ink); }
+
+  .deci-band { background: var(--ink); color: var(--paper); padding: 80px 0; }
+  .deci-band h2 { color: var(--paper); margin: 0 0 16px; }
+  .deci-band h2 em { font-style: italic; font-weight: 400; }
+  .deci-band p { color: rgba(246,236,210,0.75); max-width: 640px; margin: 0; }
+  .decisions { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: 56px; border-top: 1px solid rgba(246,236,210,0.18); }
+  @media (min-width: 760px) { .decisions { grid-template-columns: repeat(3, 1fr); } }
+  .dec { padding: 32px 28px; border-right: 1px solid rgba(246,236,210,0.12); border-bottom: 1px solid rgba(246,236,210,0.12); }
+  @media (max-width: 759px) { .dec { border-right: none; } }
+  .dec .num { font-family: var(--mono); font-size: 11px; color: rgba(246,236,210,0.4); letter-spacing: 0.06em; margin-bottom: 12px; display: block; }
+  .dec h4 { color: var(--paper); font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 0 0 8px; text-transform: none; letter-spacing: 0; }
+  .dec h4 em { font-style: italic; font-weight: 400; }
+  .dec p { color: rgba(246,236,210,0.75); font-size: 14px; line-height: 1.55; margin: 0; }
+
+  .next-band { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .next-band h2 { margin: 0 0 16px; }
+  .next-band p { max-width: 640px; margin: 0 0 32px; color: var(--ink-muted); }
+  .flow-list { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--rule-strong); }
+  .flow-row { display: grid; grid-template-columns: 60px 1fr auto; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); align-items: center; }
+  .flow-row .num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .flow-row h3 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 19px; }
+  .flow-row h3 em { font-style: italic; font-weight: 400; }
+  .flow-row p { margin: 4px 0 0; font-size: 13px; color: var(--ink-muted); }
+  .flow-row .status { padding: 4px 12px; font-size: 11px; }
+  .flow-row.done { background: var(--ok-soft); }
+
+  .foot { border-top: 1px solid var(--rule); padding: 32px 0; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<div class="topstrip">
+  <div class="container">
+    <div class="topstrip__inner">
+      <a href="../Flow 6 — Client Dashboard/index.html" class="breadcrumb"><span aria-hidden="true">←</span> Flow 6 — Client Dashboard</a>
+      <span class="breadcrumb">PROXISERVE / DESIGN / FLOW 07 — PAYMENTS / v0.1</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="hub-head">
+    <span class="eyebrow">Flow 07 / 10 — payments</span>
+    <h1 class="t-display">The <em>money</em>.</h1>
+    <p class="t-lede">Mobile money first — it's how Rwanda pays. Card with 3-D Secure for those who prefer it. Pay-your-agent-directly for cash. And behind it all, one unbreakable rule: <em>the user never wonders whether they were charged.</em></p>
+    <div class="hub-meta">
+      <span><strong>4 screens</strong> · choose, MoMo, card, receipt</span>
+      <span><strong>11 states</strong> · every failure path</span>
+      <span><strong>18 new components</strong></span>
+      <span><strong>15 / 15</strong> self-review score</span>
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <a href="method-choice.html" class="card card--feature">
+      <span class="card__num">01 / Primary deliverable</span>
+      <h2 class="card__title">Choose how to <em>pay</em>.</h2>
+      <p class="card__desc">Four methods — MTN MoMo (pre-selected), Airtel Money, card, and pay-agent-directly. Agent-confirmed fee banner, dark sticky fee breakdown that separates our service fee from the government printing fee, and a trust strip.</p>
+      <span class="card__cta">Open method choice</span>
+
+      <div class="feature-illo" aria-hidden="true">
+        <div class="mini-receipt">
+          <div class="top">
+            <div class="chk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></div>
+            <div class="lbl">Payment received</div>
+            <div class="amt">RWF <em>15,000</em></div>
+          </div>
+          <div class="body">
+            <div class="r"><span>CODE</span><span class="v">PRX-2026-00483</span></div>
+            <div class="r"><span>METHOD</span><span class="v">MTN MoMo</span></div>
+            <div class="r"><span>TXN</span><span class="v">MP260523.1432</span></div>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <a href="mobile-money.html" class="card">
+      <span class="card__num">02 / Mobile money push</span>
+      <h2 class="card__title">Approve on your <em>phone</em>.</h2>
+      <p class="card__desc">Enter your MoMo number, then a live wait screen with a pulsing phone, a 3-step progress list (sent → approve → confirm), an expiry countdown, and resend. The webhook flips it to the receipt automatically.</p>
+      <span class="card__cta">Open mobile money flow</span>
+    </a>
+
+    <a href="card-3ds.html" class="card">
+      <span class="card__num">03 / Card + 3-D Secure</span>
+      <h2 class="card__title">Card, <em>verified by your bank</em>.</h2>
+      <p class="card__desc">A live card visual that updates and brand-detects as you type, then a bank-styled 3-D Secure OTP frame. We never store card details — they go straight to the PCI-DSS processor.</p>
+      <span class="card__cta">Open card flow</span>
+    </a>
+
+    <a href="receipt.html" class="card">
+      <span class="card__num">04 / Receipt</span>
+      <h2 class="card__title">A clean <em>receipt</em>.</h2>
+      <p class="card__desc">Perforated, notched, tear-off styling. Full transaction trail — code, method, txn ID, receipt no, VAT line. Download PDF, back to application, and a "what's next" note about the government fee.</p>
+      <span class="card__cta">Open receipt</span>
+    </a>
+
+    <a href="states.html" class="card">
+      <span class="card__num">05 / Every edge case</span>
+      <h2 class="card__title">11 states — <em>drawn out</em>.</h2>
+      <p class="card__desc">Timeout · declined (mapped reasons) · pay-agent · awaiting confirmation · already paid · dispute/refund · refund issued · connection lost (reconcile) · 3DS failed · stale fee · processing.</p>
+      <span class="card__cta">Open states gallery</span>
+    </a>
+
+    <a href="spec.html" class="card card--brand">
+      <span class="card__num">06 / Engineering spec</span>
+      <h2 class="card__title">The <em>10-section</em> deliverable.</h2>
+      <p class="card__desc">Flow map · IA + transaction lifecycle · wireframes · hi-fi index · 18 components · motion · responsive · 11 states · a11y (12/12) · hand-off covering idempotency, webhook-as-truth, reconciliation, fee re-validation, refunds.</p>
+      <span class="card__cta">Read the spec</span>
+    </a>
+
+  </div>
+
+</div>
+
+<div class="deci-band">
+  <div class="container">
+    <span class="eyebrow" style="color: rgba(246,236,210,0.6);">Key design decisions</span>
+    <h2 class="t-h2">Three calls <em>worth flagging</em>.</h2>
+    <p>Payments is where a beautiful product can still lose someone's trust in one bad moment. These calls are all about removing doubt.</p>
+
+    <div class="decisions">
+      <div class="dec">
+        <span class="num">01 / Mobile money first</span>
+        <h4>Designed for how <em>Rwanda pays</em></h4>
+        <p>MoMo is pre-selected and listed first; card is third. The wait screen treats "check your phone, approve with PIN" as a real guided status surface, not a spinner — because that approval step confuses first-timers more than anything else.</p>
+      </div>
+      <div class="dec">
+        <span class="num">02 / Never "was I charged?"</span>
+        <h4>Every terminal state <em>states the outcome</em></h4>
+        <p>Timeouts and declines explicitly say "no money has left your account". Connection-drop mid-payment says "don't pay again — we're reconciling". The webhook, not the client, is the source of truth for success.</p>
+      </div>
+      <div class="dec">
+        <span class="num">03 / Pay-agent, honestly</span>
+        <h4>Support cash <em>without hiding the trade-off</em></h4>
+        <p>Many clients pay agents in cash. We support it but state plainly it's slower and unprotected until the agent confirms. The fee is always re-validated server-side at charge time so a stale amount is never silently charged.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="next-band">
+  <div class="container">
+    <span class="eyebrow">Where we are in the ten-flow plan</span>
+    <h2 class="t-h2">Flow 07 of 10 — <em>complete</em>.</h2>
+    <p>The transaction and receipt objects created here surface in the client dashboard (F6), the agent's case view (F8 — where pay-agent gets confirmed), and admin oversight (F9 — disputes, refunds, reconciliation reports).</p>
+
+    <div class="flow-list">
+      <div class="flow-row done"><span class="num">F1</span><div><h3>Marketing &amp; <em>landing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F2</span><div><h3>Service <em>discovery</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F3</span><div><h3>Application <em>submission</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F4</span><div><h3>Auth &amp; <em>role routing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F5</span><div><h3>Public <em>tracker</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F6</span><div><h3>Client <em>dashboard</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F7</span><div><h3><em>Payments</em></h3><p>MoMo push, card 3DS, pay-agent, receipt, 11 states</p></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row"><span class="num">F8</span><div><h3>Agent <em>workspace</em></h3><p>Today, case queue, case detail, document viewer, performance</p></div><span class="status s-info"><span class="dot"></span> Next</span></div>
+      <div class="flow-row"><span class="num">F9</span><div><h3>Admin <em>panel</em></h3></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+      <div class="flow-row"><span class="num">F10</span><div><h3>Cross-cutting <em>systems</em></h3></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+    </div>
+
+    <div style="margin-top: 48px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href="method-choice.html" class="pill pill--solid">Open method choice <span class="arr">↗</span></a>
+      <a href="receipt.html" class="pill">Jump to receipt <span class="arr">→</span></a>
+      <a href="spec.html" class="pill">Read the spec <span class="arr">→</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="foot container">
+  <span>PROXISERVE / FLOW 07 — PAYMENTS / v0.1</span>
+  <span>Type "Design Flow 8." when ready.</span>
+</div>
+
+</body>
+</html>

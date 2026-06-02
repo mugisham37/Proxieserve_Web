@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Services · Admin · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+<div class="ag">
+
+  <nav class="ag-nav" aria-label="Admin navigation">
+    <div class="ag-nav__brand"><span class="ico admin"></span> Proxi<em>Serve</em><span class="ag-nav__role admin">Admin</span></div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Overview</div>
+      <a href="analytics.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Analytics</a>
+      <a href="oversight.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversight <span class="ag-nav__count">2</span></a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Configure</div>
+      <a href="services-schema.html" class="ag-nav__link is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Services</a>
+      <a href="pricing-agents.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5a2.5 2.5 0 0 0-5 0c0 1.5 1 2 2.5 2.5s2.5 1 2.5 2.5a2.5 2.5 0 0 1-5 0M12 6v1.5M12 16.5V18"/></svg> Pricing</a>
+      <a href="pricing-agents.html#agents" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Agents</a>
+      <a href="broadcasts.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/></svg> Broadcasts</a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Govern</div>
+      <a href="oversight.html#audit" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Audit log</a>
+      <a href="broadcasts.html#settings" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Settings</a>
+    </div>
+    <div class="ag-nav__spacer"></div>
+    <div class="ag-nav__user"><span class="av" style="background: var(--brand);">EH</span><div><div class="nm">Eric H.</div><div class="mt">admin · owner</div></div></div>
+  </nav>
+
+  <div class="ag-main">
+    <header class="ag-top">
+      <span class="ag-top__mobile-brand"><span class="ico" style="background:var(--brand);"></span>Admin</span>
+      <label class="ag-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Search services…" aria-label="Search" /><kbd>/</kbd>
+      </label>
+      <div class="ag-top__actions">
+        <span class="env-badge" style="display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:var(--ok-soft);color:var(--ok);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.06em;"><span style="width:7px;height:7px;border-radius:999px;background:currentColor;"></span>PRODUCTION</span>
+      </div>
+    </header>
+
+    <div class="ag-content">
+
+      <!-- ===== services list ===== -->
+      <div class="ag-h">
+        <div>
+          <h1 class="ag-h__t">Services <em>catalogue</em></h1>
+          <div class="ag-h__meta">14 PUBLISHED · 1 PILOT · 2 ARCHIVED · 14 PENDING REQUESTS</div>
+        </div>
+        <div class="ag-h__actions">
+          <button class="btn-sm btn-sm--ghost">View requests (14)</button>
+          <button class="btn-sm btn-sm--solid">+ New service</button>
+        </div>
+      </div>
+
+      <div class="dtable-wrap" style="margin-bottom: 8px;">
+        <table class="dtable">
+          <thead><tr><th>Service</th><th>Category</th><th>Fee</th><th>ETA</th><th>Schema</th><th>30d vol</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr style="background: var(--brand-soft);">
+              <td><span class="nm">Passport <em>renewal</em></span></td><td>Identity</td><td class="mono">RWF 15,000</td><td class="mono">5–7d</td><td><span class="sb-version" style="font-size:11px;"><span class="tag">v4</span></span></td><td class="mono">156</td><td><span class="tpill on"><span class="dot"></span>Published</span></td>
+              <td><button class="btn-sm" style="padding:5px 12px;">Editing ▾</button></td>
+            </tr>
+            <tr><td><span class="nm">Tax registration</span></td><td>Tax</td><td class="mono">RWF 12,000</td><td class="mono">3–5d</td><td><span class="tag" style="font-family:var(--mono);font-size:10px;background:var(--cream-2);padding:2px 8px;border-radius:999px;">v2</span></td><td class="mono">118</td><td><span class="tpill on"><span class="dot"></span>Published</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Edit</button></td></tr>
+            <tr><td><span class="nm">Business license</span></td><td>Business</td><td class="mono">RWF 25,000</td><td class="mono">7–10d</td><td><span class="tag" style="font-family:var(--mono);font-size:10px;background:var(--cream-2);padding:2px 8px;border-radius:999px;">v3</span></td><td class="mono">88</td><td><span class="tpill on"><span class="dot"></span>Published</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Edit</button></td></tr>
+            <tr><td><span class="nm">RSSB pension claim</span></td><td>Welfare</td><td class="mono">RWF 10,000</td><td class="mono">4–7d</td><td><span class="tag" style="font-family:var(--mono);font-size:10px;background:var(--cream-2);padding:2px 8px;border-radius:999px;">v1</span></td><td class="mono">12</td><td><span class="tpill pilot"><span class="dot"></span>Pilot</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Edit</button></td></tr>
+            <tr><td><span class="nm" style="color:var(--ink-muted);">Visa assistance</span></td><td>Identity</td><td class="mono">—</td><td class="mono">—</td><td>—</td><td class="mono">0</td><td><span class="tpill off"><span class="dot"></span>Archived</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Restore</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ===== schema builder ===== -->
+      <div class="adm-sec" id="builder">
+        <h2>Schema builder — <em>Passport renewal</em></h2>
+        <div class="right">
+          <span class="sb-version"><span class="tag">editing v4 (draft)</span> · published v3 · 142 in-progress drafts on v3</span>
+        </div>
+      </div>
+
+      <div class="pay-banner" style="background: var(--info-soft); color: var(--info); border-left: 3px solid var(--info); padding: 12px 16px; border-radius: var(--r-md); font-size: 13px; line-height:1.5; margin-bottom: 16px;">
+        <strong>This form drives Flow 3 step 2 and the Flow 2 service page.</strong> When you publish, in-progress drafts on the old version get a migration prompt — they won't break.
+      </div>
+
+      <div class="sb">
+        <!-- canvas -->
+        <div class="sb__canvas">
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <span style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted);">Form fields · drag to reorder</span>
+            <span style="font-family: var(--mono); font-size: 11px; color: var(--ink-muted);">6 fields</span>
+          </div>
+
+          <div class="sb-field is-selected">
+            <span class="sb-field__grip">⋮⋮</span>
+            <div class="sb-field__head">
+              <span class="sb-field__label">Reason for renewal</span>
+              <span class="sb-field__type">Single choice</span>
+              <span class="sb-field__req">Required</span>
+            </div>
+            <div class="sb-field__preview"><select><option>Expired · Pages full · Lost · Stolen</option></select></div>
+            <div class="sb-field__actions">
+              <button aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/></svg></button>
+              <button aria-label="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="sb-field">
+            <span class="sb-field__grip">⋮⋮</span>
+            <div class="sb-field__head"><span class="sb-field__label">Police case reference</span><span class="sb-field__type">Text</span><span class="sb-field__type" style="background:var(--warn-soft);color:var(--warn);">Conditional</span></div>
+            <div class="sb-field__preview"><input placeholder="Shown only if Lost / Stolen" readonly></div>
+            <div class="sb-field__actions"><button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/></svg></button><button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>
+          </div>
+
+          <div class="sb-field">
+            <span class="sb-field__grip">⋮⋮</span>
+            <div class="sb-field__head"><span class="sb-field__label">Current passport number</span><span class="sb-field__type">Text</span><span class="sb-field__req">Required</span></div>
+            <div class="sb-field__preview"><input placeholder="PC123456 · 8 chars · pattern validated" readonly></div>
+            <div class="sb-field__actions"><button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/></svg></button><button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>
+          </div>
+
+          <div class="sb-field">
+            <span class="sb-field__grip">⋮⋮</span>
+            <div class="sb-field__head"><span class="sb-field__label">Travel intent</span><span class="sb-field__type">Single choice</span><span class="sb-field__type" style="background:var(--ok-soft);color:var(--ok);">New in v4</span></div>
+            <div class="sb-field__preview"><select><option>Within 2 weeks · 1–2 months · Later · None</option></select></div>
+            <div class="sb-field__actions"><button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/></svg></button><button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>
+          </div>
+
+          <div class="sb-field">
+            <span class="sb-field__grip">⋮⋮</span>
+            <div class="sb-field__head"><span class="sb-field__label">Notes for agent</span><span class="sb-field__type">Long text</span></div>
+            <div class="sb-field__preview"><input placeholder="Optional · max 500 chars" readonly></div>
+            <div class="sb-field__actions"><button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/></svg></button><button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>
+          </div>
+
+          <div style="border: 1.5px dashed var(--rule-strong); border-radius: var(--r-sm); padding: 16px; text-align: center; color: var(--ink-muted); font-size: 13px; margin-top: 4px;">
+            + Drag a field here, or click a type on the right
+          </div>
+
+          <div style="display:flex; gap: 8px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule);">
+            <button class="btn-sm btn-sm--ghost">Preview as applicant</button>
+            <button class="btn-sm btn-sm--ghost" style="margin-left:auto;">Save draft</button>
+            <button class="btn-sm" style="background:var(--brand);color:white;border-color:var(--brand);">Publish v4</button>
+          </div>
+        </div>
+
+        <!-- palette -->
+        <div class="sb__palette">
+          <h4>Field types</h4>
+          <div class="field-type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg> Short text <span class="h">Aa</span></div>
+          <div class="field-type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg> Long text <span class="h">¶</span></div>
+          <div class="field-type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg> Single choice <span class="h">◉</span></div>
+          <div class="field-type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m8 12 3 3 5-6"/></svg> Multi-select <span class="h">☑</span></div>
+          <div class="field-type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Date <span class="h">📅</span></div>
+          <div class="field-type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Document upload <span class="h">⇪</span></div>
+          <div class="field-type"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 5 11.91 19.79 19.79 0 0 1 1.92 3.18 2 2 0 0 1 3.92 1h3a2 2 0 0 1 2 1.72"/></svg> Phone <span class="h">#</span></div>
+
+          <h4 style="margin-top: 20px;">Selected field</h4>
+          <div class="adm-field" style="margin-bottom: 10px;"><label>Label</label><input value="Reason for renewal" style="padding:9px 11px;font-size:13px;"></div>
+          <div class="adm-field" style="margin-bottom: 10px;"><label>Help text</label><input value="Why are you renewing?" style="padding:9px 11px;font-size:13px;"></div>
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; padding: 6px 0;"><input type="checkbox" checked style="accent-color:var(--ink);"> Required</label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; padding: 6px 0;"><input type="checkbox" style="accent-color:var(--ink);"> Show conditionally</label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="kbd-hints"><span><kbd>/</kbd> search</span><span><kbd>⌘S</kbd> save draft</span><span><kbd>?</kbd> shortcuts</span></div>
+  </div>
+
+  <nav class="ag-tabbar" aria-label="Admin tabs">
+    <a href="analytics.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Stats</a>
+    <a href="oversight.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversee</a>
+    <a href="services-schema.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> Services</a>
+    <a href="broadcasts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/></svg> Send</a>
+  </nav>
+
+</div>
+
+<script>
+  document.querySelectorAll('.sb-field').forEach(f => f.addEventListener('click', e => {
+    if (e.target.closest('.sb-field__actions')) return;
+    document.querySelectorAll('.sb-field').forEach(x => x.classList.remove('is-selected'));
+    f.classList.add('is-selected');
+  }));
+</script>
+
+</body>
+</html>

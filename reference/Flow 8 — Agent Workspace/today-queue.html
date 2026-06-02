@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Today · Agent workspace · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+</head>
+<body>
+
+<div class="ag">
+
+  <!-- ===== SIDE NAV ===== -->
+  <nav class="ag-nav" aria-label="Agent navigation">
+    <div class="ag-nav__brand">
+      <span class="ico"></span> Proxi<em>Serve</em>
+      <span class="ag-nav__role">Agent</span>
+    </div>
+
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Work</div>
+      <a href="today-queue.html" class="ag-nav__link is-active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Today
+      </a>
+      <a href="today-queue.html#queue" class="ag-nav__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        My cases <span class="ag-nav__count brand">14</span>
+      </a>
+      <a href="case-detail.html" class="ag-nav__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages <span class="ag-nav__count">5</span>
+      </a>
+      <a href="#" class="ag-nav__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Unassigned <span class="ag-nav__count">3</span>
+      </a>
+    </div>
+
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Me</div>
+      <a href="performance.html" class="ag-nav__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        Performance
+      </a>
+      <a href="performance.html#settings" class="ag-nav__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </div>
+
+    <div class="ag-nav__spacer"></div>
+
+    <div class="ag-nav__user">
+      <span class="av">AM</span>
+      <div>
+        <div class="nm">Aline M.</div>
+        <div class="mt">agent · Kigali</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== MAIN ===== -->
+  <div class="ag-main">
+
+    <!-- top bar -->
+    <header class="ag-top">
+      <span class="ag-top__mobile-brand"><span class="ico"></span>ProxiServe</span>
+      <label class="ag-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Search cases, codes, clients…" aria-label="Search" />
+        <kbd>/</kbd>
+      </label>
+      <div class="ag-top__actions">
+        <button class="ag-status" id="status-toggle"><span class="dot"></span> Available</button>
+        <button class="ag-iconbtn" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="badge">3</span></button>
+      </div>
+    </header>
+
+    <!-- content -->
+    <div class="ag-content">
+
+      <div class="ag-h">
+        <div>
+          <h1 class="ag-h__t">Good morning, <em>Aline</em>.</h1>
+          <div class="ag-h__meta">SATURDAY 23 MAY 2026 · 14 OPEN CASES · 3 NEED YOU TODAY</div>
+        </div>
+        <div class="ag-h__actions">
+          <button class="btn-sm btn-sm--ghost">Export</button>
+          <button class="btn-sm btn-sm--solid">+ New case</button>
+        </div>
+      </div>
+
+      <!-- stats -->
+      <div class="ag-stats">
+        <div class="ag-stat ag-stat--warn">
+          <div class="l">Action required</div>
+          <div class="v"><em>3</em></div>
+          <div class="d">2 over SLA · act now</div>
+        </div>
+        <div class="ag-stat">
+          <div class="l">In progress</div>
+          <div class="v">8</div>
+          <div class="d up">↑ 2 since yesterday</div>
+        </div>
+        <div class="ag-stat">
+          <div class="l">Awaiting authority</div>
+          <div class="v">3</div>
+          <div class="d">avg 4 days waiting</div>
+        </div>
+        <div class="ag-stat ag-stat--accent">
+          <div class="l">Done this week</div>
+          <div class="v"><em>11</em></div>
+          <div class="d">5.2 day avg turnaround</div>
+        </div>
+      </div>
+
+      <!-- ===== Needs you today ===== -->
+      <h2 style="font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 0 0 12px;">Needs you <em style="font-style:italic;">today</em></h2>
+
+      <div class="ag-table-wrap" style="border: 1px solid var(--rule); border-radius: var(--r-md); overflow: hidden; background: var(--paper); margin-bottom: 28px;" id="queue">
+        <table class="ag-table">
+          <thead>
+            <tr>
+              <th style="width: 28px;"></th>
+              <th>Code</th>
+              <th>Service</th>
+              <th>Client</th>
+              <th>Status</th>
+              <th>Waiting</th>
+              <th>Next action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="ag-row is-focused" onclick="location.href='case-detail.html'">
+              <td><span class="ag-row__pri hi" title="High priority"></span></td>
+              <td class="ag-row__code">PRX-2026-00483</td>
+              <td><span class="ag-row__svc">Passport renewal</span></td>
+              <td><div class="ag-row__client"><span class="av">AK</span> Aline K.</div></td>
+              <td><span class="status s-warn"><span class="dot"></span> Action required</span></td>
+              <td><span class="ag-row__age sla-over">3d 4h</span></td>
+              <td style="font-size: 12.5px; color: var(--ink-2);">Review re-uploaded photo</td>
+            </tr>
+            <tr class="ag-row" onclick="location.href='case-detail.html'">
+              <td><span class="ag-row__pri hi"></span></td>
+              <td class="ag-row__code">PRX-2026-00477</td>
+              <td><span class="ag-row__svc">Business license</span></td>
+              <td><div class="ag-row__client"><span class="av">JN</span> Jean N.</div></td>
+              <td><span class="status s-warn"><span class="dot"></span> Awaiting response</span></td>
+              <td><span class="ag-row__age sla-over">2d 18h</span></td>
+              <td style="font-size: 12.5px; color: var(--ink-2);">Chase client for TIN doc</td>
+            </tr>
+            <tr class="ag-row" onclick="location.href='case-detail.html'">
+              <td><span class="ag-row__pri mid"></span></td>
+              <td class="ag-row__code">PRX-2026-00471</td>
+              <td><span class="ag-row__svc">Tax registration</span></td>
+              <td><div class="ag-row__client"><span class="av">MU</span> Marie U.</div></td>
+              <td><span class="status s-brand"><span class="dot"></span> In progress</span></td>
+              <td><span class="ag-row__age sla-warn">1d 2h</span></td>
+              <td style="font-size: 12.5px; color: var(--ink-2);">Submit to RRA portal</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- mobile cards version -->
+      <div class="ag-cases-mobile" style="margin-bottom: 28px;">
+        <a href="case-detail.html" class="ag-case-card">
+          <div class="ag-case-card__top"><span class="ag-case-card__code">PRX-2026-00483</span><span class="status s-warn"><span class="dot"></span> Action</span></div>
+          <span class="ag-case-card__svc">Passport renewal</span>
+          <div class="ag-case-card__meta"><span>Aline K.</span><span class="ag-row__age sla-over">3d 4h</span></div>
+        </a>
+        <a href="case-detail.html" class="ag-case-card">
+          <div class="ag-case-card__top"><span class="ag-case-card__code">PRX-2026-00477</span><span class="status s-warn"><span class="dot"></span> Awaiting</span></div>
+          <span class="ag-case-card__svc">Business license</span>
+          <div class="ag-case-card__meta"><span>Jean N.</span><span class="ag-row__age sla-over">2d 18h</span></div>
+        </a>
+        <a href="case-detail.html" class="ag-case-card">
+          <div class="ag-case-card__top"><span class="ag-case-card__code">PRX-2026-00471</span><span class="status s-brand"><span class="dot"></span> Progress</span></div>
+          <span class="ag-case-card__svc">Tax registration</span>
+          <div class="ag-case-card__meta"><span>Marie U.</span><span class="ag-row__age sla-warn">1d 2h</span></div>
+        </a>
+      </div>
+
+      <!-- ===== All my cases ===== -->
+      <div style="display:flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <h2 style="font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 0;">All my <em style="font-style:italic;">cases</em></h2>
+      </div>
+
+      <div class="ag-tabs">
+        <button class="ag-tab is-active">All <span class="ct">14</span></button>
+        <button class="ag-tab">Action required <span class="ct">3</span></button>
+        <button class="ag-tab">In progress <span class="ct">8</span></button>
+        <button class="ag-tab">Awaiting authority <span class="ct">3</span></button>
+        <button class="ag-tab">Completed <span class="ct">11</span></button>
+      </div>
+
+      <div class="ag-toolbar">
+        <button class="ag-chip is-active">All services</button>
+        <button class="ag-chip">Identity</button>
+        <button class="ag-chip">Business</button>
+        <button class="ag-chip">Tax</button>
+        <span style="margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-muted);">Sort: oldest first ▾</span>
+      </div>
+
+      <div class="ag-table-wrap" style="border: 1px solid var(--rule); border-radius: var(--r-md); overflow: hidden; background: var(--paper);">
+        <table class="ag-table">
+          <thead>
+            <tr>
+              <th style="width: 28px;"></th>
+              <th>Code</th><th>Service</th><th>Client</th><th>Status</th><th>Waiting</th><th>Fee</th>
+            </tr>
+          </thead>
+          <tbody id="all-cases">
+            <!-- rows injected -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- keyboard hints -->
+    <div class="kbd-hints">
+      <span><kbd>/</kbd> search</span>
+      <span><kbd>J</kbd> <kbd>K</kbd> move</span>
+      <span><kbd>↵</kbd> open case</span>
+      <span><kbd>E</kbd> change status</span>
+      <span><kbd>R</kbd> reply</span>
+      <span><kbd>A</kbd> assign to me</span>
+      <span><kbd>?</kbd> all shortcuts</span>
+    </div>
+
+  </div>
+
+  <!-- mobile tab bar -->
+  <nav class="ag-tabbar" aria-label="Agent tabs">
+    <a href="today-queue.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg> Today</a>
+    <a href="#queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg> Cases</a>
+    <a href="case-detail.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Messages</a>
+    <a href="performance.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Stats</a>
+  </nav>
+
+</div>
+
+<script>
+  // status toggle
+  document.getElementById('status-toggle').addEventListener('click', e => {
+    const b = e.currentTarget;
+    b.classList.toggle('away');
+    b.childNodes[b.childNodes.length-1].textContent = b.classList.contains('away') ? ' Away' : ' Available';
+  });
+
+  // build the "all cases" table
+  const cases = [
+    ['hi','PRX-2026-00483','Passport renewal','AK','Aline K.','s-warn','Action required','3d 4h','sla-over','RWF 15,000'],
+    ['hi','PRX-2026-00477','Business license','JN','Jean N.','s-warn','Awaiting response','2d 18h','sla-over','RWF 25,000'],
+    ['mid','PRX-2026-00471','Tax registration','MU','Marie U.','s-brand','In progress','1d 2h','sla-warn','RWF 12,000'],
+    ['mid','PRX-2026-00468','National ID','EH','Eric H.','s-brand','In progress','22h','','RWF 8,000'],
+    ['lo','PRX-2026-00462','Driver\u2019s license','CN','Claudine N.','s-info','Submitted to authority','4d','','RWF 18,000'],
+    ['lo','PRX-2026-00459','Mutuelle de Santé','PM','Patrick M.','s-info','Submitted to authority','3d','','RWF 6,000'],
+    ['lo','PRX-2026-00455','Birth certificate','DI','Diane I.','s-brand','In progress','6h','','RWF 5,000'],
+    ['lo','PRX-2026-00448','Tax registration','RG','Robert G.','s-info','Awaiting response','5d','','RWF 12,000'],
+    ['lo','PRX-2026-00441','Trading license','SK','Sandrine K.','s-brand','In progress','8h','','RWF 28,000'],
+    ['lo','PRX-2026-00437','Passport renewal','TM','Thierry M.','s-brand','In progress','11h','','RWF 15,000'],
+    ['lo','PRX-2026-00429','National ID','LU','Lucie U.','s-info','Submitted to authority','6d','','RWF 8,000'],
+    ['lo','PRX-2026-00421','VAT registration','BN','Bosco N.','s-brand','In progress','1d','','RWF 18,000'],
+    ['lo','PRX-2026-00414','Construction permit','GM','Grace M.','s-info','Awaiting response','7d','','RWF 35,000'],
+    ['lo','PRX-2026-00408','Company registration','FK','Faustin K.','s-brand','In progress','2d','','RWF 45,000'],
+  ];
+  const tbody = document.getElementById('all-cases');
+  tbody.innerHTML = cases.map(c => `
+    <tr class="ag-row" onclick="location.href='case-detail.html'">
+      <td><span class="ag-row__pri ${c[0]}"></span></td>
+      <td class="ag-row__code">${c[1]}</td>
+      <td><span class="ag-row__svc" style="font-size:14px;">${c[2]}</span></td>
+      <td><div class="ag-row__client"><span class="av">${c[3]}</span> ${c[4]}</div></td>
+      <td><span class="status ${c[5]}"><span class="dot"></span> ${c[6]}</span></td>
+      <td><span class="ag-row__age ${c[8]}">${c[7]}</span></td>
+      <td class="ag-row__code" style="color:var(--ink-muted);">${c[9]}</td>
+    </tr>`).join('');
+
+  // keyboard nav (J/K + Enter)
+  let focusIdx = 0;
+  const rows = () => [...document.querySelectorAll('#all-cases .ag-row')];
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT') return;
+    const rs = rows();
+    if (e.key === 'j' || e.key === 'J') { focusIdx = Math.min(rs.length-1, focusIdx+1); paint(rs); }
+    if (e.key === 'k' || e.key === 'K') { focusIdx = Math.max(0, focusIdx-1); paint(rs); }
+    if (e.key === 'Enter' && rs[focusIdx]) location.href='case-detail.html';
+    if (e.key === '/') { e.preventDefault(); document.querySelector('.ag-search input').focus(); }
+  });
+  function paint(rs){ rs.forEach((r,i)=>r.classList.toggle('is-focused', i===focusIdx)); }
+</script>
+
+</body>
+</html>

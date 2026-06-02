@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Step 1 of 5 — Your details · Passport renewal · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="wizard.css" />
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============ TOP BAR ============ -->
+<header class="wiz-topbar" data-screen-label="F3 Step 1">
+  <div class="container">
+    <div class="wiz-topbar__inner">
+      <a href="../Flow 1 — Marketing/landing.html" class="wiz-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div class="wiz-crumb">
+        <a href="../Flow 2 — Service Discovery/service-detail.html">Passport renewal</a>
+        <span class="sep">/</span>
+        <strong>Application</strong>
+      </div>
+      <div style="display:flex; gap:14px; align-items:center;">
+        <span class="wiz-savestate" id="savestate" aria-live="polite"><span class="dot"></span> Saved 12s ago</span>
+        <a href="../Flow 2 — Service Discovery/service-detail.html" class="wiz-exit">Save &amp; exit</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STEPPER ============ -->
+<div class="stepper-strip">
+  <div class="container">
+    <div class="stepper-strip__inner">
+
+      <!-- mobile compact -->
+      <div class="stepper-mobile">
+        <span class="stepper-mobile__pill">Step 1 / 5</span>
+        <span class="stepper-mobile__label">Your <em>details</em></span>
+        <span class="stepper-mobile__bar">
+          <span class="is-active"></span><span></span><span></span><span></span><span></span>
+        </span>
+      </div>
+
+      <!-- desktop -->
+      <div class="stepper">
+        <div class="stepper__node is-active">
+          <span class="stepper__num">01</span>
+          <span class="stepper__label">Your details</span>
+          <span class="stepper__line"></span>
+        </div>
+        <div class="stepper__node">
+          <span class="stepper__num">02</span>
+          <span class="stepper__label">Service details</span>
+          <span class="stepper__line"></span>
+        </div>
+        <div class="stepper__node">
+          <span class="stepper__num">03</span>
+          <span class="stepper__label">Documents</span>
+          <span class="stepper__line"></span>
+        </div>
+        <div class="stepper__node">
+          <span class="stepper__num">04</span>
+          <span class="stepper__label">Review</span>
+          <span class="stepper__line"></span>
+        </div>
+        <div class="stepper__node">
+          <span class="stepper__num">05</span>
+          <span class="stepper__label">Done</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="main" class="wiz-shell">
+  <div class="container">
+    <div class="wiz-page">
+
+      <div class="wiz-main">
+
+        <header class="wiz-head">
+          <span class="wiz-head__num">Step 01 / 05 · Personal information</span>
+          <h1>Tell us <em>about you</em>.</h1>
+          <p class="wiz-head__lede">We use this to apply on your behalf. <em>It's encrypted</em> and only your assigned agent sees it.</p>
+        </header>
+
+        <div class="privacy-line">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+          <span>Encrypted in transit (TLS 1.3) and at rest. <a href="../Flow 1 — Marketing/supporting.html#legal-privacy">Read our privacy policy</a> — it's plain language.</span>
+        </div>
+
+        <form id="step1" onsubmit="event.preventDefault(); window.location.href='step-2-service.html';">
+
+          <!-- =========== Card: identity =========== -->
+          <div class="wiz-card">
+            <div class="wiz-card__head">
+              <h2>Your <em>name &amp; ID</em></h2>
+              <span class="meta">3 fields</span>
+            </div>
+
+            <div class="field-grid field-grid--2">
+              <label class="fld">
+                <span class="fld__label">Full name <span class="req">*</span></span>
+                <input class="fld__input" type="text" name="fullName" autocomplete="name" required value="Aline Mukamana" />
+                <span class="fld__help">As it appears on your ID — first, then family name.</span>
+              </label>
+
+              <label class="fld">
+                <span class="fld__label">National ID number <span class="req">*</span></span>
+                <input class="fld__input fld__input--mono" type="text" name="nationalId" inputmode="numeric" autocomplete="off" placeholder="1 YYYY 8 NNNNNNN N NN" required maxlength="20" />
+                <span class="fld__help">16 digits, exactly as on your ID.</span>
+              </label>
+            </div>
+
+            <div class="field-grid" style="margin-top: 16px;">
+              <label class="fld">
+                <span class="fld__label">Date of birth <span class="req">*</span></span>
+                <input class="fld__input" type="date" name="dob" max="2008-05-19" min="1900-01-01" required />
+                <span class="fld__help">Must match your national ID.</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- =========== Card: contact =========== -->
+          <div class="wiz-card">
+            <div class="wiz-card__head">
+              <h2>How we can <em>reach you</em></h2>
+              <span class="meta">2 fields</span>
+            </div>
+
+            <label class="fld">
+              <span class="fld__label">Phone number <span class="req">*</span></span>
+              <div class="fld-phone">
+                <button type="button" class="cc" aria-label="Choose country code">
+                  <span class="flag">🇷🇼</span>
+                  <span style="font-family: var(--mono); font-size: 14px;">+250</span>
+                  <span style="margin-left: auto; color: var(--ink-muted);">▾</span>
+                </button>
+                <input class="fld__input" type="tel" name="phone" inputmode="numeric" autocomplete="tel-national" placeholder="78 8 123 456" />
+              </div>
+              <span class="fld__help">We'll only contact you about this application.</span>
+            </label>
+
+            <div class="wa-toggle" style="margin-top: 4px; padding: 14px 16px; background: var(--cream-2); border-radius: var(--r-md);">
+              <div>
+                <strong style="font-size:14px; font-weight: 500;">You can reach me on WhatsApp on this number</strong>
+                <div style="font-size: 12.5px; color: var(--ink-muted); margin-top: 2px;">Most clients prefer this — faster than email.</div>
+              </div>
+              <button type="button" class="switch is-on" role="switch" aria-checked="true" aria-label="WhatsApp messaging on this number"></button>
+            </div>
+
+            <label class="fld" style="margin-top: 16px;">
+              <span class="fld__label">
+                Email address
+                <span class="opt">optional</span>
+              </span>
+              <input class="fld__input" type="email" name="email" autocomplete="email" placeholder="you@example.com" />
+              <span class="fld__help">For written updates and receipts.</span>
+            </label>
+          </div>
+
+          <!-- =========== Card: preferences =========== -->
+          <div class="wiz-card">
+            <div class="wiz-card__head">
+              <h2>Your <em>preferences</em></h2>
+              <span class="meta">2 fields</span>
+            </div>
+
+            <div class="fld">
+              <span class="fld__label">Preferred language</span>
+              <div class="seg-group" role="radiogroup" aria-label="Preferred language">
+                <button type="button" class="is-active" role="radio" aria-checked="true">English</button>
+                <button type="button" role="radio" aria-checked="false">Kinyarwanda</button>
+                <button type="button" role="radio" aria-checked="false">Français</button>
+              </div>
+              <span class="fld__help" style="margin-top: 10px;">Your agent will use this language for messages.</span>
+            </div>
+          </div>
+
+          <!-- =========== Card: consent =========== -->
+          <div class="wiz-card">
+            <div class="wiz-card__head">
+              <h2>Permission to <em>act on your behalf</em></h2>
+            </div>
+
+            <label class="fld-check">
+              <input type="checkbox" name="consent" required />
+              <span class="fld-check__label">
+                I agree to ProxiServe handling my information to apply for <strong>Passport renewal</strong> on my behalf, as described in the <a href="../Flow 1 — Marketing/supporting.html#legal-privacy">Privacy Policy</a>. <a href="#" style="color: var(--brand-ink);">Read full consent</a>.
+              </span>
+            </label>
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- ============ ASIDE (desktop) ============ -->
+      <aside class="wiz-aside" aria-label="Application summary">
+        <div class="summary-card">
+          <div class="strip"></div>
+          <span class="summary-card__cat">Identity &amp; civil</span>
+          <h3>Passport <em>renewal</em></h3>
+          <div class="summary-line">
+            <span class="l">Standard fee</span><span class="v">RWF 15,000</span>
+          </div>
+          <div class="summary-line">
+            <span class="l">Turnaround</span><span class="v">5–7 days</span>
+          </div>
+          <div class="summary-line">
+            <span class="l">In-person visit</span><span class="v">Required</span>
+          </div>
+          <div class="summary-line" style="border-bottom: 1px solid var(--rule);">
+            <span class="l">Free to start</span><span class="v" style="color: var(--ok)">✓ Yes</span>
+          </div>
+        </div>
+
+        <div class="tips-card">
+          <h4 class="t-h4">A few tips for this step</h4>
+          <ul>
+            <li>Use the name <strong style="color: var(--ink);">exactly</strong> as it appears on your ID — punctuation matters.</li>
+            <li>If you don't have an email, leave it blank — we'll use SMS.</li>
+            <li>You can <strong style="color: var(--ink);">save and come back</strong> any time before submission.</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<!-- ============ FOOTER ACTIONS ============ -->
+<div class="wiz-footer">
+  <div class="container">
+    <div class="wiz-footer__inner">
+      <div class="wiz-footer__left">
+        <a href="../Flow 2 — Service Discovery/service-detail.html" class="back-link">← Back</a>
+        <span class="wiz-footer__step-meta">Step 1 of 5 · Your details</span>
+      </div>
+      <button type="submit" form="step1" class="pill pill--solid">Next — Service details <span class="arr">→</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Demo: auto-save indicator
+  const ss = document.getElementById('savestate');
+  let timer;
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', () => {
+      ss.classList.add('is-saving');
+      ss.querySelector('.dot').setAttribute('style', '');
+      ss.lastChild.textContent = ' Saving…';
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        ss.classList.remove('is-saving');
+        ss.lastChild.textContent = ' Saved just now';
+      }, 900);
+    });
+  });
+
+  // Switch toggle
+  document.querySelectorAll('.switch').forEach(sw => sw.addEventListener('click', () => {
+    sw.classList.toggle('is-on');
+    sw.setAttribute('aria-checked', sw.classList.contains('is-on'));
+  }));
+
+  // Segmented group
+  document.querySelectorAll('.seg-group').forEach(g => g.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      g.querySelectorAll('button').forEach(b => { b.classList.remove('is-active'); b.setAttribute('aria-checked','false'); });
+      e.target.classList.add('is-active'); e.target.setAttribute('aria-checked','true');
+    }
+  }));
+
+  // Auto-format National ID as user types
+  const idInput = document.querySelector('input[name="nationalId"]');
+  if (idInput) {
+    idInput.addEventListener('input', () => {
+      let v = idInput.value.replace(/\D/g, '').slice(0, 16);
+      const parts = [];
+      if (v.length > 0) parts.push(v.slice(0, 1));
+      if (v.length > 1) parts.push(v.slice(1, 5));
+      if (v.length > 5) parts.push(v.slice(5, 6));
+      if (v.length > 6) parts.push(v.slice(6, 13));
+      if (v.length > 13) parts.push(v.slice(13, 14));
+      if (v.length > 14) parts.push(v.slice(14, 16));
+      idInput.value = parts.join(' ');
+    });
+  }
+</script>
+
+</body>
+</html>

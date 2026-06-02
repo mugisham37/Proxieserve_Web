@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Card payment · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="payments.css" />
+<style>
+  /* card visual */
+  .card-visual {
+    background: linear-gradient(135deg, #2E2823 0%, #1A1612 100%);
+    color: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    position: relative;
+    min-height: 180px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    --n: 22px;
+    clip-path: polygon(var(--n) 0, 100% 0, 100% calc(100% - var(--n)), calc(100% - var(--n)) 100%, 0 100%, 0 var(--n));
+  }
+  .card-visual__chip { width: 40px; height: 30px; border-radius: 5px; background: linear-gradient(135deg, #E9B530, #C9942A); }
+  .card-visual__num { font-family: var(--mono); font-size: 20px; letter-spacing: 0.12em; }
+  .card-visual__row { display: flex; justify-content: space-between; align-items: flex-end; font-family: var(--mono); font-size: 11px; color: rgba(246,236,210,0.7); letter-spacing: 0.06em; }
+  .card-visual__row .val { font-size: 14px; color: var(--paper); letter-spacing: 0.04em; }
+  .card-visual__brand { position: absolute; top: 24px; right: 24px; font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 18px; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="pay-topbar">
+  <div class="container">
+    <div class="pay-topbar__inner">
+      <a href="../Flow 6 — Client Dashboard/dashboard.html" class="pay-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div class="pay-crumb"><a href="method-choice.html">Payment</a><span class="sep">/</span><strong>Card</strong></div>
+      <span class="pay-secure">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        SECURE · PCI-DSS
+      </span>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="pay-shell">
+  <div class="container">
+    <div class="pay-page">
+
+      <div class="pay-main">
+
+        <!-- ===== STAGE 1: card form ===== -->
+        <section id="stage-card">
+          <header class="pay-head">
+            <span class="pay-head__num">Card · step 1 of 2</span>
+            <h1>Your <em>card details</em>.</h1>
+            <p class="pay-head__lede">We never store your card. Details go straight to our PCI-DSS processor. <em>Your bank may ask you to confirm.</em></p>
+          </header>
+
+          <div class="card-visual" aria-hidden="true">
+            <div style="display:flex; justify-content: space-between; align-items: flex-start;">
+              <div class="card-visual__chip"></div>
+            </div>
+            <span class="card-visual__brand" id="cv-brand">VISA</span>
+            <div class="card-visual__num" id="cv-num">•••• •••• •••• 4242</div>
+            <div class="card-visual__row">
+              <span>CARDHOLDER<br><span class="val" id="cv-name">ALINE MUKAMANA</span></span>
+              <span>EXPIRES<br><span class="val" id="cv-exp">08 / 27</span></span>
+            </div>
+          </div>
+
+          <div class="pay-card">
+            <div class="pay-card__head"><h2>Card <em>information</em></h2><span class="meta">RWF 15,000</span></div>
+
+            <label class="pfield">
+              <span class="pfield__label">Card number</span>
+              <input class="pfield__input pfield__input--mono" id="cc-num" inputmode="numeric" placeholder="1234 5678 9012 3456" value="4242 4242 4242 4242" maxlength="19" />
+            </label>
+
+            <div class="pfield-grid">
+              <label class="pfield">
+                <span class="pfield__label">Expiry</span>
+                <input class="pfield__input pfield__input--mono" id="cc-exp" inputmode="numeric" placeholder="MM / YY" value="08 / 27" maxlength="7" />
+              </label>
+              <label class="pfield">
+                <span class="pfield__label">CVC</span>
+                <input class="pfield__input pfield__input--mono" id="cc-cvc" inputmode="numeric" placeholder="123" maxlength="4" />
+              </label>
+            </div>
+
+            <label class="pfield">
+              <span class="pfield__label">Name on card</span>
+              <input class="pfield__input" id="cc-name" placeholder="As printed on the card" value="Aline Mukamana" />
+            </label>
+
+            <label style="display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--ink-2); margin-top: 4px;">
+              <input type="checkbox" style="accent-color: var(--ink); width: 18px; height: 18px;" />
+              Save this card for next time <span style="color: var(--ink-subtle); font-size: 12px;">(stored by our processor, not us)</span>
+            </label>
+          </div>
+
+          <div style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
+            <a href="method-choice.html" class="pay-back">← Change method</a>
+            <button class="pay-cta pay-cta--ink" style="margin-left: auto; width: auto; padding-left: 32px; padding-right: 32px;" onclick="show3ds()">
+              Pay RWF 15,000 <span class="arr">→</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ===== STAGE 2: 3DS ===== -->
+        <section id="stage-3ds" style="display: none;">
+          <header class="pay-head" style="text-align: center;">
+            <span class="pay-head__num">Card · step 2 of 2 · verification</span>
+            <h1>Confirm with your <em>bank</em>.</h1>
+          </header>
+
+          <div class="tds-frame">
+            <div class="tds-bank">
+              <span class="tds-bank__name">Bank of Kigali</span>
+              <span class="tds-bank__secure">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                3-D Secure
+              </span>
+            </div>
+            <div class="tds-body">
+              <p>To approve <span class="amt">RWF 15,000</span> to <strong>ProxiServe Ltd</strong>, enter the one-time code we sent to your registered number ending <strong>•••456</strong>.</p>
+
+              <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 20px;">
+                <input class="pfield__input pfield__input--mono" style="text-align:center; padding: 12px 0; font-size: 22px;" maxlength="1" inputmode="numeric" aria-label="Digit 1" />
+                <input class="pfield__input pfield__input--mono" style="text-align:center; padding: 12px 0; font-size: 22px;" maxlength="1" inputmode="numeric" aria-label="Digit 2" />
+                <input class="pfield__input pfield__input--mono" style="text-align:center; padding: 12px 0; font-size: 22px;" maxlength="1" inputmode="numeric" aria-label="Digit 3" />
+                <input class="pfield__input pfield__input--mono" style="text-align:center; padding: 12px 0; font-size: 22px;" maxlength="1" inputmode="numeric" aria-label="Digit 4" />
+                <input class="pfield__input pfield__input--mono" style="text-align:center; padding: 12px 0; font-size: 22px;" maxlength="1" inputmode="numeric" aria-label="Digit 5" />
+                <input class="pfield__input pfield__input--mono" style="text-align:center; padding: 12px 0; font-size: 22px;" maxlength="1" inputmode="numeric" aria-label="Digit 6" />
+              </div>
+
+              <button class="pay-cta pay-cta--ink" onclick="window.location.href='receipt.html'">Confirm payment</button>
+              <p style="text-align: center; margin: 16px 0 0; font-size: 12.5px; color: var(--ink-muted);">
+                <a href="#" style="color: var(--brand-ink); text-decoration: underline;">Resend code</a> · This window is secured by your bank, not ProxiServe.
+              </p>
+            </div>
+          </div>
+
+          <p style="text-align: center; margin-top: 24px;">
+            <a href="method-choice.html" class="pay-back" style="justify-content: center;">← Cancel and choose another method</a>
+          </p>
+        </section>
+
+      </div>
+
+      <!-- Summary -->
+      <aside class="pay-summary" aria-label="Payment summary">
+        <div class="strip"></div>
+        <span class="pay-summary__cat">Identity &amp; civil</span>
+        <h3>Passport <em>renewal</em></h3>
+        <div class="pay-summary__code">PRX-2026-00483 · Aline M.</div>
+        <div class="fee-line"><span class="l">Service fee</span><span class="v">RWF 15,000</span></div>
+        <div class="fee-line"><span class="l">Via</span><span class="v">Card</span></div>
+        <div class="fee-line total"><span class="l">Pay now</span><span class="v">RWF <em>15,000</em></span></div>
+        <p class="pay-summary__note">Charged in RWF. Your bank may apply its own currency conversion if your card is foreign.</p>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<script>
+  // card number formatting + brand detect
+  const num = document.getElementById('cc-num');
+  const cvBrand = document.getElementById('cv-brand');
+  const cvNum = document.getElementById('cv-num');
+  function fmtCard() {
+    let v = num.value.replace(/\D/g, '').slice(0, 16);
+    num.value = v.replace(/(.{4})/g, '$1 ').trim();
+    cvNum.textContent = (v.padEnd(16, '•').replace(/(.{4})/g, '$1 ').trim());
+    if (v.startsWith('4')) cvBrand.textContent = 'VISA';
+    else if (/^5[1-5]/.test(v) || /^2[2-7]/.test(v)) cvBrand.textContent = 'Mastercard';
+    else cvBrand.textContent = '';
+  }
+  num.addEventListener('input', fmtCard);
+
+  const exp = document.getElementById('cc-exp');
+  const cvExp = document.getElementById('cv-exp');
+  exp.addEventListener('input', () => {
+    let v = exp.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length >= 3) v = v.slice(0,2) + ' / ' + v.slice(2);
+    exp.value = v;
+    cvExp.textContent = v || 'MM / YY';
+  });
+
+  const name = document.getElementById('cc-name');
+  const cvName = document.getElementById('cv-name');
+  name.addEventListener('input', () => { cvName.textContent = (name.value || 'CARDHOLDER').toUpperCase(); });
+
+  function show3ds() {
+    document.getElementById('stage-card').style.display = 'none';
+    document.getElementById('stage-3ds').style.display = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>

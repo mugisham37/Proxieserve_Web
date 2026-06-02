@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 7 — States gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="payments.css" />
+<style>
+  body { background: var(--cream-2); }
+  .page-head { padding: 48px 0 32px; border-bottom: 1px solid var(--rule); background: var(--cream); }
+  .page-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .page-head h1 { margin: 8px 0 12px; }
+  .page-head p { color: var(--ink-muted); margin: 0; max-width: 720px; }
+  .gallery { padding: 56px 0 120px; display: grid; grid-template-columns: 1fr; gap: 56px; }
+  .tile { background: var(--cream); border: 1px solid var(--rule); border-radius: var(--r-lg); overflow: hidden; scroll-margin-top: 24px; }
+  .tile__head { padding: 18px 24px; display: flex; gap: 16px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--rule); background: var(--paper); flex-wrap: wrap; }
+  .tile__head h2 { margin: 0; font-size: 20px; font-family: var(--serif); font-weight: 500; }
+  .tile__head h2 em { font-style: italic; font-weight: 400; }
+  .tile__head .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .tile__head .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-family: var(--mono); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: var(--cream-2); color: var(--ink-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .tag--brand { background: var(--brand-soft); color: var(--brand-ink); }
+  .tag--warn  { background: var(--warn-soft); color: var(--warn); }
+  .tag--danger{ background: var(--danger-soft); color: var(--danger); }
+  .tag--ok    { background: var(--ok-soft); color: var(--ok); }
+  .tag--info  { background: var(--info-soft); color: var(--info); }
+  .tile__body { padding: 32px; display: flex; justify-content: center; }
+  .tile__notes { padding: 16px 24px; background: var(--cream-2); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
+  .tile__notes strong { color: var(--ink); font-weight: 600; }
+  .demo-wrap { width: 100%; max-width: 520px; }
+
+  .result-hero { text-align: center; padding: 16px 0; }
+  .result-hero .ic { width: 72px; height: 72px; margin: 0 auto 20px; border-radius: 999px; display: flex; align-items: center; justify-content: center; }
+  .result-hero .ic svg { width: 36px; height: 36px; }
+  .result-hero h3 { font-family: var(--serif); font-weight: 400; font-size: 30px; margin: 0 0 8px; }
+  .result-hero h3 em { font-style: italic; }
+  .result-hero p { font-size: 14.5px; color: var(--ink-muted); margin: 0 auto 20px; max-width: 400px; line-height: 1.55; }
+  .ic--ok { background: var(--ok-soft); color: var(--ok); }
+  .ic--danger { background: var(--danger-soft); color: var(--danger); }
+  .ic--warn { background: var(--warn-soft); color: var(--warn); }
+  .ic--info { background: var(--info-soft); color: var(--info); }
+  .result-hero .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="container">
+    <a href="index.html" class="lnk-arrow" style="font-size:13px; margin-bottom: 16px; display: inline-flex;"><span aria-hidden="true">←</span> Back to Flow 7 hub</a>
+    <div class="meta">FLOW 07 / STATES GALLERY · 11 STATES</div>
+    <h1 class="t-h1">Payments — <em>edge cases</em>.</h1>
+    <p>Money is where trust is won or lost. Every failure path here is designed to never leave the user wondering whether they were charged — and to make recovery one tap away.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="gallery">
+
+    <!-- 01 timeout -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">01 / Mobile money — prompt timed out</span><h2>"The prompt <em>expired</em>"</h2></div>
+        <div class="tags"><span class="tag tag--warn">Timeout</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="result-hero">
+            <div class="ic ic--warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+            <h3>The prompt <em>expired</em>.</h3>
+            <p>We didn't get an approval within 2 minutes. No money has left your account. Want to try again?</p>
+            <div class="row">
+              <button class="pill pill--solid">Send a new prompt <span class="arr">→</span></button>
+              <a href="method-choice.html" class="pill">Use card instead</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>No ambiguity.</strong> We always state "no money has left your account" when a charge never completed. The server treats the transaction as <span class="mono">EXPIRED</span> and any later approval of the stale prompt is rejected with a refund-safe idempotency guard.
+      </div>
+    </article>
+
+    <!-- 02 declined -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">02 / Declined — insufficient funds</span><h2>"Payment <em>didn't go through</em>"</h2></div>
+        <div class="tags"><span class="tag tag--danger">Declined</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="result-hero">
+            <div class="ic ic--danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+            <h3>Payment <em>declined</em>.</h3>
+            <p>Your provider declined the charge — most often that's insufficient balance. Nothing was deducted. Top up and try again, or use another method.</p>
+            <div class="row">
+              <button class="pill pill--solid">Try again <span class="arr">→</span></button>
+              <a href="method-choice.html" class="pill">Choose another method</a>
+            </div>
+          </div>
+          <div class="pay-banner pay-banner--info" style="margin-top: 8px;">
+            <strong>Why declined?</strong> We show the provider's plain-language reason where given (insufficient funds, limit reached, blocked card). We never show raw gateway codes.
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Decline reasons mapped.</strong> Gateway codes are translated to one of six human reasons. The retry preserves everything. After 3 declines we suggest contacting the bank or switching methods.
+      </div>
+    </article>
+
+    <!-- 03 pay agent directly -->
+    <article class="tile" id="pay-agent">
+      <header class="tile__head">
+        <div><span class="num">03 / Pay agent directly — off-platform</span><h2>"Arrange with <em>Aline</em>"</h2></div>
+        <div class="tags"><span class="tag tag--brand">Off-platform</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="pay-card" style="background: var(--paper);">
+            <div class="pay-card__head"><h2>Pay <em>Aline directly</em></h2><span class="meta">RWF 15,000</span></div>
+            <div style="display: flex; gap: 14px; align-items: center; padding: 14px; background: var(--cream-2); border-radius: var(--r-md); margin-bottom: 16px;">
+              <span style="width: 44px; height: 44px; border-radius: 999px; background: var(--brand); color: white; display: inline-flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 500; font-size: 16px;">AM</span>
+              <div>
+                <div style="font-family: var(--serif); font-weight: 500; font-size: 17px;">Aline Mukamana</div>
+                <div style="font-size: 12.5px; color: var(--ink-muted);">Your agent · MTN MoMo · 78 8 *** 201</div>
+              </div>
+            </div>
+            <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.7; color: var(--ink-2);">
+              <li>Send <strong style="font-family: var(--mono);">RWF 15,000</strong> to Aline's MoMo, or pay cash in person.</li>
+              <li>Aline marks your payment received on her side.</li>
+              <li>You get a receipt here once she confirms — <strong>usually within an hour</strong>.</li>
+            </ol>
+            <div class="pay-banner pay-banner--warn" style="margin: 16px 0 0;">
+              <strong>Slower &amp; less protected.</strong> Off-platform payments aren't covered by our refund guarantee until Aline confirms. We recommend MoMo or card for instant, protected payment.
+            </div>
+            <button class="pay-cta pay-cta--ink" style="margin-top: 16px;">I've paid Aline — notify her <span class="arr">→</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Why offer it.</strong> Many Rwandans pay agents in cash, especially rural clients. We support it but make the trade-off explicit. The payment stays <span class="mono">PENDING_AGENT_CONFIRM</span> until the agent marks it received in F8 — generating the same receipt object.
+      </div>
+    </article>
+
+    <!-- 04 awaiting agent confirm -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">04 / Awaiting agent confirmation</span><h2>"Waiting for Aline to <em>confirm</em>"</h2></div>
+        <div class="tags"><span class="tag tag--info">Pending</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="result-hero">
+            <div class="ic ic--info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+            <h3>Waiting for <em>confirmation</em>.</h3>
+            <p>You told us you paid Aline RWF 15,000. We've let her know — she'll confirm receipt and your receipt will appear here. Usually within an hour.</p>
+            <div class="row">
+              <a href="../Flow 6 — Client Dashboard/application-detail.html" class="pill pill--solid">Back to application</a>
+              <button class="pill">Message Aline</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Visible limbo, not silent.</strong> The application detail shows a "Payment: awaiting confirmation" chip. If the agent doesn't confirm within 24h, support is auto-notified to follow up.
+      </div>
+    </article>
+
+    <!-- 05 partial / split -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">05 / Already paid / nothing due</span><h2>"You're <em>all paid up</em>"</h2></div>
+        <div class="tags"><span class="tag tag--ok">Nothing due</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="result-hero">
+            <div class="ic ic--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></div>
+            <h3>You're <em>all paid up</em>.</h3>
+            <p>This application's service fee was paid on 23 May. There's nothing more to pay us right now.</p>
+            <div class="row">
+              <a href="receipt.html" class="pill pill--solid">View receipt</a>
+              <a href="../Flow 6 — Client Dashboard/application-detail.html" class="pill">Back to application</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Idempotent landing.</strong> Hitting the pay URL for an already-paid application never charges twice — it routes here. Prevents double-payment from a stale bookmark or a re-shared link.
+      </div>
+    </article>
+
+    <!-- 06 dispute / request refund -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">06 / Dispute or request a refund</span><h2>"Something <em>wrong</em> with this charge?"</h2></div>
+        <div class="tags"><span class="tag tag--warn">Dispute</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="pay-card" style="background: var(--paper);">
+            <div class="pay-card__head"><h2>Report a <em>problem</em></h2></div>
+            <p style="font-size: 14px; color: var(--ink-2); margin: 0 0 16px; line-height: 1.6;">Tell us what's wrong with the <strong style="font-family: var(--mono);">RWF 15,000</strong> charge on 23 May. We respond within one working day.</p>
+            <label class="pfield">
+              <span class="pfield__label">What happened?</span>
+              <select class="pfield__input">
+                <option>I was charged but my application didn't progress</option>
+                <option>I was charged twice</option>
+                <option>The amount is wrong</option>
+                <option>I didn't authorise this payment</option>
+                <option>My application was rejected — I want a refund</option>
+                <option>Something else</option>
+              </select>
+            </label>
+            <label class="pfield">
+              <span class="pfield__label">Details</span>
+              <textarea class="pfield__input" rows="3" placeholder="Tell us more so we can help faster…"></textarea>
+            </label>
+            <button class="pay-cta pay-cta--ink">Submit dispute <span class="arr">→</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Refund policy in plain words.</strong> Service fee fully refundable if the failure was ours; government fees follow each office's rules. The dispute creates a ticket in admin oversight (F9) with the full transaction trail attached.
+      </div>
+    </article>
+
+    <!-- 07 refund issued -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">07 / Refund issued</span><h2>"Your refund is <em>on its way</em>"</h2></div>
+        <div class="tags"><span class="tag tag--ok">Refunded</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="result-hero">
+            <div class="ic ic--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></div>
+            <h3>Refund <em>issued</em>.</h3>
+            <p>We've refunded <strong style="color:var(--ink);">RWF 15,000</strong> to your MTN MoMo. Mobile money refunds usually arrive within 2 hours; cards take 5–10 business days.</p>
+            <div class="row">
+              <a href="#" class="pill pill--solid">View refund receipt</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Channel-aware timing.</strong> We set expectations by method — MoMo is near-instant, cards are slow. The refund generates its own receipt object (negative amount) linked to the original transaction.
+      </div>
+    </article>
+
+    <!-- 08 network drop mid-payment -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">08 / Connection lost mid-payment</span><h2>"We're <em>checking</em> what happened"</h2></div>
+        <div class="tags"><span class="tag tag--warn">Network</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="result-hero">
+            <div class="ic ic--info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.8a15 15 0 0 1 20 0"/><path d="M12 20h.01"/></svg></div>
+            <h3>Checking your <em>payment</em>.</h3>
+            <p>Your connection dropped while we were confirming. <strong style="color:var(--ink);">Don't pay again yet</strong> — we're verifying with your provider. This usually resolves in under a minute.</p>
+            <p style="font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.06em;"><span style="display:inline-block;width:8px;height:8px;border-radius:999px;background:var(--warn);margin-right:8px;"></span>RECONCILING · TXN MP260523.1432</p>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Reconciliation, not re-charge.</strong> If the client returns mid-flight, we poll the provider with the existing transaction reference rather than starting a new charge. The "don't pay again" message prevents panic double-payment — the single most damaging payment bug.
+      </div>
+    </article>
+
+    <!-- 09 3DS failed -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">09 / 3-D Secure failed / abandoned</span><h2>"Bank verification <em>didn't complete</em>"</h2></div>
+        <div class="tags"><span class="tag tag--danger">3DS fail</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="result-hero">
+            <div class="ic ic--danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><path d="M12 15v2"/></svg></div>
+            <h3>Verification <em>incomplete</em>.</h3>
+            <p>Your bank couldn't confirm the payment — the code may have been wrong or the window closed. No charge was made. Try again or use Mobile Money.</p>
+            <div class="row">
+              <button class="pill pill--solid">Try card again</button>
+              <a href="mobile-money.html" class="pill">Use Mobile Money</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>3DS is the bank's domain.</strong> We can't see why it failed (by design). We offer retry + an alternative method, and reassure no charge was made — the authorisation only completes after successful 3DS.
+      </div>
+    </article>
+
+    <!-- 10 fee changed -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">10 / Fee changed since you opened this</span><h2>"The fee was <em>updated</em>"</h2></div>
+        <div class="tags"><span class="tag tag--info">Stale</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="pay-card" style="background: var(--paper);">
+            <div class="pay-banner pay-banner--info" style="margin: 0 0 16px;">
+              <strong>Heads up — the fee changed.</strong> Your agent updated this to <strong>RWF 12,000</strong> (was RWF 15,000) since you opened this page. We've refreshed the amount below.
+            </div>
+            <div class="fee-line" style="border-color: var(--rule); color: var(--ink); border-bottom: 1px solid var(--rule); padding: 9px 0; display:flex; justify-content: space-between;">
+              <span style="color: var(--ink-muted); text-decoration: line-through;">Previous fee</span>
+              <span style="font-family: var(--mono); color: var(--ink-muted); text-decoration: line-through;">RWF 15,000</span>
+            </div>
+            <div class="fee-line total" style="border-top: 1px solid var(--rule-strong); margin-top: 8px; padding-top: 16px; font-family: var(--serif); font-size: 22px; display:flex; justify-content: space-between; align-items: baseline;">
+              <span>Pay now</span><span style="font-family: var(--mono);">RWF <em style="font-style:italic;">12,000</em></span>
+            </div>
+            <button class="pay-cta" style="margin-top: 16px;">Pay RWF 12,000 <span class="arr">→</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Never charge a stale amount.</strong> The fee is re-validated server-side at the moment of charge. If it changed, we block the charge, show the diff, and require fresh confirmation — the client always knowingly approves the exact amount.
+      </div>
+    </article>
+
+    <!-- 11 reduced motion / loading -->
+    <article class="tile">
+      <header class="tile__head">
+        <div><span class="num">11 / Processing — server confirming</span><h2>"Just a <em>moment</em>"</h2></div>
+        <div class="tags"><span class="tag tag--info">Processing</span><span class="tag">A11y</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="demo-wrap">
+          <div class="result-hero">
+            <div class="ic ic--info" style="position: relative;">
+              <span style="width: 28px; height: 28px; border: 3px solid var(--info); border-top-color: transparent; border-radius: 999px; display: inline-block; animation: spin 800ms linear infinite;"></span>
+            </div>
+            <h3>Confirming your <em>payment</em>…</h3>
+            <p>This usually takes a few seconds. Please don't close this page or press back.</p>
+            <p style="font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); letter-spacing: 0.06em;" role="status" aria-live="polite">PROCESSING · DO NOT REFRESH</p>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Locked but informative.</strong> Buttons disable, <span class="mono">beforeunload</span> warns on close, and a <span class="mono">role="status"</span> live region announces progress to screen readers. Under reduced-motion the spinner becomes a static "Processing…" with an animated text ellipsis instead.
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<footer style="background:var(--cream); padding: 40px 0; border-top: 1px solid var(--rule);">
+  <div class="container" style="display:flex; justify-content:space-between; font-family: var(--mono); font-size:11px; color:var(--ink-muted); letter-spacing:0.06em;">
+    <span>PROXISERVE / FLOW 07 / STATES / v0.1</span>
+    <a href="index.html" style="color: inherit; text-decoration: underline;">Back to Flow 7 hub →</a>
+  </div>
+</footer>
+
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+</body>
+</html>

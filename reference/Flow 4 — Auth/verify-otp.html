@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Verify code · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+
+<header class="auth-topbar">
+  <div class="container">
+    <div class="auth-topbar__inner">
+      <a href="../Flow 1 — Marketing/landing.html" class="auth-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <span class="t-body-sm" style="color: var(--ink-muted);">Almost there.</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="auth-shell auth-shell--client" data-screen-label="F4 OTP">
+    <aside class="auth-rail">
+      <div>
+        <span class="eyebrow" style="margin-bottom: 32px; display: block;">A six-digit code</span>
+        <p class="auth-rail__quote" style="font-size: clamp(22px, 2.4vw, 28px);">
+          We've sent a six-digit code by SMS to confirm it's really <em>you</em>.
+        </p>
+        <ul style="margin: 32px 0 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--ink-muted); line-height: 1.7;">
+          <li>· It can take up to 30 seconds.</li>
+          <li>· Codes expire after 5 minutes.</li>
+          <li>· If you don't receive it, request a new code below.</li>
+        </ul>
+      </div>
+      <div class="auth-rail__seal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+        <span>The same code is the only thing that proves it's you. <strong>Don't share it.</strong></span>
+      </div>
+    </aside>
+
+    <div class="auth-main">
+      <div class="auth-card">
+        <h1>Enter the <em>code</em>.</h1>
+        <p class="sub">Sent by SMS to <strong style="font-family: var(--mono); color: var(--ink); font-weight: 500;">+250 78 8 *** 456</strong>. <a href="#" style="color: var(--brand-ink); font-size: 14px;">Wrong number?</a></p>
+
+        <form onsubmit="event.preventDefault(); window.location.href='../Flow 6 — Client Dashboard/index.html';">
+
+          <div class="otp-input" role="group" aria-label="Six digit verification code">
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="one-time-code" aria-label="Digit 1" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 2" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 3" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 4" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 5" />
+            <input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" aria-label="Digit 6" />
+          </div>
+
+          <div class="otp-meta">
+            <span>Code expires in <strong style="color: var(--ink);" id="expire-timer">04:58</strong></span>
+            <button type="button" id="resend" disabled>Resend in <span id="resend-timer">29s</span></button>
+          </div>
+
+          <button type="submit" class="auth-cta" style="margin-top: 32px;">
+            Verify and continue
+            <span style="font-style: normal;">→</span>
+          </button>
+
+        </form>
+
+        <div class="auth-footer">
+          <a href="client-login.html" style="color: var(--ink-muted);">← Use a different sign-in method</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // OTP autofocus + auto-advance + paste
+  const inputs = document.querySelectorAll('.otp-input input');
+  inputs.forEach((input, i) => {
+    input.addEventListener('input', e => {
+      const v = input.value.replace(/\D/g, '');
+      input.value = v;
+      if (v) {
+        input.classList.add('filled');
+        if (i < inputs.length - 1) inputs[i + 1].focus();
+      } else {
+        input.classList.remove('filled');
+      }
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !input.value && i > 0) inputs[i - 1].focus();
+    });
+    input.addEventListener('paste', e => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+      [...text].forEach((d, idx) => { if (inputs[idx]) { inputs[idx].value = d; inputs[idx].classList.add('filled'); } });
+      if (inputs[Math.min(text.length, 5)]) inputs[Math.min(text.length, 5)].focus();
+    });
+  });
+  inputs[0].focus();
+
+  // Countdown
+  let resendSec = 29;
+  const resendBtn = document.getElementById('resend');
+  const resendTimer = document.getElementById('resend-timer');
+  const t = setInterval(() => {
+    resendSec--;
+    if (resendSec <= 0) {
+      clearInterval(t);
+      resendBtn.disabled = false;
+      resendBtn.textContent = 'Resend code';
+    } else {
+      resendTimer.textContent = resendSec + 's';
+    }
+  }, 1000);
+
+  // Expire timer
+  let expireSec = 298;
+  const expEl = document.getElementById('expire-timer');
+  setInterval(() => {
+    expireSec--;
+    if (expireSec < 0) return;
+    const m = String(Math.floor(expireSec/60)).padStart(2,'0');
+    const s = String(expireSec%60).padStart(2,'0');
+    expEl.textContent = m + ':' + s;
+  }, 1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Oversight &amp; audit · Admin · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+<div class="ag">
+
+  <nav class="ag-nav" aria-label="Admin navigation">
+    <div class="ag-nav__brand"><span class="ico admin"></span> Proxi<em>Serve</em><span class="ag-nav__role admin">Admin</span></div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Overview</div>
+      <a href="analytics.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Analytics</a>
+      <a href="oversight.html" class="ag-nav__link is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversight <span class="ag-nav__count">2</span></a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Configure</div>
+      <a href="services-schema.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Services</a>
+      <a href="pricing-agents.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5a2.5 2.5 0 0 0-5 0c0 1.5 1 2 2.5 2.5s2.5 1 2.5 2.5a2.5 2.5 0 0 1-5 0M12 6v1.5M12 16.5V18"/></svg> Pricing</a>
+      <a href="pricing-agents.html#agents" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Agents</a>
+      <a href="broadcasts.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/></svg> Broadcasts</a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Govern</div>
+      <a href="#audit" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Audit log</a>
+      <a href="broadcasts.html#settings" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Settings</a>
+    </div>
+    <div class="ag-nav__spacer"></div>
+    <div class="ag-nav__user"><span class="av" style="background: var(--brand);">EH</span><div><div class="nm">Eric H.</div><div class="mt">admin · owner</div></div></div>
+  </nav>
+
+  <div class="ag-main">
+    <header class="ag-top">
+      <span class="ag-top__mobile-brand"><span class="ico" style="background:var(--brand);"></span>Admin</span>
+      <label class="ag-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" placeholder="Search all cases…" aria-label="Search" /><kbd>/</kbd></label>
+      <div class="ag-top__actions"><span class="env-badge" style="display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:var(--ok-soft);color:var(--ok);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.06em;"><span style="width:7px;height:7px;border-radius:999px;background:currentColor;"></span>PRODUCTION</span></div>
+    </header>
+
+    <div class="ag-content">
+
+      <div class="ag-h">
+        <div>
+          <h1 class="ag-h__t">Oversight</h1>
+          <div class="ag-h__meta">ALL CASES ACROSS ALL AGENTS · VIEWING HERE IS AUDIT-LOGGED</div>
+        </div>
+        <div class="ag-h__actions"><button class="btn-sm btn-sm--ghost">Export</button></div>
+      </div>
+
+      <!-- attention banners -->
+      <div style="background: var(--ink); color: var(--paper); border-left: 3px solid var(--brand); padding: 12px 16px; border-radius: var(--r-md); font-size: 13px; line-height:1.5; margin-bottom: 16px;">
+        <strong style="color:var(--paper);">Oversight is read-first.</strong> You can view any case, but acting as an agent leaves a trail. Reassign and intervene are explicit, logged actions.
+      </div>
+
+      <div class="ag-tabs" style="margin-bottom: 0;">
+        <button class="ag-tab is-active">Needs attention <span class="ct">3</span></button>
+        <button class="ag-tab">SLA breaches <span class="ct">2</span></button>
+        <button class="ag-tab">Disputes <span class="ct">1</span></button>
+        <button class="ag-tab">All cases <span class="ct">487</span></button>
+      </div>
+
+      <div class="dtable-wrap" style="margin-top: 16px;">
+        <table class="dtable">
+          <thead><tr><th>Code</th><th>Service</th><th>Agent</th><th>Client</th><th>Status</th><th>Issue</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="mono">PRX-2026-00483</td><td><span class="nm" style="font-size:14px;">Passport renewal</span></td><td><span class="av-mini" style="background:var(--brand);width:22px;height:22px;font-size:10px;">AM</span></td><td>Aline K.</td><td><span class="status s-warn" style="padding:4px 12px;"><span class="dot"></span>Action req'd</span></td><td><span class="kind kind--danger">SLA · over 1d</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">View →</button></td></tr>
+            <tr><td class="mono">PRX-2026-00477</td><td><span class="nm" style="font-size:14px;">Business license</span></td><td><span class="av-mini" style="background:var(--brand);width:22px;height:22px;font-size:10px;">AM</span></td><td>Jean N.</td><td><span class="status s-warn" style="padding:4px 12px;"><span class="dot"></span>Awaiting</span></td><td><span class="kind kind--danger">SLA · over 18h</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">View →</button></td></tr>
+            <tr><td class="mono">PRX-2026-00390</td><td><span class="nm" style="font-size:14px;">Tax registration</span></td><td><span class="av-mini" style="background:var(--b-blue);width:22px;height:22px;font-size:10px;">PM</span></td><td>Marie K.</td><td><span class="status s-danger" style="padding:4px 12px;"><span class="dot"></span>Disputed</span></td><td><span class="kind kind--money">Refund requested</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">View →</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ===== AUDIT LOG ===== -->
+      <div class="adm-sec" id="audit"><h2>Audit <em>log</em></h2><div class="right"><button class="ag-chip is-active">All</button><button class="ag-chip">Privileged</button><button class="ag-chip">Money</button><button class="ag-chip">Config</button></div></div>
+
+      <div class="pay-banner" style="background: var(--cream-2); color: var(--ink-2); border-left: 3px solid var(--ink-subtle); padding: 12px 16px; border-radius: var(--r-md); font-size: 13px; line-height:1.5; margin-bottom: 16px;">
+        Append-only. Entries can't be edited or deleted — by anyone, including the owner. Retained 7 years.
+      </div>
+
+      <div class="dtable-wrap" style="padding: 4px 18px;">
+        <div class="audit">
+          <div class="audit-row"><span class="ts">23 May 14:32</span><span class="actor admin">EH</span><span class="desc"><strong>Eric H.</strong> viewed case <span class="mono">PRX-2026-00483</span> (Aline M.'s case)</span><span class="kind kind--priv">Privileged view</span></div>
+          <div class="audit-row"><span class="ts">23 May 14:28</span><span class="actor system">SY</span><span class="desc"><strong>System</strong> flagged <span class="mono">PRX-2026-00477</span> — SLA breached</span><span class="kind kind--danger">SLA</span></div>
+          <div class="audit-row"><span class="ts">23 May 11:05</span><span class="actor admin">EH</span><span class="desc"><strong>Eric H.</strong> scheduled price change — Tax registration → RWF 12,000 eff. 1 Jun</span><span class="kind kind--config">Config</span></div>
+          <div class="audit-row"><span class="ts">23 May 09:40</span><span class="actor agent">AM</span><span class="desc"><strong>Aline M.</strong> confirmed payment <span class="mono">RWF 15,000</span> on <span class="mono">PRX-2026-00483</span></span><span class="kind kind--money">Payment</span></div>
+          <div class="audit-row"><span class="ts">22 May 18:40</span><span class="actor agent">CN</span><span class="desc"><strong>Claudine N.</strong> published service schema — Passport renewal v4</span><span class="kind kind--config">Config</span></div>
+          <div class="audit-row"><span class="ts">22 May 16:12</span><span class="actor admin">EH</span><span class="desc"><strong>Eric H.</strong> raised Aline M.'s daily cap 8 → 8 (no change, reviewed)</span><span class="kind kind--priv">Privileged</span></div>
+          <div class="audit-row"><span class="ts">22 May 14:03</span><span class="actor agent">PM</span><span class="desc"><strong>Patrick M.</strong> issued refund <span class="mono">RWF 12,000</span> on <span class="mono">PRX-2026-00390</span></span><span class="kind kind--money">Refund</span></div>
+          <div class="audit-row"><span class="ts">22 May 10:21</span><span class="actor admin">EH</span><span class="desc"><strong>Eric H.</strong> archived service — Visa assistance</span><span class="kind kind--config">Config</span></div>
+          <div class="audit-row"><span class="ts">21 May 15:47</span><span class="actor system">SY</span><span class="desc"><strong>System</strong> auto-assigned <span class="mono">PRX-2026-00471</span> → Marie U.</span><span class="kind kind--config">Assignment</span></div>
+        </div>
+      </div>
+
+      <div style="text-align: center; padding: 20px;"><button class="btn-sm btn-sm--ghost">Load older entries</button></div>
+
+    </div>
+
+    <div class="kbd-hints"><span><kbd>/</kbd> search</span><span><kbd>F</kbd> filter</span><span><kbd>?</kbd> shortcuts</span></div>
+  </div>
+
+  <nav class="ag-tabbar" aria-label="Admin tabs">
+    <a href="analytics.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Stats</a>
+    <a href="oversight.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversee</a>
+    <a href="services-schema.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> Services</a>
+    <a href="broadcasts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/></svg> Send</a>
+  </nav>
+
+</div>
+</body>
+</html>

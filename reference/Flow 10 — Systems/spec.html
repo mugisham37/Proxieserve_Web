@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 10 — Engineering spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--paper); }
+  .doc { max-width: 920px; margin: 0 auto; padding: 64px 32px 120px; }
+  @media (max-width: 720px) { .doc { padding: 32px 20px 80px; } }
+  .doc-head { border-bottom: 1px solid var(--rule-strong); padding-bottom: 24px; margin-bottom: 48px; }
+  .doc-head .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .doc-head h1 { margin: 12px 0; font-family: var(--serif); font-weight: 400; font-size: clamp(36px,5vw,56px); letter-spacing: -0.02em; }
+  .doc-head h1 em { font-style: italic; }
+  .doc-head p { margin: 0; color: var(--ink-muted); }
+  .lnk-arrow { display:inline-flex; align-items:center; gap:6px; font-family: var(--sans); font-size: 13px; color: var(--ink-muted); text-decoration: none; }
+  section.spec { padding: 48px 0; border-bottom: 1px solid var(--rule); }
+  section.spec:last-of-type { border-bottom: none; }
+  .spec-head { display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 24px; align-items: baseline; }
+  .spec-num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .spec-title { font-family: var(--serif); font-weight: 500; font-size: 32px; margin: 0; line-height: 1.1; }
+  .spec-title em { font-style: italic; font-weight: 400; }
+  .spec-body { padding-left: 104px; }
+  @media (max-width: 720px) { .spec-head { grid-template-columns: 1fr; } .spec-body { padding-left: 0; } }
+  .spec-body p { margin: 0 0 14px; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
+  pre.ascii { font-family: var(--mono); font-size: 12px; line-height: 1.45; background: var(--cream-2); padding: 20px 24px; border-radius: var(--r-md); overflow-x: auto; border: 1px solid var(--rule); color: var(--ink-2); }
+  table.t { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 16px 0; }
+  .t th, .t td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  .t th { background: var(--cream-2); border-bottom: 1px solid var(--rule-strong); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); }
+  .t tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
+  .t td.mono { font-family: var(--mono); font-size: 12px; }
+  ul.l { padding-left: 20px; margin: 0 0 16px; }
+  ul.l li { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin-bottom: 6px; }
+  .check { display: grid; grid-template-columns: 24px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--rule-soft); font-size: 14px; }
+  .check.pass::before { content: "✓"; color: var(--ok); font-weight: 600; }
+  .score { display: inline-flex; align-items: baseline; gap: 4px; padding: 8px 16px; background: var(--ok-soft); color: var(--ok); border-radius: 999px; font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; }
+  .score .big { font-family: var(--serif); font-style: italic; font-size: 24px; }
+  .callout { background: var(--brand-soft); color: var(--brand-ink); border-left: 3px solid var(--brand); padding: 14px 18px; font-family: var(--serif); font-style: italic; font-size: 15px; margin: 16px 0; }
+  .callout strong { font-style: normal; font-weight: 600; }
+  code, .mono { font-family: var(--mono); font-size: 13px; }
+  .comp-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+  .comp-list .chip { background: var(--cream-2); color: var(--ink-2); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); font-family: var(--mono); font-size: 11px; }
+  .comp-list .chip.new { background: var(--brand-soft); color: var(--brand-ink); border-color: transparent; }
+  .toc { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; padding: 20px 0; border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); margin-bottom: 32px; }
+  .toc a { display: flex; gap: 16px; align-items: baseline; padding: 8px 0; font-size: 14px; color: var(--ink-2); border-bottom: 1px solid var(--rule-soft); text-decoration: none; }
+  .toc a .num { font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); }
+  @media (max-width: 600px) { .toc { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="doc">
+  <div class="doc-head">
+    <a href="index.html" class="lnk-arrow" style="margin-bottom: 16px;"><span aria-hidden="true">←</span> Back to Flow 10 hub</a>
+    <div class="meta">FLOW 10 / CROSS-CUTTING SYSTEMS / ENGINEERING SPEC · v0.1</div>
+    <h1>Flow 10 — <em>Cross-cutting systems</em>.</h1>
+    <p>Not a flow with screens of its own, but the connective tissue every other flow depends on: notifications, errors, installability, consent, i18n, theming, print, transparency, and onboarding.</p>
+  </div>
+
+  <div class="toc">
+    <a href="#s1"><span class="num">01</span> System map</a>
+    <a href="#s2"><span class="num">02</span> Notification engine</a>
+    <a href="#s3"><span class="num">03</span> Error system</a>
+    <a href="#s4"><span class="num">04</span> Artifacts index</a>
+    <a href="#s5"><span class="num">05</span> Components</a>
+    <a href="#s6"><span class="num">06</span> PWA &amp; offline</a>
+    <a href="#s7"><span class="num">07</span> i18n &amp; theming</a>
+    <a href="#s8"><span class="num">08</span> States</a>
+    <a href="#s9"><span class="num">09</span> A11y</a>
+    <a href="#s10"><span class="num">10</span> Hand-off &amp; self-review</a>
+  </div>
+
+  <section class="spec" id="s1">
+    <div class="spec-head"><span class="spec-num">01 /</span><h2 class="spec-title"><em>System</em> map</h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+  Every flow emits EVENTS ──▶ ┌────────────────────────────┐
+  (status change, message,    │  NOTIFICATION ENGINE       │
+   payment, SLA, broadcast)   │  templates · prefs · i18n  │
+                              └──┬───┬───┬───┬───┬─────────┘
+                                 ▼   ▼   ▼   ▼   ▼
+                            WhatsApp SMS push email in-app
+                                 (channel adapters + fallback)
+
+  Every flow can FAIL ──────▶  ERROR SYSTEM (404/500/503/offline/429/session)
+  Every page is WRAPPED in ─▶  PWA SHELL (manifest + service worker + cache)
+  Every surface RESPECTS ───▶  THEME (light/dark) · DIR (ltr/rtl) · PRINT · MOTION
+  Public trust SERVED by ───▶  STATUS PAGE (separate host) · COOKIE CONSENT
+  First run GUIDED by ──────▶  ONBOARDING COACHMARKS (role-aware, once)
+</pre>
+      <p>Flow 10 is horizontal: it doesn't own a user journey, it underpins all nine. The notification engine is the busiest — it's the single path through which F3, F5, F6, F7, F8, and F9 reach a human outside the app.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s2">
+    <div class="spec-head"><span class="spec-num">02 /</span><h2 class="spec-title">Notification <em>engine</em></h2></div>
+    <div class="spec-body">
+      <p>One event → one rendered message per chosen channel. The engine owns templating, localization, preference resolution, fallback, and delivery tracking.</p>
+      <table class="t">
+        <thead><tr><th>Channel</th><th>Role</th><th>Constraint</th><th>Fallback</th></tr></thead>
+        <tbody>
+          <tr><td>WhatsApp</td><td>Primary nudge</td><td>Business templates; 24h session window</td><td>→ SMS</td></tr>
+          <tr><td>SMS</td><td>Universal fallback</td><td>≤ 160 chars, no emoji</td><td>→ in-app only</td></tr>
+          <tr><td>Push</td><td>Installed-PWA nudge</td><td>Permission + quiet hours</td><td>→ WhatsApp</td></tr>
+          <tr><td>Email</td><td>Records &amp; receipts</td><td>HTML + text part</td><td>retry queue</td></tr>
+          <tr><td>In-app</td><td>Canonical log</td><td>Always written</td><td>n/a (source of truth)</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Preference resolution:</strong> per-user × per-event-type × per-channel matrix. "Action required" has a floor (≥ 1 channel always on). Marketing is opt-in only. A global STOP permanently suppresses all non-essential across every channel.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s3">
+    <div class="spec-head"><span class="spec-num">03 /</span><h2 class="spec-title">Error <em>system</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Code</th><th>Page</th><th>Behaviour</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">404</td><td>Not found</td><td>Contextual escape hatches; broken slug logged</td></tr>
+          <tr><td class="mono">500</td><td>Server error</td><td>Reassure data safe; incident ID → on-call; Sentry</td></tr>
+          <tr><td class="mono">503</td><td>Maintenance</td><td>From F9 toggle; ETA + status link; <span class="mono">Retry-After</span></td></tr>
+          <tr><td class="mono">—</td><td>Offline</td><td>Service-worker served; cached views; queue writes</td></tr>
+          <tr><td class="mono">401</td><td>Session expired</td><td>Preserve unsaved work; re-auth restores state</td></tr>
+          <tr><td class="mono">429</td><td>Rate limited</td><td>Countdown to reset from <span class="mono">Retry-After</span></td></tr>
+        </tbody>
+      </table>
+      <p>All six share one structure (serif numeral/icon · plain headline that never blames · one-line cause · ≥ 1 way forward) and the cream-and-ink palette. Staff zones render them in dark. Each announces via <span class="mono">role="alert"</span>.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s4">
+    <div class="spec-head"><span class="spec-num">04 /</span><h2 class="spec-title">Artifacts <em>index</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Artifact</th><th>File</th><th>Covers</th></tr></thead>
+        <tbody>
+          <tr><td>Notification system</td><td class="mono"><a href="notifications.html" class="linked">notifications.html</a></td><td>WhatsApp · SMS · push · email · in-app inbox · preference matrix</td></tr>
+          <tr><td>Error &amp; system pages</td><td class="mono"><a href="error-pages.html" class="linked">error-pages.html</a></td><td>404 · 500 · maintenance · offline · session expired · 429</td></tr>
+          <tr><td>Cross-cutting systems</td><td class="mono"><a href="cross-cutting.html" class="linked">cross-cutting.html</a></td><td>PWA install · cookies · RTL · dark mode · print · status page · onboarding</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><strong>Why these are shown as working artifacts.</strong> A notification spec means little as prose — so each channel is rendered as it actually appears (WhatsApp bubble, lock-screen push, email layout), each error as a real page, each system (RTL, dark, print) as a side-by-side comparison. The rule sits beneath each one.</div>
+    </div>
+  </section>
+
+  <section class="spec" id="s5">
+    <div class="spec-head"><span class="spec-num">05 /</span><h2 class="spec-title">Component <em>inventory</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin-bottom: 8px;">New in Flow 10</h4>
+      <div class="comp-list">
+        <span class="chip new">NotificationEngine</span>
+        <span class="chip new">ChannelAdapter (×5)</span>
+        <span class="chip new">NotificationTemplate</span>
+        <span class="chip new">PreferenceMatrix</span>
+        <span class="chip new">InAppInbox</span>
+        <span class="chip new">NotificationBell</span>
+        <span class="chip new">ErrorPage</span>
+        <span class="chip new">OfflinePage</span>
+        <span class="chip new">MaintenancePage</span>
+        <span class="chip new">InstallPrompt</span>
+        <span class="chip new">CookieConsent</span>
+        <span class="chip new">CookiePreferences</span>
+        <span class="chip new">ThemeProvider (light/dark)</span>
+        <span class="chip new">DirProvider (ltr/rtl)</span>
+        <span class="chip new">PrintStylesheet</span>
+        <span class="chip new">StatusPage</span>
+        <span class="chip new">Coachmark</span>
+        <span class="chip new">ServiceWorker</span>
+      </div>
+      <p>These are the lowest-level shared primitives — every other flow consumes them. The ThemeProvider + DirProvider wrap the entire app; the NotificationBell appears in F6/F8/F9; the ErrorPage catches anywhere.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s6">
+    <div class="spec-head"><span class="spec-num">06 /</span><h2 class="spec-title">PWA &amp; <em>offline</em></h2></div>
+    <div class="spec-body">
+      <ul class="l">
+        <li><strong>Manifest.</strong> Installable on Android + iOS (Add to Home Screen). Standalone display, cream theme-color, maskable icons. Install prompt deferred until after one successful interaction.</li>
+        <li><strong>Service worker.</strong> Cache-first for the app shell + static assets; stale-while-revalidate for the services catalogue; network-only for payments + auth. Offline fallback page for uncached navigations.</li>
+        <li><strong>Background Sync</strong> for queued writes (draft saves F3, messages F6/F8, document uploads). <strong>Web Push (VAPID)</strong> for notifications. <strong>IndexedDB</strong> for offline payloads.</li>
+        <li><strong>Update flow.</strong> New SW version shows a subtle "Update available — refresh" toast rather than reloading under the user.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="spec" id="s7">
+    <div class="spec-head"><span class="spec-num">07 /</span><h2 class="spec-title">i18n &amp; <em>theming</em></h2></div>
+    <div class="spec-body">
+      <ul class="l">
+        <li><strong>Languages.</strong> EN (primary), RW (Kinyarwanda), FR — switchable everywhere, persisted per user, sent through to notification templates. Copy externalized to message catalogs; no hard-coded strings.</li>
+        <li><strong>RTL-ready.</strong> Layout uses CSS logical properties throughout, so <span class="mono">dir="rtl"</span> mirrors the whole UI without a rebuild. Codes, phone numbers, and amounts forced LTR.</li>
+        <li><strong>Theming.</strong> Light (public/client default) + dark (agent/admin default) via <span class="mono">data-theme</span> token swap. Brand + status hues constant across themes. Respects <span class="mono">prefers-color-scheme</span> first visit; per-user override persists.</li>
+        <li><strong>Print.</strong> <span class="mono">@media print</span> sheet on every record surface (receipts, outcomes, summaries): chrome stripped, black-on-white, wordmark + legal footer, page-break-safe rows.</li>
+        <li><strong>Motion.</strong> Global <span class="mono">prefers-reduced-motion</span> rule in tokens.css disables all transitions — inherited by all ten flows.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="spec" id="s8">
+    <div class="spec-head"><span class="spec-num">08 /</span><h2 class="spec-title">All <em>states</em></h2></div>
+    <div class="spec-body">
+      <p>Flow 10 <em>is</em> the states layer for the whole product. The notification channels, the six error pages, and the seven cross-cutting systems are themselves the edge-case coverage every other flow relies on. Documented across <a href="notifications.html" class="linked">notifications</a>, <a href="error-pages.html" class="linked">error-pages</a>, and <a href="cross-cutting.html" class="linked">cross-cutting</a>.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s9">
+    <div class="spec-head"><span class="spec-num">09 /</span><h2 class="spec-title">Accessibility <em>checklist</em></h2></div>
+    <div class="spec-body">
+      <div class="check pass">In-app inbox: unread state in text ("2 unread"), not colour-only; rows are links</div>
+      <div class="check pass">Notification bell exposes unread count to SR; live region announces new ones</div>
+      <div class="check pass">Error pages announced via <span class="mono">role="alert"</span>; focus moved to heading</div>
+      <div class="check pass">Preference matrix toggles are real <span class="mono">role="switch"</span> with <span class="mono">aria-checked</span></div>
+      <div class="check pass">Cookie banner keyboard-reachable; doesn't trap focus; not a blocker</div>
+      <div class="check pass">Install + update prompts dismissible by keyboard; never auto-steal focus</div>
+      <div class="check pass">RTL verified — mirrored layout, LTR-locked codes, correct logical properties</div>
+      <div class="check pass">Dark mode meets AA contrast floor identical to light</div>
+      <div class="check pass">Print output is real text, high-contrast, screen-reader / copy friendly</div>
+      <div class="check pass">Status page works without JS (server-rendered health)</div>
+      <div class="check pass">Coachmarks skippable, keyboard-navigable, never shown twice</div>
+      <div class="check pass">Reduced-motion respected globally via tokens.css</div>
+    </div>
+  </section>
+
+  <section class="spec" id="s10">
+    <div class="spec-head"><span class="spec-num">10 /</span><h2 class="spec-title">Hand-off &amp; <em>self-review</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin: 0 0 6px;">Engineering notes</h4>
+      <ul class="l">
+        <li><strong>Notification engine</strong> is a queue-backed service. Events publish to a topic; the engine resolves preferences, renders the per-channel template in the user's language, dispatches via channel adapters, and records delivery + read state. Idempotent per (event, user, channel).</li>
+        <li><strong>Channel adapters:</strong> WhatsApp Business API, Africa's Talking SMS (Twilio failover), Web Push (VAPID), transactional email (SES/Postmark), in-app via WebSocket + persisted store.</li>
+        <li><strong>Errors:</strong> a single error boundary renders the right page by status; 5xx auto-logs to Sentry with request context + incident ID. Maintenance is a feature flag flipped from F9.</li>
+        <li><strong>PWA:</strong> Workbox-style SW with route-based caching strategies; Background Sync + Push; versioned cache with update toast.</li>
+        <li><strong>i18n:</strong> message catalogs (ICU MessageFormat) for EN/RW/FR; the same catalog drives UI + notification templates. RTL via logical properties — no separate stylesheet.</li>
+        <li><strong>Theming:</strong> CSS custom properties swapped on <span class="mono">data-theme</span>; SSR reads a cookie to avoid flash-of-wrong-theme.</li>
+        <li><strong>Status page:</strong> separate static host + uptime monitor; not coupled to the main app's availability.</li>
+        <li><strong>Analytics events.</strong> notif_sent {event,channel}, notif_delivered, notif_read, notif_pref_change, error_view {code}, pwa_install_prompt, pwa_installed, cookie_consent {choice}, theme_change, lang_change, onboarding_step {n}, onboarding_complete, status_view.</li>
+      </ul>
+
+      <h4 class="t-h4" style="margin: 24px 0 12px;">Designer self-review rubric (D.8)</h4>
+      <div class="check pass">01 — Real content (real channel chrome, real codes, real RWF amounts)</div>
+      <div class="check pass">02 — Spacing scale obeyed</div>
+      <div class="check pass">03 — Semantic tokens only</div>
+      <div class="check pass">04 — Mobile-first (channels shown at phone width)</div>
+      <div class="check pass">05 — Safe-area respected (install / cookie banners)</div>
+      <div class="check pass">06 — This flow IS the states layer (notifications + errors + systems)</div>
+      <div class="check pass">07 — Reduced-motion variant (global rule documented here)</div>
+      <div class="check pass">08 — A11y checklist signed (12/12)</div>
+      <div class="check pass">09 — i18n is a first-class subject of this flow</div>
+      <div class="check pass">10 — Icon family consistent (Lucide line)</div>
+      <div class="check pass">11 — Banned patterns absent</div>
+      <div class="check pass">12 — Hierarchy obvious; each artifact reads as itself (WhatsApp looks like WhatsApp)</div>
+      <div class="check pass">13 — CTAs unambiguous across error + system surfaces</div>
+      <div class="check pass">14 — Edge cases ARE the deliverable (6 errors + 5 channels + 7 systems)</div>
+      <div class="check pass">15 — Final line closes the system</div>
+
+      <p style="margin-top: 24px;"><span class="score">Score · <span class="big">15</span> / 15</span></p>
+
+      <div class="callout" style="margin-top: 32px;">
+        Flow 10 is complete — and with it, all ten flows. ProxiServe is a complete, coherent system: from a stranger's first glance at the landing page to an admin hash-chaining an audit entry, every surface shares one warm, editorial, government-trustworthy design language. See the <a href="../index.html" style="color:var(--brand-ink); text-decoration: underline;">master index</a> for the whole map.
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

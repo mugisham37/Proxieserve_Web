@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -16,15 +16,23 @@ import { EnvBadge } from "@/components/atoms/EnvBadge";
 import { FormField } from "@/components/atoms/FormField";
 import { PasswordField } from "@/components/atoms/PasswordField";
 import { staffLoginSchema, type StaffLoginData } from "@/lib/auth-schema";
-import { useAuth } from "@/lib/auth-context";
-import { type AuthSession } from "@/lib/auth-types";
+import { useStaffLogin } from "@/hooks/useAuth";
+import { isApiError } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
 export function StaffLoginForm() {
-  const router = useRouter();
-  const { dispatch } = useAuth();
+  const searchParams = useSearchParams();
   const [role, setRole] = React.useState<StaffRole>("agent");
-  const [showError, setShowError] = React.useState(false);
+  const staffLoginMutation = useStaffLogin();
+  const [bannerState, setBannerState] = React.useState<{
+    type: "invalid-credentials" | "expired" | "generic" | null;
+    message?: string;
+  }>({
+    type: searchParams.get("error") === "expired" ? "expired" : null,
+    message: searchParams.get("error") === "expired"
+      ? "Your verification session expired. Please sign in again."
+      : undefined,
+  });
 
   const {
     register,
@@ -41,28 +49,26 @@ export function StaffLoginForm() {
   }, [role, setValue]);
 
   async function onSubmit(data: StaffLoginData) {
-    setShowError(false);
-    await new Promise((r) => setTimeout(r, 800));
+    setBannerState({ type: null });
 
-    // 20% chance of failure (password = "wrong" triggers it)
-    if (data.password === "wrong") {
-      setShowError(true);
-      return;
+    try {
+      await staffLoginMutation.mutateAsync(data);
+    } catch (error) {
+      if (isApiError(error) && error.errorType === "invalid-credentials") {
+        setBannerState({
+          type: "invalid-credentials",
+          message: "Incorrect email or password.",
+        });
+        return;
+      }
+
+      setBannerState({
+        type: "generic",
+        message: isApiError(error)
+          ? error.message
+          : "Something went wrong on our end. Please try again.",
+      });
     }
-
-    // Success — save partial session, redirect to 2FA
-    const session: AuthSession = {
-      userId: "staff_" + Math.random().toString(36).slice(2),
-      name: data.role === "admin" ? "Admin User" : "Agent Eric",
-      email: data.email,
-      role: data.role === "admin" ? "staff:admin" : "staff:agent",
-      isEmailVerified: true,
-      language: "en",
-      createdAt: new Date().toISOString(),
-    };
-    // Don't commit session yet — pending 2FA
-    sessionStorage.setItem("proxi:staff:pending", JSON.stringify(session));
-    router.push("/staff/2fa");
   }
 
   return (
@@ -86,8 +92,13 @@ export function StaffLoginForm() {
           {/* Error banner */}
           <AuthBanner
             variant="danger"
-            message="Incorrect email or password."
-            visible={showError}
+            message={bannerState.message ?? "Incorrect email or password."}
+            visible={bannerState.type === "invalid-credentials" || bannerState.type === "generic"}
+          />
+          <AuthBanner
+            variant="warn"
+            message={bannerState.message ?? "Your verification session expired. Please sign in again."}
+            visible={bannerState.type === "expired"}
           />
 
           {/* Role toggle */}
@@ -99,7 +110,7 @@ export function StaffLoginForm() {
           </div>
 
           {/* Work email */}
-          {(() => { const { name: _n, ...r } = register("email"); return (
+          {(() => { const { name: fieldName, ...r } = register("email"); void fieldName; return (
             <FormField
               label="Work email"
               name="email"
@@ -134,7 +145,7 @@ export function StaffLoginForm() {
           <button
             type="button"
             onClick={handleSubmit(onSubmit)}
-            disabled={isSubmitting}
+            disabled={isSubmitting || staffLoginMutation.isPending}
             className={cn(
               "w-full h-11 rounded-[var(--r-md)]",
               "font-sans text-[14px] font-medium text-[var(--paper)]",
@@ -145,7 +156,7 @@ export function StaffLoginForm() {
               "flex items-center justify-center gap-2"
             )}
           >
-            {isSubmitting ? (
+            {isSubmitting || staffLoginMutation.isPending ? (
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-[var(--paper)] border-t-transparent rounded-full animate-spin" />
                 Verifying…

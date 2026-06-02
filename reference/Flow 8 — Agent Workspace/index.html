@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProxiServe — Flow 8 / Agent Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--cream); }
+  .topstrip { border-bottom: 1px solid var(--rule); padding: 16px 0; background: var(--cream); }
+  .topstrip__inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .breadcrumb a { color: inherit; }
+  .breadcrumb a:hover { color: var(--ink); }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 720px) { .container { padding: 0 20px; } }
+
+  .hub-head { padding: 80px 0 56px; }
+  .hub-head .eyebrow { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; font-family: var(--sans); font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-muted); font-weight: 600; }
+  .hub-head .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ink); }
+  .hub-head h1 { margin: 0 0 24px; font-family: var(--serif); font-weight: 400; font-size: clamp(48px, 7vw, 92px); line-height: 1.02; letter-spacing: -0.02em; }
+  .hub-head h1 em { font-style: italic; }
+  .hub-head p { max-width: 720px; margin: 0; font-family: var(--serif); font-size: clamp(18px,1.8vw,22px); line-height: 1.5; color: var(--ink-2); }
+  .hub-head p em { font-style: italic; }
+  .hub-meta { display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .hub-meta span strong { color: var(--ink); font-weight: 600; }
+
+  .cards { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--ink); border: 1px solid var(--ink); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 80px; }
+  @media (min-width: 760px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card { background: var(--paper); padding: 40px 32px; display: flex; flex-direction: column; min-height: 230px; color: var(--ink); text-decoration: none; transition: background var(--m-fast); position: relative; }
+  .card:hover { background: var(--paper-2); }
+  .card__num { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; margin-bottom: 12px; }
+  .card__title { font-family: var(--serif); font-weight: 500; font-size: 26px; line-height: 1.15; margin: 0 0 12px; }
+  .card__title em { font-style: italic; font-weight: 400; }
+  .card__desc { font-size: 14px; color: var(--ink-muted); line-height: 1.6; margin: 0 0 24px; flex: 1; max-width: 480px; }
+  .card__cta { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-weight: 500; font-size: 14px; }
+  .card__cta::after { content: "→"; transition: transform var(--m-fast); }
+  .card:hover .card__cta::after { transform: translateX(4px); }
+  .card--feature { background: var(--ink); color: var(--paper); grid-column: 1 / -1; padding: 56px 48px; min-height: 280px; overflow: hidden; }
+  .card--feature .card__num { color: rgba(246,236,210,0.6); }
+  .card--feature .card__title { color: var(--paper); font-size: 42px; max-width: 600px; }
+  .card--feature .card__desc { color: rgba(246,236,210,0.75); font-size: 16px; max-width: 560px; }
+  .card--feature .card__cta { color: var(--paper); }
+  .card--feature:hover { background: #2A231C; }
+  .card--brand { background: var(--brand-soft); }
+  .card--brand:hover { background: #F0CFE0; }
+  .card--brand .card__title { color: var(--brand-ink); }
+
+  /* mini queue illo */
+  .feature-illo { position: absolute; right: 40px; bottom: 40px; width: 280px; pointer-events: none; opacity: 0.95; }
+  @media (max-width: 1100px) { .feature-illo { display: none; } }
+  .mini-q { background: var(--paper); color: var(--ink); border-radius: 10px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
+  .mini-q__row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--rule); font-size: 10px; }
+  .mini-q__row:last-child { border-bottom: none; }
+  .mini-q__pri { width: 7px; height: 7px; border-radius: 999px; flex-shrink: 0; }
+  .mini-q__code { font-family: var(--mono); font-size: 9px; color: var(--ink-muted); }
+  .mini-q__svc { font-family: var(--serif); font-size: 11px; font-weight: 500; }
+  .mini-q__st { margin-left: auto; font-family: var(--mono); font-size: 8px; padding: 2px 6px; border-radius: 999px; }
+
+  .deci-band { background: var(--ink); color: var(--paper); padding: 80px 0; }
+  .deci-band h2 { color: var(--paper); margin: 0 0 16px; font-family: var(--serif); font-weight: 500; font-size: clamp(28px,3.4vw,40px); }
+  .deci-band h2 em { font-style: italic; font-weight: 400; }
+  .deci-band p { color: rgba(246,236,210,0.75); max-width: 640px; margin: 0; }
+  .deci-band .eyebrow { font-family: var(--sans); font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600; color: rgba(246,236,210,0.6); display: block; margin-bottom: 16px; }
+  .decisions { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: 56px; border-top: 1px solid rgba(246,236,210,0.18); }
+  @media (min-width: 760px) { .decisions { grid-template-columns: repeat(3, 1fr); } }
+  .dec { padding: 32px 28px; border-right: 1px solid rgba(246,236,210,0.12); border-bottom: 1px solid rgba(246,236,210,0.12); }
+  @media (max-width: 759px) { .dec { border-right: none; } }
+  .dec .num { font-family: var(--mono); font-size: 11px; color: rgba(246,236,210,0.4); letter-spacing: 0.06em; margin-bottom: 12px; display: block; }
+  .dec h4 { color: var(--paper); font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 0 0 8px; text-transform: none; letter-spacing: 0; }
+  .dec h4 em { font-style: italic; font-weight: 400; }
+  .dec p { color: rgba(246,236,210,0.75); font-size: 14px; line-height: 1.55; margin: 0; }
+
+  .next-band { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .next-band h2 { margin: 0 0 16px; font-family: var(--serif); font-weight: 500; font-size: clamp(28px,3.4vw,40px); }
+  .next-band h2 em { font-style: italic; font-weight: 400; }
+  .next-band .eyebrow { font-family: var(--sans); font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600; color: var(--ink-muted); display: block; margin-bottom: 16px; }
+  .next-band p { max-width: 640px; margin: 0 0 32px; color: var(--ink-muted); }
+  .flow-list { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--rule-strong); }
+  .flow-row { display: grid; grid-template-columns: 60px 1fr auto; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); align-items: center; }
+  .flow-row .num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .flow-row h3 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 19px; }
+  .flow-row h3 em { font-style: italic; font-weight: 400; }
+  .flow-row p { margin: 4px 0 0; font-size: 13px; color: var(--ink-muted); }
+  .status { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 999px; font-family: var(--sans); font-size: 11px; font-weight: 500; }
+  .status .dot { width: 7px; height: 7px; border-radius: 999px; background: currentColor; }
+  .s-ok { background: var(--ok-soft); color: var(--ok); } .s-info { background: var(--info-soft); color: var(--info); }
+  .flow-row.done { background: var(--ok-soft); }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border: 1px solid var(--ink); border-radius: 999px; font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 16px; background: var(--paper); color: var(--ink); text-decoration: none; }
+  .pill .arr { font-style: normal; }
+  .pill--solid { background: var(--ink); color: var(--paper); }
+  .foot { border-top: 1px solid var(--rule); padding: 32px 0; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<div class="topstrip">
+  <div class="container">
+    <div class="topstrip__inner">
+      <a href="../Flow 7 — Payments/index.html" class="breadcrumb"><span aria-hidden="true">←</span> Flow 7 — Payments</a>
+      <span class="breadcrumb">PROXISERVE / DESIGN / FLOW 08 — AGENT WORKSPACE / v0.1</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="hub-head">
+    <span class="eyebrow">Flow 08 / 10 — agent workspace</span>
+    <h1>The <em>engine room</em>.</h1>
+    <p>Where applications actually get done. Dense, keyboard-first, used all day under time pressure. It inherits the client dashboard's app shell, then tightens it — and adds the one safety affordance that matters most: <em>an internal note can never reach a client.</em></p>
+    <div class="hub-meta">
+      <span><strong>4 screens</strong> · today, case, viewer, performance</span>
+      <span><strong>10 states</strong> · incl. dark mode</span>
+      <span><strong>22 new components</strong></span>
+      <span><strong>15 / 15</strong> self-review score</span>
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <a href="today-queue.html" class="card card--feature">
+      <span class="card__num">01 / Primary deliverable</span>
+      <h2 class="card__title">Today &amp; the <em>case queue</em>.</h2>
+      <p class="card__desc">Morning greeting, four stat tiles, a "needs you today" shortlist, and the full 14-case table — with priority dots, SLA-age badges that turn red when overdue, and full keyboard navigation (J/K to move, ↵ to open, ⌘K palette).</p>
+      <span class="card__cta">Open today + queue</span>
+
+      <div class="feature-illo" aria-hidden="true">
+        <div class="mini-q">
+          <div class="mini-q__row"><span class="mini-q__pri" style="background:var(--danger);"></span><span class="mini-q__code">PRX-00483</span><span class="mini-q__svc">Passport renewal</span><span class="mini-q__st" style="background:var(--warn-soft);color:var(--warn);">3d</span></div>
+          <div class="mini-q__row"><span class="mini-q__pri" style="background:var(--danger);"></span><span class="mini-q__code">PRX-00477</span><span class="mini-q__svc">Business license</span><span class="mini-q__st" style="background:var(--warn-soft);color:var(--warn);">2d</span></div>
+          <div class="mini-q__row"><span class="mini-q__pri" style="background:var(--warn);"></span><span class="mini-q__code">PRX-00471</span><span class="mini-q__svc">Tax registration</span><span class="mini-q__st" style="background:var(--brand-soft);color:var(--brand-ink);">1d</span></div>
+          <div class="mini-q__row"><span class="mini-q__pri" style="background:var(--ink-subtle);"></span><span class="mini-q__code">PRX-00468</span><span class="mini-q__svc">National ID</span><span class="mini-q__st" style="background:var(--ok-soft);color:var(--ok);">22h</span></div>
+        </div>
+      </div>
+    </a>
+
+    <a href="case-detail.html" class="card">
+      <span class="card__num">02 / Case detail</span>
+      <h2 class="card__title">A two-column <em>work surface</em>.</h2>
+      <p class="card__desc">Checklist-first: it tells the agent exactly what to do next. A dual-lane composer (client reply vs yellow internal note), document tabs, application answers, full history — with a client / payment / SLA rail on the right.</p>
+      <span class="card__cta">Open case detail</span>
+    </a>
+
+    <a href="document-viewer.html" class="card">
+      <span class="card__num">03 / Document viewer</span>
+      <h2 class="card__title">Review at <em>full size</em>.</h2>
+      <p class="card__desc">Full-screen viewer with zoom, a filmstrip of the case's other documents, automatic quality checks (brightness, blur, face), and a clear accept / reject-and-ask-for-retake verdict.</p>
+      <span class="card__cta">Open document viewer</span>
+    </a>
+
+    <a href="performance.html" class="card">
+      <span class="card__num">04 / Performance + settings</span>
+      <h2 class="card__title">Your <em>own metrics</em>.</h2>
+      <p class="card__desc">Cases completed, turnaround, on-time SLA, client rating — plus a 6-week chart and an anonymised leaderboard framed for motivation, not ranking-pay. Settings cover availability, notifications, dark mode, and security.</p>
+      <span class="card__cta">Open performance</span>
+    </a>
+
+    <a href="states.html" class="card">
+      <span class="card__num">05 / Every edge case</span>
+      <h2 class="card__title">10 states — <em>drawn out</em>.</h2>
+      <p class="card__desc">Empty queue (caught up), loading, ⌘K command palette, SLA breach banner, confirm-before-reassign, internal-note safety, offline action queue, dark mode, case-reassigned-away, admin viewing-as.</p>
+      <span class="card__cta">Open states gallery</span>
+    </a>
+
+    <a href="spec.html" class="card card--brand">
+      <span class="card__num">06 / Engineering spec</span>
+      <h2 class="card__title">The <em>10-section</em> deliverable.</h2>
+      <p class="card__desc">Flow map · IA · wireframes · hi-fi index · 22 components · keyboard map &amp; motion · responsive · 10 states · a11y (12/12) · hand-off covering shared app shell, query-layer note filtering, SLA engine, real-time channels, audit.</p>
+      <span class="card__cta">Read the spec</span>
+    </a>
+
+  </div>
+
+</div>
+
+<div class="deci-band">
+  <div class="container">
+    <span class="eyebrow">Key design decisions</span>
+    <h2>Three calls <em>worth flagging</em>.</h2>
+    <p>The agent zone is where the product's promise — "someone competent will handle this for me" — actually gets delivered. These calls protect speed and prevent the costly mistakes.</p>
+
+    <div class="decisions">
+      <div class="dec">
+        <span class="num">01 / Checklist-first</span>
+        <h4>Tell the agent <em>what's next</em></h4>
+        <p>Case detail leads with a per-service checklist showing exactly where the agent is ("⟵ you are here") and the remaining steps, each tied to a status. It's a guided workflow, not a bare status dropdown — onboarding a new agent is far faster.</p>
+      </div>
+      <div class="dec">
+        <span class="num">02 / Note safety</span>
+        <h4>Internal notes <em>can't leak</em></h4>
+        <p>Note mode turns the whole composer yellow and changes the label + button. Beyond the UI, the API filters internal notes out of any client-facing read at the query layer — so a note can't leak even through the API, not just the screen.</p>
+      </div>
+      <div class="dec">
+        <span class="num">03 / Keyboard-first</span>
+        <h4>The mouse is <em>optional</em></h4>
+        <p>J/K to move, ↵ to open, E to change status, R/N for reply/note, ⌘K for the command palette. A fast agent processing 40 cases a day never has to reach for the mouse — and a persistent hint bar teaches the shortcuts.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="next-band">
+  <div class="container">
+    <span class="eyebrow">Where we are in the ten-flow plan</span>
+    <h2>Flow 08 of 10 — <em>complete</em>.</h2>
+    <p>The agent's actions ripple outward: status changes update F5's public tracker and F6's client dashboard; off-platform confirmations close F7 payments; reassignments and document verdicts write to the audit log that F9 admin oversees.</p>
+
+    <div class="flow-list">
+      <div class="flow-row done"><span class="num">F1</span><div><h3>Marketing &amp; <em>landing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F2</span><div><h3>Service <em>discovery</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F3</span><div><h3>Application <em>submission</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F4</span><div><h3>Auth &amp; <em>role routing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F5</span><div><h3>Public <em>tracker</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F6</span><div><h3>Client <em>dashboard</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F7</span><div><h3><em>Payments</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F8</span><div><h3>Agent <em>workspace</em></h3><p>Today, case queue, case detail, document viewer, performance, 10 states</p></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row"><span class="num">F9</span><div><h3>Admin <em>panel</em></h3><p>Analytics, services + schema builder, pricing, oversight, broadcasts, audit log</p></div><span class="status s-info"><span class="dot"></span> Next</span></div>
+      <div class="flow-row"><span class="num">F10</span><div><h3>Cross-cutting <em>systems</em></h3><p>Notifications, 404/500, cookies, PWA shell, dark mode, RTL</p></div><span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span></div>
+    </div>
+
+    <div style="margin-top: 48px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href="today-queue.html" class="pill pill--solid">Open the queue <span class="arr">↗</span></a>
+      <a href="case-detail.html" class="pill">Open a case <span class="arr">→</span></a>
+      <a href="spec.html" class="pill">Read the spec <span class="arr">→</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="foot container">
+  <span>PROXISERVE / FLOW 08 — AGENT WORKSPACE / v0.1</span>
+  <span>Type "Design Flow 9." when ready.</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Notification system · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--cream-2); }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 720px) { .container { padding: 0 20px; } }
+  .page-head { padding: 48px 0 32px; border-bottom: 1px solid var(--rule); background: var(--cream); }
+  .page-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .page-head h1 { margin: 8px 0 12px; font-family: var(--serif); font-weight: 400; font-size: clamp(32px,4.4vw,56px); letter-spacing: -0.02em; }
+  .page-head h1 em { font-style: italic; }
+  .page-head p { color: var(--ink-muted); margin: 0; max-width: 680px; }
+  .lnk-arrow { display:inline-flex; align-items:center; gap:6px; font-family: var(--sans); font-size: 13px; color: var(--ink-muted); text-decoration: none; }
+
+  .gallery { padding: 48px 0 120px; display: grid; grid-template-columns: 1fr; gap: 48px; }
+  .tile { background: var(--cream); border: 1px solid var(--rule); border-radius: var(--r-lg); overflow: hidden; }
+  .tile__head { padding: 16px 24px; display: flex; gap: 16px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--rule); background: var(--paper); flex-wrap: wrap; }
+  .tile__head h2 { margin: 0; font-size: 19px; font-family: var(--serif); font-weight: 500; }
+  .tile__head h2 em { font-style: italic; font-weight: 400; }
+  .tile__head .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .tag { font-family: var(--mono); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: var(--cream-2); color: var(--ink-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .tile__body { padding: 32px; display: flex; justify-content: center; }
+  .tile__notes { padding: 16px 24px; background: var(--cream-2); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
+  .tile__notes strong { color: var(--ink); font-weight: 600; }
+
+  /* WhatsApp */
+  .wa { max-width: 320px; width: 100%; background: #E5DDD5; border-radius: 16px; overflow: hidden; box-shadow: var(--sh-raised); }
+  .wa__bar { background: #075E54; color: white; padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+  .wa__bar .av { width: 32px; height: 32px; border-radius: 999px; background: white; color: #075E54; display:flex; align-items:center; justify-content:center; font-family: var(--serif); font-weight: 600; font-size: 13px; }
+  .wa__bar .nm { font-size: 14px; font-weight: 600; } .wa__bar .st { font-size: 10px; opacity: 0.8; }
+  .wa__body { padding: 16px 12px; display: flex; flex-direction: column; gap: 8px; min-height: 180px; }
+  .wa__msg { background: white; border-radius: 8px; padding: 8px 10px; font-size: 12.5px; line-height: 1.45; max-width: 85%; box-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+  .wa__msg .tm { font-size: 9px; color: #999; text-align: right; margin-top: 2px; }
+  .wa__msg strong { font-weight: 600; }
+  .wa__btn { background: white; border-top: 1px solid #eee; color: #075E54; text-align: center; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 0 0 8px 8px; margin-top: -2px; }
+
+  /* SMS */
+  .sms { max-width: 300px; width: 100%; }
+  .sms__msg { background: #E9E9EB; border-radius: 16px 16px 16px 4px; padding: 10px 14px; font-size: 13px; line-height: 1.45; color: #000; }
+  .sms__meta { font-family: var(--mono); font-size: 9px; color: var(--ink-subtle); text-align: center; margin: 8px 0; letter-spacing: 0.05em; }
+
+  /* push */
+  .push { max-width: 340px; width: 100%; background: rgba(255,255,255,0.78); backdrop-filter: blur(12px); border-radius: 16px; padding: 12px 14px; box-shadow: var(--sh-overlay); display: flex; gap: 12px; align-items: flex-start; border: 1px solid rgba(0,0,0,0.05); }
+  .push__ic { width: 36px; height: 36px; border-radius: 8px; background: var(--ink); color: var(--paper); display:flex; align-items:center; justify-content:center; flex-shrink: 0; font-family: var(--serif); font-weight: 600; }
+  .push__ic .dot { width: 7px; height: 7px; border-radius: 999px; background: var(--brand); }
+  .push__t { font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; }
+  .push__t .tm { font-weight: 400; color: var(--ink-subtle); font-size: 11px; }
+  .push__b { font-size: 12.5px; color: var(--ink-2); line-height: 1.4; margin-top: 2px; }
+
+  /* email */
+  .email { max-width: 460px; width: 100%; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-md); overflow: hidden; }
+  .email__head { padding: 20px 24px; border-bottom: 1px solid var(--rule); }
+  .email__from { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .email__from .av { width: 28px; height: 28px; border-radius: 999px; background: var(--ink); color: var(--paper); display:flex; align-items:center; justify-content:center; font-family: var(--serif); font-size: 11px; }
+  .email__from .nm { font-size: 13px; font-weight: 600; } .email__from .ad { font-size: 11px; color: var(--ink-muted); }
+  .email__subj { font-family: var(--serif); font-size: 18px; font-weight: 500; margin-top: 8px; }
+  .email__body { padding: 24px; }
+  .email__hero { background: var(--cream); border-radius: var(--r-md); padding: 20px; text-align: center; margin-bottom: 16px; }
+  .email__code { font-family: var(--mono); font-size: 22px; font-weight: 500; letter-spacing: 0.05em; }
+  .email__body p { font-size: 13.5px; line-height: 1.6; color: var(--ink-2); margin: 0 0 12px; }
+  .email__cta { display: inline-block; background: var(--ink); color: var(--paper); padding: 10px 20px; border-radius: 999px; font-family: var(--serif); font-style: italic; font-size: 14px; text-decoration: none; }
+
+  /* in-app notification panel */
+  .inapp { max-width: 380px; width: 100%; background: var(--paper); border: 1px solid var(--rule-strong); border-radius: var(--r-md); overflow: hidden; box-shadow: var(--sh-overlay); }
+  .inapp__head { padding: 14px 18px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+  .inapp__head h3 { font-family: var(--serif); font-weight: 500; font-size: 16px; margin: 0; }
+  .inapp__head a { font-size: 12px; color: var(--brand-ink); text-decoration: none; }
+  .inapp__row { padding: 14px 18px; display: grid; grid-template-columns: 32px 1fr; gap: 12px; border-bottom: 1px solid var(--rule-soft); position: relative; }
+  .inapp__row.unread { background: var(--brand-soft); }
+  .inapp__row.unread::before { content: ""; position: absolute; left: 7px; top: 18px; width: 6px; height: 6px; border-radius: 999px; background: var(--brand); }
+  .inapp__ic { width: 32px; height: 32px; border-radius: 999px; display:flex; align-items:center; justify-content:center; }
+  .inapp__ic svg { width: 15px; height: 15px; }
+  .inapp__t { font-size: 13px; font-weight: 500; line-height: 1.4; }
+  .inapp__t .tm { font-weight: 400; color: var(--ink-subtle); font-size: 11px; }
+  .inapp__d { font-size: 12px; color: var(--ink-muted); margin-top: 2px; line-height: 1.4; }
+
+  /* preferences matrix */
+  .matrix { width: 100%; border-collapse: collapse; font-size: 13px; max-width: 620px; }
+  .matrix th, .matrix td { padding: 10px 12px; border-bottom: 1px solid var(--rule); text-align: center; }
+  .matrix th:first-child, .matrix td:first-child { text-align: left; }
+  .matrix th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); font-weight: 600; }
+  .matrix td:first-child { font-weight: 500; }
+  .matrix .sw { display: inline-block; width: 34px; height: 20px; border-radius: 999px; background: var(--rule-strong); position: relative; cursor: pointer; }
+  .matrix .sw.on { background: var(--brand); }
+  .matrix .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 999px; background: white; transition: transform var(--m-base); }
+  .matrix .sw.on::after { transform: translateX(14px); }
+  .matrix .lock { color: var(--ink-subtle); font-size: 11px; }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="container">
+    <a href="index.html" class="lnk-arrow" style="margin-bottom: 16px;"><span aria-hidden="true">←</span> Back to Flow 10 hub</a>
+    <div class="meta">FLOW 10 / NOTIFICATION SYSTEM · 5 CHANNELS</div>
+    <h1>One message, <em>five channels</em>.</h1>
+    <p>Every status change, agent reply, and payment event flows through one notification engine that renders the same content correctly for WhatsApp, SMS, push, email, and the in-app inbox — respecting each user's preferences and the channel's constraints.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="gallery">
+
+    <!-- WhatsApp -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">01 / WhatsApp — the primary channel</span><h2>Status update <em>delivered</em></h2></div><span class="tag">Primary</span></header>
+      <div class="tile__body">
+        <div class="wa">
+          <div class="wa__bar"><span class="av">P</span><div><div class="nm">ProxiServe</div><div class="st">official business account</div></div></div>
+          <div class="wa__body">
+            <div class="wa__msg">Hi Aline 👋 Good news — your <strong>passport renewal</strong> (PRX-2026-00483) is now <strong>in progress</strong>. Your agent Aline M. is preparing it for Immigration.<div class="tm">14:32 ✓✓</div></div>
+            <div class="wa__msg">We'll message you at every step. Reply <strong>STATUS</strong> anytime for an update.<div class="tm">14:32 ✓✓</div></div>
+            <div style="background:white; border-radius:8px; overflow:hidden;"><div style="padding:8px 10px; font-size:12.5px;">Track your application</div><div class="wa__btn">📍 View status</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>Where Rwanda lives.</strong> WhatsApp is the default channel — highest open rates, lowest cost, supports rich buttons. Uses pre-approved Business templates for the first message, then a 24-hour session window for free-form replies. <span class="mono">STATUS</span> / <span class="mono">STOP</span> keywords handled by a bot.</div>
+    </article>
+
+    <!-- SMS -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">02 / SMS — the universal fallback</span><h2>Same message, <em>160 chars</em></h2></div><span class="tag">Fallback</span></header>
+      <div class="tile__body">
+        <div class="sms">
+          <div class="sms__meta">PROXISERVE · 14:32</div>
+          <div class="sms__msg">ProxiServe: Your passport renewal (PRX-2026-00483) is now In Progress. Track: prx.rw/t/00483 Reply STOP to opt out.</div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>Reaches every phone.</strong> When WhatsApp isn't available (no smartphone, not registered), SMS is the automatic fallback. Composed to fit one segment (≤160 chars) — the engine shortens links and drops emoji. Sent via Africa's Talking with a Twilio failover.</div>
+    </article>
+
+    <!-- Push -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">03 / Push — for installed PWA users</span><h2>Lock-screen <em>notification</em></h2></div><span class="tag">PWA</span></header>
+      <div class="tile__body">
+        <div class="push">
+          <div class="push__ic"><span class="dot"></span></div>
+          <div style="flex:1;"><div class="push__t"><span>ProxiServe</span><span class="tm">now</span></div><div class="push__b"><strong>Passport renewal · In progress.</strong> Your agent is preparing it for Immigration. Tap to track.</div></div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>For users who installed the app.</strong> Web Push (VAPID) to users who granted permission. Deep-links straight into the relevant case in F6. Quiet hours respected (no push 21:00–07:00 unless urgent action required). Falls through to WhatsApp if push fails.</div>
+    </article>
+
+    <!-- Email -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">04 / Email — receipts &amp; records</span><h2>The <em>paper trail</em></h2></div><span class="tag">Records</span></header>
+      <div class="tile__body">
+        <div class="email">
+          <div class="email__head">
+            <div class="email__from"><span class="av">P</span><div><div class="nm">ProxiServe</div><div class="ad">noreply@proxiserve.rw</div></div></div>
+            <div class="email__subj">Your application is in progress</div>
+          </div>
+          <div class="email__body">
+            <div class="email__hero"><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:6px;">Tracking code</div><div class="email__code">PRX-2026-00483</div></div>
+            <p>Hi Aline,</p>
+            <p>Your <strong>passport renewal</strong> is now in progress. Your assigned agent, Aline M., is preparing your application for the Department of Immigration.</p>
+            <p>You'll receive an update at each step. You can also check anytime:</p>
+            <a href="#" class="email__cta">Track your application →</a>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>For the record.</strong> Email carries receipts, outcome documents, and anything the user may need to keep or forward. Plain, accessible HTML with a text fallback. Never the primary nudge channel (lower open rates here) — it's the durable copy.</div>
+    </article>
+
+    <!-- In-app -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">05 / In-app — the notification inbox</span><h2>Bell <em>dropdown</em></h2></div><span class="tag">In-app</span></header>
+      <div class="tile__body">
+        <div class="inapp">
+          <div class="inapp__head"><h3>Notifications</h3><a href="#">Mark all read</a></div>
+          <div class="inapp__row unread"><span class="inapp__ic" style="background:var(--brand-soft);color:var(--brand-ink);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><div class="inapp__t">Status changed to In progress <span class="tm">· now</span></div><div class="inapp__d">Passport renewal · PRX-2026-00483</div></div></div>
+          <div class="inapp__row unread"><span class="inapp__ic" style="background:var(--ok-soft);color:var(--ok);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 5 5L20 7"/></svg></span><div><div class="inapp__t">Payment received · RWF 15,000 <span class="tm">· 2h</span></div><div class="inapp__d">MTN MoMo · receipt available</div></div></div>
+          <div class="inapp__row"><span class="inapp__ic" style="background:var(--info-soft);color:var(--info);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div><div class="inapp__t">Aline M. sent you a message <span class="tm">· 1d</span></div><div class="inapp__d">"Got your forms — sending them today."</div></div></div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>The durable in-product log.</strong> Every notification also lands here (the bell in F6/F8/F9). Unread state, mark-as-read, deep-links. This is the canonical history — channels are delivery; the inbox is the record. Real-time via the same WebSocket as messaging.</div>
+    </article>
+
+    <!-- Preferences -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">06 / Preferences — the user decides</span><h2>Per-event, <em>per-channel</em></h2></div><span class="tag">Control</span></header>
+      <div class="tile__body" style="display:block; padding: 24px 32px;">
+        <table class="matrix">
+          <thead><tr><th>Event</th><th>WhatsApp</th><th>SMS</th><th>Email</th><th>Push</th></tr></thead>
+          <tbody>
+            <tr><td>Status changes</td><td><span class="sw on"></span></td><td><span class="sw"></span></td><td><span class="sw on"></span></td><td><span class="sw on"></span></td></tr>
+            <tr><td>Agent messages</td><td><span class="sw on"></span></td><td><span class="sw"></span></td><td><span class="sw"></span></td><td><span class="sw on"></span></td></tr>
+            <tr><td>Action required</td><td><span class="sw on"></span></td><td><span class="sw on"></span></td><td><span class="sw on"></span></td><td><span class="sw on"></span></td></tr>
+            <tr><td>Payment &amp; receipts</td><td><span class="sw on"></span></td><td><span class="sw"></span></td><td><span class="sw on"></span></td><td><span class="sw"></span></td></tr>
+            <tr><td>Marketing &amp; tips</td><td><span class="sw"></span></td><td><span class="sw"></span></td><td><span class="sw"></span></td><td><span class="sw"></span></td></tr>
+          </tbody>
+        </table>
+        <p style="font-size: 12.5px; color: var(--ink-muted); margin: 16px 0 0; max-width: 560px;"><strong style="color:var(--ink);">"Action required" can't be fully muted</strong> — if we genuinely need something from you to proceed, at least one channel stays on. Everything else is yours to control. Marketing is off by default (opt-in only).</p>
+      </div>
+      <div class="tile__notes"><strong>Respect, encoded.</strong> Users pick channel per event type. Sensible defaults (WhatsApp + push for nudges, email for records). "Action required" has a floor so a stalled application never goes silent. One global STOP opts out of everything non-essential, honored across all channels permanently.</div>
+    </article>
+
+  </div>
+</div>
+
+<footer style="background:var(--cream); padding: 40px 0; border-top: 1px solid var(--rule);">
+  <div class="container" style="display:flex; justify-content:space-between; font-family: var(--mono); font-size:11px; color:var(--ink-muted); letter-spacing:0.06em;">
+    <span>PROXISERVE / FLOW 10 / NOTIFICATIONS / v0.1</span>
+    <a href="index.html" style="color: inherit; text-decoration: underline;">Back to Flow 10 hub →</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 6 — Engineering spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--paper); }
+  .doc { max-width: 920px; margin: 0 auto; padding: 64px 32px 120px; }
+  @media (max-width: 720px) { .doc { padding: 32px 20px 80px; } }
+  .doc-head { border-bottom: 1px solid var(--rule-strong); padding-bottom: 24px; margin-bottom: 48px; }
+  .doc-head .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .doc-head h1 { margin: 12px 0; }
+  .doc-head p { margin: 0; color: var(--ink-muted); }
+  section.spec { padding: 48px 0; border-bottom: 1px solid var(--rule); }
+  section.spec:last-of-type { border-bottom: none; }
+  .spec-head { display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 24px; align-items: baseline; }
+  .spec-num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .spec-title { font-family: var(--serif); font-weight: 500; font-size: 32px; margin: 0; line-height: 1.1; }
+  .spec-title em { font-style: italic; font-weight: 400; }
+  .spec-body { padding-left: 104px; }
+  @media (max-width: 720px) { .spec-head { grid-template-columns: 1fr; } .spec-body { padding-left: 0; } }
+  .spec-body p { margin: 0 0 14px; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
+  pre.ascii { font-family: var(--mono); font-size: 12px; line-height: 1.45; background: var(--cream-2); padding: 20px 24px; border-radius: var(--r-md); overflow-x: auto; border: 1px solid var(--rule); color: var(--ink-2); }
+  table.t { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 16px 0; }
+  .t th, .t td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  .t th { background: var(--cream-2); border-bottom: 1px solid var(--rule-strong); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); }
+  .t tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
+  .t td.mono { font-family: var(--mono); font-size: 12px; }
+  ul.l { padding-left: 20px; margin: 0 0 16px; }
+  ul.l li { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin-bottom: 6px; }
+  .check { display: grid; grid-template-columns: 24px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--rule-soft); font-size: 14px; }
+  .check.pass::before { content: "✓"; color: var(--ok); font-weight: 600; }
+  .score { display: inline-flex; align-items: baseline; gap: 4px; padding: 8px 16px; background: var(--ok-soft); color: var(--ok); border-radius: 999px; font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; }
+  .score .big { font-family: var(--serif); font-style: italic; font-size: 24px; }
+  .callout { background: var(--brand-soft); color: var(--brand-ink); border-left: 3px solid var(--brand); padding: 14px 18px; font-family: var(--serif); font-style: italic; font-size: 15px; margin: 16px 0; }
+  .callout strong { font-style: normal; font-weight: 600; }
+  code, .mono { font-family: var(--mono); font-size: 13px; }
+  .comp-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+  .comp-list .chip { background: var(--cream-2); color: var(--ink-2); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); font-family: var(--mono); font-size: 11px; }
+  .comp-list .chip.new { background: var(--brand-soft); color: var(--brand-ink); border-color: transparent; }
+  .toc { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; padding: 20px 0; border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); margin-bottom: 32px; }
+  .toc a { display: flex; gap: 16px; align-items: baseline; padding: 8px 0; font-size: 14px; color: var(--ink-2); border-bottom: 1px solid var(--rule-soft); }
+  .toc a .num { font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); }
+  @media (max-width: 600px) { .toc { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="doc">
+  <div class="doc-head">
+    <a href="index.html" class="lnk-arrow" style="font-size:13px; margin-bottom: 16px; display: inline-flex;"><span aria-hidden="true">←</span> Back to Flow 6 hub</a>
+    <div class="meta">FLOW 06 / CLIENT DASHBOARD / ENGINEERING SPEC · v0.1</div>
+    <h1 class="t-h1">Flow 6 — <em>Client Dashboard</em>.</h1>
+    <p>The authenticated home. The app shell that Flow 8 and Flow 9 inherit — same sidenav primitives, same nav-link styling, same user chip. Opened daily by anyone with an active case.</p>
+  </div>
+
+  <div class="toc">
+    <a href="#s1"><span class="num">01</span> Flow map</a>
+    <a href="#s2"><span class="num">02</span> IA</a>
+    <a href="#s3"><span class="num">03</span> Wireframes</a>
+    <a href="#s4"><span class="num">04</span> Hi-fi screens</a>
+    <a href="#s5"><span class="num">05</span> Components</a>
+    <a href="#s6"><span class="num">06</span> Motion</a>
+    <a href="#s7"><span class="num">07</span> Responsive</a>
+    <a href="#s8"><span class="num">08</span> States</a>
+    <a href="#s9"><span class="num">09</span> A11y</a>
+    <a href="#s10"><span class="num">10</span> Hand-off &amp; self-review</a>
+  </div>
+
+  <section class="spec" id="s1">
+    <div class="spec-head"><span class="spec-num">01 /</span><h2 class="spec-title"><em>Flow</em> map</h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+  Entry from F4 (sign-in success) · returning session · F3 "Create account to manage"
+             │
+             ▼
+  ┌─────────────────────────────────────────────┐
+  │  /dashboard            Home                  │ ◀── default authenticated landing
+  │  - welcome banner (most-urgent action)       │
+  │  - stat tiles · quick actions                │
+  │  - active app cards (7-step progress)        │
+  │  - recent messages · completed history       │
+  └───────┬──────────────────────────┬──────────┘
+          │ click app card           │ nav: Settings
+          ▼                          ▼
+  ┌─────────────────────────┐   ┌──────────────────────────┐
+  │  /app/[code]   Detail   │   │  /settings               │
+  │  - in-app status hero   │   │  profile · contact ·     │
+  │  - tabs:                │   │  notifications ·         │
+  │    Overview             │   │  security (devices) ·    │
+  │    Messages ───────────┐│   │  privacy · danger zone   │
+  │    Documents           ││   └──────────────────────────┘
+  │    Payment ─── F7       ││
+  │    History             ││ message reply (optimistic)
+  └─────────────────────────┘└──▶ agent (F8) sees it in case thread
+          │
+          ▼
+   New application → F2/F3   ·   Pay → F7   ·   Sign out → F4
+</pre>
+      <p><strong>Entries.</strong> F4 sign-in success, returning session cookie, F3's "Create account to manage" CTA, deep links from notification emails / WhatsApp.</p>
+      <p><strong>Exits.</strong> App detail → F7 (pay), F2/F3 (new application), F4 (sign out). The Messages tab writes into the same conversation primitive the agent reads in F8.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s2">
+    <div class="spec-head"><span class="spec-num">02 /</span><h2 class="spec-title">Information <em>architecture</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Route</th><th>Page</th><th>Auth</th><th>SSR</th><th>Offline</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">/dashboard</td><td>Home</td><td>Required</td><td>Shell + first paint</td><td>Cached snapshot</td></tr>
+          <tr><td class="mono">/app/[code]</td><td>Application detail</td><td>Required (owner)</td><td>Full</td><td>Cached; writes queue</td></tr>
+          <tr><td class="mono">/app/[code]?tab=messages</td><td>Detail · Messages</td><td>Required</td><td>Thread SSR</td><td>Cached; send queues</td></tr>
+          <tr><td class="mono">/app/[code]?tab=documents</td><td>Detail · Documents</td><td>Required</td><td>Yes</td><td>Cached; upload queues</td></tr>
+          <tr><td class="mono">/app/[code]?tab=payment</td><td>Detail · Payment → F7</td><td>Required</td><td>Yes</td><td>Network-only</td></tr>
+          <tr><td class="mono">/settings</td><td>Settings (6 sections)</td><td>Required</td><td>Full</td><td>Cached read-only</td></tr>
+        </tbody>
+      </table>
+      <p>Detail tabs are URL-synced query params so a shared link lands on the right tab. <span class="mono">[code]</span> is the PRX application code; ownership is enforced server-side — a code you don't own 404s rather than 403s (no existence leak, consistent with F4/F5).</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s3">
+    <div class="spec-head"><span class="spec-num">03 /</span><h2 class="spec-title">Low-fi <em>wireframes</em></h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+─── DASHBOARD (≥980 px) ─────────────────────────────────────
+┌────────────┬───────────────────────────────────────────────┐
+│ ● Proxi    │ DASHBOARD · 23 MAY 2026        [New app ↗]    │
+│            │ Welcome back, Aline.                          │
+│ Home    ◀  │ You have 2 unread · 1 action waiting.         │
+│ Apps       │ ┌───────────────────────────────────────────┐ │
+│ Messages•2 │ │ ⚠ Aline needs a clearer photo  [Upload→] │ │ banner
+│ Documents  │ └───────────────────────────────────────────┘ │
+│ Payments   │ [2 active][1 action][2 unread][3 done] stats  │
+│ Settings   │ ┌─────────────────┐ ┌─────────────────┐       │
+│            │ │ Passport renewal│ │ Tax registration│ cards │
+│ ───────    │ │ ▰▰▰▱▱▱▱ action  │ │ ▰▰▱▱▱▱▱ progress│       │
+│ [AM] Aline │ └─────────────────┘ └─────────────────┘       │
+│            │ Recent messages · Completed history           │
+└────────────┴───────────────────────────────────────────────┘
+
+─── DASHBOARD (mobile) ──────
+┌──────────────────────────┐
+│ ● ProxiServe        [AM] │  top bar (brand + avatar only)
+├──────────────────────────┤
+│ Welcome back, Aline.     │
+│ ⚠ banner: most urgent    │
+│ [stat][stat]             │
+│ App card (full width)    │
+│ App card                 │
+│ Recent messages          │
+├──────────────────────────┤
+│ Home  Apps  Msgs•  Me    │  sticky bottom tab bar
+└──────────────────────────┘
+
+─── APPLICATION DETAIL ──────────────────────────────────────
+┌────────────┬───────────────────────────────────────────────┐
+│ sidenav    │ ‹ Back   PRX-2026-00483                       │
+│            │ ┌─── status hero (yellow if action) ────────┐ │
+│            │ │ Action required · Upload a clearer photo  │ │
+│            │ │ [Upload now]  [Message agent]             │ │
+│            │ └───────────────────────────────────────────┘ │
+│            │ [Overview][Messages•][Documents][Pay][History]│ tabs
+│            │ ┌───────────────────────┐ ┌─────────────────┐ │
+│            │ │ tab content           │ │ agent card      │ │
+│            │ │ (timeline / thread /  │ │ fee summary     │ │
+│            │ │  docs / payment)      │ │ next step       │ │
+│            │ └───────────────────────┘ └─────────────────┘ │
+└────────────┴───────────────────────────────────────────────┘
+</pre>
+    </div>
+  </section>
+
+  <section class="spec" id="s4">
+    <div class="spec-head"><span class="spec-num">04 /</span><h2 class="spec-title">Hi-fi <em>screens</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Screen</th><th>File</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Dashboard (home)</td><td class="mono"><a href="dashboard.html" class="linked">dashboard.html</a></td><td>Welcome banner · stat tiles · app cards w/ 7-step progress · recent messages · history</td></tr>
+          <tr><td>Application detail</td><td class="mono"><a href="application-detail.html" class="linked">application-detail.html</a></td><td>In-app status hero · 5 tabs · conversation thread · inline doc replace · agent + fee column</td></tr>
+          <tr><td>Settings</td><td class="mono"><a href="settings.html" class="linked">settings.html</a></td><td>Profile · contact · notifications · security (trusted devices) · privacy · danger zone</td></tr>
+          <tr><td>All 10 states</td><td class="mono"><a href="states.html" class="linked">states.html</a></td><td>Edge-case gallery</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Hi-fi decisions worth flagging.</strong> The welcome banner surfaces the single most-urgent action (not a generic greeting). The application-detail status hero reuses the F5 public-tracker hero colors + status enum but compresses to inline buttons. App cards carry a 7-node progress bar matching the F5 timeline exactly — same enum, different density.
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s5">
+    <div class="spec-head"><span class="spec-num">05 /</span><h2 class="spec-title">Component <em>inventory</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin-bottom: 8px;">Reused from earlier flows</h4>
+      <div class="comp-list">
+        <span class="chip">StatusPill</span>
+        <span class="chip">StatusTimeline (F5)</span>
+        <span class="chip">ApplicationCodeChip</span>
+        <span class="chip">DocumentCard / FileRow (F3)</span>
+        <span class="chip">Conversation thread (F5)</span>
+        <span class="chip">AgentCard (F5)</span>
+        <span class="chip">FeeSummary (F3)</span>
+        <span class="chip">FormField</span>
+        <span class="chip">Switch / Toggle (F3)</span>
+        <span class="chip">PillButton / AppButton</span>
+        <span class="chip">Banner</span>
+        <span class="chip">EmptyState</span>
+      </div>
+      <h4 class="t-h4" style="margin: 16px 0 8px;">New in Flow 6 (the app shell — inherited by F8, F9)</h4>
+      <div class="comp-list">
+        <span class="chip new">AppShell (sidenav + content)</span>
+        <span class="chip new">SideNav</span>
+        <span class="chip new">SideNavLink (w/ unread badge)</span>
+        <span class="chip new">UserChip</span>
+        <span class="chip new">MobileTabBar</span>
+        <span class="chip new">MobileTopBar</span>
+        <span class="chip new">WelcomeBanner (most-urgent action)</span>
+        <span class="chip new">StatTile</span>
+        <span class="chip new">QuickActionChip</span>
+        <span class="chip new">ApplicationCard (7-step progress)</span>
+        <span class="chip new">ProgressNodes</span>
+        <span class="chip new">RecentMessageRow (unread dot)</span>
+        <span class="chip new">HistoryRow</span>
+        <span class="chip new">DetailTabs</span>
+        <span class="chip new">InAppStatusHero</span>
+        <span class="chip new">SettingsSection / SettingsRow</span>
+        <span class="chip new">TrustedDeviceRow (revoke)</span>
+        <span class="chip new">DangerZone</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s6">
+    <div class="spec-head"><span class="spec-num">06 /</span><h2 class="spec-title">Interaction &amp; <em>motion</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Element</th><th>Trigger</th><th>Spec</th><th>Reduced-motion</th></tr></thead>
+        <tbody>
+          <tr><td>Nav link active</td><td>route change</td><td class="mono">bg + left-rule swap, 120 ms</td><td>Instant</td></tr>
+          <tr><td>App card hover</td><td>pointer</td><td class="mono">translateY(-2px) + shadow, 120 ms</td><td>Border only</td></tr>
+          <tr><td>Tab switch</td><td>click</td><td class="mono">200 ms cross-fade + underline slide</td><td>Instant</td></tr>
+          <tr><td>Message send (optimistic)</td><td>send</td><td class="mono">bubble appears at 60% opacity → 100% on ack</td><td>Appears solid immediately</td></tr>
+          <tr><td>Unread dot</td><td>new message</td><td class="mono">scale 0→1 pop, 200 ms</td><td>Appears static</td></tr>
+          <tr><td>Document upload</td><td>file transfer</td><td class="mono">chunked progress bar interpolation</td><td>Identical</td></tr>
+          <tr><td>Mobile tab bar</td><td>scroll</td><td class="mono">always visible, no hide-on-scroll</td><td>Identical</td></tr>
+          <tr><td>Banner enter</td><td>action required</td><td class="mono">height + opacity 200 ms</td><td>Opacity only</td></tr>
+          <tr><td>Re-auth modal</td><td>session expiry</td><td class="mono">backdrop fade + card pop 200 ms</td><td>Instant appear</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s7">
+    <div class="spec-head"><span class="spec-num">07 /</span><h2 class="spec-title">Responsive <em>matrix</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Element</th><th>320–767</th><th>768–979</th><th>980+</th></tr></thead>
+        <tbody>
+          <tr><td>Navigation</td><td>bottom tab bar (4) + top bar</td><td>bottom tab bar</td><td>240 px sidenav</td></tr>
+          <tr><td>Welcome banner</td><td>stacked, CTA full-width</td><td>row</td><td>row</td></tr>
+          <tr><td>Stat tiles</td><td>2 col</td><td>4 col</td><td>4 col</td></tr>
+          <tr><td>App cards</td><td>1 col</td><td>2 col</td><td>2 col</td></tr>
+          <tr><td>Detail layout</td><td>1 col (agent card below)</td><td>1 col</td><td>main + 320 px agent/fee column</td></tr>
+          <tr><td>Detail tabs</td><td>horizontal scroll</td><td>full row</td><td>full row</td></tr>
+          <tr><td>Settings sections</td><td>stacked, label above</td><td>label left</td><td>label-220 + control</td></tr>
+          <tr><td>Conversation thread</td><td>full width bubbles</td><td>max 640</td><td>max 640</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s8">
+    <div class="spec-head"><span class="spec-num">08 /</span><h2 class="spec-title">All <em>states</em></h2></div>
+    <div class="spec-body">
+      <p>10 documented in <a href="states.html" class="linked">states.html</a>: empty (no applications yet → start CTA) · loading skeleton · offline cached snapshot · email-verification banner · optimistic message send (+ failed-to-send retry) · document upload with chunked progress · multi-tab BroadcastChannel conflict · session-expired re-auth modal · service archived after submission · returning after long absence (digest of what changed).</p>
+      <table class="t">
+        <thead><tr><th>State</th><th>Dashboard</th><th>Detail</th><th>Settings</th></tr></thead>
+        <tbody>
+          <tr><td>Empty</td><td>"No applications yet" + Browse services</td><td>—</td><td>N/A (always populated)</td></tr>
+          <tr><td>Loading</td><td>Stat + card skeletons</td><td>Hero + tab skeleton</td><td>Section skeleton</td></tr>
+          <tr><td>Offline</td><td>Cached cards + banner</td><td>Cached; sends queue</td><td>Read-only + banner</td></tr>
+          <tr><td>Server 5xx</td><td>Per-section retry</td><td>Tab-level retry</td><td>Section retry, values kept</td></tr>
+          <tr><td>Session expired</td><td>Re-auth modal (work preserved)</td><td>Re-auth modal</td><td>Re-auth modal</td></tr>
+          <tr><td>Email unverified</td><td>Persistent banner; writes blocked</td><td>Pay/upload blocked</td><td>Verify CTA in contact</td></tr>
+          <tr><td>Reduced motion</td><td>No card lift; instant tabs</td><td>Same</td><td>Same</td></tr>
+          <tr><td>RTL</td><td>Sidenav flips right; code chip LTR</td><td>Mirrored; thread flips</td><td>Mirrored</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s9">
+    <div class="spec-head"><span class="spec-num">09 /</span><h2 class="spec-title">Accessibility <em>checklist</em></h2></div>
+    <div class="spec-body">
+      <div class="check pass">SideNav is a <span class="mono">&lt;nav aria-label="Primary"&gt;</span>; active link marked <span class="mono">aria-current="page"</span></div>
+      <div class="check pass">Mobile tab bar uses <span class="mono">role="tablist"</span> equivalent with labelled icon buttons (44 px targets)</div>
+      <div class="check pass">Unread counts exposed as text to SR ("Messages, 2 unread"), not colour-only dot</div>
+      <div class="check pass">Detail tabs are a real tablist; panels have <span class="mono">role="tabpanel"</span> + <span class="mono">aria-labelledby</span></div>
+      <div class="check pass">Status hero status announced via <span class="mono">role="status"</span></div>
+      <div class="check pass">Conversation thread: each message has author + timestamp in accessible text; system messages distinguished semantically</div>
+      <div class="check pass">Optimistic-send pending state announced ("Sending…") + failure announced via <span class="mono">role="alert"</span></div>
+      <div class="check pass">Re-auth modal traps focus; <span class="mono">Esc</span> disabled (must re-auth) but cancel returns to read-only</div>
+      <div class="check pass">Settings toggles are real <span class="mono">role="switch"</span> with <span class="mono">aria-checked</span></div>
+      <div class="check pass">Danger-zone delete uses confirm-by-typing; button disabled until match</div>
+      <div class="check pass">Trusted-device revoke buttons individually labelled with device + location</div>
+      <div class="check pass">Colour never sole indicator; reduced-motion + focus-visible inherited from tokens.css</div>
+    </div>
+  </section>
+
+  <section class="spec" id="s10">
+    <div class="spec-head"><span class="spec-num">10 /</span><h2 class="spec-title">Hand-off &amp; <em>self-review</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin: 0 0 6px;">Engineering notes</h4>
+      <ul class="l">
+        <li><strong>App shell is the contract.</strong> SideNav, UserChip, MobileTabBar, and the content frame are exported from <span class="mono">@proxiserve/ui</span> and reused verbatim by F8 (agent) and F9 (admin) — only the nav items and accent differ.</li>
+        <li><strong>Optimistic messaging.</strong> Sends render immediately at 60% opacity with a client temp-id; on server ack the bubble solidifies and the temp-id swaps for the real id. On failure → inline retry, message preserved.</li>
+        <li><strong>Conversation parity.</strong> Same thread component as F5 (guest) and F8 (agent). Role determines affordances: client never sees agent internal notes; agent sees both lanes visually separated.</li>
+        <li><strong>Offline.</strong> Service worker caches the dashboard shell + last-seen app snapshots. Message sends + document uploads queue via Background Sync (shared with F3).</li>
+        <li><strong>Multi-tab.</strong> One <span class="mono">BroadcastChannel</span> keyed by user id; tabs reconcile unread counts + draft message state so a reply typed in one tab isn't lost in another.</li>
+        <li><strong>Session.</strong> 30-day idle for clients (per F4). Expiry mid-session opens a re-auth modal that preserves unsaved work (draft messages, half-filled settings) rather than bouncing to sign-in.</li>
+        <li><strong>Email verification gate.</strong> Reads allowed; writes (new application, payment, profile change) blocked behind the verification banner until confirmed.</li>
+        <li><strong>Analytics events.</strong> dash_view, dash_banner_action, app_card_click {code}, detail_tab_view {tab}, message_send {optimistic}, message_send_fail, doc_replace {req_id}, settings_section_view, device_revoke, account_delete_attempt, notif_pref_change {channel,on}.</li>
+      </ul>
+
+      <h4 class="t-h4" style="margin: 24px 0 12px;">Designer self-review rubric (D.8)</h4>
+      <div class="check pass">01 — Real content (real names, RWF, +250 phones, real service names + statuses)</div>
+      <div class="check pass">02 — Spacing scale obeyed</div>
+      <div class="check pass">03 — Semantic tokens only</div>
+      <div class="check pass">04 — Mobile-first (tab bar shell; cards stack at 320)</div>
+      <div class="check pass">05 — Sticky safe-area respected (bottom tab bar)</div>
+      <div class="check pass">06 — All states covered (10 documented)</div>
+      <div class="check pass">07 — Reduced-motion variant inherited</div>
+      <div class="check pass">08 — A11y checklist signed (12/12)</div>
+      <div class="check pass">09 — i18n length budget honoured</div>
+      <div class="check pass">10 — Icon family consistent (Lucide line)</div>
+      <div class="check pass">11 — Banned patterns absent</div>
+      <div class="check pass">12 — Hierarchy obvious; app shell distinct from public chrome</div>
+      <div class="check pass">13 — CTAs unambiguous ("New application", "Upload now", "Message agent", "Pay now")</div>
+      <div class="check pass">14 — Edge cases (10 documented)</div>
+      <div class="check pass">15 — Final line invites next flow</div>
+
+      <p style="margin-top: 24px;"><span class="score">Score · <span class="big">15</span> / 15</span></p>
+
+      <div class="callout" style="margin-top: 32px;">
+        Flow 6 is complete. Type "Design Flow 7." to continue with Payments — mobile-money push, card 3DS, pay-agent-directly, receipt, dispute. Or correct anything here first.
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

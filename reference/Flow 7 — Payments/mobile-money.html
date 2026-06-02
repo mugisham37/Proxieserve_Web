@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>MTN Mobile Money · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="payments.css" />
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="pay-topbar">
+  <div class="container">
+    <div class="pay-topbar__inner">
+      <a href="../Flow 6 — Client Dashboard/dashboard.html" class="pay-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div class="pay-crumb"><a href="method-choice.html">Payment</a><span class="sep">/</span><strong>MTN Mobile Money</strong></div>
+      <span class="pay-secure">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        SECURE
+      </span>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="pay-shell">
+  <div class="container">
+    <div class="pay-page">
+
+      <div class="pay-main">
+
+        <!-- ===== STAGE 1: enter number (hidden once submitted) ===== -->
+        <section id="stage-number">
+          <header class="pay-head">
+            <span class="pay-head__num">MTN Mobile Money · step 1 of 2</span>
+            <h1>Which <em>number</em> should we charge?</h1>
+            <p class="pay-head__lede">We'll send a prompt to this phone. <em>Approve it with your MoMo PIN</em> — we never see your PIN.</p>
+          </header>
+
+          <div class="pay-card">
+            <div class="pay-card__head"><h2>MTN <em>number</em></h2><span class="meta">RWF 15,000</span></div>
+            <label class="pfield">
+              <span class="pfield__label">Mobile Money number</span>
+              <div style="display: grid; grid-template-columns: 110px 1fr; gap: 8px;">
+                <span style="display: flex; align-items: center; gap: 6px; padding: 12px 14px; background: var(--cream); border: 1px solid var(--rule-strong); border-radius: var(--r-md); font-size: 15px;">
+                  <span style="font-size: 18px;">🇷🇼</span><span style="font-family: var(--mono); font-size: 14px;">+250</span>
+                </span>
+                <input class="pfield__input pfield__input--mono" type="tel" inputmode="numeric" value="78 8 123 456" aria-label="MTN number" />
+              </div>
+              <span class="pfield__help">Must be a registered MTN MoMo number. Charges apply only after you approve.</span>
+            </label>
+
+            <label style="display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--ink-2); margin-top: 4px;">
+              <input type="checkbox" style="accent-color: var(--ink); width: 18px; height: 18px;" checked />
+              This is also my account phone number
+            </label>
+          </div>
+
+          <div style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
+            <a href="method-choice.html" class="pay-back">← Change method</a>
+            <button class="pay-cta" style="margin-left: auto; width: auto; padding-left: 32px; padding-right: 32px;" onclick="startPush()">
+              Send payment prompt <span class="arr">→</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ===== STAGE 2: waiting for approval (shown after submit) ===== -->
+        <section id="stage-wait" style="display: none;">
+          <div class="push-wait">
+            <div class="push-phone">
+              <div class="push-phone__pulse">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              </div>
+            </div>
+
+            <h1 style="font-family: var(--serif); font-weight: 400; font-size: clamp(28px,3.4vw,40px); line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.015em;">Check your <em style="font-style: italic;">phone</em>.</h1>
+            <p style="font-family: var(--serif); font-size: 18px; color: var(--ink-2); margin: 0; line-height: 1.5;">We sent a prompt to <strong style="font-family: var(--mono); font-size: 15px; color: var(--ink);">+250 78 8 123 456</strong>. Enter your MoMo PIN to approve <strong style="color: var(--ink);">RWF 15,000</strong>.</p>
+
+            <div class="push-steps">
+              <div class="push-step is-done">
+                <span class="push-step__n">✓</span>
+                <div><strong>Prompt sent</strong><div class="sub">Delivered to your phone</div></div>
+              </div>
+              <div class="push-step is-active">
+                <span class="push-step__n">2</span>
+                <div><strong>Approve on your phone</strong><div class="sub">Open the MTN prompt, enter your PIN</div></div>
+              </div>
+              <div class="push-step">
+                <span class="push-step__n">3</span>
+                <div><strong>We confirm</strong><div class="sub">Your receipt appears here automatically</div></div>
+              </div>
+            </div>
+
+            <p class="push-timer">Waiting for approval · expires in <strong id="timer">02:00</strong></p>
+
+            <div style="margin-top: 24px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+              <button class="pill pill--sm" onclick="resendPush()">Resend prompt</button>
+              <a href="method-choice.html" class="pill pill--sm pill--ghost">Use another method</a>
+            </div>
+
+            <div class="pay-banner pay-banner--info" style="margin-top: 28px; text-align: left;">
+              <strong>Didn't get the prompt?</strong> Dial <span style="font-family: var(--mono);">*182#</span> → My Account → Approvals, or tap resend. Make sure you have airtime and network.
+            </div>
+
+            <p style="margin-top: 24px;"><a href="receipt.html" style="font-size: 13px; color: var(--ink-muted); text-decoration: underline;">(demo) Skip to receipt →</a></p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Summary -->
+      <aside class="pay-summary" aria-label="Payment summary">
+        <div class="strip"></div>
+        <span class="pay-summary__cat">Identity &amp; civil</span>
+        <h3>Passport <em>renewal</em></h3>
+        <div class="pay-summary__code">PRX-2026-00483 · Aline M.</div>
+        <div class="fee-line"><span class="l">Service fee</span><span class="v">RWF 15,000</span></div>
+        <div class="fee-line"><span class="l">Via</span><span class="v">MTN MoMo</span></div>
+        <div class="fee-line total"><span class="l">Pay now</span><span class="v">RWF <em>15,000</em></span></div>
+        <p class="pay-summary__note">You'll only be charged after you approve the prompt with your PIN.</p>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<script>
+  function startPush() {
+    document.getElementById('stage-number').style.display = 'none';
+    document.getElementById('stage-wait').style.display = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    startTimer();
+  }
+  function resendPush() {
+    const t = document.getElementById('timer');
+    secs = 120;
+  }
+  let secs = 120;
+  function startTimer() {
+    const t = document.getElementById('timer');
+    const iv = setInterval(() => {
+      secs--;
+      if (secs < 0) { clearInterval(iv); return; }
+      const m = String(Math.floor(secs/60)).padStart(2,'0');
+      const s = String(secs%60).padStart(2,'0');
+      t.textContent = m + ':' + s;
+      // auto-advance to receipt at a demo point
+      if (secs === 113) { window.location.href = 'receipt.html'; }
+    }, 1000);
+  }
+</script>
+</body>
+</html>

@@ -13,14 +13,17 @@ import { StepPills } from "@/components/molecules/StepPills";
 import { FormField } from "@/components/atoms/FormField";
 import { PhoneInputWithCountry } from "@/components/molecules/PhoneCountryButton";
 import { forgotSchema, type ForgotData } from "@/lib/auth-schema";
-import { AUTH_RESET_TOKEN_KEY, MOCK } from "@/lib/auth-types";
-import { setItem } from "@/lib/storage";
+import { useForgotPassword } from "@/hooks/useAuth";
+import { isApiError } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
 export function ForgotPasswordForm() {
   const [tab, setTab] = React.useState<AuthTabValue>("email");
   const [sent, setSent] = React.useState(false);
   const [maskedEmail, setMaskedEmail] = React.useState("");
+  const [lastSubmitted, setLastSubmitted] = React.useState<ForgotData | null>(null);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const forgotPasswordMutation = useForgotPassword();
 
   const {
     register,
@@ -38,17 +41,20 @@ export function ForgotPasswordForm() {
   }, [tab, setValue]);
 
   async function onSubmit(data: ForgotData) {
-    await new Promise((r) => setTimeout(r, 800));
+    setErrorMessage(null);
 
-    // Save mock reset token
-    setItem(AUTH_RESET_TOKEN_KEY, MOCK.VALID_RESET_TOKEN);
-
-    const masked =
-      data.identifierType === "email"
-        ? data.identifier.replace(/(.{2}).*(@.*)/, "$1•••$2")
-        : "+250 78 ••• •••";
-    setMaskedEmail(masked);
-    setSent(true);
+    try {
+      const response = await forgotPasswordMutation.mutateAsync(data);
+      setLastSubmitted(data);
+      setMaskedEmail(response.maskedEmail);
+      setSent(true);
+    } catch (error) {
+      setErrorMessage(
+        isApiError(error)
+          ? error.message
+          : "Something went wrong on our end. Please try again.",
+      );
+    }
   }
 
   return (
@@ -75,6 +81,12 @@ export function ForgotPasswordForm() {
             >
               <StepPills current={1} />
 
+              <AuthBanner
+                variant="danger"
+                message={errorMessage ?? "Something went wrong on our end. Please try again."}
+                visible={!!errorMessage}
+              />
+
               <AuthTabs active={tab} onChange={setTab} />
 
               <motion.div
@@ -84,7 +96,7 @@ export function ForgotPasswordForm() {
                 transition={{ duration: 0.12, ease: [0.2, 0, 0, 1] }}
               >
                 {tab === "email" ? (
-                  (() => { const { name: _n, ...r } = register("identifier"); return (
+                  (() => { const { name: fieldName, ...r } = register("identifier"); void fieldName; return (
                     <FormField
                       label="Email address"
                       name="identifier"
@@ -108,7 +120,7 @@ export function ForgotPasswordForm() {
               <button
                 type="button"
                 onClick={handleSubmit(onSubmit)}
-                disabled={isSubmitting}
+                disabled={isSubmitting || forgotPasswordMutation.isPending}
                 className={cn(
                   "w-full h-12 rounded-[var(--r-pill)] mt-1",
                   "font-serif italic text-[17px] text-[var(--paper)]",
@@ -119,7 +131,7 @@ export function ForgotPasswordForm() {
                   "flex items-center justify-center gap-2"
                 )}
               >
-                {isSubmitting ? (
+                {isSubmitting || forgotPasswordMutation.isPending ? (
                   <span className="flex items-center gap-2">
                     <span className="w-4 h-4 border-2 border-[var(--paper)] border-t-transparent rounded-full animate-spin" />
                     Sending…
@@ -136,10 +148,30 @@ export function ForgotPasswordForm() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
             >
+              <AuthBanner
+                variant="danger"
+                message={errorMessage ?? "Something went wrong on our end. Please try again."}
+                visible={!!errorMessage}
+                className="mb-4"
+              />
               <EmailSentConfirmation
                 maskedEmail={maskedEmail}
-                onResend={() => {
-                  /* mock: just show it again */
+                onResend={async () => {
+                  if (!lastSubmitted) {
+                    return;
+                  }
+
+                  setErrorMessage(null);
+                  try {
+                    const response = await forgotPasswordMutation.mutateAsync(lastSubmitted);
+                    setMaskedEmail(response.maskedEmail);
+                  } catch (error) {
+                    setErrorMessage(
+                      isApiError(error)
+                        ? error.message
+                        : "Something went wrong on our end. Please try again.",
+                    );
+                  }
                 }}
               />
             </motion.div>

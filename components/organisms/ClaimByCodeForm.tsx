@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,29 +12,25 @@ import { FoundApplicationCard } from "@/components/molecules/FoundApplicationCar
 import { PhoneInputWithCountry } from "@/components/molecules/PhoneCountryButton";
 import { FormField } from "@/components/atoms/FormField";
 import { claimSchema, type ClaimData } from "@/lib/auth-schema";
-import { MOCK } from "@/lib/auth-types";
+import { useClaimApplication } from "@/hooks/useAuth";
+import { useApplicationLookup } from "@/hooks/useApplicationLookup";
+import { isApiError } from "@/lib/api/types";
 import { formatTrackerCode } from "@/lib/tracker";
 import { cn } from "@/lib/utils";
 
-// Mock: service names by PRX code
-const MOCK_SERVICES: Record<string, string> = {
-  [MOCK.VALID_PRX]: "Passport renewal",
-};
-
 export function ClaimByCodeForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const defaultCode = searchParams.get("code") ?? "";
 
-  const [foundService, setFoundService] = React.useState<string | null>(null);
-  const [notFound, setNotFound] = React.useState(false);
-  const [isLinking, setIsLinking] = React.useState(false);
+  const [debouncedCode, setDebouncedCode] = React.useState(defaultCode);
+  const [submitError, setSubmitError] = React.useState<string | null>(null);
+  const lookupQuery = useApplicationLookup(debouncedCode);
+  const claimMutation = useClaimApplication();
 
   const {
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ClaimData>({
     resolver: zodResolver(claimSchema),
@@ -43,32 +39,38 @@ export function ClaimByCodeForm() {
 
   const codeValue = watch("code");
 
-  // Auto-resolve code after 600ms debounce
   React.useEffect(() => {
     if (!codeValue || codeValue.length < 14) {
-      setFoundService(null);
-      setNotFound(false);
+      setDebouncedCode("");
       return;
     }
+
     const id = setTimeout(() => {
-      const service = MOCK_SERVICES[codeValue];
-      if (service) {
-        setFoundService(service);
-        setNotFound(false);
-      } else {
-        setFoundService(null);
-        setNotFound(true);
-      }
+      setDebouncedCode(codeValue);
     }, 600);
     return () => clearTimeout(id);
   }, [codeValue]);
 
+  const foundApplication = lookupQuery.data ?? null;
+  const notFound = isApiError(lookupQuery.error) && lookupQuery.error.errorType === "claim-not-found";
+  const lookupErrorMessage = lookupQuery.isError && !notFound
+    ? (isApiError(lookupQuery.error) ? lookupQuery.error.message : "Something went wrong on our end. Please try again.")
+    : null;
+
   async function onSubmit(data: ClaimData) {
-    if (!foundService) return;
-    setIsLinking(true);
-    await new Promise((r) => setTimeout(r, 900));
-    // Success — redirect to login or dashboard
-    router.push("/login?claimed=1");
+    if (!foundApplication) return;
+
+    setSubmitError(null);
+
+    try {
+      await claimMutation.mutateAsync(data);
+    } catch (error) {
+      setSubmitError(
+        isApiError(error)
+          ? error.message
+          : "Something went wrong on our end. Please try again.",
+      );
+    }
   }
 
   return (
@@ -91,12 +93,18 @@ export function ClaimByCodeForm() {
             message="We couldn't find an application with that code. Double-check and try again."
             visible={notFound}
           />
+          <AuthBanner
+            variant="danger"
+            message={lookupErrorMessage ?? submitError ?? "Something went wrong on our end. Please try again."}
+            visible={!!lookupErrorMessage || !!submitError}
+          />
 
           {/* PRX code input */}
           {(() => {
-            const { name: _n, ...codeReg } = register("code", {
+            const { name: fieldName, ...codeReg } = register("code", {
               onChange: (e) => { e.target.value = formatTrackerCode(e.target.value); },
             });
+            void fieldName;
             return (
               <FormField
                 label="Tracking code"
@@ -113,8 +121,12 @@ export function ClaimByCodeForm() {
 
           {/* Found card */}
           <AnimatePresence>
-            {foundService && (
-              <FoundApplicationCard serviceName={foundService} />
+            {foundApplication && (
+              <FoundApplicationCard
+                serviceName={foundApplication.serviceName}
+                submittedDate={foundApplication.submittedDate}
+                status={foundApplication.status}
+              />
             )}
           </AnimatePresence>
 
@@ -131,7 +143,7 @@ export function ClaimByCodeForm() {
           <button
             type="button"
             onClick={handleSubmit(onSubmit)}
-            disabled={isSubmitting || isLinking || !foundService}
+            disabled={isSubmitting || claimMutation.isPending || !foundApplication}
             className={cn(
               "w-full h-12 rounded-[var(--r-pill)] mt-1",
               "font-serif italic text-[17px] text-[var(--paper)]",
@@ -142,7 +154,7 @@ export function ClaimByCodeForm() {
               "flex items-center justify-center gap-2"
             )}
           >
-            {isLinking || isSubmitting ? (
+            {claimMutation.isPending || isSubmitting ? (
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-[var(--paper)] border-t-transparent rounded-full animate-spin" />
                 Linking…

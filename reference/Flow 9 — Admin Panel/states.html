@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 9 — States gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+<link rel="stylesheet" href="admin.css" />
+<style>
+  body { background: var(--cream-2); }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 720px) { .container { padding: 0 20px; } }
+  .page-head { padding: 48px 0 32px; border-bottom: 1px solid var(--rule); background: var(--cream); }
+  .page-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .page-head h1 { margin: 8px 0 12px; font-family: var(--serif); font-weight: 400; font-size: clamp(32px,4vw,52px); letter-spacing: -0.02em; }
+  .page-head h1 em { font-style: italic; }
+  .page-head p { color: var(--ink-muted); margin: 0; max-width: 720px; }
+  .lnk-arrow { display:inline-flex; align-items:center; gap:6px; font-family: var(--sans); font-size: 13px; color: var(--ink-muted); text-decoration: none; }
+  .gallery { padding: 56px 0 120px; display: grid; grid-template-columns: 1fr; gap: 56px; }
+  .tile { background: var(--cream); border: 1px solid var(--rule); border-radius: var(--r-lg); overflow: hidden; }
+  .tile__head { padding: 18px 24px; display: flex; gap: 16px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--rule); background: var(--paper); flex-wrap: wrap; }
+  .tile__head h2 { margin: 0; font-size: 20px; font-family: var(--serif); font-weight: 500; }
+  .tile__head h2 em { font-style: italic; font-weight: 400; }
+  .tile__head .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .tag { font-family: var(--mono); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: var(--cream-2); color: var(--ink-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .tag--brand { background: var(--brand-soft); color: var(--brand-ink); }
+  .tag--warn  { background: var(--warn-soft); color: var(--warn); }
+  .tag--danger{ background: var(--danger-soft); color: var(--danger); }
+  .tag--info  { background: var(--info-soft); color: var(--info); }
+  .tile__body { padding: 32px; }
+  .tile__notes { padding: 16px 24px; background: var(--cream-2); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
+  .tile__notes strong { color: var(--ink); font-weight: 600; }
+  .demo-wrap { max-width: 620px; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="container">
+    <a href="index.html" class="lnk-arrow" style="margin-bottom: 16px;"><span aria-hidden="true">←</span> Back to Flow 9 hub</a>
+    <div class="meta">FLOW 09 / STATES GALLERY · 8 STATES</div>
+    <h1>Admin — <em>edge cases</em>.</h1>
+    <p>The admin panel holds the most power, so it needs the most guardrails: confirm-by-typing on destructive actions, schema-publish migration warnings, append-only audit integrity, and permission boundaries even the owner can't cross.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="gallery">
+
+    <!-- 01 schema publish migration -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">01 / Publishing a schema with live drafts</span><h2>"142 drafts on the <em>old version</em>"</h2></div><span class="tag tag--brand">Migration</span></header>
+      <div class="tile__body"><div class="demo-wrap">
+        <div style="background: var(--paper); border: 1px solid var(--ink); border-radius: var(--r-lg); padding: 24px;">
+          <h3 style="font-family: var(--serif); font-weight: 500; font-size: 22px; margin: 0 0 8px;">Publish Passport renewal <em style="font-style:italic;">v4?</em></h3>
+          <p style="font-size: 14px; color: var(--ink-2); line-height: 1.55; margin: 0 0 16px;">This becomes the live form immediately for new applicants. <strong>142 in-progress drafts are on v3.</strong> Choose how they migrate:</p>
+          <label style="display:flex; gap:10px; align-items:flex-start; padding: 12px; border: 1px solid var(--ink); border-radius: var(--r-sm); background: var(--brand-soft); margin-bottom: 8px;"><input type="radio" name="mig" checked style="margin-top:3px; accent-color: var(--brand);"><div><div style="font-weight:600; font-size:14px;">Migrate automatically (recommended)</div><div style="font-size:12.5px; color:var(--ink-muted);">Carry over matching answers, flag the new "Travel intent" field for them to fill.</div></div></label>
+          <label style="display:flex; gap:10px; align-items:flex-start; padding: 12px; border: 1px solid var(--rule-strong); border-radius: var(--r-sm); margin-bottom: 16px;"><input type="radio" name="mig" style="margin-top:3px; accent-color: var(--ink);"><div><div style="font-weight:600; font-size:14px;">Let drafts finish on v3</div><div style="font-size:12.5px; color:var(--ink-muted);">Existing drafts keep the old form; only new applicants get v4.</div></div></label>
+          <div style="display:flex; gap:8px; justify-content:flex-end;"><button class="btn-sm btn-sm--ghost">Cancel</button><button class="btn-sm" style="background:var(--brand);color:white;border-color:var(--brand);">Publish v4</button></div>
+        </div>
+      </div></div>
+      <div class="tile__notes"><strong>The schema is the contract with Flow 3.</strong> Publishing never silently breaks a client mid-application — the admin explicitly chooses the migration strategy, and Flow 3 shows affected clients the "what changed" diff on resume.</div>
+    </article>
+
+    <!-- 02 confirm by typing -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">02 / Destructive action — confirm by typing</span><h2>"Type the service <em>name</em>"</h2></div><span class="tag tag--danger">Destructive</span></header>
+      <div class="tile__body"><div class="demo-wrap">
+        <div class="danger-box">
+          <h4>Permanently delete "Visa assistance"?</h4>
+          <p>This service has 0 active applications but 18 historical ones. Deleting removes the service and its schema. Historical applications keep a snapshot. <strong>This can't be undone.</strong> Type <strong>Visa assistance</strong> to confirm.</p>
+          <input placeholder="Type the service name" value="Visa assist" />
+          <button class="btn-sm" style="margin-top: 12px; background: var(--ink-subtle); color: white; border-color: var(--ink-subtle); cursor: not-allowed;">Delete service</button>
+          <span style="font-family: var(--mono); font-size: 11px; color: var(--danger); margin-left: 12px;">name doesn't match yet</span>
+        </div>
+      </div></div>
+      <div class="tile__notes"><strong>Friction proportional to consequence.</strong> Archiving is one click (reversible). Permanent deletion requires typing the exact name — the button stays disabled until it matches. Same pattern for deleting an agent or wiping data.</div>
+    </article>
+
+    <!-- 03 audit immutability -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">03 / Trying to edit the audit log</span><h2>"Even the <em>owner</em> can't"</h2></div><span class="tag tag--info">Integrity</span></header>
+      <div class="tile__body"><div class="demo-wrap">
+        <div style="background: var(--ink); color: var(--paper); border-radius: var(--r-md); padding: 20px; display:flex; gap: 16px; align-items: flex-start;">
+          <span style="width:40px;height:40px;border-radius:999px;background:rgba(246,236,210,0.12);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+          <div>
+            <div style="font-family: var(--serif); font-weight: 500; font-size: 18px; margin-bottom: 4px;">The audit log is append-only</div>
+            <p style="font-size: 13.5px; color: rgba(246,236,210,0.75); line-height: 1.55; margin: 0;">Entries can't be edited or deleted by anyone — including you as owner. This is deliberate: the log is the source of truth if there's ever a dispute or investigation. Retained 7 years, exportable for legal requests.</p>
+          </div>
+        </div>
+      </div></div>
+      <div class="tile__notes"><strong>Trust requires tamper-evidence.</strong> A government-adjacent product handling ID documents must be able to prove who did what. The audit log has no edit/delete affordance anywhere in the UI, and the backend rejects mutations cryptographically (hash-chained entries).</div>
+    </article>
+
+    <!-- 04 permission boundary -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">04 / Acting as an agent from oversight</span><h2>"This will be <em>logged</em>"</h2></div><span class="tag tag--brand">Permission</span></header>
+      <div class="tile__body"><div class="demo-wrap">
+        <div style="background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-lg); padding: 24px;">
+          <h3 style="font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 0 0 8px;">Intervene on <em style="font-style:italic;">Aline M.'s case?</em></h3>
+          <p style="font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin: 0 0 16px;">You're about to take an agent action (reassign / message client / change status) on a case you don't own. This is sometimes necessary — but it's recorded with your name, the reason, and a timestamp, and Aline is notified.</p>
+          <div class="adm-field"><label>Reason (required)</label><input placeholder="Why are you intervening?" value="Agent over capacity — rebalancing to Patrick"></div>
+          <div style="display:flex; gap:8px; justify-content:flex-end;"><button class="btn-sm btn-sm--ghost">Cancel</button><button class="btn-sm" style="background:var(--brand);color:white;border-color:var(--brand);">Reassign &amp; log</button></div>
+        </div>
+      </div></div>
+      <div class="tile__notes"><strong>Oversight without surveillance creep.</strong> Admins can intervene, but never invisibly. Every privileged action requires a reason, notifies the affected agent, and writes to the audit log. This is what makes "admin → agent" a healthy relationship rather than a panopticon.</div>
+    </article>
+
+    <!-- 05 broadcast guardrail -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">05 / Broadcast confirmation</span><h2>"Sending to <em>142 people</em>"</h2></div><span class="tag tag--warn">Confirm</span></header>
+      <div class="tile__body"><div class="demo-wrap">
+        <div style="background: var(--paper); border: 1px solid var(--ink); border-radius: var(--r-lg); padding: 24px;">
+          <h3 style="font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 0 0 8px;">Send to <em style="font-style:italic;">142 clients?</em></h3>
+          <div style="display:flex; flex-direction:column; gap:8px; margin: 16px 0; font-size:13.5px;">
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--rule-soft);"><span style="color:var(--ink-muted);">Audience</span><span style="font-weight:500;">In-progress applicants</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--rule-soft);"><span style="color:var(--ink-muted);">Channels</span><span style="font-weight:500;">WhatsApp</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--rule-soft);"><span style="color:var(--ink-muted);">Opt-outs excluded</span><span style="font-weight:500;">6</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--ink-muted);">Est. cost</span><span style="font-weight:500; font-family: var(--mono);">RWF 8,520</span></div>
+          </div>
+          <div style="display:flex; gap:8px; justify-content:flex-end;"><button class="btn-sm btn-sm--ghost">Back to edit</button><button class="btn-sm" style="background:var(--brand);color:white;border-color:var(--brand);">Send now</button></div>
+        </div>
+      </div></div>
+      <div class="tile__notes"><strong>No accidental mass-sends.</strong> Broadcasts always confirm with the exact reach, cost, and opt-out count before sending. Test-to-self is one click away. Opt-outs are excluded automatically and irreversibly — a client who opted out can never be re-added by a segment.</div>
+    </article>
+
+    <!-- 06 loading -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">06 / Loading — analytics aggregating</span><h2>KPI <em>skeletons</em></h2></div><span class="tag tag--brand">Loading</span></header>
+      <div class="tile__body">
+        <div class="kpi" style="grid-template-columns: repeat(3,1fr);">
+          <div class="kpi-card"><div style="height:9px;width:50%;background:var(--cream-2);border-radius:4px;margin-bottom:10px;"></div><div style="height:26px;width:70%;background:var(--cream-2);border-radius:4px;"></div></div>
+          <div class="kpi-card"><div style="height:9px;width:60%;background:var(--cream-2);border-radius:4px;margin-bottom:10px;"></div><div style="height:26px;width:60%;background:var(--cream-2);border-radius:4px;"></div></div>
+          <div class="kpi-card"><div style="height:9px;width:45%;background:var(--cream-2);border-radius:4px;margin-bottom:10px;"></div><div style="height:26px;width:80%;background:var(--cream-2);border-radius:4px;"></div></div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>Heavy queries, honest waits.</strong> Analytics aggregates over hundreds of thousands of rows. KPIs stream in as each query resolves rather than blocking on the slowest. Cached snapshots show instantly with a "refreshed 14:32" timestamp; live recompute happens in the background.</div>
+    </article>
+
+    <!-- 07 empty analytics -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">07 / Empty — new install, no data</span><h2>"Once applications <em>come in</em>"</h2></div><span class="tag">Empty</span></header>
+      <div class="tile__body"><div class="demo-wrap" style="text-align:center; padding: 32px;">
+        <div style="width:56px;height:56px;border:1.5px solid var(--ink-muted);border-radius:999px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:var(--ink-muted);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+        <h3 style="font-family: var(--serif); font-weight: 500; font-size: 24px; margin: 0 0 8px;">No data <em style="font-style:italic;">yet</em></h3>
+        <p style="font-size: 14px; color: var(--ink-muted); max-width: 380px; margin: 0 auto 20px;">Your analytics will fill in as applications come through. In the meantime, set up your services and invite your agents.</p>
+        <div style="display:flex; gap:8px; justify-content:center;"><a href="services-schema.html" class="btn-sm btn-sm--solid">Set up services</a><a href="pricing-agents.html#agents" class="btn-sm">Invite agents</a></div>
+      </div></div>
+      <div class="tile__notes"><strong>Onboarding, not a void.</strong> A brand-new install routes the admin to the two setup tasks that unblock everything else, rather than showing empty charts. Each KPI card has its own empty hint until it has data.</div>
+    </article>
+
+    <!-- 08 dark mode default -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">08 / Dark mode — admin default</span><h2>Power-user <em>default</em></h2></div><span class="tag">Appearance</span></header>
+      <div class="tile__body"><div class="demo-wrap">
+        <div style="background:#14110D; border:1px solid #2A231C; border-radius: var(--r-md); padding: 20px;">
+          <div style="display:flex; gap: 10px; margin-bottom: 14px;">
+            <div style="flex:1; background:#1F1A14; border:1px solid #2A231C; border-radius:8px; padding:12px;"><div style="font-family:var(--mono);font-size:9px;color:rgba(246,236,210,0.5);letter-spacing:0.08em;text-transform:uppercase;">Applications</div><div style="font-family:var(--serif);font-size:26px;color:#F2EBD7;margin-top:4px;">487</div></div>
+            <div style="flex:1; background:#1F1A14; border:1px solid #2A231C; border-radius:8px; padding:12px;"><div style="font-family:var(--mono);font-size:9px;color:rgba(246,236,210,0.5);letter-spacing:0.08em;text-transform:uppercase;">Revenue</div><div style="font-family:var(--serif);font-size:26px;color:var(--brand);margin-top:4px;">7.1M</div></div>
+            <div style="flex:1; background:#1F1A14; border:1px solid #2A231C; border-radius:8px; padding:12px;"><div style="font-family:var(--mono);font-size:9px;color:rgba(246,236,210,0.5);letter-spacing:0.08em;text-transform:uppercase;">SLA</div><div style="font-family:var(--serif);font-size:26px;color:#F2EBD7;margin-top:4px;">89%</div></div>
+          </div>
+          <div style="display:flex; align-items:flex-end; gap:6px; height:80px;">
+            <div style="flex:1;background:rgba(246,236,210,0.7);border-radius:3px 3px 0 0;height:50%;"></div>
+            <div style="flex:1;background:rgba(246,236,210,0.7);border-radius:3px 3px 0 0;height:65%;"></div>
+            <div style="flex:1;background:rgba(246,236,210,0.7);border-radius:3px 3px 0 0;height:55%;"></div>
+            <div style="flex:1;background:rgba(246,236,210,0.7);border-radius:3px 3px 0 0;height:80%;"></div>
+            <div style="flex:1;background:var(--brand);border-radius:3px 3px 0 0;height:100%;"></div>
+          </div>
+        </div>
+      </div></div>
+      <div class="tile__notes"><strong>Dark by default for admins.</strong> The most table-heavy zone defaults to dark for long sessions (set in platform settings), while public + client zones stay light. Brand magenta + status hues are held constant across themes for instant recognition. Per-user override always wins.</div>
+    </article>
+
+  </div>
+</div>
+
+<footer style="background:var(--cream); padding: 40px 0; border-top: 1px solid var(--rule);">
+  <div class="container" style="display:flex; justify-content:space-between; font-family: var(--mono); font-size:11px; color:var(--ink-muted); letter-spacing:0.06em;">
+    <span>PROXISERVE / FLOW 09 / STATES / v0.1</span>
+    <a href="index.html" style="color: inherit; text-decoration: underline;">Back to Flow 9 hub →</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProxiServe — Flow 3 / Application Submission</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--cream); }
+  .topstrip { border-bottom: 1px solid var(--rule); padding: 16px 0; background: var(--cream); }
+  .topstrip__inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .breadcrumb a { color: inherit; border-bottom: 1px solid transparent; padding-bottom: 1px; }
+  .breadcrumb a:hover { border-bottom-color: var(--ink); color: var(--ink); }
+
+  .hub-head { padding: 80px 0 56px; }
+  .hub-head .eyebrow { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .hub-head .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ink); }
+  .hub-head h1 { margin: 0 0 24px; }
+  .hub-head p { max-width: 720px; margin: 0; }
+  .hub-meta { display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .hub-meta span strong { color: var(--ink); font-weight: 600; }
+
+  /* Step pills — visual stepper showing all 5 step pages */
+  .step-strip {
+    margin-bottom: 64px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  @media (min-width: 760px) {
+    .step-strip { grid-template-columns: repeat(5, 1fr); }
+  }
+  .step-tile {
+    background: var(--paper);
+    padding: 28px 24px;
+    display: flex; flex-direction: column;
+    min-height: 200px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: background var(--m-fast);
+    position: relative;
+  }
+  .step-tile:hover { background: var(--paper-2); }
+  .step-tile__num {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  .step-tile__name {
+    font-family: var(--serif); font-weight: 500; font-size: 22px; line-height: 1.15;
+    margin: 0 0 8px;
+  }
+  .step-tile__name em { font-style: italic; font-weight: 400; }
+  .step-tile__desc { font-size: 13px; color: var(--ink-muted); margin: 0; flex: 1; line-height: 1.5; }
+  .step-tile__arrow {
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    color: var(--ink-2);
+    margin-top: 16px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .step-tile__arrow::after { content: "→"; transition: transform var(--m-fast); }
+  .step-tile:hover .step-tile__arrow::after { transform: translateX(4px); }
+  .step-tile--success { background: var(--ok-soft); }
+  .step-tile--success:hover { background: #C7DEC4; }
+  .step-tile--success .step-tile__num { color: var(--ok); }
+
+  /* Other deliverable cards (states + spec) */
+  .cards {
+    display: grid; grid-template-columns: 1fr; gap: 1px;
+    background: var(--ink); border: 1px solid var(--ink);
+    border-radius: var(--r-lg); overflow: hidden; margin-bottom: 80px;
+  }
+  @media (min-width: 760px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card {
+    background: var(--paper); padding: 40px 32px;
+    display: flex; flex-direction: column; min-height: 240px;
+    color: var(--ink); text-decoration: none;
+    transition: background var(--m-fast);
+  }
+  .card:hover { background: var(--paper-2); }
+  .card__num { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; margin-bottom: 12px; }
+  .card__title { font-family: var(--serif); font-weight: 500; font-size: 28px; line-height: 1.15; margin: 0 0 12px; }
+  .card__title em { font-style: italic; font-weight: 400; }
+  .card__desc { font-size: 14px; color: var(--ink-muted); line-height: 1.6; margin: 0 0 24px; flex: 1; max-width: 480px; }
+  .card__cta { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-weight: 500; font-size: 14px; }
+  .card__cta::after { content: "→"; transition: transform var(--m-fast); }
+  .card:hover .card__cta::after { transform: translateX(4px); }
+  .card--brand { background: var(--brand-soft); }
+  .card--brand:hover { background: #F0CFE0; }
+  .card--brand .card__title { color: var(--brand-ink); }
+
+  /* Decisions band */
+  .deci-band { background: var(--ink); color: var(--paper); padding: 80px 0; }
+  .deci-band h2 { color: var(--paper); margin: 0 0 16px; }
+  .deci-band h2 em { font-style: italic; font-weight: 400; }
+  .deci-band p { color: rgba(246,236,210,0.75); max-width: 640px; margin: 0; }
+  .decisions {
+    display: grid; grid-template-columns: 1fr; gap: 0;
+    margin-top: 56px;
+    border-top: 1px solid rgba(246,236,210,0.18);
+  }
+  @media (min-width: 760px) { .decisions { grid-template-columns: repeat(3, 1fr); } }
+  .dec {
+    padding: 32px 28px;
+    border-right: 1px solid rgba(246,236,210,0.12);
+    border-bottom: 1px solid rgba(246,236,210,0.12);
+  }
+  @media (max-width: 759px) { .dec { border-right: none; } }
+  .dec .num { font-family: var(--mono); font-size: 11px; color: rgba(246,236,210,0.4); letter-spacing: 0.06em; margin-bottom: 12px; display: block; }
+  .dec h4 { color: var(--paper); font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 0 0 8px; text-transform: none; letter-spacing: 0; }
+  .dec h4 em { font-style: italic; font-weight: 400; }
+  .dec p { color: rgba(246,236,210,0.75); font-size: 14px; line-height: 1.55; margin: 0; }
+
+  .next-band { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .next-band h2 { margin: 0 0 16px; }
+  .next-band p { max-width: 640px; margin: 0 0 32px; color: var(--ink-muted); }
+
+  .flow-list { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--rule-strong); }
+  .flow-row {
+    display: grid; grid-template-columns: 60px 1fr auto; gap: 20px;
+    padding: 18px 0; border-bottom: 1px solid var(--rule); align-items: center;
+  }
+  .flow-row .num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .flow-row h3 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 19px; }
+  .flow-row h3 em { font-style: italic; font-weight: 400; }
+  .flow-row p { margin: 4px 0 0; font-size: 13px; color: var(--ink-muted); }
+  .flow-row .status { padding: 4px 12px; font-size: 11px; }
+  .flow-row.done { background: var(--ok-soft); }
+
+  .foot {
+    border-top: 1px solid var(--rule); padding: 32px 0;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em;
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="topstrip">
+  <div class="container">
+    <div class="topstrip__inner">
+      <a href="../Flow 2 — Service Discovery/index.html" class="breadcrumb"><span aria-hidden="true">←</span> Flow 2 — Service Discovery</a>
+      <span class="breadcrumb">PROXISERVE / DESIGN / FLOW 03 — APPLICATION / v0.1</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="hub-head">
+    <span class="eyebrow">Flow 03 / 10 — application submission</span>
+    <h1 class="t-display">The <em>wizard</em>.</h1>
+    <p class="t-lede">Where intent becomes commitment. <em>The most state-heavy flow in the system</em> — five steps, dynamic schemas, document uploads, autosave, offline queue, idempotent submission, schema migration. Designed to feel short even when the data underneath is dense.</p>
+    <div class="hub-meta">
+      <span><strong>5 steps</strong> · personal → confirmation</span>
+      <span><strong>12 states</strong> · resume → server error</span>
+      <span><strong>30 components</strong> · 22 new in this flow</span>
+      <span><strong>15 / 15</strong> self-review score</span>
+    </div>
+  </div>
+
+  <!-- The 5 steps -->
+  <span class="eyebrow" style="display: block; margin-bottom: 16px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted);">The five live step pages</span>
+  <div class="step-strip">
+
+    <a href="step-1-personal.html" class="step-tile">
+      <span class="step-tile__num">Step 01</span>
+      <h3 class="step-tile__name">Your <em>details</em></h3>
+      <p class="step-tile__desc">Name, ID number, DOB, phone with WhatsApp toggle, language, consent.</p>
+      <span class="step-tile__arrow">Open step 1</span>
+    </a>
+
+    <a href="step-2-service.html" class="step-tile">
+      <span class="step-tile__num">Step 02</span>
+      <h3 class="step-tile__name">Service <em>details</em></h3>
+      <p class="step-tile__desc">Schema-driven for passport renewal — reason, current passport, travel intent, notes.</p>
+      <span class="step-tile__arrow">Open step 2</span>
+    </a>
+
+    <a href="step-3-documents.html" class="step-tile">
+      <span class="step-tile__num">Step 03</span>
+      <h3 class="step-tile__name">Your <em>documents</em></h3>
+      <p class="step-tile__desc">Per-requirement dropzones with live upload progress + every file state.</p>
+      <span class="step-tile__arrow">Open step 3</span>
+    </a>
+
+    <a href="step-4-review.html" class="step-tile">
+      <span class="step-tile__num">Step 04</span>
+      <h3 class="step-tile__name">Review &amp; <em>send</em></h3>
+      <p class="step-tile__desc">Edit-anything-from-here. Dark fee summary. Two final consents.</p>
+      <span class="step-tile__arrow">Open step 4</span>
+    </a>
+
+    <a href="step-5-confirmation.html" class="step-tile step-tile--success">
+      <span class="step-tile__num">Step 05 ✓</span>
+      <h3 class="step-tile__name">You're <em>all set</em></h3>
+      <p class="step-tile__desc">Unmissable code chip. SMS + WhatsApp delivery status. What-next list. Track / Account CTAs.</p>
+      <span class="step-tile__arrow">Open confirmation</span>
+    </a>
+
+  </div>
+
+  <!-- Other deliverables -->
+  <div class="cards">
+
+    <a href="states.html" class="card">
+      <span class="card__num">06 / Every edge case</span>
+      <h2 class="card__title">12 states — <em>drawn out</em>.</h2>
+      <p class="card__desc">Resume draft banner. Photo blur soft warning. Validation summary with anchor links. Submitting / idempotent / duplicate-click. Offline queued. Multi-tab conflict. Schema migration card. Service archived during draft. Draft expiring at 7 days. Server 5xx. Field help popover.</p>
+      <span class="card__cta">Open states gallery</span>
+    </a>
+
+    <a href="spec.html" class="card card--brand">
+      <span class="card__num">07 / Engineering spec</span>
+      <h2 class="card__title">The <em>10-section</em> deliverable.</h2>
+      <p class="card__desc">Flow map · IA · wireframes desktop+mobile · hi-fi index · 30 components · motion · responsive matrix · state matrix per step · a11y · hand-off including auto-save mechanics, idempotency keys, resumable uploads, schema versioning.</p>
+      <span class="card__cta">Read the spec</span>
+    </a>
+
+  </div>
+
+</div>
+
+<!-- Decisions band -->
+<div class="deci-band">
+  <div class="container">
+    <span class="eyebrow" style="color: rgba(246,236,210,0.6);">Key design decisions</span>
+    <h2 class="t-h2">Three calls <em>worth flagging</em>.</h2>
+    <p>This is the surface where most applications die — at form-friction. Every choice below was made to keep someone with low digital literacy moving on a flaky phone over a metered 3G connection.</p>
+
+    <div class="decisions">
+      <div class="dec">
+        <span class="num">01 / Auto-save indicator</span>
+        <h4>Status, not a <em>save button</em></h4>
+        <p>Users on flaky connections want to know their work is safe. The auto-save indicator in the top bar shows three states (saved / saving / offline) — the only system status that's always visible. No explicit "Save" button means one less thing to forget.</p>
+      </div>
+      <div class="dec">
+        <span class="num">02 / Confirmation code</span>
+        <h4>Big, monospace, <em>copyable</em></h4>
+        <p>The application code is the only thing a guest user has linking them back to their case. Display-size mono with copy + WhatsApp share buttons, repeated in SMS and WhatsApp delivery. The page caption literally says "TREAT IT LIKE A PASSWORD".</p>
+      </div>
+      <div class="dec">
+        <span class="num">03 / Schema migration</span>
+        <h4>Versioned, <em>transparent</em></h4>
+        <p>When admin updates a service form (Flow 9), drafts in progress could break. We version every schema and show users a "What changed?" card with the diff on resume — so trust survives the inevitable form revisions.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Where Flow 3 sits -->
+<div class="next-band">
+  <div class="container">
+    <span class="eyebrow">Where we are in the ten-flow plan</span>
+    <h2 class="t-h2">Flow 03 of 10 — <em>complete</em>.</h2>
+    <p>The application code (PRX-2026-00483) generated at the end of this flow is the contract that travels through every other flow. Flow 5 reads it. Flow 6 manages it. Flow 7 charges against it. Flow 8 fulfils it. Flow 9 audits it.</p>
+
+    <div class="flow-list">
+      <div class="flow-row done">
+        <span class="num">F1</span>
+        <div><h3>Marketing &amp; <em>landing</em></h3><p>Landing, How it works, Pricing, FAQ, Contact, About, Legal</p></div>
+        <span class="status s-ok"><span class="dot"></span> Delivered</span>
+      </div>
+      <div class="flow-row done">
+        <span class="num">F2</span>
+        <div><h3>Service <em>discovery</em></h3><p>Services index, service detail, 10 edge-case states</p></div>
+        <span class="status s-ok"><span class="dot"></span> Delivered</span>
+      </div>
+      <div class="flow-row done">
+        <span class="num">F3</span>
+        <div><h3>Application <em>submission</em></h3><p>5-step wizard, schema-driven, documents, idempotent submit, 12 states</p></div>
+        <span class="status s-ok"><span class="dot"></span> Delivered</span>
+      </div>
+      <div class="flow-row">
+        <span class="num">F4</span>
+        <div><h3>Auth &amp; <em>role routing</em></h3><p>Client + staff sign-in, OTP, 2FA, password reset, claim-by-code</p></div>
+        <span class="status s-info"><span class="dot"></span> Next</span>
+      </div>
+      <div class="flow-row">
+        <span class="num">F5</span>
+        <div><h3>Public <em>tracker</em></h3><p>Code entry, status hero, timeline, agent contact, documents</p></div>
+        <span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span>
+      </div>
+      <div class="flow-row">
+        <span class="num">F6</span>
+        <div><h3>Client <em>dashboard</em></h3><p>Authenticated home, messages, documents, settings</p></div>
+        <span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span>
+      </div>
+      <div class="flow-row">
+        <span class="num">F7</span>
+        <div><h3><em>Payments</em></h3><p>Mobile money push, card 3DS, off-platform, receipt, dispute</p></div>
+        <span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span>
+      </div>
+      <div class="flow-row">
+        <span class="num">F8</span>
+        <div><h3>Agent <em>workspace</em></h3><p>Today, case queue, case detail, document viewer</p></div>
+        <span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span>
+      </div>
+      <div class="flow-row">
+        <span class="num">F9</span>
+        <div><h3>Admin <em>panel</em></h3><p>Analytics, services + schema builder, broadcasts, audit log</p></div>
+        <span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span>
+      </div>
+      <div class="flow-row">
+        <span class="num">F10</span>
+        <div><h3>Cross-cutting <em>systems</em></h3><p>Notifications, 404/500, cookies, PWA shell, dark mode, RTL</p></div>
+        <span class="status"><span class="dot" style="background:var(--ink-subtle)"></span> Queued</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 48px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href="step-1-personal.html" class="pill pill--solid">Open the wizard at step 1 <span class="arr">↗</span></a>
+      <a href="step-5-confirmation.html" class="pill">Jump to confirmation <span class="arr">→</span></a>
+      <a href="spec.html" class="pill">Read the spec <span class="arr">→</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="foot container">
+  <span>PROXISERVE / FLOW 03 — APPLICATION / v0.1</span>
+  <span>Type "Design Flow 4." when ready.</span>
+</div>
+
+</body>
+</html>

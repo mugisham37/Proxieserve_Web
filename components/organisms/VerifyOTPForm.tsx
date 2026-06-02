@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { AuthCard } from "@/components/molecules/AuthCard";
 import { AuthBanner } from "@/components/molecules/AuthBanner";
@@ -9,44 +9,44 @@ import { AuthFooterLinks } from "@/components/molecules/AuthFooterLinks";
 import { DeviceInfoCard } from "@/components/molecules/DeviceInfoCard";
 import { OTPInput } from "@/components/atoms/OTPInput";
 import { ResendCooldown } from "@/components/atoms/ResendCooldown";
-import { useAuth } from "@/lib/auth-context";
-import { MOCK, AUTH_VERIFIED_KEY } from "@/lib/auth-types";
-import { setItem } from "@/lib/storage";
+import { useResendOtp, useVerifyOtp } from "@/hooks/useAuth";
+import { isApiError, isOtpWrongData, isRateLimitedData } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
 export function VerifyOTPForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const { dispatch } = useAuth();
+  const verifyOtpMutation = useVerifyOtp();
+  const resendOtpMutation = useResendOtp();
 
-  const next = searchParams.get("next") ?? "/";
   const maskedEmail = decodeURIComponent(searchParams.get("email") ?? "your email");
   const isNewDevice = searchParams.get("device") === "new";
 
   const [otp, setOtp] = React.useState("");
-  const [errorType, setErrorType] = React.useState<"wrong" | "expired" | null>(null);
+  const [errorState, setErrorState] = React.useState<{
+    type: "wrong" | "expired" | "generic" | null;
+    message?: string;
+  }>({ type: null });
   const [attempts, setAttempts] = React.useState(3);
-  const [isVerifying, setIsVerifying] = React.useState(false);
   const [expired, setExpired] = React.useState(false);
-
-  // OTP expiry: 5 minutes from mount
   const [expiryMs, setExpiryMs] = React.useState(5 * 60 * 1000);
+  const [expiresAt, setExpiresAt] = React.useState(() => Date.now() + 5 * 60 * 1000);
+  const [resendCooldownSeconds, setResendCooldownSeconds] = React.useState(30);
 
   React.useEffect(() => {
-    if (expiryMs <= 0) return;
     const id = setInterval(() => {
-      setExpiryMs((ms) => {
-        if (ms <= 1000) {
-          clearInterval(id);
-          setExpired(true);
-          setErrorType("expired");
-          return 0;
-        }
-        return ms - 1000;
-      });
+      const nextMs = Math.max(0, expiresAt - Date.now());
+      setExpiryMs(nextMs);
+      if (nextMs <= 0) {
+        clearInterval(id);
+        setExpired(true);
+        setErrorState({
+          type: "expired",
+          message: "This code has expired. Request a new one.",
+        });
+      }
     }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [expiresAt]);
 
   function formatExpiry(ms: number) {
     const s = Math.ceil(ms / 1000);
@@ -54,39 +54,56 @@ export function VerifyOTPForm() {
   }
 
   async function handleVerify(code: string) {
-    if (expired || isVerifying || code.length < 6) return;
-    setIsVerifying(true);
-    setErrorType(null);
+    if (expired || verifyOtpMutation.isPending || code.length < 6) return;
+    setErrorState({ type: null });
 
-    await new Promise((r) => setTimeout(r, 600));
-
-    if (code !== MOCK.VALID_OTP) {
-      const remaining = attempts - 1;
-      setAttempts(remaining);
-      if (remaining <= 0) {
-        setExpired(true);
-        setErrorType("expired");
-      } else {
-        setErrorType("wrong");
+    try {
+      await verifyOtpMutation.mutateAsync({ code });
+    } catch (error) {
+      if (!isApiError(error)) {
+        setErrorState({
+          type: "generic",
+          message: "Something went wrong on our end. Please try again.",
+        });
+        return;
       }
-      setOtp("");
-      setIsVerifying(false);
-      return;
-    }
 
-    // Success
-    setItem(AUTH_VERIFIED_KEY, "true");
-    dispatch({ type: "SET_EMAIL_VERIFIED" });
-    router.push(next);
+      if (error.errorType === "otp-wrong" && isOtpWrongData(error.data)) {
+        setAttempts(error.data.attemptsRemaining);
+        if (error.data.attemptsRemaining <= 0) {
+          setExpired(true);
+          setErrorState({
+            type: "expired",
+            message: "This code has expired. Request a new one.",
+          });
+        } else {
+          setErrorState({
+            type: "wrong",
+            message: `Incorrect code. ${error.data.attemptsRemaining} attempt${error.data.attemptsRemaining === 1 ? "" : "s"} remaining.`,
+          });
+        }
+        setOtp("");
+        return;
+      }
+
+      if (error.errorType === "otp-expired") {
+        setExpired(true);
+        setErrorState({
+          type: "expired",
+          message: "This code has expired. Request a new one.",
+        });
+        setOtp("");
+        return;
+      }
+
+      setErrorState({
+        type: "generic",
+        message: error.statusCode >= 500
+          ? "Something went wrong on our end. Please try again."
+          : error.message,
+      });
+    }
   }
-
-  // Auto-submit when 6 digits entered
-  React.useEffect(() => {
-    if (otp.length === 6) {
-      handleVerify(otp);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [otp]);
 
   return (
     <motion.div
@@ -107,13 +124,18 @@ export function VerifyOTPForm() {
           {/* Error banners */}
           <AuthBanner
             variant="danger"
-            message={`Incorrect code. ${attempts} attempt${attempts === 1 ? "" : "s"} remaining.`}
-            visible={errorType === "wrong"}
+            message={errorState.message ?? `Incorrect code. ${attempts} attempt${attempts === 1 ? "" : "s"} remaining.`}
+            visible={errorState.type === "wrong"}
           />
           <AuthBanner
             variant="warn"
-            message="Your code has expired. Request a new one."
-            visible={errorType === "expired"}
+            message={errorState.message ?? "Your code has expired. Request a new one."}
+            visible={errorState.type === "expired"}
+          />
+          <AuthBanner
+            variant="danger"
+            message={errorState.message ?? "Something went wrong on our end. Please try again."}
+            visible={errorState.type === "generic"}
           />
 
           {/* OTP Input */}
@@ -121,8 +143,11 @@ export function VerifyOTPForm() {
             <OTPInput
               value={otp}
               onChange={setOtp}
-              error={errorType === "wrong" || errorType === "expired"}
-              disabled={expired || isVerifying}
+              onComplete={(value) => {
+                void handleVerify(value);
+              }}
+              error={errorState.type === "wrong" || errorState.type === "expired"}
+              disabled={expired || verifyOtpMutation.isPending}
             />
 
             {/* Expiry timer */}
@@ -136,11 +161,11 @@ export function VerifyOTPForm() {
             )}
           </div>
 
-          {/* Submit button (fallback if no auto-submit) */}
+          {/* Submit button fallback */}
           <button
             type="button"
             onClick={() => handleVerify(otp)}
-            disabled={otp.length < 6 || expired || isVerifying}
+            disabled={otp.length < 6 || expired || verifyOtpMutation.isPending}
             className={cn(
               "w-full h-12 rounded-[var(--r-pill)]",
               "font-serif italic text-[17px] text-[var(--paper)]",
@@ -151,7 +176,7 @@ export function VerifyOTPForm() {
               "flex items-center justify-center gap-2"
             )}
           >
-            {isVerifying ? (
+            {verifyOtpMutation.isPending ? (
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-[var(--paper)] border-t-transparent rounded-full animate-spin" />
                 Verifying…
@@ -167,13 +192,34 @@ export function VerifyOTPForm() {
               Didn&apos;t receive it?
             </span>
             <ResendCooldown
-              cooldownSeconds={30}
-              onResend={() => {
-                setExpired(false);
-                setErrorType(null);
-                setAttempts(3);
-                setOtp("");
-                setExpiryMs(5 * 60 * 1000);
+              cooldownSeconds={resendCooldownSeconds}
+              onResend={async () => {
+                try {
+                  await resendOtpMutation.mutateAsync();
+                  setExpired(false);
+                  setErrorState({ type: null });
+                  setAttempts(3);
+                  setOtp("");
+                  setExpiryMs(5 * 60 * 1000);
+                  setExpiresAt(Date.now() + 5 * 60 * 1000);
+                  setResendCooldownSeconds(30);
+                } catch (error) {
+                  if (isApiError(error) && error.errorType === "rate-limited" && isRateLimitedData(error.data)) {
+                    setErrorState({
+                      type: "generic",
+                      message: `Too many attempts. Try again in ${error.data.retryAfterSeconds} seconds.`,
+                    });
+                    setResendCooldownSeconds(error.data.retryAfterSeconds);
+                    return;
+                  }
+
+                  setErrorState({
+                    type: "generic",
+                    message: isApiError(error)
+                      ? error.message
+                      : "Something went wrong on our end. Please try again.",
+                  });
+                }
               }}
             />
           </div>

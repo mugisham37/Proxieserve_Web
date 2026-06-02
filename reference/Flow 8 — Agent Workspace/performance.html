@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Performance · Agent workspace · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+<style>
+  /* simple bar chart */
+  .chart { display: flex; align-items: flex-end; gap: 10px; height: 180px; padding: 16px 0; }
+  .chart .bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; justify-content: flex-end; height: 100%; }
+  .chart .bar .fill { width: 100%; max-width: 36px; background: var(--ink); border-radius: 4px 4px 0 0; transition: height var(--m-slow); }
+  .chart .bar:last-child .fill { background: var(--brand); }
+  .chart .bar .lab { font-family: var(--mono); font-size: 10px; color: var(--ink-muted); }
+  .chart .bar .val { font-family: var(--mono); font-size: 10px; color: var(--ink); }
+
+  .perf-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 900px) { .perf-grid { grid-template-columns: 1.4fr 1fr; } }
+  .panel { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-md); padding: 20px; }
+  .panel h3 { font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 0 0 4px; }
+  .panel h3 em { font-style: italic; font-weight: 400; }
+  .panel .sub { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); margin-bottom: 12px; }
+
+  .lead { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule-soft); }
+  .lead:last-child { border-bottom: none; }
+  .lead .rank { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); width: 24px; }
+  .lead .av { width: 30px; height: 30px; border-radius: 999px; background: var(--ink); color: var(--paper); display: inline-flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 12px; }
+  .lead .nm { flex: 1; font-size: 14px; font-weight: 500; }
+  .lead .sc { font-family: var(--mono); font-size: 13px; font-weight: 600; }
+  .lead.me { background: var(--brand-soft); border-radius: var(--r-sm); padding: 10px; margin: 4px -10px; }
+  .lead.me .av { background: var(--brand); }
+
+  /* settings */
+  .set-section { border-top: 1px solid var(--rule); padding: 24px 0; }
+  .set-section:first-of-type { border-top: none; }
+  .set-row { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding: 12px 0; }
+  .set-row .l { font-size: 14px; font-weight: 500; }
+  .set-row .d { font-size: 12.5px; color: var(--ink-muted); margin-top: 2px; }
+  .switch { position: relative; width: 40px; height: 22px; background: var(--rule-strong); border-radius: 999px; cursor: pointer; transition: background var(--m-base); border: none; flex-shrink: 0; }
+  .switch.is-on { background: var(--brand); }
+  .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: white; border-radius: 999px; transition: transform var(--m-base); }
+  .switch.is-on::after { transform: translateX(18px); }
+</style>
+</head>
+<body>
+
+<div class="ag">
+
+  <nav class="ag-nav" aria-label="Agent navigation">
+    <div class="ag-nav__brand"><span class="ico"></span> Proxi<em>Serve</em><span class="ag-nav__role">Agent</span></div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Work</div>
+      <a href="today-queue.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Today</a>
+      <a href="today-queue.html#queue" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg> My cases <span class="ag-nav__count brand">14</span></a>
+      <a href="case-detail.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Messages <span class="ag-nav__count">5</span></a>
+      <a href="#" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Unassigned <span class="ag-nav__count">3</span></a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Me</div>
+      <a href="performance.html" class="ag-nav__link is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Performance</a>
+      <a href="#settings" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Settings</a>
+    </div>
+    <div class="ag-nav__spacer"></div>
+    <div class="ag-nav__user"><span class="av">AM</span><div><div class="nm">Aline M.</div><div class="mt">agent · Kigali</div></div></div>
+  </nav>
+
+  <div class="ag-main">
+    <header class="ag-top">
+      <span class="ag-top__mobile-brand"><span class="ico"></span>ProxiServe</span>
+      <label class="ag-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Search…" aria-label="Search" /><kbd>/</kbd>
+      </label>
+      <div class="ag-top__actions"><button class="ag-status"><span class="dot"></span> Available</button></div>
+    </header>
+
+    <div class="ag-content">
+
+      <div class="ag-h">
+        <div>
+          <h1 class="ag-h__t">Your <em>performance</em></h1>
+          <div class="ag-h__meta">THIS MONTH · MAY 2026 · YOUR OWN METRICS ONLY</div>
+        </div>
+        <div class="ag-h__actions">
+          <button class="ag-chip is-active">This month</button>
+          <button class="ag-chip">Quarter</button>
+        </div>
+      </div>
+
+      <!-- stats -->
+      <div class="ag-stats">
+        <div class="ag-stat"><div class="l">Completed</div><div class="v">11</div><div class="d up">↑ 3 vs April</div></div>
+        <div class="ag-stat"><div class="l">Avg turnaround</div><div class="v">5.2<span style="font-size:16px;color:var(--ink-muted);">d</span></div><div class="d up">↓ 0.8d — faster</div></div>
+        <div class="ag-stat"><div class="l">On-time SLA</div><div class="v">92<span style="font-size:16px;color:var(--ink-muted);">%</span></div><div class="d">target 90%</div></div>
+        <div class="ag-stat ag-stat--accent"><div class="l">Client rating</div><div class="v"><em>4.8</em></div><div class="d">from 23 ratings</div></div>
+      </div>
+
+      <div class="perf-grid">
+        <div class="panel">
+          <h3>Cases completed <em>per week</em></h3>
+          <div class="sub">LAST 6 WEEKS</div>
+          <div class="chart">
+            <div class="bar"><span class="val">2</span><div class="fill" style="height:30%;"></div><span class="lab">W14</span></div>
+            <div class="bar"><span class="val">3</span><div class="fill" style="height:45%;"></div><span class="lab">W15</span></div>
+            <div class="bar"><span class="val">2</span><div class="fill" style="height:30%;"></div><span class="lab">W16</span></div>
+            <div class="bar"><span class="val">4</span><div class="fill" style="height:60%;"></div><span class="lab">W17</span></div>
+            <div class="bar"><span class="val">3</span><div class="fill" style="height:45%;"></div><span class="lab">W18</span></div>
+            <div class="bar"><span class="val">5</span><div class="fill" style="height:75%;"></div><span class="lab">W19</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Team <em>leaderboard</em></h3>
+          <div class="sub">COMPLETED THIS MONTH · ANONYMISED RANKS</div>
+          <div class="lead"><span class="rank">1</span><span class="av">CN</span><span class="nm">Claudine N.</span><span class="sc">15</span></div>
+          <div class="lead"><span class="rank">2</span><span class="av">PM</span><span class="nm">Patrick M.</span><span class="sc">13</span></div>
+          <div class="lead me"><span class="rank">3</span><span class="av">AM</span><span class="nm">You</span><span class="sc">11</span></div>
+          <div class="lead"><span class="rank">4</span><span class="av">DI</span><span class="nm">Diane I.</span><span class="sc">9</span></div>
+          <div class="lead"><span class="rank">5</span><span class="av">TG</span><span class="nm">Thierry G.</span><span class="sc">7</span></div>
+          <p style="font-family: var(--mono); font-size: 10px; color: var(--ink-subtle); margin: 12px 0 0; letter-spacing: 0.04em;">Leaderboard is for motivation, not ranking-based pay. Quality &gt; volume.</p>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS ===== -->
+      <div id="settings" style="margin-top: 40px; max-width: 680px;">
+        <h2 style="font-family: var(--serif); font-weight: 500; font-size: 24px; margin: 0 0 4px;">Agent <em style="font-style:italic;">settings</em></h2>
+        <p style="font-size: 13.5px; color: var(--ink-muted); margin: 0 0 8px;">Availability, notifications, and your security.</p>
+
+        <div class="set-section">
+          <div class="ag-h__meta" style="margin-bottom: 8px;">AVAILABILITY</div>
+          <div class="set-row">
+            <div><div class="l">Accept new case assignments</div><div class="d">When off, the dispatcher skips you for new work</div></div>
+            <button class="switch is-on" role="switch" aria-checked="true"></button>
+          </div>
+          <div class="set-row">
+            <div><div class="l">Daily case cap</div><div class="d">Max new cases assigned per day</div></div>
+            <select class="status-select" style="background: var(--cream); color: var(--ink); border-color: var(--rule-strong); background-image: none; padding-right: 14px;"><option>5</option><option selected>8</option><option>10</option><option>No cap</option></select>
+          </div>
+        </div>
+
+        <div class="set-section">
+          <div class="ag-h__meta" style="margin-bottom: 8px;">NOTIFICATIONS</div>
+          <div class="set-row"><div><div class="l">New case assigned</div><div class="d">Push + email</div></div><button class="switch is-on" role="switch" aria-checked="true"></button></div>
+          <div class="set-row"><div><div class="l">Client replied</div><div class="d">Push only</div></div><button class="switch is-on" role="switch" aria-checked="true"></button></div>
+          <div class="set-row"><div><div class="l">SLA approaching breach</div><div class="d">Push + email · 4h before</div></div><button class="switch is-on" role="switch" aria-checked="true"></button></div>
+          <div class="set-row"><div><div class="l">Daily summary</div><div class="d">Email at 8:00 CAT</div></div><button class="switch" role="switch" aria-checked="false"></button></div>
+        </div>
+
+        <div class="set-section">
+          <div class="ag-h__meta" style="margin-bottom: 8px;">APPEARANCE</div>
+          <div class="set-row"><div><div class="l">Dark mode</div><div class="d">Easier on the eyes for long shifts</div></div><button class="switch" role="switch" aria-checked="false"></button></div>
+          <div class="set-row"><div><div class="l">Compact tables</div><div class="d">More rows per screen</div></div><button class="switch is-on" role="switch" aria-checked="true"></button></div>
+        </div>
+
+        <div class="set-section">
+          <div class="ag-h__meta" style="margin-bottom: 8px;">SECURITY</div>
+          <div class="set-row"><div><div class="l">Two-factor authentication</div><div class="d">Required for all staff · authenticator app</div></div><span class="status s-ok" style="padding:4px 12px;"><span class="dot"></span> On</span></div>
+          <div class="set-row"><div><div class="l">Trusted devices</div><div class="d">2 devices · this MacBook + your phone</div></div><button class="btn-sm">Manage</button></div>
+          <div class="set-row"><div><div class="l">Change password</div><div class="d">Last changed 3 months ago</div></div><button class="btn-sm">Change</button></div>
+        </div>
+
+        <div style="padding: 24px 0;">
+          <a href="../Flow 4 — Auth/staff-login.html" class="btn-sm btn-sm--ghost" style="color: var(--danger); border-color: var(--danger);">Sign out of all devices</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="kbd-hints">
+      <span><kbd>/</kbd> search</span>
+      <span><kbd>G</kbd> then <kbd>T</kbd> go to Today</span>
+      <span><kbd>?</kbd> all shortcuts</span>
+    </div>
+  </div>
+
+  <nav class="ag-tabbar" aria-label="Agent tabs">
+    <a href="today-queue.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg> Today</a>
+    <a href="today-queue.html#queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg> Cases</a>
+    <a href="case-detail.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Messages</a>
+    <a href="performance.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Stats</a>
+  </nav>
+
+</div>
+
+<script>
+  document.querySelectorAll('.switch').forEach(s => s.addEventListener('click', () => {
+    s.classList.toggle('is-on'); s.setAttribute('aria-checked', s.classList.contains('is-on'));
+  }));
+  document.querySelectorAll('.ag-chip').forEach(c => c.addEventListener('click', () => {
+    c.parentElement.querySelectorAll('.ag-chip').forEach(x => x.classList.remove('is-active'));
+    c.classList.add('is-active');
+  }));
+</script>
+
+</body>
+</html>

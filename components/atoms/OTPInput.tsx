@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 interface OTPInputProps {
   value: string; // 6-char string, "" for empty
   onChange: (value: string) => void;
+  onComplete?: (value: string) => void;
   error?: boolean;
   disabled?: boolean;
   className?: string;
@@ -15,6 +16,7 @@ interface OTPInputProps {
 export function OTPInput({
   value,
   onChange,
+  onComplete,
   error = false,
   disabled = false,
   className,
@@ -63,6 +65,9 @@ export function OTPInput({
     const digit = raw.slice(-1);
     const next = digits.map((d, i) => (i === idx ? digit : d)).join("");
     onChange(next);
+    if (next.length === 6) {
+      onComplete?.(next);
+    }
     if (idx < 5) {
       focusCell(idx + 1);
     }
@@ -74,6 +79,9 @@ export function OTPInput({
     if (!pasted) return;
     const padded = pasted.padEnd(6, "").slice(0, 6);
     onChange(padded);
+    if (pasted.length === 6) {
+      onComplete?.(padded);
+    }
     const nextIdx = Math.min(pasted.length, 5);
     focusCell(nextIdx);
   }

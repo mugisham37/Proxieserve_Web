@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 7 — Engineering spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--paper); }
+  .doc { max-width: 920px; margin: 0 auto; padding: 64px 32px 120px; }
+  @media (max-width: 720px) { .doc { padding: 32px 20px 80px; } }
+  .doc-head { border-bottom: 1px solid var(--rule-strong); padding-bottom: 24px; margin-bottom: 48px; }
+  .doc-head .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .doc-head h1 { margin: 12px 0; }
+  .doc-head p { margin: 0; color: var(--ink-muted); }
+  section.spec { padding: 48px 0; border-bottom: 1px solid var(--rule); }
+  section.spec:last-of-type { border-bottom: none; }
+  .spec-head { display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 24px; align-items: baseline; }
+  .spec-num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .spec-title { font-family: var(--serif); font-weight: 500; font-size: 32px; margin: 0; line-height: 1.1; }
+  .spec-title em { font-style: italic; font-weight: 400; }
+  .spec-body { padding-left: 104px; }
+  @media (max-width: 720px) { .spec-head { grid-template-columns: 1fr; } .spec-body { padding-left: 0; } }
+  .spec-body p { margin: 0 0 14px; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
+  pre.ascii { font-family: var(--mono); font-size: 12px; line-height: 1.45; background: var(--cream-2); padding: 20px 24px; border-radius: var(--r-md); overflow-x: auto; border: 1px solid var(--rule); color: var(--ink-2); }
+  table.t { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 16px 0; }
+  .t th, .t td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  .t th { background: var(--cream-2); border-bottom: 1px solid var(--rule-strong); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); }
+  .t tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
+  .t td.mono { font-family: var(--mono); font-size: 12px; }
+  ul.l { padding-left: 20px; margin: 0 0 16px; }
+  ul.l li { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin-bottom: 6px; }
+  .check { display: grid; grid-template-columns: 24px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--rule-soft); font-size: 14px; }
+  .check.pass::before { content: "✓"; color: var(--ok); font-weight: 600; }
+  .score { display: inline-flex; align-items: baseline; gap: 4px; padding: 8px 16px; background: var(--ok-soft); color: var(--ok); border-radius: 999px; font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; }
+  .score .big { font-family: var(--serif); font-style: italic; font-size: 24px; }
+  .callout { background: var(--brand-soft); color: var(--brand-ink); border-left: 3px solid var(--brand); padding: 14px 18px; font-family: var(--serif); font-style: italic; font-size: 15px; margin: 16px 0; }
+  .callout strong { font-style: normal; font-weight: 600; }
+  code, .mono { font-family: var(--mono); font-size: 13px; }
+  .comp-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+  .comp-list .chip { background: var(--cream-2); color: var(--ink-2); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); font-family: var(--mono); font-size: 11px; }
+  .comp-list .chip.new { background: var(--brand-soft); color: var(--brand-ink); border-color: transparent; }
+  .toc { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; padding: 20px 0; border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); margin-bottom: 32px; }
+  .toc a { display: flex; gap: 16px; align-items: baseline; padding: 8px 0; font-size: 14px; color: var(--ink-2); border-bottom: 1px solid var(--rule-soft); }
+  .toc a .num { font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); }
+  @media (max-width: 600px) { .toc { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="doc">
+  <div class="doc-head">
+    <a href="index.html" class="lnk-arrow" style="font-size:13px; margin-bottom: 16px; display: inline-flex;"><span aria-hidden="true">←</span> Back to Flow 7 hub</a>
+    <div class="meta">FLOW 07 / PAYMENTS / ENGINEERING SPEC · v0.1</div>
+    <h1 class="t-h1">Flow 7 — <em>Payments</em>.</h1>
+    <p>Money. The flow where a single ambiguous state — "was I charged?" — destroys trust faster than any visual flaw. Every path here resolves to a clear, recoverable answer.</p>
+  </div>
+
+  <div class="toc">
+    <a href="#s1"><span class="num">01</span> Flow map</a>
+    <a href="#s2"><span class="num">02</span> IA</a>
+    <a href="#s3"><span class="num">03</span> Wireframes</a>
+    <a href="#s4"><span class="num">04</span> Hi-fi screens</a>
+    <a href="#s5"><span class="num">05</span> Components</a>
+    <a href="#s6"><span class="num">06</span> Motion</a>
+    <a href="#s7"><span class="num">07</span> Responsive</a>
+    <a href="#s8"><span class="num">08</span> States</a>
+    <a href="#s9"><span class="num">09</span> A11y</a>
+    <a href="#s10"><span class="num">10</span> Hand-off &amp; self-review</a>
+  </div>
+
+  <section class="spec" id="s1">
+    <div class="spec-head"><span class="spec-num">01 /</span><h2 class="spec-title"><em>Flow</em> map</h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+  Entry: F6 app detail "Pay now" · F5 tracker · agent-sent payment link · email/WhatsApp
+             │
+             ▼
+  ┌─────────────────────────────────────┐
+  │  /pay/[code]   Method choice         │  fee re-validated server-side here
+  │  MoMo · Airtel · Card · Pay-agent    │
+  └───┬─────────┬─────────┬─────────┬────┘
+      │         │         │         │
+      ▼         ▼         ▼         ▼
+  ┌────────┐ ┌────────┐ ┌────────┐ ┌──────────────┐
+  │ MoMo   │ │ Airtel │ │ Card   │ │ Pay agent    │
+  │ push   │ │ push   │ │ + 3DS  │ │ (off-platform)│
+  └───┬────┘ └───┬────┘ └───┬────┘ └──────┬───────┘
+      │          │          │             │
+      ▼          ▼          ▼             ▼
+   wait for approval     3DS challenge   notify agent
+      │          │          │             │
+      └────┬─────┴─────┬────┘             ▼
+           ▼           ▼            PENDING_AGENT_CONFIRM
+        SUCCESS     FAIL/TIMEOUT          │ (agent confirms in F8)
+           │           │                  ▼
+           ▼           ▼               SUCCESS
+   ┌──────────────┐  retry / switch       │
+   │  /receipt    │ ◀─────────────────────┘
+   └──────────────┘
+           │
+           ▼
+   dispute · refund (admin F9 oversight)
+</pre>
+      <p><strong>Entries.</strong> F6 application detail "Pay now", F5 public tracker, an agent-sent payment link (deep link with code), email / WhatsApp reminders.</p>
+      <p><strong>Exits.</strong> Receipt → back to F6 detail. Dispute → ticket in F9 oversight. Pay-agent → F8 agent confirms receipt. Refund → channel-aware refund receipt.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s2">
+    <div class="spec-head"><span class="spec-num">02 /</span><h2 class="spec-title">Information <em>architecture</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Route</th><th>Page</th><th>Method</th><th>Auth</th><th>Idempotent</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">/pay/[code]</td><td>Method choice</td><td>GET</td><td>Owner or code-token</td><td>—</td></tr>
+          <tr><td class="mono">/pay/[code]/momo</td><td>Mobile money push</td><td>GET/POST</td><td>Owner</td><td>Yes (txn ref)</td></tr>
+          <tr><td class="mono">/pay/[code]/card</td><td>Card + 3DS</td><td>GET/POST</td><td>Owner</td><td>Yes (txn ref)</td></tr>
+          <tr><td class="mono">/pay/[code]/agent</td><td>Pay agent directly</td><td>GET/POST</td><td>Owner</td><td>Yes</td></tr>
+          <tr><td class="mono">/pay/[code]/receipt/[rcp]</td><td>Receipt</td><td>GET</td><td>Owner or code-token</td><td>—</td></tr>
+          <tr><td class="mono">/pay/[code]/dispute</td><td>Dispute / refund request</td><td>GET/POST</td><td>Owner</td><td>—</td></tr>
+          <tr><td class="mono">POST /api/payments</td><td>Initiate charge</td><td>POST</td><td>Owner</td><td>Idempotency-Key</td></tr>
+          <tr><td class="mono">webhook /api/payments/callback</td><td>Provider callback</td><td>POST</td><td>Signed</td><td>Yes (dedup)</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Transaction lifecycle:</strong> <span class="mono">CREATED → PENDING → (SUCCESS | FAILED | EXPIRED | PENDING_AGENT_CONFIRM)</span>. Refunds: <span class="mono">SUCCESS → REFUND_REQUESTED → REFUNDED</span>. Every transition is logged and surfaces a matching UI state.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s3">
+    <div class="spec-head"><span class="spec-num">03 /</span><h2 class="spec-title">Low-fi <em>wireframes</em></h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+─── METHOD CHOICE (≥920) ────────────────────────┬─── SUMMARY ───
+  Payment · choose method                        │ Passport renewal
+  HOW WOULD YOU LIKE TO PAY?                      │ PRX-2026-00483
+  ✓ fee confirmed by agent banner                 │ Service fee 15,000
+  ┌────────────────────────────────────────────┐ │ VAT      incl.
+  │ [MTN] MTN Mobile Money         ( • )        │ │ ──────────────
+  │ [Air] Airtel Money             ( )          │ │ Pay now  15,000
+  │ [▭]  Card (Visa/Mastercard)    ( )          │ │ gov fee separate
+  │ [@]  Pay my agent directly     [off-platfrm]│ │
+  └────────────────────────────────────────────┘ │
+  🔒 encrypted · no card stored · refundable      │
+
+─── MOMO PUSH (stage 2) ──────       ─── CARD 3DS (stage 2) ──────
+        [ 📱 pulsing ]                ┌─ Bank of Kigali · 3DS ─┐
+   CHECK YOUR PHONE.                  │ Approve RWF 15,000 to  │
+   ✓ Prompt sent                      │ ProxiServe             │
+   ● Approve with PIN                 │ [_][_][_][_][_][_]     │
+   ○ We confirm                       │ [Confirm payment]      │
+   expires 02:00 · [resend]           └────────────────────────┘
+
+─── RECEIPT ──────────────
+   ( ✓ )  PAYMENT RECEIVED.
+          RWF 15,000
+   ┄┄┄┄ perforated divider ┄┄┄┄
+   application · code · method
+   txn id · receipt no · date
+   [Download PDF] [Back to app]
+</pre>
+    </div>
+  </section>
+
+  <section class="spec" id="s4">
+    <div class="spec-head"><span class="spec-num">04 /</span><h2 class="spec-title">Hi-fi <em>screens</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Screen</th><th>File</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Method choice</td><td class="mono"><a href="method-choice.html" class="linked">method-choice.html</a></td><td>4 methods · fee-confirmed banner · dark fee summary · trust strip</td></tr>
+          <tr><td>Mobile money push</td><td class="mono"><a href="mobile-money.html" class="linked">mobile-money.html</a></td><td>Number entry → live pulsing wait screen w/ 3-step + countdown</td></tr>
+          <tr><td>Card + 3DS</td><td class="mono"><a href="card-3ds.html" class="linked">card-3ds.html</a></td><td>Live card visual (brand detect) → bank 3-D Secure OTP frame</td></tr>
+          <tr><td>Receipt</td><td class="mono"><a href="receipt.html" class="linked">receipt.html</a></td><td>Perforated notched receipt · full txn detail · download PDF</td></tr>
+          <tr><td>All 11 states</td><td class="mono"><a href="states.html" class="linked">states.html</a></td><td>Edge-case gallery</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Decisions worth flagging.</strong> Mobile money is listed first and pre-selected — it's how most Rwandans pay. The wait screen is a real status surface (sent → approve → confirm), not a generic spinner. The receipt uses the notch motif with perforated-edge circles for a "tear-off" feel. The card visual updates live as you type — reassurance you entered the right number.
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s5">
+    <div class="spec-head"><span class="spec-num">05 /</span><h2 class="spec-title">Component <em>inventory</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin-bottom: 8px;">Reused</h4>
+      <div class="comp-list">
+        <span class="chip">PillButton / AppButton</span>
+        <span class="chip">FeeSummary (F3)</span>
+        <span class="chip">ApplicationCodeChip</span>
+        <span class="chip">FormField / PhoneField</span>
+        <span class="chip">OTPInput (F4)</span>
+        <span class="chip">StatusPill</span>
+        <span class="chip">Banner</span>
+        <span class="chip">AgentCard (F5)</span>
+      </div>
+      <h4 class="t-h4" style="margin: 16px 0 8px;">New in Flow 7</h4>
+      <div class="comp-list">
+        <span class="chip new">PaymentMethodCard</span>
+        <span class="chip new">DarkFeeSummary (sticky)</span>
+        <span class="chip new">TrustStrip</span>
+        <span class="chip new">PushWaitScreen</span>
+        <span class="chip new">PushStepList</span>
+        <span class="chip new">PhonePulse</span>
+        <span class="chip new">ExpiryCountdown</span>
+        <span class="chip new">CardVisual (live)</span>
+        <span class="chip new">CardNumberField (brand-detect)</span>
+        <span class="chip new">ThreeDSFrame</span>
+        <span class="chip new">Receipt (perforated)</span>
+        <span class="chip new">ReceiptRow</span>
+        <span class="chip new">PaymentResultHero</span>
+        <span class="chip new">PayAgentCard</span>
+        <span class="chip new">DisputeForm</span>
+        <span class="chip new">RefundResult</span>
+        <span class="chip new">ReconcileState</span>
+        <span class="chip new">StaleFeeNotice</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s6">
+    <div class="spec-head"><span class="spec-num">06 /</span><h2 class="spec-title">Interaction &amp; <em>motion</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Element</th><th>Trigger</th><th>Spec</th><th>Reduced-motion</th></tr></thead>
+        <tbody>
+          <tr><td>Method select</td><td>click</td><td class="mono">border + inset ring, 120 ms</td><td>Instant</td></tr>
+          <tr><td>Phone pulse ring</td><td>waiting</td><td class="mono">expanding ring 1.8s loop</td><td>Static phone icon, no ring</td></tr>
+          <tr><td>Push step advance</td><td>provider callback</td><td class="mono">n-circle done/active swap, 200 ms</td><td>Instant swap</td></tr>
+          <tr><td>Card visual update</td><td>field input</td><td class="mono">live text mirror, no animation</td><td>Identical</td></tr>
+          <tr><td>Stage transition</td><td>submit</td><td class="mono">200 ms cross-fade + scroll-top</td><td>Instant</td></tr>
+          <tr><td>Receipt enter</td><td>page load</td><td class="mono">check pop 200 ms + opacity 320 ms</td><td>Static check</td></tr>
+          <tr><td>Processing spinner</td><td>charge confirm</td><td class="mono">spin 800 ms loop</td><td>Static "Processing…" + text ellipsis</td></tr>
+          <tr><td>Countdown</td><td>waiting</td><td class="mono">per-second decrement</td><td>Identical</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s7">
+    <div class="spec-head"><span class="spec-num">07 /</span><h2 class="spec-title">Responsive <em>matrix</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Element</th><th>320–767</th><th>768–919</th><th>920+</th></tr></thead>
+        <tbody>
+          <tr><td>Page layout</td><td>1 col, summary below</td><td>1 col, summary below</td><td>main + 340 px sticky summary</td></tr>
+          <tr><td>Method cards</td><td>full width, stacked</td><td>full width</td><td>full width</td></tr>
+          <tr><td>Push wait phone</td><td>120 px centered</td><td>same</td><td>same</td></tr>
+          <tr><td>Card visual</td><td>full width</td><td>max 420</td><td>max 420</td></tr>
+          <tr><td>3DS frame</td><td>full width minus 32</td><td>440 centered</td><td>440 centered</td></tr>
+          <tr><td>Receipt</td><td>full width minus 32</td><td>560 centered</td><td>560 centered</td></tr>
+          <tr><td>Receipt actions</td><td>stacked full-width</td><td>2-up</td><td>2-up</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s8">
+    <div class="spec-head"><span class="spec-num">08 /</span><h2 class="spec-title">All <em>states</em></h2></div>
+    <div class="spec-body">
+      <p>11 documented in <a href="states.html" class="linked">states.html</a>: prompt timeout · declined (mapped reasons) · pay-agent-directly · awaiting agent confirmation · already-paid / nothing due · dispute &amp; refund request · refund issued (channel-aware timing) · connection lost mid-payment (reconcile, don't re-charge) · 3-D Secure failed · fee changed since page open (stale-fee block) · processing (locked + live region).</p>
+      <p>The cardinal rule across all of them: <strong>the user is never left wondering whether money moved.</strong> Every terminal state states the charge outcome explicitly.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s9">
+    <div class="spec-head"><span class="spec-num">09 /</span><h2 class="spec-title">Accessibility <em>checklist</em></h2></div>
+    <div class="spec-body">
+      <div class="check pass">Method cards are real radio-equivalent links with visible selection + label</div>
+      <div class="check pass">Card fields use <span class="mono">inputmode="numeric"</span> + <span class="mono">autocomplete="cc-number / cc-exp / cc-csc"</span></div>
+      <div class="check pass">3DS OTP cells labelled <span class="mono">aria-label="Digit N"</span>; group has accessible name</div>
+      <div class="check pass">Wait-screen progress announced via <span class="mono">aria-live="polite"</span> at each step</div>
+      <div class="check pass">Processing state uses <span class="mono">role="status"</span> + "do not refresh" message</div>
+      <div class="check pass">Countdown announced at 30s + 10s thresholds, not every second (no SR spam)</div>
+      <div class="check pass">Result heroes (success/fail/refund) announced via <span class="mono">role="status"</span> / <span class="mono">role="alert"</span></div>
+      <div class="check pass">Colour never sole indicator — every result pairs icon + heading + body text</div>
+      <div class="check pass">Touch targets ≥ 44 px; pay CTA is full-width on mobile</div>
+      <div class="check pass">Reduced motion: pulse + spinner replaced with static + text per tokens.css</div>
+      <div class="check pass">Receipt is real semantic text (not an image) — screen-reader &amp; copy friendly</div>
+      <div class="check pass">Amounts always include currency ("RWF 15,000") — never a bare number</div>
+    </div>
+  </section>
+
+  <section class="spec" id="s10">
+    <div class="spec-head"><span class="spec-num">10 /</span><h2 class="spec-title">Hand-off &amp; <em>self-review</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin: 0 0 6px;">Engineering notes</h4>
+      <ul class="l">
+        <li><strong>Providers.</strong> MTN MoMo Collections API + Airtel Money API for push; a PCI-DSS card processor (Flutterwave / Stripe) for card + 3DS. Card details never touch our servers — tokenized client-side.</li>
+        <li><strong>Idempotency.</strong> Every charge carries a client <span class="mono">Idempotency-Key</span>; the provider txn reference dedups callbacks. A stale prompt approval after EXPIRED is auto-reversed.</li>
+        <li><strong>Webhooks are the source of truth.</strong> The UI's "success" comes from a signed provider webhook, not the client. The wait screen polls status; the webhook flips it. Mismatches favour the webhook.</li>
+        <li><strong>Reconciliation.</strong> On reconnect mid-payment, we query the provider with the existing reference rather than re-charging. The "don't pay again — reconciling" state prevents double-payment.</li>
+        <li><strong>Fee re-validation.</strong> The amount is re-checked server-side at charge time against the agent-confirmed fee. A changed fee blocks the charge and shows the diff (state 10).</li>
+        <li><strong>Pay-agent.</strong> Off-platform payments enter <span class="mono">PENDING_AGENT_CONFIRM</span>; the agent confirms receipt in F8, generating the same receipt object. 24h SLA before support escalation.</li>
+        <li><strong>Refunds.</strong> Channel-aware: MoMo near-instant, card 5–10 business days. Service fee fully refundable on our error; government fees follow office rules. Refund emits a negative-amount receipt linked to the original.</li>
+        <li><strong>VAT.</strong> Computed inclusive and shown as a line on the receipt for tax compliance.</li>
+        <li><strong>Analytics events.</strong> pay_method_view, pay_method_select {method}, pay_momo_initiated, pay_momo_approved, pay_momo_timeout, pay_card_initiated, pay_3ds_shown, pay_3ds_result {ok}, pay_success {txn}, pay_failed {reason}, pay_agent_selected, pay_agent_confirmed, pay_dispute_open {reason}, pay_refund_issued, pay_reconcile.</li>
+      </ul>
+
+      <h4 class="t-h4" style="margin: 24px 0 12px;">Designer self-review rubric (D.8)</h4>
+      <div class="check pass">01 — Real content (RWF amounts, real MoMo/Airtel/BoK names, real txn-ref format)</div>
+      <div class="check pass">02 — Spacing scale obeyed</div>
+      <div class="check pass">03 — Semantic tokens only</div>
+      <div class="check pass">04 — Mobile-first (single column; pay CTA full-width)</div>
+      <div class="check pass">05 — Sticky safe-area respected</div>
+      <div class="check pass">06 — All states covered (11 documented)</div>
+      <div class="check pass">07 — Reduced-motion variant (pulse/spinner → static)</div>
+      <div class="check pass">08 — A11y checklist signed (12/12)</div>
+      <div class="check pass">09 — i18n length budget honoured</div>
+      <div class="check pass">10 — Icon family consistent (Lucide line)</div>
+      <div class="check pass">11 — Banned patterns absent (no fake confetti, no aggressive gradient)</div>
+      <div class="check pass">12 — Hierarchy obvious; amount is always the loudest element</div>
+      <div class="check pass">13 — CTAs unambiguous ("Send payment prompt", "Pay RWF 15,000", "Confirm payment", "Download PDF")</div>
+      <div class="check pass">14 — Edge cases (11 — well past the 3 minimum; the "was I charged?" rule enforced)</div>
+      <div class="check pass">15 — Final line invites next flow</div>
+
+      <p style="margin-top: 24px;"><span class="score">Score · <span class="big">15</span> / 15</span></p>
+
+      <div class="callout" style="margin-top: 32px;">
+        Flow 7 is complete. Type "Design Flow 8." to continue with the Agent Workspace — the dense, keyboard-first surface where agents actually fulfil applications. Or correct anything here first.
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

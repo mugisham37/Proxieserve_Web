@@ -1,19 +1,22 @@
 "use client";
 
 import * as React from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { SESSION_INVALIDATED_EVENT } from "@/lib/api/client";
 import {
   AuthSession,
   AuthUiState,
   INITIAL_AUTH_UI_STATE,
-  AUTH_SESSION_KEY,
-  AUTH_VERIFIED_KEY,
+  SESSION_QUERY_KEY,
+  STAFF_PRE_2FA_KEY,
 } from "./auth-types";
-import { getItem, setItem, removeItem } from "./storage";
+import { useSession } from "@/hooks/useSession";
 
 // ---------------------------------------------------------------------------
 // Actions
 // ---------------------------------------------------------------------------
 type AuthAction =
+  | { type: "HYDRATE_FROM_SERVER"; payload: AuthSession | null }
   | { type: "SET_SESSION"; payload: AuthSession }
   | { type: "CLEAR_SESSION" }
   | { type: "SET_EMAIL_VERIFIED" }
@@ -27,13 +30,18 @@ interface AuthState {
 
 function reducer(state: AuthState, action: AuthAction): AuthState {
   switch (action.type) {
+    case "HYDRATE_FROM_SERVER":
     case "SET_SESSION":
       return { ...state, session: action.payload };
     case "CLEAR_SESSION":
-      return { ...state, session: null };
+      return { ...state, session: null, uiState: INITIAL_AUTH_UI_STATE };
     case "SET_EMAIL_VERIFIED":
       if (!state.session) return state;
-      return { ...state, session: { ...state.session, isEmailVerified: true } };
+      return {
+        ...state,
+        session: { ...state.session, isEmailVerified: true },
+        uiState: { ...state.uiState, showEmailVerifyBanner: false },
+      };
     case "SET_UI":
       return { ...state, uiState: { ...state.uiState, ...action.payload } };
     case "RESET_UI":
@@ -61,41 +69,40 @@ const AuthContext = React.createContext<AuthContextValue | null>(null);
 // Provider
 // ---------------------------------------------------------------------------
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient();
+  const { session: serverSession, isLoading: isSessionLoading, isError: isSessionError } = useSession();
   const [state, dispatch] = React.useReducer(reducer, {
     session: null,
     uiState: INITIAL_AUTH_UI_STATE,
   });
-  const [isHydrated, setIsHydrated] = React.useState(false);
+  const isHydrated = !isSessionLoading;
 
-  // Hydrate session from localStorage on mount
   React.useEffect(() => {
-    const raw = getItem(AUTH_SESSION_KEY);
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw) as AuthSession;
-        // Sync email verified flag
-        const verified = getItem(AUTH_VERIFIED_KEY);
-        if (verified === "true") {
-          parsed.isEmailVerified = true;
-        }
-        dispatch({ type: "SET_SESSION", payload: parsed });
-      } catch {
-        removeItem(AUTH_SESSION_KEY);
+    if (isSessionLoading || isSessionError) {
+      return;
+    }
+
+    dispatch({ type: "HYDRATE_FROM_SERVER", payload: serverSession });
+  }, [isSessionError, isSessionLoading, serverSession]);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const handleSessionInvalidated = () => {
+      dispatch({ type: "CLEAR_SESSION" });
+      queryClient.setQueryData([...SESSION_QUERY_KEY], null);
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem(STAFF_PRE_2FA_KEY);
       }
-    }
-    setIsHydrated(true);
-  }, []);
+    };
 
-  // Persist session to localStorage on change
-  React.useEffect(() => {
-    if (!isHydrated) return;
-    if (state.session) {
-      setItem(AUTH_SESSION_KEY, JSON.stringify(state.session));
-      setItem(AUTH_VERIFIED_KEY, String(state.session.isEmailVerified));
-    } else {
-      removeItem(AUTH_SESSION_KEY);
-    }
-  }, [state.session, isHydrated]);
+    window.addEventListener(SESSION_INVALIDATED_EVENT, handleSessionInvalidated);
+    return () => {
+      window.removeEventListener(SESSION_INVALIDATED_EVENT, handleSessionInvalidated);
+    };
+  }, [queryClient]);
 
   const setUiState = React.useCallback((patch: Partial<AuthUiState>) => {
     dispatch({ type: "SET_UI", payload: patch });
@@ -103,9 +110,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = React.useCallback(() => {
     dispatch({ type: "CLEAR_SESSION" });
-    removeItem(AUTH_SESSION_KEY);
-    removeItem(AUTH_VERIFIED_KEY);
-  }, []);
+    queryClient.setQueryData([...SESSION_QUERY_KEY], null);
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem(STAFF_PRE_2FA_KEY);
+    }
+  }, [queryClient]);
 
   const value: AuthContextValue = React.useMemo(
     () => ({

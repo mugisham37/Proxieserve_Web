@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -13,17 +13,21 @@ import { StepPills } from "@/components/molecules/StepPills";
 import { PasswordField } from "@/components/atoms/PasswordField";
 import { PasswordStrengthMeter } from "@/components/atoms/PasswordStrengthMeter";
 import { resetSchema, type ResetData } from "@/lib/auth-schema";
-import { AUTH_RESET_TOKEN_KEY, MOCK } from "@/lib/auth-types";
-import { getItem, removeItem } from "@/lib/storage";
+import { useResetPassword } from "@/hooks/useAuth";
+import { isApiError } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
 export function ResetPasswordForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
-
-  const isTokenValid = token === MOCK.VALID_RESET_TOKEN ||
-    getItem(AUTH_RESET_TOKEN_KEY) === MOCK.VALID_RESET_TOKEN;
+  const resetPasswordMutation = useResetPassword();
+  const token = searchParams.get("token") ?? "";
+  const [errorState, setErrorState] = React.useState<{
+    type: "expired" | "generic" | null;
+    message?: string;
+  }>({
+    type: token ? null : "expired",
+    message: token ? undefined : "This reset link has expired or was already used.",
+  });
 
   const {
     register,
@@ -37,10 +41,39 @@ export function ResetPasswordForm() {
 
   const password = watch("password");
 
-  async function onSubmit() {
-    await new Promise((r) => setTimeout(r, 800));
-    removeItem(AUTH_RESET_TOKEN_KEY);
-    router.push("/login?reset=success");
+  async function onSubmit(data: ResetData) {
+    if (!token) {
+      setErrorState({
+        type: "expired",
+        message: "This reset link has expired or was already used.",
+      });
+      return;
+    }
+
+    setErrorState({ type: null });
+
+    try {
+      await resetPasswordMutation.mutateAsync({
+        token,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      });
+    } catch (error) {
+      if (isApiError(error) && error.errorType === "reset-expired") {
+        setErrorState({
+          type: "expired",
+          message: "This reset link has expired or was already used.",
+        });
+        return;
+      }
+
+      setErrorState({
+        type: "generic",
+        message: isApiError(error)
+          ? error.message
+          : "Something went wrong on our end. Please try again.",
+      });
+    }
   }
 
   return (
@@ -61,12 +94,17 @@ export function ResetPasswordForm() {
           {/* Expired token banner */}
           <AuthBanner
             variant="warn"
-            message="This reset link has already been used or has expired."
+            message={errorState.message ?? "This reset link has already been used or has expired."}
             action={{ label: "Send a new link →", href: "/forgot-password" }}
-            visible={!isTokenValid}
+            visible={errorState.type === "expired"}
+          />
+          <AuthBanner
+            variant="danger"
+            message={errorState.message ?? "Something went wrong on our end. Please try again."}
+            visible={errorState.type === "generic"}
           />
 
-          {isTokenValid && (
+          {errorState.type !== "expired" && (
             <>
               <div className="flex flex-col gap-2">
                 <PasswordField
@@ -91,7 +129,7 @@ export function ResetPasswordForm() {
               <button
                 type="button"
                 onClick={handleSubmit(onSubmit)}
-                disabled={isSubmitting}
+                disabled={isSubmitting || resetPasswordMutation.isPending}
                 className={cn(
                   "w-full h-12 rounded-[var(--r-pill)] mt-1",
                   "font-serif italic text-[17px] text-[var(--paper)]",
@@ -102,7 +140,7 @@ export function ResetPasswordForm() {
                   "flex items-center justify-center gap-2"
                 )}
               >
-                {isSubmitting ? (
+                {isSubmitting || resetPasswordMutation.isPending ? (
                   <span className="flex items-center gap-2">
                     <span className="w-4 h-4 border-2 border-[var(--paper)] border-t-transparent rounded-full animate-spin" />
                     Updating…
@@ -114,7 +152,7 @@ export function ResetPasswordForm() {
             </>
           )}
 
-          {!isTokenValid && (
+          {errorState.type === "expired" && (
             <Link
               href="/login"
               className="font-sans text-[13px] text-center text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors underline underline-offset-2"

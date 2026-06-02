@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 9 — Engineering spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--paper); }
+  .doc { max-width: 920px; margin: 0 auto; padding: 64px 32px 120px; }
+  @media (max-width: 720px) { .doc { padding: 32px 20px 80px; } }
+  .doc-head { border-bottom: 1px solid var(--rule-strong); padding-bottom: 24px; margin-bottom: 48px; }
+  .doc-head .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .doc-head h1 { margin: 12px 0; font-family: var(--serif); font-weight: 400; font-size: clamp(36px,5vw,56px); letter-spacing: -0.02em; }
+  .doc-head h1 em { font-style: italic; }
+  .doc-head p { margin: 0; color: var(--ink-muted); }
+  .lnk-arrow { display:inline-flex; align-items:center; gap:6px; font-family: var(--sans); font-size: 13px; color: var(--ink-muted); text-decoration: none; }
+  section.spec { padding: 48px 0; border-bottom: 1px solid var(--rule); }
+  section.spec:last-of-type { border-bottom: none; }
+  .spec-head { display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 24px; align-items: baseline; }
+  .spec-num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .spec-title { font-family: var(--serif); font-weight: 500; font-size: 32px; margin: 0; line-height: 1.1; }
+  .spec-title em { font-style: italic; font-weight: 400; }
+  .spec-body { padding-left: 104px; }
+  @media (max-width: 720px) { .spec-head { grid-template-columns: 1fr; } .spec-body { padding-left: 0; } }
+  .spec-body p { margin: 0 0 14px; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
+  pre.ascii { font-family: var(--mono); font-size: 12px; line-height: 1.45; background: var(--cream-2); padding: 20px 24px; border-radius: var(--r-md); overflow-x: auto; border: 1px solid var(--rule); color: var(--ink-2); }
+  table.t { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 16px 0; }
+  .t th, .t td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  .t th { background: var(--cream-2); border-bottom: 1px solid var(--rule-strong); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); }
+  .t tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
+  .t td.mono { font-family: var(--mono); font-size: 12px; }
+  ul.l { padding-left: 20px; margin: 0 0 16px; }
+  ul.l li { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin-bottom: 6px; }
+  .check { display: grid; grid-template-columns: 24px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--rule-soft); font-size: 14px; }
+  .check.pass::before { content: "✓"; color: var(--ok); font-weight: 600; }
+  .score { display: inline-flex; align-items: baseline; gap: 4px; padding: 8px 16px; background: var(--ok-soft); color: var(--ok); border-radius: 999px; font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; }
+  .score .big { font-family: var(--serif); font-style: italic; font-size: 24px; }
+  .callout { background: var(--brand-soft); color: var(--brand-ink); border-left: 3px solid var(--brand); padding: 14px 18px; font-family: var(--serif); font-style: italic; font-size: 15px; margin: 16px 0; }
+  .callout strong { font-style: normal; font-weight: 600; }
+  code, .mono { font-family: var(--mono); font-size: 13px; }
+  .comp-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+  .comp-list .chip { background: var(--cream-2); color: var(--ink-2); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); font-family: var(--mono); font-size: 11px; }
+  .comp-list .chip.new { background: var(--brand-soft); color: var(--brand-ink); border-color: transparent; }
+  .toc { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; padding: 20px 0; border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); margin-bottom: 32px; }
+  .toc a { display: flex; gap: 16px; align-items: baseline; padding: 8px 0; font-size: 14px; color: var(--ink-2); border-bottom: 1px solid var(--rule-soft); text-decoration: none; }
+  .toc a .num { font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); }
+  @media (max-width: 600px) { .toc { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="doc">
+  <div class="doc-head">
+    <a href="index.html" class="lnk-arrow" style="margin-bottom: 16px;"><span aria-hidden="true">←</span> Back to Flow 9 hub</a>
+    <div class="meta">FLOW 09 / ADMIN PANEL / ENGINEERING SPEC · v0.1</div>
+    <h1>Flow 9 — <em>Admin Panel</em>.</h1>
+    <p>The control room. The most powerful and most governed zone — where the service catalogue, pricing, agents, and platform itself are configured, and where every privileged action leaves a permanent trail.</p>
+  </div>
+
+  <div class="toc">
+    <a href="#s1"><span class="num">01</span> Flow map</a>
+    <a href="#s2"><span class="num">02</span> IA</a>
+    <a href="#s3"><span class="num">03</span> Wireframes</a>
+    <a href="#s4"><span class="num">04</span> Hi-fi screens</a>
+    <a href="#s5"><span class="num">05</span> Components</a>
+    <a href="#s6"><span class="num">06</span> Motion</a>
+    <a href="#s7"><span class="num">07</span> Responsive</a>
+    <a href="#s8"><span class="num">08</span> States</a>
+    <a href="#s9"><span class="num">09</span> A11y</a>
+    <a href="#s10"><span class="num">10</span> Hand-off &amp; self-review</a>
+  </div>
+
+  <section class="spec" id="s1">
+    <div class="spec-head"><span class="spec-num">01 /</span><h2 class="spec-title"><em>Flow</em> map</h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+  Entry from F4 (staff sign-in + 2FA → role: admin)
+             │
+             ▼
+  ┌─────────────────────────────────────────────┐
+  │  /admin            Analytics (landing)       │
+  │  KPIs · charts · agent perf · needs-attention│
+  └───┬──────────┬──────────┬─────────┬──────────┘
+      ▼          ▼          ▼         ▼
+  ┌────────┐ ┌────────┐ ┌────────┐ ┌──────────┐
+  │Services│ │Pricing │ │Agents  │ │Broadcasts│
+  │+schema │ │+ dated │ │+ caps  │ │+ segments│
+  │builder ─┼─┐      │ └────────┘ └──────────┘
+  └────────┘ │ │ drives F3 step 2 + F2 catalogue
+             ▼ ▼
+  ┌─────────────────────┐    ┌──────────────────┐
+  │  Oversight          │    │  Settings        │
+  │  all cases · SLA ·  │    │  general · sec · │
+  │  disputes · audit ──┼──▶ │  maintenance     │
+  │  (view → F8 case)   │    └──────────────────┘
+  └─────────────────────┘
+        every privileged action → append-only AUDIT LOG
+</pre>
+      <p><strong>Entries.</strong> F4 staff sign-in with an admin role claim. Deep links from alert notifications (SLA breach, dispute opened, agent over capacity).</p>
+      <p><strong>Connections out.</strong> Schema builder → F3 step 2 + F2 detail page. Pricing → F1/F2 displayed fees + F7 charge validation. Oversight "view" → F8 case detail (read-only, logged). Broadcasts → F10 notification channels. Every config + privileged action writes the audit log.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s2">
+    <div class="spec-head"><span class="spec-num">02 /</span><h2 class="spec-title">Information <em>architecture</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Route</th><th>Page</th><th>Role</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">/admin</td><td>Analytics</td><td>Admin</td><td>Default landing; KPIs + agent perf</td></tr>
+          <tr><td class="mono">/admin/services</td><td>Services + schema builder</td><td>Admin</td><td>Drag-build, versioned, migration on publish</td></tr>
+          <tr><td class="mono">/admin/pricing</td><td>Pricing</td><td>Admin</td><td>Effective-dated changes</td></tr>
+          <tr><td class="mono">/admin/agents</td><td>Agents</td><td>Admin</td><td>Skills, caps, roles, 2FA status</td></tr>
+          <tr><td class="mono">/admin/oversight</td><td>Oversight</td><td>Admin</td><td>All cases; view-as logged</td></tr>
+          <tr><td class="mono">/admin/audit</td><td>Audit log</td><td>Admin</td><td>Append-only, filterable, 7-yr retention</td></tr>
+          <tr><td class="mono">/admin/broadcasts</td><td>Broadcasts</td><td>Admin</td><td>Segment + channel + preview</td></tr>
+          <tr><td class="mono">/admin/settings</td><td>Settings</td><td>Admin (owner for some)</td><td>Platform, security, maintenance</td></tr>
+        </tbody>
+      </table>
+      <p>Desktop-first by design — the schema builder and data tables assume a wide screen. A reduced mobile view supports triage (analytics, oversight, send a broadcast) but the schema builder is gated to ≥ 1000 px with a "best on desktop" notice.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s3">
+    <div class="spec-head"><span class="spec-num">03 /</span><h2 class="spec-title">Low-fi <em>wireframes</em></h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+─── ANALYTICS ───────────────────────────────────────────────
+┌────────────┬───────────────────────────────────────────────┐
+│ ● Admin    │ [search]                  [PRODUCTION] [🔔2]   │
+│ OVERVIEW   │ Analytics overview      [30d][Q][Y] [Export]  │
+│ Analytics ◀│ [Apps][Done][Rev][TAT][SLA][Reject]  6 KPIs   │
+│ Oversight 2│ ┌── apps/week bars ──┐ ┌── service mix ────┐  │
+│ CONFIGURE  │ └────────────────────┘ └───────────────────┘  │
+│ Services   │ [by status] [pay methods] [needs attention]   │
+│ Pricing    │ ┌── agent performance table ──────────────┐  │
+│ Agents     │ └─────────────────────────────────────────┘  │
+│ Broadcasts │                                               │
+│ GOVERN     │                                               │
+│ Audit log  │                                               │
+│ Settings   │                                               │
+└────────────┴───────────────────────────────────────────────┘
+
+─── SCHEMA BUILDER ──────────────────────────────────────────
+┌──────────────────────────────────┬──────────────────────────┐
+│ Form fields · drag to reorder    │ FIELD TYPES (palette)    │
+│ ┌──────────────────────────────┐ │ [Aa] Short text          │
+│ │ ⋮⋮ Reason · single · req'd  ◉│ │ [¶]  Long text           │
+│ ├──────────────────────────────┤ │ [◉]  Single choice       │
+│ │ ⋮⋮ Police ref · conditional  │ │ [☑]  Multi-select        │
+│ ├──────────────────────────────┤ │ [📅] Date                │
+│ │ ⋮⋮ Passport no · text · req' │ │ [⇪]  Document upload     │
+│ ├──────────────────────────────┤ │ [#]  Phone               │
+│ │ ⋮⋮ Travel intent · NEW v4    │ │ ────────────             │
+│ └──────────────────────────────┘ │ SELECTED FIELD           │
+│ + drag field here                │ label / help / required  │
+│ [Preview] [Save draft][Publish]  │                          │
+└──────────────────────────────────┴──────────────────────────┘
+</pre>
+    </div>
+  </section>
+
+  <section class="spec" id="s4">
+    <div class="spec-head"><span class="spec-num">04 /</span><h2 class="spec-title">Hi-fi <em>screens</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Screen</th><th>File</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Analytics</td><td class="mono"><a href="analytics.html" class="linked">analytics.html</a></td><td>6 KPIs · weekly bars · service mix · payment mix · by-status · needs-attention · agent table</td></tr>
+          <tr><td>Services + schema builder</td><td class="mono"><a href="services-schema.html" class="linked">services-schema.html</a></td><td>Catalogue table + drag-to-build versioned schema + migration note</td></tr>
+          <tr><td>Pricing + agents</td><td class="mono"><a href="pricing-agents.html" class="linked">pricing-agents.html</a></td><td>Effective-dated fees + agent team with caps, skills, 2FA</td></tr>
+          <tr><td>Oversight + audit</td><td class="mono"><a href="oversight.html" class="linked">oversight.html</a></td><td>Needs-attention / SLA / disputes + append-only audit log</td></tr>
+          <tr><td>Broadcasts + settings</td><td class="mono"><a href="broadcasts.html" class="linked">broadcasts.html</a></td><td>Segment composer + phone preview + platform/security/maintenance</td></tr>
+          <tr><td>All 8 states</td><td class="mono"><a href="states.html" class="linked">states.html</a></td><td>Edge-case gallery</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Decisions worth flagging.</strong> The schema builder is the architectural keystone — it's the literal source that renders F3's step 2 and F2's catalogue, with versioning + migration so edits never break in-progress applications. The audit log has no edit/delete affordance anywhere. Admin is the most stripped-down zone: flat rectangles, hairlines, dark-mode default.
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s5">
+    <div class="spec-head"><span class="spec-num">05 /</span><h2 class="spec-title">Component <em>inventory</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin-bottom: 8px;">Reused / inherited</h4>
+      <div class="comp-list">
+        <span class="chip">AppShell / SideNav (F6/F8)</span>
+        <span class="chip">AgentTopBar + EnvBadge (F8)</span>
+        <span class="chip">DataTable (F8 queue)</span>
+        <span class="chip">StatusPill</span>
+        <span class="chip">StatTile</span>
+        <span class="chip">Switch / Toggle</span>
+        <span class="chip">DangerZone (F6)</span>
+        <span class="chip">DarkModeTheme (F8)</span>
+        <span class="chip">KbdHintBar (F8)</span>
+      </div>
+      <h4 class="t-h4" style="margin: 16px 0 8px;">New in Flow 9</h4>
+      <div class="comp-list">
+        <span class="chip new">KPIRow</span>
+        <span class="chip new">BarChart</span>
+        <span class="chip new">StackedShareBars</span>
+        <span class="chip new">NeedsAttentionList</span>
+        <span class="chip new">SchemaBuilder</span>
+        <span class="chip new">FieldTypePalette</span>
+        <span class="chip new">SchemaField (drag)</span>
+        <span class="chip new">FieldInspector</span>
+        <span class="chip new">SchemaVersionBadge</span>
+        <span class="chip new">MigrationDialog</span>
+        <span class="chip new">EffectiveDatedPriceRow</span>
+        <span class="chip new">AgentRow (caps/skills)</span>
+        <span class="chip new">OversightTable</span>
+        <span class="chip new">AuditLog</span>
+        <span class="chip new">AuditRow (kind-tagged)</span>
+        <span class="chip new">BroadcastComposer</span>
+        <span class="chip new">ChannelPicker</span>
+        <span class="chip new">PhonePreview</span>
+        <span class="chip new">SegmentPicker</span>
+        <span class="chip new">ConfirmByType</span>
+        <span class="chip new">InterveneDialog</span>
+        <span class="chip new">MaintenanceToggle</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s6">
+    <div class="spec-head"><span class="spec-num">06 /</span><h2 class="spec-title">Interaction &amp; <em>motion</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Element</th><th>Spec</th><th>Reduced-motion</th></tr></thead>
+        <tbody>
+          <tr><td>Bar chart grow</td><td class="mono">height grow-up 480 ms on view</td><td>Static height</td></tr>
+          <tr><td>Schema field drag</td><td class="mono">lift shadow + 120 ms reflow on drop</td><td>Instant reorder, no lift</td></tr>
+          <tr><td>Field select</td><td class="mono">brand inset ring, instant; inspector cross-fade 200 ms</td><td>Instant</td></tr>
+          <tr><td>Migration dialog</td><td class="mono">backdrop fade + card pop 200 ms</td><td>Instant appear</td></tr>
+          <tr><td>Confirm-by-type</td><td class="mono">button enable cross-fade on match</td><td>Instant enable</td></tr>
+          <tr><td>KPI stream-in</td><td class="mono">each card fades as its query resolves</td><td>Appear when ready, no fade</td></tr>
+          <tr><td>Channel toggle</td><td class="mono">bg + colour swap 120 ms</td><td>Instant</td></tr>
+          <tr><td>Phone preview update</td><td class="mono">live text mirror, no animation</td><td>Identical</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s7">
+    <div class="spec-head"><span class="spec-num">07 /</span><h2 class="spec-title">Responsive <em>matrix</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Element</th><th>≤900</th><th>901–999</th><th>1000+</th></tr></thead>
+        <tbody>
+          <tr><td>Navigation</td><td>bottom tab bar (4)</td><td>sidenav</td><td>sidenav (232px)</td></tr>
+          <tr><td>KPI row</td><td>2 col</td><td>4 col</td><td>6 col</td></tr>
+          <tr><td>Charts</td><td>1 col stacked</td><td>1 col</td><td>2-up / 3-up</td></tr>
+          <tr><td>Schema builder</td><td>"best on desktop" notice + read-only preview</td><td>stacked canvas/palette</td><td>canvas + 360px palette</td></tr>
+          <tr><td>Data tables</td><td>horizontal scroll</td><td>fit</td><td>fit</td></tr>
+          <tr><td>Broadcast composer</td><td>1 col (preview below)</td><td>1 col</td><td>composer + 320px preview</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s8">
+    <div class="spec-head"><span class="spec-num">08 /</span><h2 class="spec-title">All <em>states</em></h2></div>
+    <div class="spec-body">
+      <p>8 documented in <a href="states.html" class="linked">states.html</a>: schema-publish migration (142 live drafts) · destructive confirm-by-typing · audit-log immutability (even owner can't edit) · permission boundary (intervene = logged + reason + agent notified) · broadcast confirmation (reach/cost/opt-outs) · analytics loading (stream-in) · empty new-install (onboarding) · dark mode admin default.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s9">
+    <div class="spec-head"><span class="spec-num">09 /</span><h2 class="spec-title">Accessibility <em>checklist</em></h2></div>
+    <div class="spec-body">
+      <div class="check pass">SideNav grouped with <span class="mono">&lt;nav&gt;</span> + section labels; active link <span class="mono">aria-current</span></div>
+      <div class="check pass">Charts have accessible data-table fallbacks (values exposed to SR, not image-only)</div>
+      <div class="check pass">Schema builder fields keyboard-reorderable (not drag-only); inspector reachable by Tab</div>
+      <div class="check pass">Field-type palette items are buttons; "add field" works without a pointer</div>
+      <div class="check pass">Confirm-by-type input labelled; button <span class="mono">aria-disabled</span> until match, with text reason</div>
+      <div class="check pass">Migration dialog focus-trapped; radio group labelled; Esc cancels</div>
+      <div class="check pass">Audit log is a semantic table; kind tags carry text, not colour only</div>
+      <div class="check pass">Status / capacity flags pair colour with text ("Over cap", "14 / 8")</div>
+      <div class="check pass">Broadcast confirm announces reach + cost before send via live region</div>
+      <div class="check pass">Dark mode meets AA contrast; brand/status hues constant across themes</div>
+      <div class="check pass">Maintenance + delete actions need explicit typed confirmation (no accidental trigger)</div>
+      <div class="check pass">Reduced-motion respected via tokens.css (bars + dialogs static)</div>
+    </div>
+  </section>
+
+  <section class="spec" id="s10">
+    <div class="spec-head"><span class="spec-num">10 /</span><h2 class="spec-title">Hand-off &amp; <em>self-review</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin: 0 0 6px;">Engineering notes</h4>
+      <ul class="l">
+        <li><strong>Schema is the source of truth.</strong> A service schema is a versioned JSON document. <span class="mono">SchemaRenderer</span> (shared with F3 step 2 + the builder's live preview) renders it identically everywhere. Publishing bumps <span class="mono">version</span>; the migration dialog writes a <span class="mono">migrationStrategy</span> that F3 applies on draft resume.</li>
+        <li><strong>Effective-dated pricing.</strong> Prices are time-ranged rows. F7 validates the charge against the price effective <em>at submission time</em>, so a mid-flight price change never surprises a client (matches F7 state 10).</li>
+        <li><strong>Audit log integrity.</strong> Append-only, hash-chained (each entry references the prior entry's hash). The API rejects any update/delete. No UI affordance to edit. 7-year retention; exportable for legal/compliance.</li>
+        <li><strong>Privileged actions.</strong> Any admin action on a resource they don't own (view agent case, intervene, raise cap) requires a reason, notifies the affected party, and writes an audit entry tagged <span class="mono">privileged</span>.</li>
+        <li><strong>Broadcasts.</strong> Segments are computed from live status, never manual lists. Opt-outs are subtracted at send time and are irreversible. Cost estimated per channel before send; test-to-self always available.</li>
+        <li><strong>RBAC.</strong> Roles: <span class="mono">agent</span>, <span class="mono">admin</span>, <span class="mono">owner</span>. Some settings (maintenance mode, billing, deleting the last owner) are owner-only. Enforced server-side; the UI hides what the role can't do.</li>
+        <li><strong>Analytics.</strong> Pre-aggregated rollups (hourly) for fast KPIs + on-demand recompute for custom ranges. Cached snapshot shown instantly with a refresh timestamp.</li>
+        <li><strong>Dark mode.</strong> Admin default via platform setting; token swap on <span class="mono">data-theme</span>; per-user override persisted.</li>
+        <li><strong>Analytics events.</strong> admin_view {page}, schema_publish {service,version,migration}, price_change {service,effective}, agent_cap_change, agent_invite, oversight_view {code}, admin_intervene {code,reason}, audit_filter, broadcast_send {segment,channels,reach}, setting_change {key}, maintenance_toggle.</li>
+      </ul>
+
+      <h4 class="t-h4" style="margin: 24px 0 12px;">Designer self-review rubric (D.8)</h4>
+      <div class="check pass">01 — Real content (real services, RWF fees, real agent names, plausible KPIs)</div>
+      <div class="check pass">02 — Spacing scale obeyed</div>
+      <div class="check pass">03 — Semantic tokens only (+ dark token swap)</div>
+      <div class="check pass">04 — Mobile triage supported; schema builder honestly gated to desktop</div>
+      <div class="check pass">05 — Safe-area respected on mobile tab bar</div>
+      <div class="check pass">06 — All states covered (8 documented)</div>
+      <div class="check pass">07 — Reduced-motion variant</div>
+      <div class="check pass">08 — A11y checklist signed (12/12)</div>
+      <div class="check pass">09 — i18n length budget honoured</div>
+      <div class="check pass">10 — Icon family consistent (Lucide line)</div>
+      <div class="check pass">11 — Banned patterns absent (no rainbow charts — two-tone + status hues only)</div>
+      <div class="check pass">12 — Hierarchy obvious; admin visibly the most stripped-down zone</div>
+      <div class="check pass">13 — CTAs unambiguous ("Publish v4", "Schedule change", "Send now", "Delete service")</div>
+      <div class="check pass">14 — Edge cases (8, incl. audit immutability + permission boundary + migration)</div>
+      <div class="check pass">15 — Final line invites the last flow</div>
+
+      <p style="margin-top: 24px;"><span class="score">Score · <span class="big">15</span> / 15</span></p>
+
+      <div class="callout" style="margin-top: 32px;">
+        Flow 9 is complete — 9 of 10 flows delivered. Type "Design Flow 10." for the cross-cutting systems: the notification layer (in-app, email, SMS, WhatsApp, push), error pages (404/500/maintenance), cookies, the PWA shell, status page, onboarding, RTL, print, and the dark-mode system spec. Or correct anything here first.
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

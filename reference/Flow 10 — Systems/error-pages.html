@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Error &amp; system pages · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--cream-2); }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 720px) { .container { padding: 0 20px; } }
+  .page-head { padding: 48px 0 32px; border-bottom: 1px solid var(--rule); background: var(--cream); }
+  .page-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .page-head h1 { margin: 8px 0 12px; font-family: var(--serif); font-weight: 400; font-size: clamp(32px,4.4vw,56px); letter-spacing: -0.02em; }
+  .page-head h1 em { font-style: italic; }
+  .page-head p { color: var(--ink-muted); margin: 0; max-width: 680px; }
+  .lnk-arrow { display:inline-flex; align-items:center; gap:6px; font-family: var(--sans); font-size: 13px; color: var(--ink-muted); text-decoration: none; }
+
+  .gallery { padding: 48px 0 120px; display: grid; grid-template-columns: 1fr; gap: 48px; }
+  @media (min-width: 800px) { .gallery { grid-template-columns: 1fr 1fr; } }
+  .tile { background: var(--cream); border: 1px solid var(--rule); border-radius: var(--r-lg); overflow: hidden; display: flex; flex-direction: column; }
+  .tile__head { padding: 14px 20px; display: flex; gap: 12px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--rule); background: var(--paper); }
+  .tile__head h2 { margin: 0; font-size: 17px; font-family: var(--serif); font-weight: 500; }
+  .tile__head h2 em { font-style: italic; font-weight: 400; }
+  .tile__head .num { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .tile__body { padding: 40px 28px; flex: 1; display: flex; align-items: center; justify-content: center; }
+  .tile__notes { padding: 14px 20px; background: var(--cream-2); border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--ink-muted); line-height: 1.55; }
+  .tile__notes strong { color: var(--ink); font-weight: 600; }
+
+  .err { text-align: center; max-width: 380px; }
+  .err__code { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 88px; line-height: 1; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .err__code.brand { color: var(--brand); }
+  .err__code.warn { color: var(--warn); }
+  .err__code.ink { color: var(--ink); }
+  .err h3 { font-family: var(--serif); font-weight: 500; font-size: 26px; margin: 0 0 10px; }
+  .err h3 em { font-style: italic; font-weight: 400; }
+  .err p { font-size: 14px; color: var(--ink-muted); line-height: 1.6; margin: 0 0 24px; }
+  .err .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border: 1px solid var(--ink); border-radius: 999px; font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 15px; background: var(--paper); color: var(--ink); text-decoration: none; cursor: pointer; }
+  .pill--solid { background: var(--ink); color: var(--paper); }
+  .pill .arr { font-style: normal; }
+
+  /* maintenance illustration */
+  .maint-ic { width: 72px; height: 72px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); display:flex; align-items:center; justify-content:center; margin: 0 auto 20px; }
+  .maint-ic svg { width: 34px; height: 34px; }
+  .offline-ic { width: 72px; height: 72px; border-radius: 999px; background: var(--cream-2); color: var(--ink-muted); display:flex; align-items:center; justify-content:center; margin: 0 auto 20px; }
+  .offline-ic svg { width: 34px; height: 34px; }
+
+  .full-note { background: var(--cream); border: 1px solid var(--rule); border-radius: var(--r-lg); padding: 24px 28px; margin-top: 8px; }
+  .full-note h4 { font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 0 0 8px; }
+  .full-note p { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="container">
+    <a href="index.html" class="lnk-arrow" style="margin-bottom: 16px;"><span aria-hidden="true">←</span> Back to Flow 10 hub</a>
+    <div class="meta">FLOW 10 / ERROR &amp; SYSTEM PAGES · 6 PAGES</div>
+    <h1>When things <em>go wrong</em>.</h1>
+    <p>Errors are part of the product. Each one stays on-brand, explains what happened in plain language, never blames the user, and always offers a way forward — including offline, where the app still does what it can.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="gallery">
+
+    <!-- 404 -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">01 / 404 — page not found</span><h2>Lost, <em>not stuck</em></h2></div></header>
+      <div class="tile__body">
+        <div class="err">
+          <div class="err__code brand">404</div>
+          <h3>We can't find <em>that page</em>.</h3>
+          <p>The link might be old, or there's a typo. Let's get you back somewhere useful.</p>
+          <div class="row"><a href="#" class="pill pill--solid">Go home <span class="arr">→</span></a><a href="#" class="pill">Track an application</a></div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>Contextual escape hatches.</strong> The 404 knows roughly where you came from (service URL, dashboard, tracker) and offers the most relevant next step. Broken slugs are logged so admin can add redirects for common typos.</div>
+    </article>
+
+    <!-- 500 -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">02 / 500 — something broke</span><h2>Our fault, <em>not yours</em></h2></div></header>
+      <div class="tile__body">
+        <div class="err">
+          <div class="err__code ink">500</div>
+          <h3>Something went wrong on <em>our end</em>.</h3>
+          <p>Your data is safe — nothing was lost. We've logged it for our team. Try again in a moment.</p>
+          <div class="row"><a href="#" class="pill pill--solid">Try again <span class="arr">↻</span></a><a href="#" class="pill">Contact support</a></div>
+          <p style="font-family: var(--mono); font-size: 11px; margin-top: 16px; color: var(--ink-subtle);">Incident #INC-26-3819</p>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>Honest + traceable.</strong> Always takes the blame off the user, reassures about data, and surfaces an incident ID that routes to the on-call engineer. Auto-logged to Sentry with full request context.</div>
+    </article>
+
+    <!-- maintenance -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">03 / Maintenance mode</span><h2>Back <em>shortly</em></h2></div></header>
+      <div class="tile__body">
+        <div class="err">
+          <div class="maint-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6a1.4 1.4 0 0 0 2 2l6-6a4 4 0 0 0 5.4-5.4l-2.3 2.3-2-2 2.3-2.3z"/></svg></div>
+          <h3>We're doing a little <em>maintenance</em>.</h3>
+          <p>ProxiServe is briefly offline for an upgrade. We'll be back by <strong style="color:var(--ink);">14:00 CAT</strong>. Your applications are safe and waiting.</p>
+          <div class="row"><a href="#" class="pill">Check status page</a></div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>Triggered from F9.</strong> The admin maintenance switch shows this page to the public + client zones while staff work continues. Includes an ETA and a link to the status page. Returns a 503 with <span class="mono">Retry-After</span> for crawlers.</div>
+    </article>
+
+    <!-- offline -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">04 / Offline — no connection</span><h2>Still <em>useful</em></h2></div></header>
+      <div class="tile__body">
+        <div class="err">
+          <div class="offline-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.8a10 10 0 0 1 14 0M8.5 16.5a5 5 0 0 1 7 0M12 20h.01"/><path d="m2 2 20 20" stroke-width="1.8"/></svg></div>
+          <h3>You're <em>offline</em>.</h3>
+          <p>No internet right now. You can still view applications you've already opened — we saved them on this device. New actions will sync when you're back.</p>
+          <div class="row"><a href="#" class="pill pill--solid">View saved applications</a><a href="#" class="pill">Retry <span class="arr">↻</span></a></div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>The PWA shell speaks.</strong> Served by the service worker when the network's down. Cached pages remain viewable; writes queue. Auto-dismisses with a toast the moment connection returns.</div>
+    </article>
+
+    <!-- session expired -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">05 / Session expired</span><h2>Sign in <em>again</em></h2></div></header>
+      <div class="tile__body">
+        <div class="err">
+          <div class="err__code warn" style="font-size:64px;">⏱</div>
+          <h3>You've been <em>signed out</em>.</h3>
+          <p>For your security we sign you out after a while. Your unsaved work is preserved — sign back in to pick up exactly where you left off.</p>
+          <div class="row"><a href="#" class="pill pill--solid">Sign in <span class="arr">→</span></a></div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>Preserves work.</strong> Rather than bouncing to a cold login, this preserves the in-memory state (draft message, half-filled form) and restores it after re-auth — matching the F6 re-auth modal pattern.</div>
+    </article>
+
+    <!-- rate limited -->
+    <article class="tile">
+      <header class="tile__head"><div><span class="num">06 / 429 — too many requests</span><h2>Slow <em>down</em></h2></div></header>
+      <div class="tile__body">
+        <div class="err">
+          <div class="err__code warn">429</div>
+          <h3>That's a lot of <em>requests</em>.</h3>
+          <p>You're going faster than we allow, to keep things fair for everyone. Take a short breather and try again in a few seconds.</p>
+          <div class="row"><a href="#" class="pill pill--solid">Try again in 5s</a></div>
+        </div>
+      </div>
+      <div class="tile__notes"><strong>Gentle throttle.</strong> Protects the API from abuse and runaway scripts. The retry button counts down to when the window resets (from the <span class="mono">Retry-After</span> header). Never punishes — just paces.</div>
+    </article>
+
+  </div>
+
+  <div class="full-note" style="margin-bottom: 80px;">
+    <h4>One error system, every zone</h4>
+    <p>All six pages share the same structure: a large serif numeral or icon, a plain-language headline that never blames the user, a one-sentence explanation, and at least one clear way forward. They inherit the cream-and-ink palette so even a 500 feels like part of ProxiServe. Staff zones (F8/F9) render the same errors in their dark theme. Every error is keyboard-navigable and screen-reader announced via <span class="mono">role="alert"</span>.</p>
+  </div>
+</div>
+
+</body>
+</html>

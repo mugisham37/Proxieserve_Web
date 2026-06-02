@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Document viewer · PRX-2026-00483 · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+<style>
+  body { background: var(--ink); margin: 0; }
+  .dv { display: grid; grid-template-columns: 1fr 320px; height: 100vh; }
+  @media (max-width: 860px) { .dv { grid-template-columns: 1fr; } }
+
+  /* viewer top bar */
+  .dv-top {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 20px;
+    background: var(--ink); color: var(--paper);
+    border-bottom: 1px solid rgba(246,236,210,0.12);
+  }
+  .dv-top__back { color: rgba(246,236,210,0.7); text-decoration: none; font-family: var(--sans); font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+  .dv-top__back:hover { color: var(--paper); }
+  .dv-top__title { font-family: var(--serif); font-weight: 500; font-size: 16px; }
+  .dv-top__title .mt { font-family: var(--mono); font-size: 11px; color: rgba(246,236,210,0.5); margin-left: 8px; }
+  .dv-top__tools { margin-left: auto; display: flex; gap: 6px; }
+  .dv-tool { width: 34px; height: 34px; border-radius: var(--r-sm); border: 1px solid rgba(246,236,210,0.2); background: transparent; color: rgba(246,236,210,0.8); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+  .dv-tool:hover { background: rgba(246,236,210,0.1); color: var(--paper); }
+  .dv-tool svg { width: 16px; height: 16px; }
+
+  /* canvas */
+  .dv-canvas {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background:
+      repeating-linear-gradient(45deg, rgba(246,236,210,0.02) 0 20px, transparent 20px 40px),
+      var(--ink);
+    padding: 32px;
+  }
+  .dv-doc {
+    width: min(440px, 80%); aspect-ratio: 3/4;
+    background: linear-gradient(160deg, #f4ede0, #e8dcc4);
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    position: relative;
+    transition: transform var(--m-base);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  /* fake passport-photo doc content */
+  .dv-doc__head { background: rgba(26,22,18,0.85); color: #f4ede0; padding: 14px 18px; font-family: var(--serif); font-size: 13px; letter-spacing: 0.04em; }
+  .dv-doc__body { flex: 1; display: flex; gap: 16px; padding: 20px; }
+  .dv-doc__photo { width: 38%; aspect-ratio: 3/4; border-radius: 4px; background: linear-gradient(135deg, #b8a888, #9a8a6a); }
+  .dv-doc__lines { flex: 1; display: flex; flex-direction: column; gap: 10px; padding-top: 6px; }
+  .dv-doc__lines span { height: 8px; border-radius: 4px; background: rgba(26,22,18,0.18); }
+  .dv-doc__lines span:nth-child(1) { width: 80%; } .dv-doc__lines span:nth-child(2) { width: 60%; }
+  .dv-doc__lines span:nth-child(3) { width: 90%; } .dv-doc__lines span:nth-child(4) { width: 50%; }
+  .dv-doc__mrz { font-family: var(--mono); font-size: 9px; color: rgba(26,22,18,0.5); padding: 12px 18px; letter-spacing: 0.1em; border-top: 1px dashed rgba(26,22,18,0.25); }
+
+  .dv-zoom { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; background: rgba(26,22,18,0.7); backdrop-filter: blur(8px); border-radius: 999px; padding: 4px; }
+  .dv-zoom button { width: 32px; height: 32px; border: none; background: transparent; color: var(--paper); cursor: pointer; border-radius: 999px; font-size: 16px; }
+  .dv-zoom button:hover { background: rgba(246,236,210,0.15); }
+  .dv-zoom .lvl { color: var(--paper); font-family: var(--mono); font-size: 11px; display: inline-flex; align-items: center; padding: 0 8px; }
+
+  /* filmstrip of other docs */
+  .dv-strip { position: absolute; top: 50%; left: 20px; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; }
+  @media (max-width: 860px) { .dv-strip { display: none; } }
+  .dv-strip__thumb { width: 48px; height: 60px; border-radius: 4px; border: 2px solid transparent; background: linear-gradient(135deg, #d8ccb0, #c0b290); cursor: pointer; overflow: hidden; opacity: 0.6; }
+  .dv-strip__thumb.is-active { border-color: var(--brand); opacity: 1; }
+
+  /* right rail: review panel */
+  .dv-rail { background: var(--cream); border-left: 1px solid var(--rule); padding: 20px; overflow-y: auto; }
+  @media (max-width: 860px) { .dv-rail { border-left: none; border-top: 1px solid var(--rule); } }
+  .dv-rail h2 { font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 0 0 4px; }
+  .dv-rail h2 em { font-style: italic; font-weight: 400; }
+  .dv-rail__sub { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); margin-bottom: 16px; }
+
+  .qc { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-md); padding: 14px; margin-bottom: 14px; }
+  .qc__h { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 10px; }
+  .qc-line { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; }
+  .qc-line svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .qc-line.ok { color: var(--ok); } .qc-line.warn { color: var(--warn); }
+  .qc-line .x { color: var(--ink-2); }
+
+  .verdict { display: grid; gap: 8px; margin-top: 16px; }
+  .verdict button { padding: 12px; border-radius: var(--r-md); font-family: var(--sans); font-weight: 600; font-size: 13.5px; cursor: pointer; border: 1px solid; }
+  .verdict .accept { background: var(--ok); color: white; border-color: var(--ok); }
+  .verdict .reject { background: transparent; color: var(--danger); border-color: var(--danger); }
+  .verdict .reject:hover { background: var(--danger-soft); }
+</style>
+</head>
+<body>
+
+<div class="dv">
+
+  <div class="dv-top">
+    <a href="case-detail.html" class="dv-top__back">‹ Back to case</a>
+    <div class="dv-top__title">Passport photo <span class="mt">photo-v2.jpg · PRX-2026-00483</span></div>
+    <div class="dv-top__tools">
+      <button class="dv-tool" aria-label="Rotate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+      <button class="dv-tool" aria-label="Download"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></svg></button>
+      <button class="dv-tool" aria-label="Fullscreen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
+    </div>
+  </div>
+
+  <!-- canvas -->
+  <div class="dv-canvas">
+    <div class="dv-strip">
+      <div class="dv-strip__thumb is-active"></div>
+      <div class="dv-strip__thumb"></div>
+      <div class="dv-strip__thumb"></div>
+      <div class="dv-strip__thumb"></div>
+    </div>
+
+    <div class="dv-doc" id="doc">
+      <div class="dv-doc__head">REPUBLIC OF RWANDA · PASSPORT PHOTO</div>
+      <div class="dv-doc__body">
+        <div class="dv-doc__photo"></div>
+        <div class="dv-doc__lines"><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="dv-doc__mrz">P&lt;RWAKABERA&lt;&lt;ALINE&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+    </div>
+
+    <div class="dv-zoom">
+      <button id="zout" aria-label="Zoom out">−</button>
+      <span class="lvl" id="lvl">100%</span>
+      <button id="zin" aria-label="Zoom in">+</button>
+    </div>
+  </div>
+
+  <!-- review rail -->
+  <aside class="dv-rail">
+    <h2>Review <em>photo</em></h2>
+    <div class="dv-rail__sub">UPLOADED 22 MAY 18:40 · 2.4 MB · 1200×1600</div>
+
+    <div class="qc">
+      <div class="qc__h">Automatic checks</div>
+      <div class="qc-line ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg><span class="x">Brightness OK (was too dark before)</span></div>
+      <div class="qc-line ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg><span class="x">Sharpness OK — no blur detected</span></div>
+      <div class="qc-line ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg><span class="x">Face detected, centered</span></div>
+      <div class="qc-line warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span class="x">Background not pure white — borderline</span></div>
+    </div>
+
+    <div class="qc">
+      <div class="qc__h">Manual confirm</div>
+      <label style="display:flex; gap:8px; align-items:center; font-size:13px; padding:5px 0;"><input type="checkbox" style="accent-color:var(--ink);" checked> Matches the person on the ID</label>
+      <label style="display:flex; gap:8px; align-items:center; font-size:13px; padding:5px 0;"><input type="checkbox" style="accent-color:var(--ink);" checked> Recent (taken &lt; 6 months)</label>
+      <label style="display:flex; gap:8px; align-items:center; font-size:13px; padding:5px 0;"><input type="checkbox" style="accent-color:var(--ink);"> Meets Immigration spec</label>
+    </div>
+
+    <div class="verdict">
+      <button class="accept" onclick="window.location.href='case-detail.html'">Accept &amp; mark step done</button>
+      <button class="reject">Reject — ask client to retake</button>
+    </div>
+
+    <p style="font-family: var(--mono); font-size: 10px; color: var(--ink-subtle); letter-spacing: 0.04em; margin-top: 16px; text-align: center;">Rejecting opens a pre-filled message to the client</p>
+  </aside>
+
+</div>
+
+<script>
+  let zoom = 100;
+  const doc = document.getElementById('doc');
+  const lvl = document.getElementById('lvl');
+  function apply(){ doc.style.transform = 'scale(' + (zoom/100) + ')'; lvl.textContent = zoom + '%'; }
+  document.getElementById('zin').onclick = () => { zoom = Math.min(250, zoom+25); apply(); };
+  document.getElementById('zout').onclick = () => { zoom = Math.max(50, zoom-25); apply(); };
+</script>
+
+</body>
+</html>

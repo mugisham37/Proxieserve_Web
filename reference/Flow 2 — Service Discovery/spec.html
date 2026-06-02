@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 2 — Engineering spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--paper); }
+  .doc { max-width: 920px; margin: 0 auto; padding: 64px 32px 120px; }
+  @media (max-width: 720px) { .doc { padding: 32px 20px 80px; } }
+  .doc-head { border-bottom: 1px solid var(--rule-strong); padding-bottom: 24px; margin-bottom: 48px; }
+  .doc-head .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .doc-head h1 { margin: 12px 0; }
+  .doc-head p { margin: 0; color: var(--ink-muted); }
+
+  section.spec { padding: 48px 0; border-bottom: 1px solid var(--rule); }
+  section.spec:last-of-type { border-bottom: none; }
+  .spec-head {
+    display: grid; grid-template-columns: 80px 1fr;
+    gap: 24px; margin-bottom: 24px; align-items: baseline;
+  }
+  .spec-num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .spec-title { font-family: var(--serif); font-weight: 500; font-size: 32px; margin: 0; line-height: 1.1; }
+  .spec-title em { font-style: italic; font-weight: 400; }
+  .spec-body { padding-left: 104px; }
+  @media (max-width: 720px) { .spec-head { grid-template-columns: 1fr; gap: 4px; } .spec-body { padding-left: 0; } }
+  .spec-body p { margin: 0 0 14px; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
+
+  pre.ascii {
+    font-family: var(--mono); font-size: 12px; line-height: 1.45;
+    background: var(--cream-2); padding: 20px 24px; border-radius: var(--r-md);
+    overflow-x: auto; border: 1px solid var(--rule); color: var(--ink-2);
+  }
+  table.spec-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 16px 0; }
+  .spec-table th, .spec-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  .spec-table th { background: var(--cream-2); border-bottom: 1px solid var(--rule-strong); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); }
+  .spec-table tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
+  .spec-table td.mono { font-family: var(--mono); font-size: 12px; }
+
+  ul.spec-list, ol.spec-list { padding-left: 20px; margin: 0 0 16px; }
+  ul.spec-list li, ol.spec-list li { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin-bottom: 6px; }
+
+  .check {
+    display: grid; grid-template-columns: 24px 1fr;
+    gap: 10px; align-items: baseline;
+    padding: 8px 0; border-bottom: 1px solid var(--rule-soft); font-size: 14px;
+  }
+  .check.pass::before { content: "✓"; color: var(--ok); font-weight: 600; }
+  .check.fail::before { content: "✕"; color: var(--danger); font-weight: 600; }
+
+  .score {
+    display: inline-flex; align-items: baseline; gap: 4px;
+    padding: 8px 16px; background: var(--ok-soft); color: var(--ok);
+    border-radius: 999px; font-family: var(--mono); font-weight: 600; font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  .score .big { font-family: var(--serif); font-style: italic; font-size: 24px; }
+
+  .callout {
+    background: var(--brand-soft); color: var(--brand-ink);
+    border-left: 3px solid var(--brand);
+    padding: 14px 18px;
+    font-family: var(--serif); font-style: italic; font-size: 15px;
+    margin: 16px 0;
+  }
+  .callout strong { font-style: normal; font-weight: 600; }
+  code, .mono { font-family: var(--mono); font-size: 13px; }
+  .comp-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+  .comp-list .chip { background: var(--cream-2); color: var(--ink-2); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); font-family: var(--mono); font-size: 11px; }
+  .comp-list .chip.new { background: var(--brand-soft); color: var(--brand-ink); border-color: transparent; }
+  .toc { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; padding: 20px 0; border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); margin-bottom: 32px; }
+  .toc a { display: flex; gap: 16px; align-items: baseline; padding: 8px 0; font-size: 14px; color: var(--ink-2); border-bottom: 1px solid var(--rule-soft); }
+  .toc a .num { font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); }
+  @media (max-width: 600px) { .toc { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-head">
+    <a href="index.html" class="lnk-arrow" style="font-size:13px; margin-bottom: 16px; display: inline-flex;"><span aria-hidden="true">←</span> Back to Flow 2 hub</a>
+    <div class="meta">FLOW 02 / SERVICE DISCOVERY / ENGINEERING SPEC · v0.1</div>
+    <h1 class="t-h1">Flow 2 — <em>Service Discovery</em>.</h1>
+    <p>The catalogue surface. How a visitor moves from "I think I need help with X" to "starting an application for X" without friction.</p>
+  </div>
+
+  <div class="toc">
+    <a href="#s1"><span class="num">01</span> Flow map</a>
+    <a href="#s2"><span class="num">02</span> Information architecture</a>
+    <a href="#s3"><span class="num">03</span> Wireframes</a>
+    <a href="#s4"><span class="num">04</span> Hi-fi screens</a>
+    <a href="#s5"><span class="num">05</span> Component inventory</a>
+    <a href="#s6"><span class="num">06</span> Interaction &amp; motion</a>
+    <a href="#s7"><span class="num">07</span> Responsive matrix</a>
+    <a href="#s8"><span class="num">08</span> All states</a>
+    <a href="#s9"><span class="num">09</span> Accessibility</a>
+    <a href="#s10"><span class="num">10</span> Hand-off &amp; self-review</a>
+  </div>
+
+  <!-- 01 -->
+  <section class="spec" id="s1">
+    <div class="spec-head"><span class="spec-num">01 /</span><h2 class="spec-title"><em>Flow</em> map</h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+  Entry from Flow 1 (Start CTAs, service tiles, See all)
+              │
+              ▼
+  ┌─────────────────────────────┐    search/filter/sort
+  │  [F2.1] Services Index      │ ◀────────────┐
+  │  /services                  │              │
+  │  - search + cat chips + sort│              │
+  │  - 14 cards, color-stripes  │              │
+  └────────────┬──────────┬─────┘              │
+               │          │                    │
+   click card  │          │ "Request a service"
+               ▼          ▼
+  ┌─────────────────────────────┐    archived/waitlisted/pilot
+  │  [F2.2] Service Detail      │    eligibility-gated
+  │  /services/[slug]           │    multi-applicant
+  │  - hero + action card       │
+  │  - requirements list        │
+  │  - how-it-works (3-step)    │
+  │  - pricing tiers (2)        │
+  │  - per-service FAQ          │
+  │  - related services         │
+  │  - closing CTA              │
+  └────────────┬──────────┬─────┘
+               │          │
+   Start app   │          │ Save for later (account)
+               ▼          ▼
+        [F3] Submission   [F4] Auth (return-to-svc)
+</pre>
+      <p><strong>Entries:</strong> Flow 1 CTAs (Start, See all, individual service tiles), Flow 1 Pricing rows, paid ads deep-linking to a slug, SEO landing on a service slug.</p>
+      <p><strong>Exits:</strong> Start application → Flow 3 (with <span class="mono">?service=[id]</span>). Save for later → Flow 4 sign-up with return URL. Talk on WhatsApp → external. Request a service → admin queue. Back → previous page.</p>
+    </div>
+  </section>
+
+  <!-- 02 IA -->
+  <section class="spec" id="s2">
+    <div class="spec-head"><span class="spec-num">02 /</span><h2 class="spec-title">Information <em>architecture</em></h2></div>
+    <div class="spec-body">
+      <table class="spec-table">
+        <thead><tr><th>Route</th><th>Page</th><th>Indexed</th><th>SSR</th><th>Offline</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">/services</td><td>Services index</td><td>Yes</td><td>Catalogue + filters</td><td>Last-known cache</td></tr>
+          <tr><td class="mono">/services/[slug]</td><td>Service detail</td><td>Yes (1 per service)</td><td>Full</td><td>Last-known cache</td></tr>
+          <tr><td class="mono">/services?q=…&amp;category=…&amp;sort=…</td><td>Filtered index</td><td>No (canonical to /services)</td><td>Yes</td><td>Cached, client-filters</td></tr>
+          <tr><td class="mono">/services/[bad-slug] → 404</td><td>Service not found</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="t-h4" style="margin: 20px 0 6px;">URL params (shareable deep links)</h4>
+      <ul class="spec-list">
+        <li><span class="mono">q</span> — search string (debounced 200 ms, URL-synced on blur).</li>
+        <li><span class="mono">category</span> — single-select enum (<span class="mono">tax</span>, <span class="mono">identity</span>, <span class="mono">business</span>, <span class="mono">welfare</span>, <span class="mono">permits</span>, <span class="mono">other</span>).</li>
+        <li><span class="mono">sort</span> — enum (<span class="mono">popular</span>, <span class="mono">eta</span>, <span class="mono">fee</span>, <span class="mono">az</span>).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 03 WIREFRAMES -->
+  <section class="spec" id="s3">
+    <div class="spec-head"><span class="spec-num">03 /</span><h2 class="spec-title">Low-fi <em>wireframes</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin: 0 0 6px;">Services index — desktop</h4>
+<pre class="ascii">
+┌──────────────────────────────────────────────────────────────────┐
+│ ● ProxiServe   Home / Services                Track · Sign in    │
+└──────────────────────────────────────────────────────────────────┘
+  01 / Services
+  WHAT CAN WE HELP YOU WITH?
+  Lede — 1 sentence.
+┌──────────────────────────────────────────────────────────────────┐
+│ [🔍 search _______]  [All][Tax][Identity][Business]...   Sort ▼  │
+└──────────────────────────────────────────────────────────────────┘
+  14 services match · sorted by popularity        See full pricing →
+┌──────────┬──────────┬──────────┐
+│ ━━━━━━━━ │ ━━━━━━━━ │ ━━━━━━━━ │   color strip top
+│ Passport │ Nat. ID  │ Tax reg  │
+│ desc...  │ desc...  │ desc...  │
+│ fee · ETA│ fee · ETA│ fee · ETA│ →
+├──────────┼──────────┼──────────┤
+│ Business │ Driver's │ Permit   │
+│ ...      │ ...      │ ...      │
+└──────────┴──────────┴──────────┘
+  ... (14 cards total in 3-col grid)
+┌──────────────────────────────────────────────────────────────────┐
+│ HELP BAND — "Can't find it?"  [WhatsApp] [Request a service]      │
+└──────────────────────────────────────────────────────────────────┘
+</pre>
+
+      <h4 class="t-h4" style="margin: 20px 0 6px;">Service detail — desktop</h4>
+<pre class="ascii">
+┌────────────────────────────────────────┬─────────────────────────┐
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ │                         │
+│ category-color strip (full bleed)      │   ACTION CARD (sticky)  │
+├────────────────────────────────────────┤                         │
+│ [● Identity &amp; civil]                  │   Ready to start?       │
+│                                        │   ─────────────────     │
+│ PASSPORT RENEWAL.                      │   Standard fee  RWF 15K │
+│                                        │                         │
+│ Sub — 2 sentences.                     │   [Start application]   │
+│                                        │   [Save for later]      │
+│ Fee │ ETA │ Coverage │ Languages        │   "Free to start..."    │
+└────────────────────────────────────────┴─────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│ 01 / What you'll need                                             │
+│ ✓ Current passport (required)   ✓ National ID (required)          │
+│ ✓ Photo (required) [?]          ○ Proof of address (optional)     │
+│ ○ Police clearance (conditional)                                  │
+│  ─ advisory: biometric visit may be required ─                    │
+└──────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│ 02 / How this works  (3 steps, side-by-side)                      │
+└──────────────────────────────────────────────────────────────────┘
+┌─────────────────────┬────────────────────────────────────────────┐
+│ Standard            │ Urgent (featured)                          │
+│ RWF 15,000          │ RWF 35,000                                 │
+│ 5–7 days            │ 2–3 days                                   │
+│ Features list       │ Features list                              │
+│ [Start standard]    │ [Start urgent]                             │
+└─────────────────────┴────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│ 04 / FAQ (5 items, per-service)                                   │
+└──────────────────────────────────────────────────────────────────┘
+┌────────┬────────┬────────┐
+│ Related│ Related│ Related│   3 service cards
+└────────┴────────┴────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│ Closing CTA band (gradient)                                       │
+└──────────────────────────────────────────────────────────────────┘
+</pre>
+    </div>
+  </section>
+
+  <!-- 04 HI-FI -->
+  <section class="spec" id="s4">
+    <div class="spec-head"><span class="spec-num">04 /</span><h2 class="spec-title">Hi-fi <em>screens</em></h2></div>
+    <div class="spec-body">
+      <table class="spec-table">
+        <thead><tr><th>Screen</th><th>File</th><th>Breakpoints</th></tr></thead>
+        <tbody>
+          <tr><td>Services index</td><td class="mono"><a href="services-index.html" class="linked">services-index.html</a></td><td>320 → 1920 (responsive, live filtering)</td></tr>
+          <tr><td>Service detail — Passport renewal</td><td class="mono"><a href="service-detail.html" class="linked">service-detail.html</a></td><td>320 → 1920 (sticky action card desktop, sticky bottom bar mobile)</td></tr>
+          <tr><td>All 10 states</td><td class="mono"><a href="states.html" class="linked">states.html</a></td><td>desktop preview</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Hi-fi decisions worth flagging:</strong> Index cards use a cream body with a coloured category strip at the top (8 → 12 px on hover), keeping density at 3-up on desktop. The detail page uses a full-bleed category-coloured strip at the very top of the hero — a quieter use of the same colour vocabulary than Flow 1's six-up service grid.
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 COMPONENTS -->
+  <section class="spec" id="s5">
+    <div class="spec-head"><span class="spec-num">05 /</span><h2 class="spec-title">Component <em>inventory</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin-bottom: 8px;">Reused from Flow 1</h4>
+      <div class="comp-list">
+        <span class="chip">PillButton</span>
+        <span class="chip">AppButton</span>
+        <span class="chip">StatusPill</span>
+        <span class="chip">FormField</span>
+        <span class="chip">TopBar</span>
+        <span class="chip">Footer</span>
+        <span class="chip">FAQAccordion (mini variant)</span>
+        <span class="chip">GradientCTABand</span>
+        <span class="chip">EmptyState</span>
+        <span class="chip">CategoryDotChip</span>
+      </div>
+
+      <h4 class="t-h4" style="margin: 16px 0 8px;">New primitives introduced in Flow 2</h4>
+      <div class="comp-list">
+        <span class="chip new">CatalogueCard</span>
+        <span class="chip new">SearchInput (with /-shortcut)</span>
+        <span class="chip new">CategoryChipRow</span>
+        <span class="chip new">SortDropdown</span>
+        <span class="chip new">ResultsMeta (aria-live)</span>
+        <span class="chip new">ServiceHero</span>
+        <span class="chip new">InfoChipRow</span>
+        <span class="chip new">ActionCard (sticky)</span>
+        <span class="chip new">RequirementRow</span>
+        <span class="chip new">SubNavSticky</span>
+        <span class="chip new">PricingTier</span>
+        <span class="chip new">EligibilityGate</span>
+        <span class="chip new">InPersonCallout</span>
+        <span class="chip new">MultiApplicantList</span>
+        <span class="chip new">WaitlistCounter</span>
+        <span class="chip new">PilotBanner</span>
+        <span class="chip new">RequestServiceForm</span>
+        <span class="chip new">StickyMobileActionBar</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 MOTION -->
+  <section class="spec" id="s6">
+    <div class="spec-head"><span class="spec-num">06 /</span><h2 class="spec-title">Interaction &amp; <em>motion</em></h2></div>
+    <div class="spec-body">
+      <table class="spec-table">
+        <thead><tr><th>Element</th><th>Trigger</th><th>Spec</th><th>Reduced-motion</th></tr></thead>
+        <tbody>
+          <tr><td>Card hover</td><td>pointerover</td><td class="mono">translateY(-2px) + strip 8→12 px + shadow-subtle, 120 ms</td><td>Border colour only</td></tr>
+          <tr><td>Card arrow</td><td>card hover</td><td class="mono">bg invert (cream→ink), 120 ms</td><td>Identical</td></tr>
+          <tr><td>Filter chip toggle</td><td>click</td><td class="mono">bg + colour swap, 120 ms</td><td>Identical</td></tr>
+          <tr><td>Search filter</td><td>input</td><td class="mono">200 ms debounced; cross-fade 120 ms on result swap</td><td>Instant swap</td></tr>
+          <tr><td>Sub-nav active</td><td>scroll</td><td class="mono">underline slide, 200 ms</td><td>Identical</td></tr>
+          <tr><td>FAQ accordion</td><td>summary</td><td class="mono">height + chevron rotate, 200 ms</td><td>Instant open</td></tr>
+          <tr><td>Sticky bottom bar</td><td>scroll past hero (mobile)</td><td class="mono">slide-up 320 ms decelerate</td><td>Opacity fade only</td></tr>
+          <tr><td>Action card stick</td><td>scroll (desktop)</td><td class="mono">native position: sticky, no JS</td><td>Identical</td></tr>
+          <tr><td>Empty state appear</td><td>filter no-match</td><td class="mono">opacity + translateY 6 px, 200 ms</td><td>Opacity only</td></tr>
+          <tr><td>Eligibility gate enter</td><td>cta tap</td><td class="mono">modal pop 200 ms</td><td>Instant appear</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 07 RESPONSIVE -->
+  <section class="spec" id="s7">
+    <div class="spec-head"><span class="spec-num">07 /</span><h2 class="spec-title">Responsive <em>matrix</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin: 0 0 6px;">Services index</h4>
+      <table class="spec-table">
+        <thead><tr><th>Section</th><th>320</th><th>375</th><th>768</th><th>1024</th><th>1280+</th></tr></thead>
+        <tbody>
+          <tr><td>Top bar</td><td>logo+actions</td><td>same</td><td>+ crumb</td><td>same</td><td>same</td></tr>
+          <tr><td>Filter bar</td><td>stacked rows</td><td>stacked</td><td>stacked</td><td>3 cols (search, chips, sort)</td><td>3 cols</td></tr>
+          <tr><td>Category chips</td><td>horizontal scroll</td><td>scroll</td><td>scroll</td><td>wrap if fits</td><td>wrap</td></tr>
+          <tr><td>Cards grid</td><td>1 col</td><td>1 col</td><td>2 col</td><td>3 col</td><td>3 col</td></tr>
+          <tr><td>Sort dropdown</td><td>full width</td><td>same</td><td>same</td><td>right-aligned</td><td>right</td></tr>
+          <tr><td>Help band</td><td>stacked</td><td>stacked</td><td>2-col 60/40</td><td>2-col</td><td>2-col</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="t-h4" style="margin: 20px 0 6px;">Service detail</h4>
+      <table class="spec-table">
+        <thead><tr><th>Section</th><th>320</th><th>768</th><th>980</th><th>1280+</th></tr></thead>
+        <tbody>
+          <tr><td>Hero</td><td>stacked, action card inline</td><td>stacked</td><td>2-col (copy + sticky action card)</td><td>same</td></tr>
+          <tr><td>Sub-nav</td><td>hidden</td><td>hidden</td><td>visible sticky</td><td>visible</td></tr>
+          <tr><td>Requirements list</td><td>1 col</td><td>2 col</td><td>2 col</td><td>2 col</td></tr>
+          <tr><td>How-it-works (3-step)</td><td>stacked</td><td>stacked</td><td>3-col row</td><td>3-col</td></tr>
+          <tr><td>Pricing tiers</td><td>stacked</td><td>2-col</td><td>2-col</td><td>2-col</td></tr>
+          <tr><td>FAQ</td><td>full width</td><td>full</td><td>720 px max</td><td>720 px</td></tr>
+          <tr><td>Related</td><td>1 col</td><td>2 col</td><td>3 col</td><td>3 col</td></tr>
+          <tr><td>Sticky mobile bar</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 08 STATES -->
+  <section class="spec" id="s8">
+    <div class="spec-head"><span class="spec-num">08 /</span><h2 class="spec-title">All <em>states</em></h2></div>
+    <div class="spec-body">
+      <p>Standard, ten edge-case variants. See <a href="states.html" class="linked">states.html</a> for visuals.</p>
+      <table class="spec-table">
+        <thead><tr><th>State</th><th>Index</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>Standard</td><td>14 cards, 6 categories</td><td>Full hero + action card</td></tr>
+          <tr><td>Loading first paint</td><td>Skeleton cards (filter bar SSR)</td><td>Skeleton hero + requirements</td></tr>
+          <tr><td>Filtered empty</td><td>"No services match 'X'" + Request CTA</td><td>N/A</td></tr>
+          <tr><td>Catalogue empty (admin)</td><td>Empty state with email capture</td><td>N/A</td></tr>
+          <tr><td>Service archived</td><td>Card hidden from grid</td><td>Disabled CTA + "notify me"</td></tr>
+          <tr><td>Service waitlisted</td><td>Card shows waitlist badge</td><td>"Join the waitlist" + phone capture</td></tr>
+          <tr><td>Service pilot/new</td><td>Card shows "New" / "Pilot" flag</td><td>Yellow advisory; CTAs unchanged</td></tr>
+          <tr><td>Eligibility required</td><td>—</td><td>Gate interstitial before Start</td></tr>
+          <tr><td>In-person required</td><td>—</td><td>Branded callout in hero + footer reminder</td></tr>
+          <tr><td>Multi-applicant</td><td>—</td><td>Applicants list (replaces step 1 in Flow 3)</td></tr>
+          <tr><td>404 service slug</td><td>—</td><td>Contextualised 404 → browse all</td></tr>
+          <tr><td>Server error 5xx</td><td>Section retry, hero stays</td><td>Full-page retry, breadcrumb preserved</td></tr>
+          <tr><td>Offline</td><td>Cached cards + banner</td><td>Cached page; Start CTA disabled</td></tr>
+          <tr><td>Reduced motion</td><td>No hover lift; static colour swaps</td><td>Same</td></tr>
+          <tr><td>RTL</td><td>Mirrored cards + filter chips</td><td>Mirrored hero; action card flips right→left</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 09 A11Y -->
+  <section class="spec" id="s9">
+    <div class="spec-head"><span class="spec-num">09 /</span><h2 class="spec-title">Accessibility <em>checklist</em></h2></div>
+    <div class="spec-body">
+      <div class="check pass">Filter chips are <span class="mono">&lt;button aria-pressed&gt;</span></div>
+      <div class="check pass">Search input has <span class="mono">role="searchbox"</span> and visually-hidden label</div>
+      <div class="check pass">Results count announced via <span class="mono">aria-live="polite"</span></div>
+      <div class="check pass">Keyboard: "/" focuses search; "Esc" clears + blurs</div>
+      <div class="check pass">Service cards are whole-card links; inner pseudo-CTA <span class="mono">aria-hidden</span> so SR doesn't double-announce</div>
+      <div class="check pass">Category dot is decorative — accompanied by visible category label text</div>
+      <div class="check pass">Sub-nav uses <span class="mono">aria-label="On this page"</span> and tracks scroll position</div>
+      <div class="check pass">Action card has its own <span class="mono">aria-label</span> ("Start this service")</div>
+      <div class="check pass">Requirement help "?" buttons use <span class="mono">aria-describedby</span> to expose the tooltip text</div>
+      <div class="check pass">Eligibility gate is a focus-trapped modal; <span class="mono">Esc</span> closes</div>
+      <div class="check pass">Sticky mobile bar has <span class="mono">aria-label="Start application for [service name]"</span></div>
+      <div class="check pass">Touch targets ≥ 44 × 44 px (filter chips have 12 px vertical padding)</div>
+      <div class="check pass">Colour never sole indicator — every status pill includes icon + text label</div>
+      <div class="check pass">Reduced motion respected via tokens.css global rule</div>
+      <div class="check pass">Sortable table column not used — sort is a single-select for clarity</div>
+    </div>
+  </section>
+
+  <!-- 10 HAND-OFF -->
+  <section class="spec" id="s10">
+    <div class="spec-head"><span class="spec-num">10 /</span><h2 class="spec-title">Hand-off &amp; <em>self-review</em></h2></div>
+    <div class="spec-body">
+
+      <h4 class="t-h4" style="margin: 0 0 6px;">Engineering notes</h4>
+      <ul class="spec-list">
+        <li><strong>Schema source.</strong> Service definitions live in the admin (Flow 9.3). Each service has: <span class="mono">slug</span>, <span class="mono">name {en, rw, fr}</span>, <span class="mono">category</span>, <span class="mono">description</span>, <span class="mono">fee</span>, <span class="mono">urgentFee</span>, <span class="mono">eta {min,max}</span>, <span class="mono">requirements[]</span>, <span class="mono">flags: {new, pilot, archived, waitlisted, requiresInPerson, multiApplicant}</span>, <span class="mono">eligibilityChecks[]</span>.</li>
+        <li><strong>Filtering.</strong> All filters client-side (catalogue is bounded ~30 services). URL-synced. Server only renders the initial set.</li>
+        <li><strong>Empty / archived / waitlisted</strong> are not separate routes — they're variant renders driven by service flags.</li>
+        <li><strong>Sub-nav scroll-spy</strong> uses <span class="mono">IntersectionObserver</span>; falls back to scroll listener on iOS &lt; 12.4.</li>
+        <li><strong>Sticky action card</strong> uses native <span class="mono">position: sticky</span>; no JS scroll math.</li>
+        <li><strong>SEO.</strong> One indexed canonical per service slug. Filtered URLs return <span class="mono">&lt;link rel="canonical"&gt;</span> back to <span class="mono">/services</span>. Service detail emits JSON-LD <span class="mono">Service</span> + <span class="mono">Offer</span> schema.</li>
+        <li><strong>Analytics events.</strong> <span class="mono">services_index_view</span>, <span class="mono">services_search {q}</span>, <span class="mono">services_filter {category}</span>, <span class="mono">services_sort {sort}</span>, <span class="mono">service_card_click {service_id}</span>, <span class="mono">services_empty_state</span>, <span class="mono">service_detail_view {service_id}</span>, <span class="mono">service_start_click {service_id}</span>, <span class="mono">service_save_for_later {service_id}</span>, <span class="mono">service_archived_view</span>, <span class="mono">service_waitlist_join</span>, <span class="mono">service_request {term}</span>.</li>
+      </ul>
+
+      <h4 class="t-h4" style="margin: 24px 0 12px;">Designer self-review rubric (D.8)</h4>
+      <div class="check pass">01 — Real content (every service has real name, fee, ETA, description)</div>
+      <div class="check pass">02 — Spacing scale obeyed</div>
+      <div class="check pass">03 — Semantic tokens only</div>
+      <div class="check pass">04 — Mobile-first (320 viewport renders without scroll, sticky mobile CTA works)</div>
+      <div class="check pass">05 — Sticky / safe-area respected</div>
+      <div class="check pass">06 — All states covered (10 in states.html)</div>
+      <div class="check pass">07 — Reduced-motion variant inherited from tokens.css</div>
+      <div class="check pass">08 — A11y checklist signed (15/15)</div>
+      <div class="check pass">09 — i18n length budget (chips and card descriptions tested at +35%)</div>
+      <div class="check pass">10 — Icon family consistent (Lucide; one magnifier + one chevron)</div>
+      <div class="check pass">11 — Banned patterns absent</div>
+      <div class="check pass">12 — Hierarchy obvious</div>
+      <div class="check pass">13 — CTAs unambiguous ("Start application", "Save for later", "Join waitlist", "Notify me", "Request a service")</div>
+      <div class="check pass">14 — Edge cases (10 documented: archived, waitlisted, pilot, eligibility, in-person, multi-applicant, empty search, loading, 404, offline)</div>
+      <div class="check pass">15 — Final line invites next flow</div>
+
+      <p style="margin-top: 24px;"><span class="score">Score · <span class="big">15</span> / 15</span></p>
+
+      <div class="callout" style="margin-top: 32px;">
+        Flow 2 is complete. Type "Design Flow 3." to continue with Application Submission — the 5-step wizard, where it gets state-heavy. Or correct anything here first.
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

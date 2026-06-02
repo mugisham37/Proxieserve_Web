@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 3 — States gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="wizard.css" />
+<style>
+  body { background: var(--cream-2); }
+  .page-head { padding: 48px 0 32px; border-bottom: 1px solid var(--rule); background: var(--cream); }
+  .page-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .page-head h1 { margin: 8px 0 12px; }
+  .page-head p { color: var(--ink-muted); margin: 0; max-width: 720px; }
+
+  .gallery { padding: 56px 0 120px; display: grid; grid-template-columns: 1fr; gap: 56px; }
+  .tile {
+    background: var(--cream); border: 1px solid var(--rule);
+    border-radius: var(--r-lg); overflow: hidden;
+  }
+  .tile__head {
+    padding: 18px 24px;
+    display: flex; gap: 16px; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--rule); background: var(--paper); flex-wrap: wrap;
+  }
+  .tile__head h2 { margin: 0; font-size: 20px; font-family: var(--serif); font-weight: 500; }
+  .tile__head h2 em { font-style: italic; font-weight: 400; }
+  .tile__head .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .tile__head .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-family: var(--mono); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: var(--cream-2); color: var(--ink-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .tag--brand { background: var(--brand-soft); color: var(--brand-ink); }
+  .tag--warn  { background: var(--warn-soft); color: var(--warn); }
+  .tag--danger{ background: var(--danger-soft); color: var(--danger); }
+  .tag--ok    { background: var(--ok-soft); color: var(--ok); }
+  .tag--info  { background: var(--info-soft); color: var(--info); }
+  .tile__body { padding: 32px; }
+  .tile__notes { padding: 16px 24px; background: var(--cream-2); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
+  .tile__notes strong { color: var(--ink); font-weight: 600; }
+
+  /* Resume draft banner */
+  .resume-banner {
+    background: var(--ink); color: var(--paper);
+    padding: 20px 24px;
+    border-radius: var(--r-lg);
+    display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center;
+  }
+  .resume-banner h4 { color: var(--paper); margin: 0 0 4px; font-family: var(--serif); font-weight: 500; font-size: 18px; text-transform: none; letter-spacing: 0; }
+  .resume-banner h4 em { font-style: italic; font-weight: 400; }
+  .resume-banner p { margin: 0; font-size: 13px; color: rgba(246,236,210,0.75); }
+  .resume-banner .pill { background: var(--paper); color: var(--ink); }
+  @media (max-width: 600px) { .resume-banner { grid-template-columns: 1fr; } }
+
+  /* Photo quality warning */
+  .photo-warn {
+    background: var(--warn-soft); color: var(--warn);
+    border: 1px solid var(--warn);
+    border-radius: var(--r-md);
+    padding: 16px 18px;
+    display: grid; grid-template-columns: 56px 1fr auto; gap: 16px; align-items: center;
+  }
+  .photo-warn__ico {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 100%);
+    border-radius: 4px;
+    filter: blur(2px);
+  }
+  .photo-warn h4 { color: inherit; margin: 0 0 4px; font-family: var(--serif); font-size: 16px; font-weight: 600; text-transform: none; letter-spacing: 0; }
+  .photo-warn p { margin: 0; font-size: 13px; line-height: 1.5; }
+  .photo-warn .row { gap: 8px; }
+  .photo-warn .btn { background: var(--cream); }
+
+  /* Submit progress / button loading */
+  .pill--loading {
+    pointer-events: none;
+    position: relative;
+  }
+  .pill--loading::before {
+    content: ""; width: 14px; height: 14px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 999px;
+    animation: spin 800ms linear infinite;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Validation summary banner */
+  .vbanner {
+    background: var(--danger-soft); color: var(--danger);
+    border-left: 3px solid var(--danger);
+    padding: 16px 20px;
+    border-radius: var(--r-md);
+    margin-bottom: 16px;
+  }
+  .vbanner h4 { color: inherit; margin: 0 0 8px; font-family: var(--serif); font-weight: 600; font-size: 16px; text-transform: none; letter-spacing: 0; }
+  .vbanner ol { margin: 0; padding-left: 20px; }
+  .vbanner li { font-size: 13.5px; padding: 4px 0; }
+  .vbanner a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+  /* Idempotency / duplicate submission */
+  .idem-card {
+    background: var(--info-soft); color: var(--info);
+    border-radius: var(--r-md);
+    padding: 14px 18px;
+    border-left: 3px solid var(--info);
+    font-size: 13.5px; line-height: 1.5;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .idem-card .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid var(--info);
+    border-top-color: transparent;
+    border-radius: 999px;
+    animation: spin 800ms linear infinite;
+    flex-shrink: 0;
+  }
+
+  /* Schema migration */
+  .migrate-card {
+    background: var(--brand-soft); color: var(--brand-ink);
+    border-radius: var(--r-md);
+    padding: 18px 22px;
+    border-left: 3px solid var(--brand);
+  }
+  .migrate-card h4 { color: inherit; margin: 0 0 8px; font-family: var(--serif); font-size: 17px; font-weight: 600; text-transform: none; letter-spacing: 0; }
+  .migrate-card p { margin: 0 0 12px; font-size: 13.5px; line-height: 1.55; }
+  .migrate-card ul { margin: 0; padding-left: 18px; font-size: 13px; }
+  .migrate-card li { padding: 3px 0; }
+  .migrate-card .row { margin-top: 16px; }
+
+  /* Multi-tab conflict */
+  .mt-conflict {
+    background: var(--warn-soft); color: var(--warn);
+    border-radius: var(--r-md);
+    padding: 18px 22px;
+    border-left: 3px solid var(--warn);
+  }
+  .mt-conflict h4 { color: inherit; margin: 0 0 8px; font-family: var(--serif); font-size: 17px; font-weight: 600; text-transform: none; letter-spacing: 0; }
+  .mt-conflict p { margin: 0 0 14px; font-size: 13.5px; line-height: 1.55; }
+  .mt-conflict .row { gap: 10px; }
+  .mt-conflict .btn { background: var(--cream); }
+
+  /* Draft expiring */
+  .expire-banner {
+    background: var(--cream-2); border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    padding: 16px 20px;
+    display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center;
+  }
+  .expire-banner h4 { margin: 0 0 4px; font-family: var(--serif); font-weight: 500; font-size: 16px; text-transform: none; letter-spacing: 0; color: var(--ink); }
+  .expire-banner p { margin: 0; font-size: 13px; color: var(--ink-muted); }
+  .expire-banner .countdown { font-family: var(--mono); color: var(--warn); }
+  @media (max-width: 600px) { .expire-banner { grid-template-columns: 1fr; } }
+
+  /* Offline queued */
+  .offline-queue {
+    background: var(--ink); color: var(--paper);
+    border-radius: var(--r-md);
+    padding: 24px;
+    display: grid; gap: 16px;
+  }
+  .offline-queue h3 { color: var(--paper); margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 500; }
+  .offline-queue h3 em { font-style: italic; font-weight: 400; }
+  .offline-queue p { margin: 0; font-size: 14px; color: rgba(246,236,210,0.8); line-height: 1.55; }
+  .offline-queue__bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: rgba(246,236,210,0.06);
+    border-radius: var(--r-sm);
+  }
+  .offline-queue__bar .dot {
+    width: 8px; height: 8px; border-radius: 999px;
+    background: var(--warn);
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* Per-field validation */
+  .demo-field {
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="container">
+    <a href="index.html" class="lnk-arrow" style="font-size:13px; margin-bottom: 16px; display: inline-flex;"><span aria-hidden="true">←</span> Back to Flow 3 hub</a>
+    <div class="meta">FLOW 03 / STATES GALLERY · 12 STATES</div>
+    <h1 class="t-h1">Application submission — <em>edge cases</em>.</h1>
+    <p>The most state-heavy flow in ProxiServe. The 5 live step pages live in the hub. Below are the variants that have to land gracefully — draft resume, validation, offline queue, schema migration, multi-tab conflict, idempotency, draft expiry.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="gallery">
+
+    <!-- ============ 01 RESUME DRAFT ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">01 / Resume a saved draft</span>
+          <h2>"Pick up where you <em>left off</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--ok">Returning</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="resume-banner">
+          <div>
+            <h4>Welcome back, your <em>passport renewal</em> draft is waiting</h4>
+            <p>Last edited yesterday at 18:42 · 3 of 5 steps complete · 4 of 4 required documents uploaded.</p>
+          </div>
+          <a href="../Flow 3 — Application/step-3-documents.html" class="pill">Resume <span class="arr">→</span></a>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Mechanics.</strong> Draft lives in <span class="mono">localStorage</span> for guests; server-side for signed-in users. The banner sits above the top bar on landing, services index, and the service-detail page that matches the draft's service. Dismissable; respects dismissal for 30 days then re-shows.
+      </div>
+    </article>
+
+    <!-- ============ 02 PHOTO QUALITY WARNING ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">02 / Photo quality — blurry or dark</span>
+          <h2>"Hard to <em>read</em> — try again?"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">Soft warning</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="photo-warn">
+          <div class="photo-warn__ico"></div>
+          <div>
+            <h4>This photo is hard to read</h4>
+            <p>It looks dark — your ID number might not be visible. <strong>Try again in better light</strong>, or use it anyway if you're sure it's clear enough.</p>
+          </div>
+          <div class="row">
+            <button class="btn">Use anyway</button>
+            <button class="btn btn--solid">Retake</button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Detection.</strong> Client-side: brightness histogram + image-laplacian variance to estimate blur. Above thresholds — silent. Below — soft warning, never blocking. Server-side does the same check + OCR confidence; if both fail, the file enters error state.
+      </div>
+    </article>
+
+    <!-- ============ 03 VALIDATION SUMMARY ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">03 / Validation errors — summary + per-field</span>
+          <h2>Anchor links to <em>each problem</em></h2>
+        </div>
+        <div class="tags"><span class="tag tag--danger">Validation</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="vbanner" role="alert">
+          <h4>3 things need fixing before we can continue</h4>
+          <ol>
+            <li><a href="#">National ID number</a> — needs to be 16 digits</li>
+            <li><a href="#">Phone number</a> — doesn't look right (use the format 07X XXX XXXX)</li>
+            <li><a href="#">Permission to act on your behalf</a> — please confirm to continue</li>
+          </ol>
+        </div>
+
+        <div class="demo-field fld fld--error">
+          <span class="fld__label">National ID number <span class="req">*</span></span>
+          <input class="fld__input fld__input--mono" type="text" value="1 1992 8 0042" aria-invalid="true" aria-describedby="x-err" />
+          <span class="fld__help" id="x-err"><strong>Needs 16 digits — yours has 9.</strong> Check the long number on the front of your ID.</span>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Tone.</strong> Errors say what's wrong and how to fix it. Summary banner at top, per-field error below input. Clicking a summary link scrolls + focuses the field. The submit button stays enabled — pressing it surfaces the next pending error, not a wall of red.
+      </div>
+    </article>
+
+    <!-- ============ 04 SUBMITTING (LOADING) ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">04 / Sending — button loading state</span>
+          <h2>"Sending your <em>application</em>…"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--info">Submitting</span></div>
+      </header>
+      <div class="tile__body">
+        <div style="display: flex; gap: 16px; align-items: center; padding: 24px; background: var(--paper); border-radius: var(--r-md);">
+          <a class="back-link" style="color: var(--ink-subtle); pointer-events: none;">← Back</a>
+          <span style="font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; margin-right: auto;">Step 4 of 5 · Review</span>
+          <button class="pill pill--brand pill--loading">Sending your application…</button>
+        </div>
+        <p style="margin: 16px 0 0; font-size: 13px; color: var(--ink-muted);">
+          The form is disabled while sending. Browser back navigation is blocked via <span class="mono">beforeunload</span>. A modal blocks the user if they try to close the tab.
+        </p>
+      </div>
+      <div class="tile__notes">
+        <strong>Idempotency.</strong> A client-generated <span class="mono">Idempotency-Key</span> header is included; double-clicks de-duplicate server-side. If the connection drops mid-submit, the retry uses the same key — the server returns the same application code rather than creating a duplicate.
+      </div>
+    </article>
+
+    <!-- ============ 05 DUPLICATE SUBMISSION ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">05 / Duplicate click during submit</span>
+          <h2>Toast — "<em>Already sending</em> — hang on"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--info">Idempotent</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="idem-card">
+          <span class="spinner"></span>
+          <span><strong>Already sending — hang on.</strong> The first click is on its way. We won't double-submit.</span>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Why this matters.</strong> On slow 3G the submit takes 4–8 seconds — users tap multiple times. Without idempotency we'd create duplicate applications. The toast is informational, never alarming.
+      </div>
+    </article>
+
+    <!-- ============ 06 OFFLINE QUEUED ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">06 / Offline on submit — queued locally</span>
+          <h2>"Saved on this device — we'll <em>send when you're online</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">Offline</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="offline-queue">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 32px; height: 32px; border-radius: 999px; background: var(--warn); display: inline-flex; align-items: center; justify-content: center; color: white; font-family: var(--serif); font-style: italic; font-size: 18px;">!</span>
+            <h3>Saved on this <em>device</em></h3>
+          </div>
+          <p>Your application is ready to send. We'll dispatch it the moment you're back online — usually within seconds of reconnection. <strong style="color: var(--paper);">Keep this tab open if you can.</strong></p>
+          <div class="offline-queue__bar">
+            <span class="dot"></span>
+            <span style="font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;">QUEUED · waiting for connection · attempt 1 in 30s</span>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Service worker.</strong> The payload is stashed in IndexedDB with a retry schedule (30s, 60s, 5min, 30min). A Background Sync registration handles wake-up. When the submit succeeds, the success toast appears even if the user closed the tab in between — via Push API where granted.
+      </div>
+    </article>
+
+    <!-- ============ 07 MULTI-TAB CONFLICT ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">07 / Same draft open in another tab</span>
+          <h2>"This application is open <em>somewhere else</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">Conflict</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="mt-conflict">
+          <h4>This application is already open in another tab</h4>
+          <p>If you keep editing here, the other tab will become read-only. Otherwise, switch over to that tab — your work there is saved.</p>
+          <div class="row">
+            <button class="btn">Switch to other tab</button>
+            <button class="btn btn--solid">Use this tab instead</button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Detection.</strong> A <span class="mono">BroadcastChannel</span> for each draft id; tabs heartbeat every 10s. If the second tab doesn't hear back, it goes read-only with a "your work was paused — refresh to resume" banner. Last-writer-wins is unacceptable for draft applications.
+      </div>
+    </article>
+
+    <!-- ============ 08 SCHEMA MIGRATION ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">08 / Service schema updated between draft + submit</span>
+          <h2>"We've <em>improved</em> this form"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--brand">Migration</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="migrate-card">
+          <h4>We've updated this form since you started</h4>
+          <p>The Department of Immigration changed what they need. Most of your existing answers carry over — please double-check the fields highlighted below:</p>
+          <ul>
+            <li><strong>New:</strong> "Travel intent" question (we recommend Urgent if &lt; 2 weeks)</li>
+            <li><strong>Changed:</strong> Police clearance number format (now starts with RNP-)</li>
+            <li><strong>Removed:</strong> "Mother's maiden name" — Immigration dropped this requirement</li>
+          </ul>
+          <div class="row">
+            <button class="btn btn--solid">Continue with my draft</button>
+            <button class="btn">Start over</button>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Versioned schemas.</strong> Every service form has a <span class="mono">version</span>. On draft resume we compare draft.version vs current.version. Fields that map 1:1 are auto-migrated; new required fields are highlighted yellow; removed fields are silently dropped. A "What changed?" link expands the full diff for the curious.
+      </div>
+    </article>
+
+    <!-- ============ 09 SERVICE ARCHIVED ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">09 / Service archived between draft + submit</span>
+          <h2>"This service is <em>no longer available</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--danger">Archived</span></div>
+      </header>
+      <div class="tile__body">
+        <div style="background: var(--danger-soft); color: var(--danger); border-left: 3px solid var(--danger); padding: 18px 22px; border-radius: var(--r-md);">
+          <h4 style="color: inherit; margin: 0 0 8px; font-family: var(--serif); font-size: 17px; font-weight: 600; text-transform: none; letter-spacing: 0;">This service is no longer available</h4>
+          <p style="margin: 0 0 16px; font-size: 13.5px; line-height: 1.55;">
+            We've discontinued the RSSB pension claim pilot. Your draft has been preserved — if a similar service launches in the future, you can re-use what you uploaded.
+          </p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="#" class="btn" style="background: var(--cream);">See similar services</a>
+            <a href="#" class="btn" style="background: var(--cream);">Contact us</a>
+            <a href="#" class="btn btn--solid">Download my draft</a>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Soft archive.</strong> Drafts of archived services aren't deleted — they migrate to a read-only state. The downloaded JSON is portable for our support team to manually process if needed.
+      </div>
+    </article>
+
+    <!-- ============ 10 DRAFT EXPIRING ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">10 / Draft expires in 7 days</span>
+          <h2>"Your saved draft will <em>expire soon</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--warn">Expiring</span></div>
+      </header>
+      <div class="tile__body">
+        <div class="expire-banner">
+          <div>
+            <h4>Your draft will expire in <span class="countdown">6 days, 14 hours</span></h4>
+            <p>Drafts are saved on this device for 30 days. After that, we delete it to protect your data. Submit now or save your progress to your account.</p>
+          </div>
+          <div class="row" style="gap: 8px;">
+            <a href="../Flow 4 — Auth/index.html" class="btn">Save to account</a>
+            <a href="#" class="btn btn--solid">Continue draft</a>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Why 30 days?</strong> Compliance: we don't want personally identifying information sitting unencrypted in browser storage indefinitely. The 7-day warning gives users a final nudge — they can extend by creating an account (which moves the draft server-side under their auth).
+      </div>
+    </article>
+
+    <!-- ============ 11 SERVER ERROR ON SUBMIT ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">11 / Server error on submit</span>
+          <h2>"We couldn't <em>send it just now</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag tag--danger">5xx</span></div>
+      </header>
+      <div class="tile__body">
+        <div style="background: var(--danger-soft); color: var(--danger); border-left: 3px solid var(--danger); padding: 18px 22px; border-radius: var(--r-md);">
+          <h4 style="color: inherit; margin: 0 0 8px; font-family: var(--serif); font-size: 17px; font-weight: 600; text-transform: none; letter-spacing: 0;">Something on our end went wrong</h4>
+          <p style="margin: 0 0 16px; font-size: 13.5px; line-height: 1.55;">
+            Your details are safe — nothing was lost. We've logged this for our team to investigate. Most often, retrying in a moment works.
+          </p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <a href="#" class="btn btn--solid">Try sending again</a>
+            <a href="#" class="btn" style="background: var(--cream);">Contact support</a>
+            <span style="font-family: var(--mono); font-size: 11px; opacity: 0.8;">Incident #INC-26-3819</span>
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Behaviour.</strong> The form remains fully populated. The Retry button uses the same idempotency key. After 3 failed retries we encourage contacting support with the incident ID — which routes directly to the on-call engineer's queue.
+      </div>
+    </article>
+
+    <!-- ============ 12 FIELD HELP POPOVER ============ -->
+    <article class="tile">
+      <header class="tile__head">
+        <div>
+          <span class="num">12 / Field-level help popover</span>
+          <h2>"<em>What does this mean?</em>"</h2>
+        </div>
+        <div class="tags"><span class="tag">A11y</span></div>
+      </header>
+      <div class="tile__body">
+        <div style="max-width: 540px; padding: 20px; background: var(--paper); border-radius: var(--r-md); border: 1px solid var(--rule);">
+          <span style="font-family: var(--sans); font-size: 13px; font-weight: 500; display: flex; gap: 6px; align-items: center;">
+            Passport number <span style="color: var(--ink-muted);">*</span>
+            <button style="width: 18px; height: 18px; border-radius: 999px; background: var(--ink); color: var(--paper); border: none; font-family: var(--serif); font-style: italic; font-size: 12px; cursor: pointer;">?</button>
+          </span>
+          <input class="fld__input fld__input--mono" type="text" placeholder="PC123456" style="margin-top: 6px;" />
+          <div style="margin-top: 8px; padding: 12px 14px; background: var(--info-soft); color: var(--info); border-radius: var(--r-md); font-size: 12.5px; line-height: 1.5; border-left: 3px solid var(--info);">
+            <strong>Where to find it.</strong> Open your current passport to the bio page (the one with your photo). The number is in the top-right corner, near "Passport No." — it starts with letters (e.g. PC).
+          </div>
+        </div>
+      </div>
+      <div class="tile__notes">
+        <strong>Implementation.</strong> "?" button is a real <span class="mono">&lt;button&gt;</span> with <span class="mono">aria-describedby</span> linking to the popover content. Keyboard reachable (<span class="mono">Tab</span> + <span class="mono">Enter</span>). On mobile, tap opens a bottom sheet instead of a popover so it doesn't overlap the field.
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<footer style="background:var(--cream); padding: 40px 0; border-top: 1px solid var(--rule);">
+  <div class="container">
+    <div style="display:flex; justify-content:space-between; font-family: var(--mono); font-size:11px; color:var(--ink-muted); letter-spacing:0.06em;">
+      <span>PROXISERVE / FLOW 03 / STATES / v0.1</span>
+      <a href="index.html" class="lnk-arrow" style="font-size:12px;">Back to Flow 3 hub →</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

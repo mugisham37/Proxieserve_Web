@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Payment receipt · PRX-2026-00483 · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="payments.css" />
+</head>
+<body>
+
+<header class="pay-topbar">
+  <div class="container">
+    <div class="pay-topbar__inner">
+      <a href="../Flow 6 — Client Dashboard/dashboard.html" class="pay-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div class="pay-crumb"><strong>Payment complete ✓</strong></div>
+      <span class="pay-secure">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg>
+        PAID
+      </span>
+    </div>
+  </div>
+</header>
+
+<main class="pay-shell">
+  <div class="container">
+
+    <div class="receipt">
+      <div class="receipt__top">
+        <div class="receipt__check" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+        </div>
+        <h1>Payment <em>received</em>.</h1>
+        <p>Thank you — your passport renewal is moving forward.</p>
+        <div class="receipt__amt">RWF <em>15,000</em></div>
+      </div>
+
+      <div class="receipt__body">
+        <div class="receipt-row"><span class="l">Application</span><span class="v">Passport renewal</span></div>
+        <div class="receipt-row"><span class="l">Tracking code</span><span class="v mono">PRX-2026-00483</span></div>
+        <div class="receipt-row"><span class="l">Paid to</span><span class="v">ProxiServe Ltd</span></div>
+        <div class="receipt-row"><span class="l">Method</span><span class="v">MTN Mobile Money · 78 8 *** 456</span></div>
+        <div class="receipt-row"><span class="l">Transaction ID</span><span class="v mono">MP260523.1432.A48217</span></div>
+        <div class="receipt-row"><span class="l">Receipt no.</span><span class="v mono">RCP-2026-04821</span></div>
+        <div class="receipt-row"><span class="l">Date</span><span class="v">23 May 2026 · 14:32 CAT</span></div>
+        <div class="receipt-row"><span class="l">Service fee</span><span class="v mono">RWF 15,000</span></div>
+        <div class="receipt-row"><span class="l">VAT (incl.)</span><span class="v mono">RWF 2,288</span></div>
+        <div class="receipt-row"><span class="l">Status</span><span class="v" style="color: var(--ok);">Paid in full</span></div>
+      </div>
+
+      <div class="receipt__actions">
+        <a href="#" class="pill pill--solid" onclick="window.print();return false;">Download PDF <span class="arr">↓</span></a>
+        <a href="../Flow 6 — Client Dashboard/application-detail.html" class="pill">Back to application <span class="arr">→</span></a>
+      </div>
+    </div>
+
+    <div style="max-width: 560px; margin: 24px auto 0;">
+      <div class="pay-banner pay-banner--info" style="margin: 0;">
+        <strong>What's next?</strong> Aline will submit your application to Immigration today. You'll get a WhatsApp update at every step. The government printing fee (RWF 75,000) is paid in person at your biometric appointment.
+      </div>
+    </div>
+
+    <p style="text-align: center; margin-top: 24px; font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); letter-spacing: 0.06em;">
+      A copy has been sent to your phone &amp; email · Need help? <a href="../Flow 1 — Marketing/supporting.html#contact" style="color: var(--ink-muted); text-decoration: underline;">Contact support</a>
+    </p>
+
+  </div>
+</main>
+
+<script>
+  try { localStorage.setItem('proxi:lastCode', 'PRX-2026-00483'); } catch(e) {}
+</script>
+</body>
+</html>

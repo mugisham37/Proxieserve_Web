@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Passport renewal — ProxiServe</title>
+<meta name="description" content="Renew your Rwandan passport through ProxiServe. RWF 15,000 standard. 5–7 working days." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="flow2.css" />
+<style>
+  /* Page-specific: in-page sub-nav (sticky under top bar) */
+  .svc-subnav {
+    position: sticky; top: 71px; z-index: 30;
+    background: rgba(242,235,215,0.96);
+    backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 4px 0;
+  }
+  .svc-subnav__inner {
+    display: flex; gap: 4px; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .svc-subnav__inner::-webkit-scrollbar { display: none; }
+  .svc-subnav a {
+    flex-shrink: 0;
+    padding: 14px 18px;
+    font-family: var(--serif); font-style: italic; font-size: 15px;
+    color: var(--ink-muted);
+    border-bottom: 2px solid transparent;
+    transition: color var(--m-fast), border-color var(--m-fast);
+  }
+  .svc-subnav a:hover { color: var(--ink); }
+  .svc-subnav a.is-active { color: var(--ink); border-bottom-color: var(--ink); }
+  @media (max-width: 760px) { .svc-subnav { display: none; } }
+
+  /* Tip card / advisory inline */
+  .advisory {
+    background: var(--info-soft);
+    color: var(--info);
+    border-left: 3px solid var(--info);
+    padding: 16px 20px;
+    border-radius: var(--r-md);
+    margin: 24px 0;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .advisory strong { font-weight: 600; }
+
+  /* Mini-FAQ list */
+  .mini-faq { border-top: 1px solid var(--rule); }
+  .mini-faq details {
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 0;
+  }
+  .mini-faq summary {
+    list-style: none; cursor: pointer;
+    font-family: var(--serif); font-size: 18px; font-weight: 500;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .mini-faq summary::-webkit-details-marker { display: none; }
+  .mini-faq summary em { font-style: italic; font-weight: 400; }
+  .mini-faq summary .plus { font-family: var(--sans); font-size: 22px; transition: transform var(--m-base); }
+  .mini-faq details[open] summary .plus { transform: rotate(45deg); }
+  .mini-faq__body { padding: 16px 0 0; font-size: 14.5px; line-height: 1.65; color: var(--ink-muted); max-width: 660px; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="container">
+    <div class="topbar__inner">
+      <a href="../Flow 1 — Marketing/landing.html" class="wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div class="crumb"><a href="../Flow 1 — Marketing/landing.html">Home</a><span class="sep">/</span><a href="services-index.html">Services</a><span class="sep">/</span><strong>Passport renewal</strong></div>
+      <div class="topbar__actions">
+        <a href="../Flow 1 — Marketing/landing.html#track" class="pill pill--sm pill--ghost">Track</a>
+        <a href="#" class="pill pill--sm pill--solid">Sign in</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="svc-subnav" aria-label="On this page">
+  <div class="container">
+    <div class="svc-subnav__inner">
+      <a href="#overview" class="is-active">Overview</a>
+      <a href="#requirements">What you'll need</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#related">Related services</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="svc-hero svc-hero--pink" id="overview">
+    <div class="svc-hero__strip"></div>
+    <div class="container">
+      <div class="svc-hero__inner">
+
+        <div class="svc-hero__copy">
+          <span class="svc-hero__cat">
+            <span style="width:6px; height:6px; border-radius:999px; background: var(--b-pink); display:inline-block;"></span>
+            Identity &amp; civil
+          </span>
+          <h1>Passport <em>renewal</em>.</h1>
+          <p class="svc-hero__sub">Renew your existing Rwandan passport without queuing at Immigration. We collect your documents, prepare the application, and submit on your behalf. <em>Most people finish the upload in under 10 minutes.</em></p>
+
+          <div class="svc-info-chips">
+            <div class="info-chip">
+              <span class="label">Fee</span>
+              <span class="value">RWF 15,000</span>
+            </div>
+            <div class="info-chip">
+              <span class="label">Turnaround</span>
+              <span class="value">5–7 days</span>
+            </div>
+            <div class="info-chip">
+              <span class="label">Where it applies</span>
+              <span class="value">Nationwide</span>
+            </div>
+            <div class="info-chip">
+              <span class="label">Languages</span>
+              <span class="value">EN · RW · FR</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticky action card -->
+        <aside class="action-card" aria-label="Start this service">
+          <h3>Ready to <em>start?</em></h3>
+          <p style="margin:0; font-size:13.5px; color: var(--ink-muted); line-height:1.5;">
+            We'll guide you through five short steps. You can save and come back any time.
+          </p>
+          <div class="fee-line">
+            <span class="lab">Standard fee</span>
+            <span class="v">RWF 15,000</span>
+          </div>
+          <a href="#" class="pill pill--solid">Start application <span class="arr">↗</span></a>
+          <a href="#" class="pill pill--sm" style="justify-content:center; background:transparent;">Save for later <span class="arr">→</span></a>
+          <p class="note">Free to start — you pay once we agree on the final fee.</p>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REQUIREMENTS ============ -->
+  <section class="svc-section" id="requirements">
+    <div class="container">
+      <div class="svc-section__head">
+        <div class="svc-section__num">01 / What you'll need</div>
+        <div>
+          <h2 class="svc-section__title">A few documents, <em>nothing else</em>.</h2>
+          <p class="svc-section__lede">If you don't have one of these, we'll tell you what to do — don't worry about getting everything perfect before you start.</p>
+        </div>
+      </div>
+
+      <div class="req-list">
+
+        <div class="req-item">
+          <span class="req-item__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+          </span>
+          <div>
+            <div class="req-item__name">Your current <em>passport</em></div>
+            <p class="req-item__desc">Photo of the bio page (the one with your photo and details). Even if expired.</p>
+          </div>
+          <span class="req-item__opt req">Required</span>
+        </div>
+
+        <div class="req-item">
+          <span class="req-item__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+          </span>
+          <div>
+            <div class="req-item__name">National <em>ID</em></div>
+            <p class="req-item__desc">Both sides. We use this to verify your identity matches your passport.</p>
+          </div>
+          <span class="req-item__opt req">Required</span>
+        </div>
+
+        <div class="req-item">
+          <span class="req-item__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+          </span>
+          <div>
+            <div class="req-item__name">Passport-size <em>photo</em></div>
+            <p class="req-item__desc">White background, taken in the last 6 months. Take it with your phone — we'll check if it works.</p>
+          </div>
+          <span class="req-item__opt req">Required</span>
+          <button class="req-item__help" aria-label="More about the passport photo requirements" title="A clear, well-lit photo from the chest up, looking at the camera, no glasses or hat, white background.">?</button>
+        </div>
+
+        <div class="req-item">
+          <span class="req-item__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+          </span>
+          <div>
+            <div class="req-item__name">Proof of <em>address</em></div>
+            <p class="req-item__desc">A utility bill or letter from your sector office, less than 3 months old.</p>
+          </div>
+          <span class="req-item__opt">Optional</span>
+          <button class="req-item__help" aria-label="More about proof of address" title="Required only if your address changed since your previous passport.">?</button>
+        </div>
+
+        <div class="req-item">
+          <span class="req-item__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+          </span>
+          <div>
+            <div class="req-item__name">Police clearance <em>(if applicable)</em></div>
+            <p class="req-item__desc">Only needed if your previous passport was lost or stolen. Skip otherwise.</p>
+          </div>
+          <span class="req-item__opt">Conditional</span>
+        </div>
+
+      </div>
+
+      <div class="advisory">
+        <strong>Heads up.</strong> The Department of Immigration &amp; Emigration may ask you to come in person for a biometric scan once your application is in review. We'll let you know the moment that's scheduled.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="svc-section" id="how" style="background: var(--cream-2);">
+    <div class="container">
+      <div class="svc-section__head">
+        <div class="svc-section__num">02 / How this service works</div>
+        <div>
+          <h2 class="svc-section__title">Five days, <em>three touchpoints</em>.</h2>
+          <p class="svc-section__lede">Most of the wait is the Immigration office — we keep you posted the whole way through.</p>
+        </div>
+      </div>
+
+      <div class="how-svc">
+        <article class="how-svc__step">
+          <div class="n">01</div>
+          <h3>You <em>send</em> us your details</h3>
+          <p>You finish the 5-step application from your phone or computer — usually under 10 minutes. Your documents are encrypted the moment they upload.</p>
+        </article>
+        <article class="how-svc__step">
+          <div class="n">02</div>
+          <h3>We <em>prepare</em> &amp; submit</h3>
+          <p>Within 1 working day, an agent reviews everything, fills the official Immigration form, and submits it. You'll get a tracking code by SMS.</p>
+        </article>
+        <article class="how-svc__step">
+          <div class="n">03</div>
+          <h3>You <em>receive</em> your passport</h3>
+          <p>Immigration prints the new passport and returns it to us in 4–6 days. We hand it to you in person at our office or by courier.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="svc-section" id="pricing">
+    <div class="container">
+      <div class="svc-section__head">
+        <div class="svc-section__num">03 / Pricing</div>
+        <div>
+          <h2 class="svc-section__title">Two <em>options</em>, both clear.</h2>
+          <p class="svc-section__lede">Government printing fees are included. No hidden line items at checkout.</p>
+        </div>
+      </div>
+
+      <div class="tier-grid">
+
+        <article class="tier">
+          <div class="tier__head">
+            <h3 class="tier__name">Standard</h3>
+          </div>
+          <div class="tier__price">RWF <em>15,000</em></div>
+          <div class="tier__price-meta">RWF 15K · 5–7 working days</div>
+          <ul class="tier__list">
+            <li>Full document preparation</li>
+            <li>Submission to Immigration office</li>
+            <li>WhatsApp + SMS status updates</li>
+            <li>Hand-off at our office in Kigali</li>
+            <li class="no">No express handling</li>
+          </ul>
+          <a href="#" class="pill" style="justify-content:center;">Start standard <span class="arr">→</span></a>
+        </article>
+
+        <article class="tier tier--featured">
+          <div class="tier__head">
+            <h3 class="tier__name">Urgent</h3>
+            <span class="tier__badge">Faster</span>
+          </div>
+          <div class="tier__price">RWF <em>35,000</em></div>
+          <div class="tier__price-meta">RWF 35K · 2–3 working days</div>
+          <ul class="tier__list">
+            <li>Everything in Standard</li>
+            <li>Express slot at Immigration office</li>
+            <li>Priority agent queue</li>
+            <li>Courier delivery in Kigali (free)</li>
+            <li>Live WhatsApp updates from your agent</li>
+          </ul>
+          <a href="#" class="pill pill--solid" style="justify-content:center;">Start urgent <span class="arr">↗</span></a>
+        </article>
+
+      </div>
+
+      <p style="margin-top: 32px; font-size: 13px; color: var(--ink-muted); max-width: 640px;">
+        Fees include VAT. The standard government printing fee (RWF 75,000, paid separately to Immigration) is not included — you'll see it as a separate line at checkout. We accept MTN Mobile Money, Airtel Money, Visa &amp; Mastercard.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="svc-section" id="faq" style="background: var(--cream-2);">
+    <div class="container">
+      <div class="svc-section__head">
+        <div class="svc-section__num">04 / Questions about this service</div>
+        <div>
+          <h2 class="svc-section__title">Asked <em>often</em>.</h2>
+          <p class="svc-section__lede">Specific to passport renewal. For everything else, see the <a href="../Flow 1 — Marketing/supporting.html#faq" class="linked">general FAQ</a>.</p>
+        </div>
+      </div>
+
+      <div class="mini-faq" style="max-width: 880px;">
+        <details>
+          <summary>What if my passport is already <em>expired</em>? <span class="plus">+</span></summary>
+          <div class="mini-faq__body">No problem — this service is specifically for renewals, and an expired passport is fine. We use it to verify identity. If it was stolen or lost, you'll need a police clearance certificate too (we can help you get one).</div>
+        </details>
+        <details>
+          <summary>Can I renew if I'm <em>abroad</em>? <span class="plus">+</span></summary>
+          <div class="mini-faq__body">Only if you can come to Rwanda for the biometric appointment — Immigration requires it in person. We can hold your application until you arrive and book the appointment for the day you land.</div>
+        </details>
+        <details>
+          <summary>How long is the <em>new passport</em> valid for? <span class="plus">+</span></summary>
+          <div class="mini-faq__body">10 years for adult applicants (18+), 5 years for minors. The expiry date will be printed on your new bio page.</div>
+        </details>
+        <details>
+          <summary>What if my <em>name</em> has changed? <span class="plus">+</span></summary>
+          <div class="mini-faq__body">You'll need a marriage certificate, deed poll, or court order documenting the change. Upload it during step 2 and your agent will confirm whether Immigration accepts your specific documentation before proceeding.</div>
+        </details>
+        <details>
+          <summary>Can I get an <em>urgent</em> passport same-day? <span class="plus">+</span></summary>
+          <div class="mini-faq__body">Immigration's fastest official turnaround is 2 working days, and that's what our Urgent tier targets. Same-day is not currently possible through any channel.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RELATED ============ -->
+  <section class="svc-section" id="related">
+    <div class="container">
+      <div class="svc-section__head">
+        <div class="svc-section__num">05 / Related services</div>
+        <div>
+          <h2 class="svc-section__title">People who renew their <em>passport</em>, often also need:</h2>
+        </div>
+      </div>
+
+      <div class="related-grid">
+
+        <a href="service-detail.html" class="svc-card svc-card--blue">
+          <div class="svc-card__strip"></div>
+          <div class="svc-card__body">
+            <div class="svc-card__head">
+              <span class="svc-card__cat">Identity &amp; civil</span>
+            </div>
+            <h3 class="svc-card__name">National <em>ID</em></h3>
+            <p class="svc-card__desc">Replace a lost or damaged national identity card.</p>
+            <div class="svc-card__meta">
+              <div>Fee<br><strong class="mono">RWF 8,000</strong></div>
+              <div>Turnaround<br><strong>2–4 days</strong></div>
+              <span class="svc-card__arrow" aria-hidden="true">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="service-detail.html" class="svc-card svc-card--blue">
+          <div class="svc-card__strip"></div>
+          <div class="svc-card__body">
+            <div class="svc-card__head">
+              <span class="svc-card__cat">Identity &amp; civil</span>
+            </div>
+            <h3 class="svc-card__name">Driver's <em>license</em></h3>
+            <p class="svc-card__desc">Renew or replace your driver's license.</p>
+            <div class="svc-card__meta">
+              <div>Fee<br><strong class="mono">RWF 18,000</strong></div>
+              <div>Turnaround<br><strong>5–9 days</strong></div>
+              <span class="svc-card__arrow" aria-hidden="true">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="service-detail.html" class="svc-card svc-card--pink">
+          <div class="svc-card__strip"></div>
+          <div class="svc-card__body">
+            <div class="svc-card__head">
+              <span class="svc-card__cat">Identity &amp; civil</span>
+            </div>
+            <h3 class="svc-card__name">Birth <em>certificate</em></h3>
+            <p class="svc-card__desc">For visa applications and other paperwork.</p>
+            <div class="svc-card__meta">
+              <div>Fee<br><strong class="mono">RWF 5,000</strong></div>
+              <div>Turnaround<br><strong>1–2 days</strong></div>
+              <span class="svc-card__arrow" aria-hidden="true">→</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING CTA ============ -->
+  <section style="padding: 32px 0 96px;">
+    <div class="container">
+      <div class="svc-cta-band">
+        <div class="svc-cta-band__inner">
+          <div>
+            <h2>Ready to renew your <em>passport?</em></h2>
+            <p>Free to start. You only pay the RWF 15,000 service fee once we've confirmed everything together.</p>
+          </div>
+          <div class="svc-cta-band__actions">
+            <a href="#" class="pill pill--solid pill--lg">Start application <span class="arr">↗</span></a>
+            <a href="https://wa.me/250788123456" class="pill pill--lg">WhatsApp first <span class="arr">↗</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER (slim) ============ -->
+<footer style="background:var(--cream); padding: 56px 0 32px; border-top: 1px solid var(--rule);">
+  <div class="container">
+    <div style="display:flex; justify-content:space-between; gap:24px; flex-wrap: wrap; align-items: baseline;">
+      <a href="../Flow 1 — Marketing/landing.html" class="wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div style="display:flex; gap:32px; flex-wrap:wrap;">
+        <a href="../Flow 1 — Marketing/supporting.html#how" style="font-size:14px;">How it works</a>
+        <a href="services-index.html" style="font-size:14px;">All services</a>
+        <a href="../Flow 1 — Marketing/supporting.html#faq" style="font-size:14px;">FAQ</a>
+        <a href="../Flow 1 — Marketing/supporting.html#contact" style="font-size:14px;">Contact</a>
+        <a href="../Flow 1 — Marketing/supporting.html#legal-privacy" style="font-size:14px;">Privacy</a>
+      </div>
+    </div>
+    <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--rule); display:flex; justify-content:space-between; font-family: var(--mono); font-size:11px; letter-spacing:0.06em; color: var(--ink-muted); flex-wrap: wrap; gap: 16px;">
+      <span>© 2026 PROXISERVE LTD · KIGALI</span>
+      <span>BUILD 2026.05.19 · FLOW 02 / SERVICE DETAIL</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ STICKY MOBILE ACTION BAR ============ -->
+<div class="svc-mobile-bar">
+  <div class="svc-mobile-bar__fee">
+    <span class="l">Fee</span>
+    <span class="v">RWF 15,000</span>
+  </div>
+  <a href="#" class="pill pill--solid">Start application <span class="arr">↗</span></a>
+</div>
+
+<script>
+  // Active sub-nav based on scroll
+  const subnav = document.querySelectorAll('.svc-subnav a');
+  const sections = document.querySelectorAll('main section[id]');
+  const setActive = () => {
+    const y = window.scrollY + 160;
+    let active = sections[0];
+    sections.forEach(s => { if (s.offsetTop <= y) active = s; });
+    subnav.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + active.id));
+  };
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+</script>
+
+</body>
+</html>

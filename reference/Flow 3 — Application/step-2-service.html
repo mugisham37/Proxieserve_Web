@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Step 2 of 5 — Service details · Passport renewal · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="wizard.css" />
+<style>
+  /* In-page jump nav (desktop only) */
+  .jumpnav {
+    position: sticky; top: 130px; align-self: start;
+    border-left: 1px solid var(--rule);
+    padding-left: 16px;
+  }
+  .jumpnav h4 { margin: 0 0 12px; }
+  .jumpnav ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .jumpnav a {
+    display: flex; gap: 12px; align-items: baseline;
+    font-size: 13px; color: var(--ink-muted);
+    padding: 4px 0;
+    border-left: 2px solid transparent;
+    padding-left: 12px; margin-left: -14px;
+  }
+  .jumpnav a:hover { color: var(--ink); }
+  .jumpnav a.is-active { color: var(--ink); border-left-color: var(--ink); }
+  .jumpnav a .n { font-family: var(--mono); font-size: 10px; color: var(--ink-subtle); }
+
+  /* Schema-driven radio cards */
+  .radio-card-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  @media (min-width: 720px) { .radio-card-group { grid-template-columns: 1fr 1fr; } }
+  .radio-card {
+    padding: 14px 16px;
+    background: var(--cream);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-md);
+    cursor: pointer;
+    display: grid; grid-template-columns: 20px 1fr; gap: 12px;
+    align-items: start;
+    transition: border-color var(--m-fast), background var(--m-fast);
+  }
+  .radio-card:hover { border-color: var(--ink); }
+  .radio-card.is-checked {
+    background: var(--paper);
+    border-color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+  .radio-card input { margin-top: 2px; accent-color: var(--ink); }
+  .radio-card .name { font-family: var(--serif); font-size: 16px; font-weight: 500; }
+  .radio-card .name em { font-style: italic; font-weight: 400; }
+  .radio-card .desc { font-size: 12.5px; color: var(--ink-muted); margin-top: 2px; }
+
+  /* Conditional reveal */
+  .conditional {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 320ms cubic-bezier(0,0,0,1), opacity 200ms ease;
+    margin-top: 0;
+  }
+  .conditional.is-open {
+    max-height: 600px;
+    opacity: 1;
+    margin-top: 16px;
+  }
+  .conditional-inner {
+    padding: 16px;
+    background: var(--brand-soft);
+    border-radius: var(--r-md);
+    border-left: 3px solid var(--brand);
+  }
+  .conditional .fld__input { background: var(--paper); }
+
+  /* Help popover (simple visible note) */
+  .helper-pop {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: var(--info-soft); color: var(--info);
+    border-radius: var(--r-md);
+    font-size: 12.5px; line-height: 1.5;
+    border-left: 3px solid var(--info);
+    display: none;
+  }
+  .helper-pop.is-open { display: block; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============ TOP BAR ============ -->
+<header class="wiz-topbar" data-screen-label="F3 Step 2">
+  <div class="container">
+    <div class="wiz-topbar__inner">
+      <a href="../Flow 1 — Marketing/landing.html" class="wiz-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div class="wiz-crumb">
+        <a href="../Flow 2 — Service Discovery/service-detail.html">Passport renewal</a>
+        <span class="sep">/</span>
+        <strong>Application</strong>
+      </div>
+      <div style="display:flex; gap:14px; align-items:center;">
+        <span class="wiz-savestate" id="savestate"><span class="dot"></span> Saved 2 min ago</span>
+        <a href="../Flow 2 — Service Discovery/service-detail.html" class="wiz-exit">Save &amp; exit</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STEPPER ============ -->
+<div class="stepper-strip">
+  <div class="container">
+    <div class="stepper-strip__inner">
+
+      <div class="stepper-mobile">
+        <span class="stepper-mobile__pill">Step 2 / 5</span>
+        <span class="stepper-mobile__label">Service <em>details</em></span>
+        <span class="stepper-mobile__bar">
+          <span class="is-done"></span><span class="is-active"></span><span></span><span></span><span></span>
+        </span>
+      </div>
+
+      <div class="stepper">
+        <div class="stepper__node is-done">
+          <span class="stepper__num">01</span>
+          <span class="stepper__label">Your details</span>
+          <span class="stepper__line"></span>
+        </div>
+        <div class="stepper__node is-active">
+          <span class="stepper__num">02</span>
+          <span class="stepper__label">Service details</span>
+          <span class="stepper__line"></span>
+        </div>
+        <div class="stepper__node">
+          <span class="stepper__num">03</span>
+          <span class="stepper__label">Documents</span>
+          <span class="stepper__line"></span>
+        </div>
+        <div class="stepper__node">
+          <span class="stepper__num">04</span>
+          <span class="stepper__label">Review</span>
+          <span class="stepper__line"></span>
+        </div>
+        <div class="stepper__node">
+          <span class="stepper__num">05</span>
+          <span class="stepper__label">Done</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="main" class="wiz-shell">
+  <div class="container">
+    <div class="wiz-page">
+
+      <div class="wiz-main">
+
+        <header class="wiz-head">
+          <span class="wiz-head__num">Step 02 / 05 · Service-specific details</span>
+          <h1>About your <em>passport</em>.</h1>
+          <p class="wiz-head__lede">A few questions specific to passport renewal. <em>If you're not sure</em> about something, leave it for now — your agent will help you.</p>
+        </header>
+
+        <form id="step2" onsubmit="event.preventDefault(); window.location.href='step-3-documents.html';">
+
+          <!-- =========== Card 1: Reason =========== -->
+          <div class="wiz-card" id="reason">
+            <div class="wiz-card__head">
+              <h2>Why are you <em>renewing?</em></h2>
+              <span class="meta">1 of 4</span>
+            </div>
+
+            <div class="fld">
+              <span class="fld__label">Reason for renewal <span class="req">*</span></span>
+              <div class="radio-card-group" role="radiogroup">
+                <label class="radio-card is-checked">
+                  <input type="radio" name="reason" value="expired" checked />
+                  <div>
+                    <div class="name">It's <em>expired</em> (or about to)</div>
+                    <div class="desc">The most common case — standard renewal.</div>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="reason" value="full" />
+                  <div>
+                    <div class="name">Pages are <em>full</em></div>
+                    <div class="desc">No empty visa pages left.</div>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="reason" value="lost" />
+                  <div>
+                    <div class="name">It was <em>lost</em></div>
+                    <div class="desc">We'll need a police clearance.</div>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="reason" value="stolen" />
+                  <div>
+                    <div class="name">It was <em>stolen</em></div>
+                    <div class="desc">We'll need a police report.</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Conditional field shown when "lost" or "stolen" is picked -->
+            <div class="conditional" id="cond-police">
+              <div class="conditional-inner">
+                <label class="fld" style="margin: 0;">
+                  <span class="fld__label">Police case reference number <span class="req">*</span></span>
+                  <input class="fld__input fld__input--mono" type="text" name="policeRef" placeholder="RNP-2026-XXXXX" />
+                  <span class="fld__help">From the police report. We'll need a photo of the report at step 3.</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========== Card 2: Current passport =========== -->
+          <div class="wiz-card" id="current">
+            <div class="wiz-card__head">
+              <h2>Your <em>current passport</em></h2>
+              <span class="meta">2 of 4</span>
+            </div>
+
+            <div class="field-grid field-grid--2">
+              <label class="fld">
+                <span class="fld__label">
+                  Passport number <span class="req">*</span>
+                  <button type="button" class="helpbtn" aria-label="What is the passport number" data-help="passport-num">?</button>
+                </span>
+                <input class="fld__input fld__input--mono" type="text" name="passportNum" placeholder="PC123456" autocomplete="off" maxlength="9" />
+                <span class="fld__help">8 characters — letters &amp; numbers — on the bio page.</span>
+                <div class="helper-pop" id="help-passport-num">
+                  <strong>Where to find it.</strong> Open your current passport to the page with your photo. The number is in the top-right corner, near "Passport No." — it starts with letters (e.g. PC).
+                </div>
+              </label>
+
+              <label class="fld">
+                <span class="fld__label">Expiry date</span>
+                <input class="fld__input" type="date" name="expiry" />
+                <span class="fld__help">If unsure, check the bio page or leave blank.</span>
+              </label>
+            </div>
+
+            <div class="field-grid" style="margin-top: 16px;">
+              <label class="fld">
+                <span class="fld__label">Place of issue</span>
+                <select class="fld__input" name="placeIssue">
+                  <option value="">— Select —</option>
+                  <option>Kigali — Department of Immigration</option>
+                  <option>Embassy abroad (please specify in notes)</option>
+                  <option>I don't remember</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <!-- =========== Card 3: Travel intent =========== -->
+          <div class="wiz-card" id="travel">
+            <div class="wiz-card__head">
+              <h2>Are you <em>travelling soon?</em></h2>
+              <span class="meta">3 of 4</span>
+            </div>
+
+            <div class="fld">
+              <span class="fld__label">Upcoming travel</span>
+              <div class="radio-card-group">
+                <label class="radio-card">
+                  <input type="radio" name="travel" value="urgent" />
+                  <div>
+                    <div class="name">Yes — within <em>2 weeks</em></div>
+                    <div class="desc">We'll recommend the Urgent tier.</div>
+                  </div>
+                </label>
+                <label class="radio-card is-checked">
+                  <input type="radio" name="travel" value="soon" checked />
+                  <div>
+                    <div class="name">Yes — within <em>1–2 months</em></div>
+                    <div class="desc">Standard tier should be fine.</div>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="travel" value="later" />
+                  <div>
+                    <div class="name">Later than that</div>
+                    <div class="desc">No rush. Standard tier.</div>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="travel" value="none" />
+                  <div>
+                    <div class="name">No travel planned</div>
+                    <div class="desc">Renewing just-in-case.</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========== Card 4: Notes =========== -->
+          <div class="wiz-card" id="notes">
+            <div class="wiz-card__head">
+              <h2>Anything else <em>we should know?</em></h2>
+              <span class="meta">4 of 4</span>
+            </div>
+
+            <label class="fld">
+              <span class="fld__label">
+                Notes for your agent <span class="opt">optional</span>
+              </span>
+              <textarea class="fld__input" name="notes" placeholder="E.g. 'My middle name has a special character not on the standard form.' Or 'I can only visit the Immigration office on weekday mornings.'" rows="4"></textarea>
+              <span class="fld__help">Anything that doesn't fit elsewhere. <strong style="color: var(--ink);">0 / 500</strong> characters.</span>
+            </label>
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- ============ JUMP NAV (desktop) ============ -->
+      <aside class="jumpnav" aria-label="On this step">
+        <h4 class="t-h4">On this step</h4>
+        <ul>
+          <li><a href="#reason" class="is-active"><span class="n">01</span> Reason for renewal</a></li>
+          <li><a href="#current"><span class="n">02</span> Current passport</a></li>
+          <li><a href="#travel"><span class="n">03</span> Travel intent</a></li>
+          <li><a href="#notes"><span class="n">04</span> Notes for your agent</a></li>
+        </ul>
+
+        <div class="tips-card" style="margin-top: 32px;">
+          <h4 class="t-h4">Tips</h4>
+          <ul>
+            <li>Forms differ by service. This one has 4 short sections — totalling 6 questions.</li>
+            <li>If a question doesn't apply, leave it blank — your agent will follow up.</li>
+            <li>Auto-saving as you type. Your draft survives if you close the tab.</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<div class="wiz-footer">
+  <div class="container">
+    <div class="wiz-footer__inner">
+      <div class="wiz-footer__left">
+        <a href="step-1-personal.html" class="back-link">← Back</a>
+        <span class="wiz-footer__step-meta">Step 2 of 5 · Service details</span>
+      </div>
+      <button type="submit" form="step2" class="pill pill--solid">Next — Documents <span class="arr">→</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Conditional reveal for police reference
+  const reasonRadios = document.querySelectorAll('input[name="reason"]');
+  const policeCond = document.getElementById('cond-police');
+  reasonRadios.forEach(r => r.addEventListener('change', () => {
+    const v = document.querySelector('input[name="reason"]:checked').value;
+    policeCond.classList.toggle('is-open', v === 'lost' || v === 'stolen');
+  }));
+
+  // Radio card checked state
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.addEventListener('change', () => {
+    document.querySelectorAll('.radio-card').forEach(c => {
+      const input = c.querySelector('input[type="radio"]');
+      c.classList.toggle('is-checked', input && input.checked && input.name === r.name);
+      // re-check all radio groups
+    });
+    document.querySelectorAll('.radio-card').forEach(c => {
+      const i = c.querySelector('input[type="radio"]');
+      c.classList.toggle('is-checked', i && i.checked);
+    });
+  }));
+
+  // Help popovers
+  document.querySelectorAll('.helpbtn').forEach(btn => btn.addEventListener('click', e => {
+    e.preventDefault();
+    const id = 'help-' + btn.dataset.help;
+    const pop = document.getElementById(id);
+    if (pop) pop.classList.toggle('is-open');
+  }));
+
+  // Scroll-spy for jump nav
+  const jumpLinks = document.querySelectorAll('.jumpnav a');
+  const sections = document.querySelectorAll('.wiz-card[id]');
+  const setActive = () => {
+    const y = window.scrollY + 180;
+    let active = sections[0];
+    sections.forEach(s => { if (s.offsetTop <= y) active = s; });
+    jumpLinks.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + active.id));
+  };
+  window.addEventListener('scroll', setActive, { passive: true });
+
+  // Character count
+  const notes = document.querySelector('textarea[name="notes"]');
+  if (notes) notes.addEventListener('input', () => {
+    const help = notes.parentElement.querySelector('.fld__help strong');
+    if (help) help.textContent = notes.value.length + ' / 500';
+  });
+
+  // Auto-save indicator
+  const ss = document.getElementById('savestate');
+  let timer;
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', () => {
+      ss.classList.add('is-saving');
+      ss.lastChild.textContent = ' Saving…';
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        ss.classList.remove('is-saving');
+        ss.lastChild.textContent = ' Saved just now';
+      }, 900);
+    });
+  });
+</script>
+
+</body>
+</html>

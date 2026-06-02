@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProxiServe — Flow 10 / Cross-cutting systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--cream); }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 720px) { .container { padding: 0 20px; } }
+  .topstrip { border-bottom: 1px solid var(--rule); padding: 16px 0; background: var(--cream); }
+  .topstrip__inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; text-decoration: none; }
+  .breadcrumb:hover { color: var(--ink); }
+
+  .hub-head { padding: 80px 0 56px; }
+  .hub-head .eyebrow { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; font-family: var(--sans); font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-muted); font-weight: 600; }
+  .hub-head .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ink); }
+  .hub-head h1 { margin: 0 0 24px; font-family: var(--serif); font-weight: 400; font-size: clamp(48px, 7vw, 92px); line-height: 1.02; letter-spacing: -0.02em; }
+  .hub-head h1 em { font-style: italic; }
+  .hub-head p { max-width: 720px; margin: 0; font-family: var(--serif); font-size: clamp(18px,1.8vw,22px); line-height: 1.5; color: var(--ink-2); }
+  .hub-head p em { font-style: italic; }
+  .hub-meta { display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .hub-meta span strong { color: var(--ink); font-weight: 600; }
+
+  .cards { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--ink); border: 1px solid var(--ink); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 80px; }
+  @media (min-width: 760px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card { background: var(--paper); padding: 40px 32px; display: flex; flex-direction: column; min-height: 220px; color: var(--ink); text-decoration: none; transition: background var(--m-fast); position: relative; }
+  .card:hover { background: var(--paper-2); }
+  .card__num { font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.08em; margin-bottom: 12px; }
+  .card__title { font-family: var(--serif); font-weight: 500; font-size: 26px; line-height: 1.15; margin: 0 0 12px; }
+  .card__title em { font-style: italic; font-weight: 400; }
+  .card__desc { font-size: 14px; color: var(--ink-muted); line-height: 1.6; margin: 0 0 24px; flex: 1; max-width: 480px; }
+  .card__cta { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-weight: 500; font-size: 14px; }
+  .card__cta::after { content: "→"; transition: transform var(--m-fast); }
+  .card:hover .card__cta::after { transform: translateX(4px); }
+  .card--feature { background: var(--ink); color: var(--paper); grid-column: 1 / -1; padding: 56px 48px; min-height: 260px; overflow: hidden; }
+  .card--feature .card__num { color: rgba(246,236,210,0.6); }
+  .card--feature .card__title { color: var(--paper); font-size: 42px; max-width: 600px; }
+  .card--feature .card__desc { color: rgba(246,236,210,0.75); font-size: 16px; max-width: 560px; }
+  .card--feature .card__cta { color: var(--paper); }
+  .card--feature:hover { background: #2A231C; }
+  .card--brand { background: var(--brand-soft); }
+  .card--brand:hover { background: #F0CFE0; }
+  .card--brand .card__title { color: var(--brand-ink); }
+
+  /* mini channel illo */
+  .feature-illo { position: absolute; right: 36px; bottom: 36px; display: flex; flex-direction: column; gap: 8px; width: 250px; pointer-events: none; opacity: 0.95; }
+  @media (max-width: 1100px) { .feature-illo { display: none; } }
+  .mini-wa { background: #E5DDD5; border-radius: 10px; padding: 10px; box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
+  .mini-wa__b { background: white; border-radius: 6px; padding: 7px 9px; font-size: 10px; line-height: 1.4; color: #111; }
+  .mini-wa__b .tm { font-size: 8px; color: #999; text-align: right; margin-top: 2px; }
+  .mini-push { background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border-radius: 10px; padding: 8px 10px; display: flex; gap: 8px; align-items: center; box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+  .mini-push .ic { width: 24px; height: 24px; border-radius: 6px; background: var(--ink); display:flex; align-items:center; justify-content:center; flex-shrink: 0; }
+  .mini-push .ic .d { width: 7px; height: 7px; border-radius: 999px; background: var(--brand); }
+  .mini-push .t { font-size: 9px; } .mini-push .t b { font-weight: 600; } .mini-push .t span { color: #666; }
+
+  .deci-band { background: var(--ink); color: var(--paper); padding: 80px 0; }
+  .deci-band h2 { color: var(--paper); margin: 0 0 16px; font-family: var(--serif); font-weight: 500; font-size: clamp(28px,3.4vw,40px); }
+  .deci-band h2 em { font-style: italic; font-weight: 400; }
+  .deci-band p { color: rgba(246,236,210,0.75); max-width: 640px; margin: 0; }
+  .deci-band .eyebrow { font-family: var(--sans); font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600; color: rgba(246,236,210,0.6); display: block; margin-bottom: 16px; }
+  .decisions { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: 56px; border-top: 1px solid rgba(246,236,210,0.18); }
+  @media (min-width: 760px) { .decisions { grid-template-columns: repeat(3, 1fr); } }
+  .dec { padding: 32px 28px; border-right: 1px solid rgba(246,236,210,0.12); border-bottom: 1px solid rgba(246,236,210,0.12); }
+  @media (max-width: 759px) { .dec { border-right: none; } }
+  .dec .num { font-family: var(--mono); font-size: 11px; color: rgba(246,236,210,0.4); letter-spacing: 0.06em; margin-bottom: 12px; display: block; }
+  .dec h4 { color: var(--paper); font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 0 0 8px; text-transform: none; letter-spacing: 0; }
+  .dec h4 em { font-style: italic; font-weight: 400; }
+  .dec p { color: rgba(246,236,210,0.75); font-size: 14px; line-height: 1.55; margin: 0; }
+
+  .next-band { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .next-band h2 { margin: 0 0 16px; font-family: var(--serif); font-weight: 500; font-size: clamp(28px,3.4vw,40px); }
+  .next-band h2 em { font-style: italic; font-weight: 400; }
+  .next-band .eyebrow { font-family: var(--sans); font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600; color: var(--ink-muted); display: block; margin-bottom: 16px; }
+  .next-band p { max-width: 640px; margin: 0 0 32px; color: var(--ink-muted); }
+  .flow-list { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--rule-strong); }
+  .flow-row { display: grid; grid-template-columns: 60px 1fr auto; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); align-items: center; }
+  .flow-row .num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.06em; }
+  .flow-row h3 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 19px; }
+  .flow-row h3 em { font-style: italic; font-weight: 400; }
+  .flow-row p { margin: 4px 0 0; font-size: 13px; color: var(--ink-muted); }
+  .status { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 999px; font-family: var(--sans); font-size: 11px; font-weight: 500; }
+  .status .dot { width: 7px; height: 7px; border-radius: 999px; background: currentColor; }
+  .s-ok { background: var(--ok-soft); color: var(--ok); }
+  .flow-row.done { background: var(--ok-soft); }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border: 1px solid var(--ink); border-radius: 999px; font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 16px; background: var(--paper); color: var(--ink); text-decoration: none; }
+  .pill .arr { font-style: normal; }
+  .pill--solid { background: var(--ink); color: var(--paper); }
+  .foot { border-top: 1px solid var(--rule); padding: 32px 0; font-family: var(--mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.06em; display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<div class="topstrip">
+  <div class="container">
+    <div class="topstrip__inner">
+      <a href="../Flow 9 — Admin Panel/index.html" class="breadcrumb"><span aria-hidden="true">←</span> Flow 9 — Admin Panel</a>
+      <span class="breadcrumb">PROXISERVE / DESIGN / FLOW 10 — SYSTEMS / v0.1</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="hub-head">
+    <span class="eyebrow">Flow 10 / 10 — cross-cutting systems</span>
+    <h1>The <em>connective tissue</em>.</h1>
+    <p>The last flow isn't a journey — it's everything that holds the other nine together. One notification engine across five channels, an on-brand error system, the PWA shell that makes it installable, and the i18n / theming / print / consent / transparency layers every surface inherits. <em>Invisible when it works, decisive when it doesn't.</em></p>
+    <div class="hub-meta">
+      <span><strong>3 artifacts</strong> · 18 sub-pieces</span>
+      <span><strong>5 channels</strong> · 6 errors · 7 systems</span>
+      <span><strong>18 new primitives</strong></span>
+      <span><strong>15 / 15</strong> self-review score</span>
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <a href="notifications.html" class="card card--feature">
+      <span class="card__num">01 / The busiest system</span>
+      <h2 class="card__title">One message, <em>five channels</em>.</h2>
+      <p class="card__desc">Every status change, agent reply, and payment event flows through one engine that renders correctly for WhatsApp (primary), SMS (fallback), push (installed PWA), email (records), and the in-app inbox (canonical log) — each respecting the user's per-event, per-channel preferences.</p>
+      <span class="card__cta">Open the notification system</span>
+
+      <div class="feature-illo" aria-hidden="true">
+        <div class="mini-push"><div class="ic"><span class="d"></span></div><div class="t"><b>ProxiServe</b> · <span>now</span><br><span>Passport renewal · In progress</span></div></div>
+        <div class="mini-wa"><div class="mini-wa__b">Your <b>passport renewal</b> is now in progress 🎉<div class="tm">14:32 ✓✓</div></div></div>
+      </div>
+    </a>
+
+    <a href="error-pages.html" class="card">
+      <span class="card__num">02 / When things break</span>
+      <h2 class="card__title">Errors that stay <em>on-brand</em>.</h2>
+      <p class="card__desc">404, 500, maintenance, offline, session-expired, and 429 — one structure each: a serif numeral, a headline that never blames the user, a plain-language cause, and at least one way forward. Cream-and-ink in public, dark in staff zones.</p>
+      <span class="card__cta">Open the error pages</span>
+    </a>
+
+    <a href="cross-cutting.html" class="card">
+      <span class="card__num">03 / The connective layer</span>
+      <h2 class="card__title">PWA, i18n, theming &amp; <em>more</em>.</h2>
+      <p class="card__desc">Installable app prompt, cookie consent (banner not wall), RTL-ready layout with LTR-locked codes, token-driven dark mode, print stylesheets for receipts, a public status page on separate hosting, and skippable first-run coachmarks.</p>
+      <span class="card__cta">Open cross-cutting systems</span>
+    </a>
+
+    <a href="spec.html" class="card card--brand">
+      <span class="card__num">04 / Engineering spec</span>
+      <h2 class="card__title">The <em>10-section</em> deliverable.</h2>
+      <p class="card__desc">System map · notification engine + preference resolution · error system · artifacts index · 18 primitives · PWA &amp; offline · i18n &amp; theming · a11y (12/12) · hand-off covering queues, channel adapters, service worker, message catalogs, and theming.</p>
+      <span class="card__cta">Read the spec</span>
+    </a>
+
+  </div>
+
+</div>
+
+<div class="deci-band">
+  <div class="container">
+    <span class="eyebrow">Key design decisions</span>
+    <h2>Three calls <em>worth flagging</em>.</h2>
+    <p>These systems decide whether the product feels trustworthy in the moments that matter most — a stalled application, a dropped connection, a message at the wrong hour.</p>
+
+    <div class="decisions">
+      <div class="dec">
+        <span class="num">01 / WhatsApp-first</span>
+        <h4>Meet people <em>where they are</em></h4>
+        <p>WhatsApp is the default channel because it's how Rwanda communicates — highest open rates, lowest cost, rich buttons. SMS is the universal fallback for non-smartphone users. Email is for records, not nudges. The engine picks the right channel per user automatically.</p>
+      </div>
+      <div class="dec">
+        <span class="num">02 / Errors never blame</span>
+        <h4>"Our fault, <em>not yours</em>"</h4>
+        <p>Every error page reassures that data is safe, takes responsibility off the user, and offers a way forward. A 500 surfaces an incident ID to the on-call engineer. Offline still shows cached work. The product stays calm exactly when the user might not be.</p>
+      </div>
+      <div class="dec">
+        <span class="num">03 / One system, every variant</span>
+        <h4>Dark, RTL, print — <em>token swaps</em></h4>
+        <p>Dark mode, right-to-left, and print aren't reskins — they're the same tokens and logical properties resolved differently. The brand magenta and status hues hold constant everywhere, so recognition survives every theme, direction, and medium.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="next-band">
+  <div class="container">
+    <span class="eyebrow">The ten-flow plan</span>
+    <h2>All ten flows — <em>complete</em>.</h2>
+    <p>From a stranger's first glance at the landing page to an admin hash-chaining an audit entry, ProxiServe is now a complete, coherent system — every surface speaking one warm, editorial, government-trustworthy design language.</p>
+
+    <div class="flow-list">
+      <div class="flow-row done"><span class="num">F1</span><div><h3>Marketing &amp; <em>landing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F2</span><div><h3>Service <em>discovery</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F3</span><div><h3>Application <em>submission</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F4</span><div><h3>Auth &amp; <em>role routing</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F5</span><div><h3>Public <em>tracker</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F6</span><div><h3>Client <em>dashboard</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F7</span><div><h3><em>Payments</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F8</span><div><h3>Agent <em>workspace</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F9</span><div><h3>Admin <em>panel</em></h3></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+      <div class="flow-row done"><span class="num">F10</span><div><h3>Cross-cutting <em>systems</em></h3><p>Notifications, errors, PWA, i18n, theming, print, status, onboarding</p></div><span class="status s-ok"><span class="dot"></span> Delivered</span></div>
+    </div>
+
+    <div style="margin-top: 48px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href="../index.html" class="pill pill--solid">See the master index <span class="arr">↗</span></a>
+      <a href="notifications.html" class="pill">Open notifications <span class="arr">→</span></a>
+      <a href="spec.html" class="pill">Read the spec <span class="arr">→</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="foot container">
+  <span>PROXISERVE / FLOW 10 — SYSTEMS / v0.1</span>
+  <span>All ten flows complete.</span>
+</div>
+
+</body>
+</html>

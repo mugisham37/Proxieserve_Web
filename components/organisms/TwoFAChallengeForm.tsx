@@ -1,24 +1,24 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AuthCard } from "@/components/molecules/AuthCard";
 import { AuthBanner } from "@/components/molecules/AuthBanner";
 import { TwoFAMethodToggle, type TwoFAMethod } from "@/components/molecules/TwoFAMethodToggle";
 import { OTPInput } from "@/components/atoms/OTPInput";
-import { useAuth } from "@/lib/auth-context";
-import { MOCK, type AuthSession } from "@/lib/auth-types";
+import { useStaffTwoFactor } from "@/hooks/useAuth";
+import { isApiError } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
 export function TwoFAChallengeForm() {
-  const router = useRouter();
-  const { dispatch } = useAuth();
+  const staffTwoFactorMutation = useStaffTwoFactor();
   const [method, setMethod] = React.useState<TwoFAMethod>("totp");
   const [otp, setOtp] = React.useState("");
   const [trustDevice, setTrustDevice] = React.useState(false);
-  const [error, setError] = React.useState(false);
-  const [isVerifying, setIsVerifying] = React.useState(false);
+  const [errorState, setErrorState] = React.useState<{
+    type: "wrong" | "generic" | null;
+    message?: string;
+  }>({ type: null });
 
   const HINTS: Record<TwoFAMethod, string> = {
     totp: "Enter the 6-digit code from your authenticator app.",
@@ -26,43 +26,44 @@ export function TwoFAChallengeForm() {
     backup: "Enter one of your saved backup codes.",
   };
 
-  async function handleVerify(code: string) {
-    if (isVerifying || code.length < 6) return;
-    setIsVerifying(true);
-    setError(false);
-
-    await new Promise((r) => setTimeout(r, 700));
-
-    if (code !== MOCK.VALID_OTP) {
-      setError(true);
-      setOtp("");
-      setIsVerifying(false);
-      return;
-    }
-
-    // Commit pending session
-    try {
-      const raw = sessionStorage.getItem("proxi:staff:pending");
-      if (raw) {
-        const session = JSON.parse(raw) as AuthSession;
-        dispatch({ type: "SET_SESSION", payload: session });
-        sessionStorage.removeItem("proxi:staff:pending");
-      }
-    } catch {}
-
-    router.push("/");
+  function handleMethodChange(nextMethod: TwoFAMethod) {
+    setMethod(nextMethod);
+    setOtp("");
+    setErrorState({ type: null });
   }
 
-  React.useEffect(() => {
-    if (otp.length === 6) handleVerify(otp);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [otp]);
+  async function handleVerify(code: string) {
+    if (staffTwoFactorMutation.isPending || code.length < 6) return;
+    setErrorState({ type: null });
 
-  // Reset OTP when method changes
-  React.useEffect(() => {
-    setOtp("");
-    setError(false);
-  }, [method]);
+    try {
+      await staffTwoFactorMutation.mutateAsync({
+        code,
+        method,
+        trustDevice,
+      });
+    } catch (error) {
+      if (isApiError(error) && error.errorType === "otp-wrong") {
+        setErrorState({
+          type: "wrong",
+          message: "Incorrect code. Please try again.",
+        });
+        setOtp("");
+        return;
+      }
+
+      if (isApiError(error) && error.errorType === "otp-expired") {
+        return;
+      }
+
+      setErrorState({
+        type: "generic",
+        message: isApiError(error)
+          ? error.message
+          : "Something went wrong on our end. Please try again.",
+      });
+    }
+  }
 
   return (
     <motion.div
@@ -78,7 +79,7 @@ export function TwoFAChallengeForm() {
       >
         <div className="flex flex-col gap-5">
           {/* Method toggle */}
-          <TwoFAMethodToggle value={method} onChange={setMethod} />
+          <TwoFAMethodToggle value={method} onChange={handleMethodChange} />
 
           {/* Context hint */}
           <p className="font-sans text-[13px] text-[var(--ink-muted)] leading-snug">
@@ -88,23 +89,26 @@ export function TwoFAChallengeForm() {
           {/* Error */}
           <AuthBanner
             variant="danger"
-            message="Incorrect code. Please try again."
-            visible={error}
+            message={errorState.message ?? "Incorrect code. Please try again."}
+            visible={errorState.type === "wrong" || errorState.type === "generic"}
           />
 
           {/* OTP Input */}
           <OTPInput
             value={otp}
             onChange={setOtp}
-            error={error}
-            disabled={isVerifying}
+            onComplete={(value) => {
+              void handleVerify(value);
+            }}
+            error={errorState.type === "wrong"}
+            disabled={staffTwoFactorMutation.isPending}
           />
 
           {/* Submit */}
           <button
             type="button"
             onClick={() => handleVerify(otp)}
-            disabled={otp.length < 6 || isVerifying}
+            disabled={otp.length < 6 || staffTwoFactorMutation.isPending}
             className={cn(
               "w-full h-11 rounded-[var(--r-md)]",
               "font-sans text-[14px] font-medium text-[var(--paper)]",
@@ -115,7 +119,7 @@ export function TwoFAChallengeForm() {
               "flex items-center justify-center gap-2"
             )}
           >
-            {isVerifying ? (
+            {staffTwoFactorMutation.isPending ? (
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-[var(--paper)] border-t-transparent rounded-full animate-spin" />
                 Verifying…

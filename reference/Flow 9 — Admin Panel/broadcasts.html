@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Broadcasts &amp; settings · Admin · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+<div class="ag">
+
+  <nav class="ag-nav" aria-label="Admin navigation">
+    <div class="ag-nav__brand"><span class="ico admin"></span> Proxi<em>Serve</em><span class="ag-nav__role admin">Admin</span></div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Overview</div>
+      <a href="analytics.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Analytics</a>
+      <a href="oversight.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversight <span class="ag-nav__count">2</span></a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Configure</div>
+      <a href="services-schema.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Services</a>
+      <a href="pricing-agents.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5a2.5 2.5 0 0 0-5 0c0 1.5 1 2 2.5 2.5s2.5 1 2.5 2.5a2.5 2.5 0 0 1-5 0M12 6v1.5M12 16.5V18"/></svg> Pricing</a>
+      <a href="pricing-agents.html#agents" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Agents</a>
+      <a href="broadcasts.html" class="ag-nav__link is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/></svg> Broadcasts</a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Govern</div>
+      <a href="oversight.html#audit" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Audit log</a>
+      <a href="#settings" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Settings</a>
+    </div>
+    <div class="ag-nav__spacer"></div>
+    <div class="ag-nav__user"><span class="av" style="background: var(--brand);">EH</span><div><div class="nm">Eric H.</div><div class="mt">admin · owner</div></div></div>
+  </nav>
+
+  <div class="ag-main">
+    <header class="ag-top">
+      <span class="ag-top__mobile-brand"><span class="ico" style="background:var(--brand);"></span>Admin</span>
+      <label class="ag-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" placeholder="Search…" aria-label="Search" /><kbd>/</kbd></label>
+      <div class="ag-top__actions"><span class="env-badge" style="display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:var(--ok-soft);color:var(--ok);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.06em;"><span style="width:7px;height:7px;border-radius:999px;background:currentColor;"></span>PRODUCTION</span></div>
+    </header>
+
+    <div class="ag-content">
+
+      <!-- ===== Broadcasts ===== -->
+      <div class="ag-h">
+        <div>
+          <h1 class="ag-h__t">Broadcasts</h1>
+          <div class="ag-h__meta">SEND TO CLIENTS BY SEGMENT · NEVER MARKETING SPAM · OPT-OUT ALWAYS HONORED</div>
+        </div>
+      </div>
+
+      <div class="bc">
+        <!-- composer -->
+        <div>
+          <div class="adm-field">
+            <label>Audience</label>
+            <select><option>Clients with an in-progress application (142)</option><option>Clients waitlisted for Construction permit (7)</option><option>Everyone who used Tax registration (118)</option><option>All clients (2,140)</option></select>
+            <div class="hint">Segments are built from real status — no manual lists. Opt-outs are removed automatically.</div>
+          </div>
+
+          <div class="adm-field">
+            <label>Channels</label>
+            <div class="bc-channel">
+              <button class="bc-chan is-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg> WhatsApp</button>
+              <button class="bc-chan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> SMS</button>
+              <button class="bc-chan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Email</button>
+              <button class="bc-chan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg> In-app</button>
+            </div>
+          </div>
+
+          <div class="adm-field">
+            <label>Message</label>
+            <textarea id="bc-msg">Quick update from ProxiServe: the Immigration office is closed Mon 26 May for a public holiday. Passport applications may take 1 extra day. We'll keep you posted — no action needed.</textarea>
+            <div class="hint"><strong id="charcount">214</strong> chars · ~1 SMS segment · variables: {first_name} {service} {code}</div>
+          </div>
+
+          <div class="adm-field">
+            <label>When</label>
+            <div style="display:flex; gap:8px;">
+              <button class="ag-chip is-active">Send now</button>
+              <button class="ag-chip">Schedule</button>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; padding-top: 8px;">
+            <button class="btn-sm btn-sm--ghost">Send test to me</button>
+            <button class="btn-sm" style="margin-left:auto; background:var(--brand); color:white; border-color:var(--brand);">Review &amp; send to 142</button>
+          </div>
+        </div>
+
+        <!-- preview -->
+        <div class="bc-preview">
+          <h4 style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin: 0 0 12px;">WhatsApp preview</h4>
+          <div class="phone-preview">
+            <div style="font-family: var(--mono); font-size: 9px; color: var(--ink-subtle); text-align:center; margin-bottom: 10px;">PROXISERVE · OFFICIAL</div>
+            <div class="pp-bubble">Quick update from ProxiServe: the Immigration office is closed Mon 26 May for a public holiday. Passport applications may take 1 extra day. We'll keep you posted — no action needed.</div>
+            <div class="pp-meta">delivered · 14:32 · reply STOP to opt out</div>
+          </div>
+          <div style="margin-top: 16px; font-size: 12px; color: var(--ink-muted); line-height: 1.5;">
+            <strong style="color: var(--ink);">Recipients:</strong> 142 · <strong style="color: var(--ink);">Est. cost:</strong> RWF 8,520 · <strong style="color: var(--ink);">Opt-outs excluded:</strong> 6
+          </div>
+        </div>
+      </div>
+
+      <!-- past broadcasts -->
+      <div class="adm-sec"><h2>Recent <em>broadcasts</em></h2></div>
+      <div class="dtable-wrap">
+        <table class="dtable">
+          <thead><tr><th>Sent</th><th>Audience</th><th>Channels</th><th>Reach</th><th>Sent by</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">19 May</td><td>In-progress applicants</td><td style="font-size:12px;">WhatsApp · SMS</td><td class="mono">138</td><td style="font-size:12px;">Eric H.</td></tr>
+            <tr><td class="mono">12 May</td><td>Tax registration users</td><td style="font-size:12px;">Email</td><td class="mono">116</td><td style="font-size:12px;">Claudine N.</td></tr>
+            <tr><td class="mono">04 May</td><td>All clients</td><td style="font-size:12px;">In-app</td><td class="mono">2,094</td><td style="font-size:12px;">Eric H.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ===== SETTINGS ===== -->
+      <div class="adm-sec" id="settings" style="margin-top: 40px;"><h2>Platform <em>settings</em></h2></div>
+
+      <div class="adm-grid adm-grid--2">
+        <div>
+          <div class="chart-card" style="margin-bottom: 16px;">
+            <h3 style="font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 0 0 14px;">General</h3>
+            <div class="set-row" style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule-soft);"><div><div style="font-size:14px;font-weight:500;">Accept new applications</div><div style="font-size:12.5px;color:var(--ink-muted);">Master switch for the whole platform</div></div><button class="switch is-on" role="switch" aria-checked="true"></button></div>
+            <div class="set-row" style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule-soft);"><div><div style="font-size:14px;font-weight:500;">Guest applications</div><div style="font-size:12.5px;color:var(--ink-muted);">Allow applying without an account</div></div><button class="switch is-on" role="switch" aria-checked="true"></button></div>
+            <div class="set-row" style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:10px 0;"><div><div style="font-size:14px;font-weight:500;">Data retention</div><div style="font-size:12.5px;color:var(--ink-muted);">Delete completed applications after</div></div><select class="status-select" style="background:var(--cream);color:var(--ink);border-color:var(--rule-strong);background-image:none;padding-right:14px;"><option>12 months</option><option selected>24 months</option><option>36 months</option></select></div>
+          </div>
+
+          <div class="chart-card">
+            <h3 style="font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 0 0 14px;">Appearance</h3>
+            <div class="set-row" style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule-soft);"><div><div style="font-size:14px;font-weight:500;">Dark mode (default for admins)</div><div style="font-size:12.5px;color:var(--ink-muted);">Power-user default; each person can override</div></div><button class="switch is-on" role="switch" aria-checked="true"></button></div>
+            <div class="set-row" style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:10px 0;"><div><div style="font-size:14px;font-weight:500;">Compact tables</div><div style="font-size:12.5px;color:var(--ink-muted);">More rows per screen</div></div><button class="switch is-on" role="switch" aria-checked="true"></button></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="chart-card" style="margin-bottom: 16px;">
+            <h3 style="font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 0 0 14px;">Security</h3>
+            <div class="set-row" style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule-soft);"><div><div style="font-size:14px;font-weight:500;">Require 2FA for all staff</div><div style="font-size:12.5px;color:var(--ink-muted);">Cannot be disabled per-user</div></div><span class="tpill on"><span class="dot"></span>Enforced</span></div>
+            <div class="set-row" style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule-soft);"><div><div style="font-size:14px;font-weight:500;">Staff session timeout</div><div style="font-size:12.5px;color:var(--ink-muted);">Auto sign-out after inactivity</div></div><select class="status-select" style="background:var(--cream);color:var(--ink);border-color:var(--rule-strong);background-image:none;padding-right:14px;"><option>2 hours</option><option selected>4 hours</option><option>8 hours</option></select></div>
+            <div class="set-row" style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:10px 0;"><div><div style="font-size:14px;font-weight:500;">IP allowlist for admin</div><div style="font-size:12.5px;color:var(--ink-muted);">Restrict admin panel to office IPs</div></div><button class="switch" role="switch" aria-checked="false"></button></div>
+          </div>
+
+          <div class="danger-box">
+            <h4>Maintenance mode</h4>
+            <p>Puts the whole public site into a maintenance page. In-progress staff work continues. Type <strong>MAINTENANCE</strong> to enable.</p>
+            <input placeholder="Type MAINTENANCE to confirm" />
+            <button class="btn-sm" style="margin-top: 12px; background: var(--danger); color: white; border-color: var(--danger);">Enable maintenance mode</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="kbd-hints"><span><kbd>/</kbd> search</span><span><kbd>?</kbd> shortcuts</span></div>
+  </div>
+
+  <nav class="ag-tabbar" aria-label="Admin tabs">
+    <a href="analytics.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Stats</a>
+    <a href="oversight.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversee</a>
+    <a href="services-schema.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> Services</a>
+    <a href="broadcasts.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/></svg> Send</a>
+  </nav>
+
+</div>
+
+<script>
+  document.querySelectorAll('.bc-chan').forEach(c => c.addEventListener('click', () => c.classList.toggle('is-on')));
+  document.querySelectorAll('.switch').forEach(s => s.addEventListener('click', () => { s.classList.toggle('is-on'); s.setAttribute('aria-checked', s.classList.contains('is-on')); }));
+  document.querySelectorAll('.ag-chip').forEach(c => c.addEventListener('click', () => { c.parentElement.querySelectorAll('.ag-chip').forEach(x=>x.classList.remove('is-active')); c.classList.add('is-active'); }));
+  const msg = document.getElementById('bc-msg'), cc = document.getElementById('charcount');
+  if (msg) msg.addEventListener('input', () => cc.textContent = msg.value.length);
+</script>
+
+</body>
+</html>

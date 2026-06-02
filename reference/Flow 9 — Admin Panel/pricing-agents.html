@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Pricing &amp; agents · Admin · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+<div class="ag">
+
+  <nav class="ag-nav" aria-label="Admin navigation">
+    <div class="ag-nav__brand"><span class="ico admin"></span> Proxi<em>Serve</em><span class="ag-nav__role admin">Admin</span></div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Overview</div>
+      <a href="analytics.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Analytics</a>
+      <a href="oversight.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversight <span class="ag-nav__count">2</span></a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Configure</div>
+      <a href="services-schema.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Services</a>
+      <a href="pricing-agents.html" class="ag-nav__link is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5a2.5 2.5 0 0 0-5 0c0 1.5 1 2 2.5 2.5s2.5 1 2.5 2.5a2.5 2.5 0 0 1-5 0M12 6v1.5M12 16.5V18"/></svg> Pricing</a>
+      <a href="#agents" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Agents</a>
+      <a href="broadcasts.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/></svg> Broadcasts</a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Govern</div>
+      <a href="oversight.html#audit" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Audit log</a>
+      <a href="broadcasts.html#settings" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Settings</a>
+    </div>
+    <div class="ag-nav__spacer"></div>
+    <div class="ag-nav__user"><span class="av" style="background: var(--brand);">EH</span><div><div class="nm">Eric H.</div><div class="mt">admin · owner</div></div></div>
+  </nav>
+
+  <div class="ag-main">
+    <header class="ag-top">
+      <span class="ag-top__mobile-brand"><span class="ico" style="background:var(--brand);"></span>Admin</span>
+      <label class="ag-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" placeholder="Search…" aria-label="Search" /><kbd>/</kbd></label>
+      <div class="ag-top__actions"><span class="env-badge" style="display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:var(--ok-soft);color:var(--ok);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.06em;"><span style="width:7px;height:7px;border-radius:999px;background:currentColor;"></span>PRODUCTION</span></div>
+    </header>
+
+    <div class="ag-content">
+
+      <!-- ===== Pricing ===== -->
+      <div class="ag-h">
+        <div>
+          <h1 class="ag-h__t">Pricing <em>&amp; fees</em></h1>
+          <div class="ag-h__meta">CHANGES TAKE EFFECT ON A DATE YOU CHOOSE · ALL CHANGES AUDIT-LOGGED</div>
+        </div>
+        <div class="ag-h__actions"><button class="btn-sm btn-sm--solid">+ Schedule change</button></div>
+      </div>
+
+      <div class="pay-banner" style="background: var(--warn-soft); color: var(--warn); border-left: 3px solid var(--warn); padding: 12px 16px; border-radius: var(--r-md); font-size: 13px; line-height:1.5; margin-bottom: 16px;">
+        <strong>1 scheduled change.</strong> Tax registration → RWF 12,000 effective 1 June 2026. Clients with in-progress applications keep the price they started with.
+      </div>
+
+      <div class="dtable-wrap">
+        <table class="dtable">
+          <thead><tr><th>Service</th><th>Standard fee</th><th>Urgent fee</th><th>Gov. fee (passthrough)</th><th>Effective</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><span class="nm">Passport renewal</span></td><td class="mono">RWF 15,000</td><td class="mono">RWF 35,000</td><td class="mono">RWF 75,000</td><td><span class="tpill on"><span class="dot"></span>Active</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Edit</button></td></tr>
+            <tr><td><span class="nm">Tax registration</span></td><td class="mono">RWF 12,000 <span style="color:var(--warn);">→ 12,000</span></td><td class="mono">RWF 25,000</td><td class="mono">—</td><td><span class="tpill pilot"><span class="dot"></span>1 Jun</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Edit</button></td></tr>
+            <tr><td><span class="nm">Business license</span></td><td class="mono">RWF 25,000</td><td class="mono">RWF 60,000</td><td class="mono">RWF 40,000</td><td><span class="tpill on"><span class="dot"></span>Active</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Edit</button></td></tr>
+            <tr><td><span class="nm">National ID</span></td><td class="mono">RWF 8,000</td><td class="mono">—</td><td class="mono">RWF 500</td><td><span class="tpill on"><span class="dot"></span>Active</span></td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Edit</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ===== Agents ===== -->
+      <div class="adm-sec" id="agents"><h2>Agents <em>&amp; team</em></h2><div class="right"><button class="btn-sm btn-sm--ghost">Invite agent</button><button class="btn-sm btn-sm--solid">+ Add agent</button></div></div>
+
+      <div class="kpi" style="grid-template-columns: repeat(2,1fr); margin-bottom: 16px;">
+        <div class="kpi-card"><div class="l">Active agents</div><div class="v">5</div><div class="d">1 over capacity</div></div>
+        <div class="kpi-card"><div class="l">Avg load</div><div class="v">9.2</div><div class="d">cases per agent</div></div>
+      </div>
+
+      <div class="dtable-wrap">
+        <table class="dtable">
+          <thead><tr><th>Agent</th><th>Email</th><th>Skills</th><th>Load / cap</th><th>2FA</th><th>Role</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini" style="background:var(--b-green);">CN</span> <span class="nm" style="font-size:14px;">Claudine N.</span></div></td><td class="mono">claudine@…rw</td><td style="font-size:12px;color:var(--ink-muted);">Identity, Business</td><td class="mono">12 / 15</td><td><span class="tpill on"><span class="dot"></span>On</span></td><td style="font-size:12px;">Agent</td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Manage</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini" style="background:var(--brand);">AM</span> <span class="nm" style="font-size:14px;">Aline M.</span></div></td><td class="mono">aline@…rw</td><td style="font-size:12px;color:var(--ink-muted);">Identity, Tax</td><td class="mono" style="color:var(--warn);">14 / 8 ⚠</td><td><span class="tpill on"><span class="dot"></span>On</span></td><td style="font-size:12px;">Agent</td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Manage</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini" style="background:var(--b-blue);">PM</span> <span class="nm" style="font-size:14px;">Patrick M.</span></div></td><td class="mono">patrick@…rw</td><td style="font-size:12px;color:var(--ink-muted);">Business, Permits</td><td class="mono">10 / 12</td><td><span class="tpill on"><span class="dot"></span>On</span></td><td style="font-size:12px;">Agent</td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Manage</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini" style="background:var(--b-marigold);color:var(--ink);">DI</span> <span class="nm" style="font-size:14px;">Diane I.</span></div></td><td class="mono">diane@…rw</td><td style="font-size:12px;color:var(--ink-muted);">Welfare, Tax</td><td class="mono">8 / 10</td><td><span class="tpill on"><span class="dot"></span>On</span></td><td style="font-size:12px;">Agent · T&amp;S</td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Manage</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><span class="av-mini" style="background:var(--brand);">EH</span> <span class="nm" style="font-size:14px;">Eric H.</span></div></td><td class="mono">eric@…rw</td><td style="font-size:12px;color:var(--ink-muted);">—</td><td class="mono">—</td><td><span class="tpill on"><span class="dot"></span>On</span></td><td style="font-size:12px;color:var(--brand-ink);font-weight:600;">Admin · owner</td><td><button class="btn-sm btn-sm--ghost" style="padding:5px 12px;">Manage</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="kbd-hints"><span><kbd>/</kbd> search</span><span><kbd>?</kbd> shortcuts</span></div>
+  </div>
+
+  <nav class="ag-tabbar" aria-label="Admin tabs">
+    <a href="analytics.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Stats</a>
+    <a href="oversight.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Oversee</a>
+    <a href="pricing-agents.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 6v12M9 9.5a2.5 2.5 0 0 1 5 0"/></svg> Pricing</a>
+    <a href="broadcasts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v12L3 14v-3z"/></svg> Send</a>
+  </nav>
+
+</div>
+</body>
+</html>

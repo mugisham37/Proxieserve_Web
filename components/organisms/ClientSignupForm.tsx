@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -16,8 +15,8 @@ import { FormField } from "@/components/atoms/FormField";
 import { SegmentedGroup } from "@/components/atoms/SegmentedGroup";
 import { PhoneInputWithCountry } from "@/components/molecules/PhoneCountryButton";
 import { signupSchema, type SignupData } from "@/lib/auth-schema";
-import { useAuth } from "@/lib/auth-context";
-import { MOCK, type AuthSession } from "@/lib/auth-types";
+import { useSignup } from "@/hooks/useAuth";
+import { isApiError, isRateLimitedData } from "@/lib/api/types";
 import { formatTrackerCode } from "@/lib/tracker";
 import { cn } from "@/lib/utils";
 
@@ -28,10 +27,12 @@ const LANGUAGE_OPTIONS = [
 ];
 
 export function ClientSignupForm() {
-  const router = useRouter();
-  const { dispatch } = useAuth();
   const [tab, setTab] = React.useState<AuthTabValue>("email");
-  const [accountExists, setAccountExists] = React.useState(false);
+  const signupMutation = useSignup();
+  const [bannerState, setBannerState] = React.useState<{
+    type: "account-exists" | "rate-limited" | "network-error" | "timeout" | "unexpected" | null;
+    message?: string;
+  }>({ type: null });
 
   const {
     register,
@@ -61,34 +62,49 @@ export function ClientSignupForm() {
   const password = watch("password");
 
   async function onSubmit(data: SignupData) {
-    setAccountExists(false);
-    await new Promise((r) => setTimeout(r, 900));
+    setBannerState({ type: null });
 
-    // Mock: account-exists state
-    if (data.identifier === MOCK.EXISTING_EMAIL) {
-      setAccountExists(true);
-      return;
+    try {
+      await signupMutation.mutateAsync({
+        ...data,
+        code: data.code || undefined,
+      });
+    } catch (error) {
+      if (!isApiError(error)) {
+        setBannerState({
+          type: "unexpected",
+          message: "Something went wrong on our end. Please try again.",
+        });
+        return;
+      }
+
+      switch (error.errorType) {
+        case "account-exists":
+          setBannerState({ type: "account-exists", message: error.message });
+          break;
+        case "rate-limited":
+          setBannerState({
+            type: "rate-limited",
+            message: isRateLimitedData(error.data)
+              ? `Too many attempts. Try again in ${error.data.retryAfterSeconds} seconds.`
+              : error.message,
+          });
+          break;
+        case "network-error":
+          setBannerState({ type: "network-error", message: error.message });
+          break;
+        case "timeout":
+          setBannerState({ type: "timeout", message: error.message });
+          break;
+        default:
+          setBannerState({
+            type: "unexpected",
+            message: error.statusCode >= 500
+              ? "Something went wrong on our end. Please try again."
+              : error.message,
+          });
+      }
     }
-
-    // Success
-    const session: AuthSession = {
-      userId: "usr_" + Math.random().toString(36).slice(2),
-      name: data.name,
-      email: data.identifierType === "email" ? data.identifier : "new@user.rw",
-      phone: data.identifierType === "phone" ? data.identifier : undefined,
-      role: "client",
-      isEmailVerified: false,
-      language: data.language,
-      createdAt: new Date().toISOString(),
-    };
-    dispatch({ type: "SET_SESSION", payload: session });
-
-    const encoded = encodeURIComponent(
-      data.identifierType === "email"
-        ? data.identifier.replace(/(.{2}).*(@.*)/, "$1•••$2")
-        : "+250 78 ••• •••"
-    );
-    router.push(`/verify?next=/&email=${encoded}`);
   }
 
   return (
@@ -107,13 +123,23 @@ export function ClientSignupForm() {
         <div className="flex flex-col gap-4">
           <AuthBanner
             variant="info"
-            message="An account with this email already exists."
+            message={bannerState.message ?? "An account with this email already exists."}
             action={{ label: "Sign in instead →", href: "/login" }}
-            visible={accountExists}
+            visible={bannerState.type === "account-exists"}
+          />
+          <AuthBanner
+            variant="warn"
+            message={bannerState.message ?? "Too many attempts. Try again shortly."}
+            visible={bannerState.type === "rate-limited"}
+          />
+          <AuthBanner
+            variant="danger"
+            message={bannerState.message ?? "Something went wrong on our end. Please try again."}
+            visible={bannerState.type === "network-error" || bannerState.type === "timeout" || bannerState.type === "unexpected"}
           />
 
           {/* Full name */}
-          {(() => { const { name: _n, ...r } = register("name"); return (
+          {(() => { const { name: fieldName, ...r } = register("name"); void fieldName; return (
             <FormField
               label="Full name"
               name="name"
@@ -135,7 +161,7 @@ export function ClientSignupForm() {
               transition={{ duration: 0.12, ease: [0.2, 0, 0, 1] }}
             >
               {tab === "email" ? (
-                (() => { const { name: _n, ...r } = register("identifier"); return (
+                (() => { const { name: fieldName, ...r } = register("identifier"); void fieldName; return (
                   <FormField
                     label="Email address"
                     name="identifier"
@@ -190,9 +216,10 @@ export function ClientSignupForm() {
 
           {/* Optional tracking code */}
           {(() => {
-            const { name: _n, ...r } = register("code", {
+            const { name: fieldName, ...r } = register("code", {
               onChange: (e) => { e.target.value = formatTrackerCode(e.target.value); },
             });
+            void fieldName;
             return (
               <FormField
                 label="Tracking code (optional)"
@@ -240,7 +267,7 @@ export function ClientSignupForm() {
           <button
             type="button"
             onClick={handleSubmit(onSubmit)}
-            disabled={isSubmitting}
+            disabled={isSubmitting || signupMutation.isPending}
             className={cn(
               "w-full h-12 rounded-[var(--r-pill)] mt-1",
               "font-serif italic text-[17px] text-[var(--paper)]",
@@ -251,7 +278,7 @@ export function ClientSignupForm() {
               "flex items-center justify-center gap-2"
             )}
           >
-            {isSubmitting ? (
+            {isSubmitting || signupMutation.isPending ? (
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-[var(--paper)] border-t-transparent rounded-full animate-spin" />
                 Creating account…

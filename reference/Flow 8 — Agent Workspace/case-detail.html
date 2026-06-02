@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>PRX-2026-00483 · Case detail · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="agent.css" />
+</head>
+<body>
+
+<div class="ag">
+
+  <!-- ===== SIDE NAV (collapsed-ish, same component) ===== -->
+  <nav class="ag-nav" aria-label="Agent navigation">
+    <div class="ag-nav__brand"><span class="ico"></span> Proxi<em>Serve</em><span class="ag-nav__role">Agent</span></div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Work</div>
+      <a href="today-queue.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Today</a>
+      <a href="today-queue.html#queue" class="ag-nav__link is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg> My cases <span class="ag-nav__count brand">14</span></a>
+      <a href="case-detail.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Messages <span class="ag-nav__count">5</span></a>
+      <a href="#" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Unassigned <span class="ag-nav__count">3</span></a>
+    </div>
+    <div class="ag-nav__group">
+      <div class="ag-nav__label">Me</div>
+      <a href="performance.html" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Performance</a>
+      <a href="performance.html#settings" class="ag-nav__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Settings</a>
+    </div>
+    <div class="ag-nav__spacer"></div>
+    <div class="ag-nav__user"><span class="av">AM</span><div><div class="nm">Aline M.</div><div class="mt">agent · Kigali</div></div></div>
+  </nav>
+
+  <div class="ag-main">
+
+    <header class="ag-top">
+      <span class="ag-top__mobile-brand"><span class="ico"></span>ProxiServe</span>
+      <label class="ag-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Search cases…" aria-label="Search" /><kbd>/</kbd>
+      </label>
+      <div class="ag-top__actions">
+        <button class="btn-sm btn-sm--ghost">‹ Prev</button>
+        <button class="btn-sm btn-sm--ghost">Next ›</button>
+        <button class="ag-status"><span class="dot"></span> Available</button>
+      </div>
+    </header>
+
+    <!-- ===== Two-column work surface ===== -->
+    <div class="ag-case">
+
+      <!-- WORK column -->
+      <div class="ag-case__work">
+        <a href="today-queue.html" class="ag-case__back">‹ Back to cases</a>
+
+        <div class="ag-case__head">
+          <div>
+            <span class="ag-case__code">PRX-2026-00483 · submitted 19 May 2026</span>
+            <h1 class="ag-case__svc">Passport <em>renewal</em></h1>
+          </div>
+          <div class="status-changer">
+            <select class="status-select" aria-label="Change status">
+              <option>Action required</option>
+              <option>Received</option>
+              <option>Under review</option>
+              <option selected>In progress</option>
+              <option>Submitted to authority</option>
+              <option>Awaiting response</option>
+              <option>Completed</option>
+              <option>Rejected</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- work tabs -->
+        <div class="work-tabs">
+          <button class="work-tab is-active" data-wt="checklist">Checklist</button>
+          <button class="work-tab" data-wt="conversation">Conversation</button>
+          <button class="work-tab" data-wt="documents">Documents</button>
+          <button class="work-tab" data-wt="details">Details</button>
+          <button class="work-tab" data-wt="history">History</button>
+        </div>
+
+        <!-- CHECKLIST pane -->
+        <div data-pane="checklist">
+          <div class="note-box" style="margin-bottom: 16px;">
+            <div class="note-box__label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+              Internal — client never sees this
+            </div>
+            <textarea placeholder="Add a private note for yourself or the next agent…">Client re-uploaded the photo on 22 May — looks clearer now. Verify before submitting to Immigration.</textarea>
+          </div>
+
+          <div class="ag-checklist">
+            <div class="ag-check done">
+              <span class="ag-check__box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg></span>
+              <div><div class="ag-check__label">Verify client identity against national ID</div><div class="ag-check__sub">Name + DOB match passport bio page</div></div>
+              <span class="ag-check__time">19 May</span>
+            </div>
+            <div class="ag-check done">
+              <span class="ag-check__box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg></span>
+              <div><div class="ag-check__label">Confirm fee with client</div><div class="ag-check__sub">RWF 15,000 confirmed via WhatsApp</div></div>
+              <span class="ag-check__time">20 May</span>
+            </div>
+            <div class="ag-check done">
+              <span class="ag-check__box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg></span>
+              <div><div class="ag-check__label">Collect payment</div><div class="ag-check__sub">RWF 15,000 · MTN MoMo · paid 23 May</div></div>
+              <span class="ag-check__time">23 May</span>
+            </div>
+            <div class="ag-check" style="border-color: var(--brand); background: var(--brand-soft);">
+              <span class="ag-check__box" style="border-color: var(--brand);"></span>
+              <div><div class="ag-check__label">Review re-uploaded passport photo</div><div class="ag-check__sub" style="color: var(--brand-ink);">⟵ you are here · client uploaded new photo 22 May</div></div>
+              <span class="ag-check__time">now</span>
+            </div>
+            <div class="ag-check">
+              <span class="ag-check__box"></span>
+              <div><div class="ag-check__label">Fill official Immigration renewal form</div><div class="ag-check__sub">Form IMM-04 · use verified details</div></div>
+            </div>
+            <div class="ag-check">
+              <span class="ag-check__box"></span>
+              <div><div class="ag-check__label">Submit to Department of Immigration</div><div class="ag-check__sub">Then set status → Submitted to authority</div></div>
+            </div>
+            <div class="ag-check">
+              <span class="ag-check__box"></span>
+              <div><div class="ag-check__label">Book biometric appointment</div><div class="ag-check__sub">Notify client of date + what to bring</div></div>
+            </div>
+            <div class="ag-check">
+              <span class="ag-check__box"></span>
+              <div><div class="ag-check__label">Collect &amp; hand over passport</div><div class="ag-check__sub">Then set status → Completed</div></div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top: 20px;">
+            <button class="btn-sm btn-sm--brand">Mark step done &amp; continue</button>
+            <a href="document-viewer.html" class="btn-sm">Open the new photo →</a>
+          </div>
+        </div>
+
+        <!-- CONVERSATION pane -->
+        <div data-pane="conversation" style="display:none;">
+          <div class="conv">
+            <div class="msg msg--system"><div class="msg__bubble">Application submitted · 19 May 14:32</div></div>
+            <div class="msg msg--client">
+              <span class="msg__av">AK</span>
+              <div><div class="msg__bubble">Hi, I've sent everything. Let me know if you need anything else!</div><div class="msg__meta">Aline K. · 19 May 15:10</div></div>
+            </div>
+            <div class="msg msg--agent">
+              <span class="msg__av">AM</span>
+              <div><div class="msg__bubble">Got it, thanks! Everything looks good. One thing — your passport photo is a little dark. Could you retake it near a window?</div><div class="msg__meta">You · 20 May 09:24 · read</div></div>
+            </div>
+            <div class="msg msg--note">
+              <div style="width:100%;"><div class="msg__label">Internal note</div><div class="msg__bubble">Photo brightness below threshold. Asked client to retake. Don't submit until fixed.</div><div class="msg__meta">You · 20 May 09:25 · only agents see this</div></div>
+            </div>
+            <div class="msg msg--client">
+              <span class="msg__av">AK</span>
+              <div><div class="msg__bubble">Done! Just uploaded a new one 📸</div><div class="msg__meta">Aline K. · 22 May 18:40</div></div>
+            </div>
+            <div class="msg msg--system"><div class="msg__bubble">Client replaced "passport photo" · 22 May 18:40</div></div>
+          </div>
+
+          <!-- composer with lane toggle -->
+          <div class="composer" id="composer">
+            <div class="composer__lanes">
+              <button class="composer__lane client is-active" data-lane="client">Reply to client</button>
+              <button class="composer__lane note" data-lane="note">Internal note</button>
+            </div>
+            <textarea placeholder="Write a reply to Aline…" id="composer-text"></textarea>
+            <div class="composer__bar">
+              <div class="tools">
+                <button class="ag-iconbtn" style="width:30px;height:30px;" aria-label="Attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m21.4 11.05-9.19 9.19a5 5 0 0 1-7.07-7.07l9.19-9.19a3.5 3.5 0 0 1 4.95 4.95L10.6 17.8"/></svg></button>
+                <button class="ag-iconbtn" style="width:30px;height:30px;" aria-label="Canned reply"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+              </div>
+              <button class="btn-sm btn-sm--brand composer__send">Send <span style="font-style:normal;">→</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DOCUMENTS pane -->
+        <div data-pane="documents" style="display:none;">
+          <div class="doc-grid">
+            <a href="document-viewer.html" class="doc-thumb">
+              <div class="doc-thumb__img">passport-bio.jpg<span class="doc-thumb__badge">✓ verified</span></div>
+              <div class="doc-thumb__cap"><div class="nm">Current passport</div><div class="mt">1.2 MB · 19 May</div></div>
+            </a>
+            <a href="document-viewer.html" class="doc-thumb">
+              <div class="doc-thumb__img">id-front.jpg<span class="doc-thumb__badge">✓ verified</span></div>
+              <div class="doc-thumb__cap"><div class="nm">National ID (front)</div><div class="mt">980 KB · 19 May</div></div>
+            </a>
+            <a href="document-viewer.html" class="doc-thumb">
+              <div class="doc-thumb__img">id-back.jpg<span class="doc-thumb__badge">✓ verified</span></div>
+              <div class="doc-thumb__cap"><div class="nm">National ID (back)</div><div class="mt">1.1 MB · 19 May</div></div>
+            </a>
+            <a href="document-viewer.html" class="doc-thumb">
+              <div class="doc-thumb__img" style="background: linear-gradient(135deg, var(--brand-soft), var(--paper-2));">photo-v2.jpg<span class="doc-thumb__badge" style="background: var(--brand);">NEW</span></div>
+              <div class="doc-thumb__cap"><div class="nm">Passport photo (v2)</div><div class="mt">2.4 MB · 22 May · needs review</div></div>
+            </a>
+          </div>
+        </div>
+
+        <!-- DETAILS pane -->
+        <div data-pane="details" style="display:none;">
+          <div class="rail-card" style="background: var(--paper);">
+            <div class="rail-card__h">Application answers</div>
+            <div class="rail-line"><span class="l">Reason for renewal</span><span class="v">Expired</span></div>
+            <div class="rail-line"><span class="l">Current passport no.</span><span class="v mono">PC284615</span></div>
+            <div class="rail-line"><span class="l">Expiry date</span><span class="v">12 Aug 2026</span></div>
+            <div class="rail-line"><span class="l">Place of issue</span><span class="v">Kigali</span></div>
+            <div class="rail-line"><span class="l">Travel plans</span><span class="v">Within 1–2 months</span></div>
+            <div class="rail-line"><span class="l">Notes from client</span><span class="v">—</span></div>
+          </div>
+        </div>
+
+        <!-- HISTORY pane -->
+        <div data-pane="history" style="display:none;">
+          <div class="conv">
+            <div class="msg msg--system"><div class="msg__bubble">23 May 14:32 · Payment received RWF 15,000 (MoMo)</div></div>
+            <div class="msg msg--system"><div class="msg__bubble">22 May 18:40 · Client replaced passport photo</div></div>
+            <div class="msg msg--system"><div class="msg__bubble">20 May 09:25 · Status → In progress (by Aline M.)</div></div>
+            <div class="msg msg--system"><div class="msg__bubble">20 May 09:00 · Assigned to Aline M.</div></div>
+            <div class="msg msg--system"><div class="msg__bubble">19 May 14:32 · Application received</div></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RAIL column -->
+      <aside class="ag-case__rail">
+        <div class="rail-card">
+          <div class="client-head">
+            <span class="av">AK</span>
+            <div>
+              <div class="nm">Aline Kabera</div>
+              <div class="mt">+250 78 8 *** 456 · EN</div>
+            </div>
+          </div>
+          <div class="rail-line"><span class="l">National ID</span><span class="v mono">1 1992 8 …31</span></div>
+          <div class="rail-line"><span class="l">Member since</span><span class="v">Guest</span></div>
+          <div class="rail-line"><span class="l">Other cases</span><span class="v">None</span></div>
+          <a href="#" class="wa-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.6.2s-.7 1-.9 1.1c-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5l-.9-2.1c-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.2.2 1.8 2.8 4.4 3.9 1.6.7 2.2.7 3 .6.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.2-.3-.2-.6-.3z"/></svg>
+            Message on WhatsApp
+          </a>
+        </div>
+
+        <div class="rail-card">
+          <div class="rail-card__h">Payment <a href="../Flow 7 — Payments/receipt.html">view receipt</a></div>
+          <div class="rail-line"><span class="l">Service fee</span><span class="v mono">RWF 15,000</span></div>
+          <div class="rail-line"><span class="l">Status</span><span class="v" style="color: var(--ok);">Paid · 23 May</span></div>
+          <div class="rail-line"><span class="l">Method</span><span class="v">MTN MoMo</span></div>
+        </div>
+
+        <div class="rail-card">
+          <div class="rail-card__h">SLA &amp; priority</div>
+          <div class="rail-line"><span class="l">Priority</span><span class="v" style="color: var(--danger);">● High</span></div>
+          <div class="rail-line"><span class="l">Age</span><span class="v">3d 4h</span></div>
+          <div class="rail-line"><span class="l">SLA target</span><span class="v" style="color: var(--danger);">Over by 1d</span></div>
+          <div class="rail-line"><span class="l">Turnaround est.</span><span class="v">5–7 days</span></div>
+        </div>
+
+        <div class="rail-card">
+          <div class="rail-card__h">Quick actions</div>
+          <div style="display:flex; flex-direction: column; gap: 8px;">
+            <button class="btn-sm" style="justify-content:center;">Request a document</button>
+            <button class="btn-sm" style="justify-content:center;">Reassign case</button>
+            <button class="btn-sm btn-sm--ghost" style="justify-content:center; color: var(--danger); border-color: var(--danger);">Flag for admin</button>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="kbd-hints">
+      <span><kbd>E</kbd> change status</span>
+      <span><kbd>R</kbd> reply</span>
+      <span><kbd>N</kbd> internal note</span>
+      <span><kbd>D</kbd> documents</span>
+      <span><kbd>⌘↵</kbd> send</span>
+      <span><kbd>[</kbd> <kbd>]</kbd> prev/next case</span>
+    </div>
+
+  </div>
+
+  <nav class="ag-tabbar" aria-label="Agent tabs">
+    <a href="today-queue.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg> Today</a>
+    <a href="today-queue.html#queue" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg> Cases</a>
+    <a href="case-detail.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Messages</a>
+    <a href="performance.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> Stats</a>
+  </nav>
+
+</div>
+
+<script>
+  // work tab switching
+  document.querySelectorAll('.work-tab').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.work-tab').forEach(x => x.classList.remove('is-active'));
+    t.classList.add('is-active');
+    document.querySelectorAll('[data-pane]').forEach(p => p.style.display = 'none');
+    document.querySelector('[data-pane="'+t.dataset.wt+'"]').style.display = '';
+  }));
+
+  // composer lane toggle
+  const composer = document.getElementById('composer');
+  document.querySelectorAll('.composer__lane').forEach(l => l.addEventListener('click', () => {
+    document.querySelectorAll('.composer__lane').forEach(x => x.classList.remove('is-active'));
+    l.classList.add('is-active');
+    const txt = document.getElementById('composer-text');
+    if (l.dataset.lane === 'note') {
+      composer.classList.add('note-mode');
+      txt.placeholder = 'Add a private internal note (client never sees this)…';
+    } else {
+      composer.classList.remove('note-mode');
+      txt.placeholder = 'Write a reply to Aline…';
+    }
+  }));
+
+  // checklist toggle
+  document.querySelectorAll('.ag-check__box').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    b.closest('.ag-check').classList.toggle('done');
+    if (b.closest('.ag-check').classList.contains('done') && !b.querySelector('svg')) {
+      b.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg>';
+    }
+  }));
+</script>
+
+</body>
+</html>

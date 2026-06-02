@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flow 8 — Engineering spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { background: var(--paper); }
+  .doc { max-width: 920px; margin: 0 auto; padding: 64px 32px 120px; }
+  @media (max-width: 720px) { .doc { padding: 32px 20px 80px; } }
+  .doc-head { border-bottom: 1px solid var(--rule-strong); padding-bottom: 24px; margin-bottom: 48px; }
+  .doc-head .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-muted); }
+  .doc-head h1 { margin: 12px 0; }
+  .doc-head p { margin: 0; color: var(--ink-muted); }
+  section.spec { padding: 48px 0; border-bottom: 1px solid var(--rule); }
+  section.spec:last-of-type { border-bottom: none; }
+  .spec-head { display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 24px; align-items: baseline; }
+  .spec-num { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .spec-title { font-family: var(--serif); font-weight: 500; font-size: 32px; margin: 0; line-height: 1.1; }
+  .spec-title em { font-style: italic; font-weight: 400; }
+  .spec-body { padding-left: 104px; }
+  @media (max-width: 720px) { .spec-head { grid-template-columns: 1fr; } .spec-body { padding-left: 0; } }
+  .spec-body p { margin: 0 0 14px; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
+  pre.ascii { font-family: var(--mono); font-size: 12px; line-height: 1.45; background: var(--cream-2); padding: 20px 24px; border-radius: var(--r-md); overflow-x: auto; border: 1px solid var(--rule); color: var(--ink-2); }
+  table.t { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 16px 0; }
+  .t th, .t td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  .t th { background: var(--cream-2); border-bottom: 1px solid var(--rule-strong); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); }
+  .t tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
+  .t td.mono { font-family: var(--mono); font-size: 12px; }
+  ul.l { padding-left: 20px; margin: 0 0 16px; }
+  ul.l li { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin-bottom: 6px; }
+  .check { display: grid; grid-template-columns: 24px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--rule-soft); font-size: 14px; }
+  .check.pass::before { content: "✓"; color: var(--ok); font-weight: 600; }
+  .score { display: inline-flex; align-items: baseline; gap: 4px; padding: 8px 16px; background: var(--ok-soft); color: var(--ok); border-radius: 999px; font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; }
+  .score .big { font-family: var(--serif); font-style: italic; font-size: 24px; }
+  .callout { background: var(--brand-soft); color: var(--brand-ink); border-left: 3px solid var(--brand); padding: 14px 18px; font-family: var(--serif); font-style: italic; font-size: 15px; margin: 16px 0; }
+  .callout strong { font-style: normal; font-weight: 600; }
+  code, .mono { font-family: var(--mono); font-size: 13px; }
+  .comp-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+  .comp-list .chip { background: var(--cream-2); color: var(--ink-2); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); font-family: var(--mono); font-size: 11px; }
+  .comp-list .chip.new { background: var(--brand-soft); color: var(--brand-ink); border-color: transparent; }
+  .toc { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; padding: 20px 0; border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); margin-bottom: 32px; }
+  .toc a { display: flex; gap: 16px; align-items: baseline; padding: 8px 0; font-size: 14px; color: var(--ink-2); border-bottom: 1px solid var(--rule-soft); }
+  .toc a .num { font-family: var(--mono); font-size: 11px; color: var(--ink-subtle); }
+  @media (max-width: 600px) { .toc { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="doc">
+  <div class="doc-head">
+    <a href="index.html" class="lnk-arrow" style="font-size:13px; margin-bottom: 16px; display: inline-flex;"><span aria-hidden="true">←</span> Back to Flow 8 hub</a>
+    <div class="meta">FLOW 08 / AGENT WORKSPACE / ENGINEERING SPEC · v0.1</div>
+    <h1 class="t-h1">Flow 8 — <em>Agent Workspace</em>.</h1>
+    <p>The fulfilment engine. Dense, keyboard-first, used all day under time pressure. Inherits the F6 app shell, tightens it, and adds the dual-lane conversation that keeps internal notes from ever reaching a client.</p>
+  </div>
+
+  <div class="toc">
+    <a href="#s1"><span class="num">01</span> Flow map</a>
+    <a href="#s2"><span class="num">02</span> IA</a>
+    <a href="#s3"><span class="num">03</span> Wireframes</a>
+    <a href="#s4"><span class="num">04</span> Hi-fi screens</a>
+    <a href="#s5"><span class="num">05</span> Components</a>
+    <a href="#s6"><span class="num">06</span> Motion &amp; keyboard</a>
+    <a href="#s7"><span class="num">07</span> Responsive</a>
+    <a href="#s8"><span class="num">08</span> States</a>
+    <a href="#s9"><span class="num">09</span> A11y</a>
+    <a href="#s10"><span class="num">10</span> Hand-off &amp; self-review</a>
+  </div>
+
+  <section class="spec" id="s1">
+    <div class="spec-head"><span class="spec-num">01 /</span><h2 class="spec-title"><em>Flow</em> map</h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+  Entry from F4 (staff sign-in + 2FA → role: agent)
+             │
+             ▼
+  ┌─────────────────────────────────────────────┐
+  │  /agent            Today + queue            │ ◀── default agent landing
+  │  - stats · needs-you-today · all cases      │
+  │  - keyboard nav (J/K/↵) · ⌘K palette        │
+  └───────┬──────────────────────┬──────────────┘
+          │ open case            │ pull unassigned
+          ▼                      ▼
+  ┌─────────────────────────────────────────────┐
+  │  /agent/case/[code]   Case detail           │
+  │  ┌─ work ─────────────┐ ┌─ rail ──────────┐ │
+  │  │ status changer     │ │ client card     │ │
+  │  │ checklist          │ │ payment (F7)    │ │
+  │  │ conversation ⇄F6   │ │ SLA/priority    │ │
+  │  │ documents ─────────┼─┼─▶ /viewer       │ │
+  │  │ details · history  │ │ quick actions   │ │
+  │  └────────────────────┘ └─────────────────┘ │
+  └───────┬─────────────────────────────────────┘
+          │ open document
+          ▼
+  ┌─────────────────────┐     ┌──────────────────────┐
+  │  /viewer  Document  │     │  /agent/performance  │
+  │  zoom · QC · verdict│     │  metrics + settings  │
+  └─────────────────────┘     └──────────────────────┘
+</pre>
+      <p><strong>Entries.</strong> F4 staff sign-in with an agent role claim. Deep links from push notifications ("new case assigned", "client replied", "SLA approaching").</p>
+      <p><strong>Connections.</strong> Conversation ⇄ F6 (same thread, role-gated lanes). Payment card ⇄ F7 (agent confirms off-platform payments). Reassign / flag ⇄ F9 (admin oversight). Status changes propagate to F5 public tracker + F6 client dashboard.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s2">
+    <div class="spec-head"><span class="spec-num">02 /</span><h2 class="spec-title">Information <em>architecture</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Route</th><th>Page</th><th>Role</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">/agent</td><td>Today + queue</td><td>Agent</td><td>Default landing; own cases only</td></tr>
+          <tr><td class="mono">/agent/case/[code]</td><td>Case detail</td><td>Agent (owner)</td><td>Two-column work surface</td></tr>
+          <tr><td class="mono">/agent/case/[code]/doc/[id]</td><td>Document viewer</td><td>Agent (owner)</td><td>Full-screen, QC + verdict</td></tr>
+          <tr><td class="mono">/agent/unassigned</td><td>Unassigned pool</td><td>Agent</td><td>Pull-to-claim queue</td></tr>
+          <tr><td class="mono">/agent/performance</td><td>Performance</td><td>Agent</td><td>Own metrics + anonymised leaderboard</td></tr>
+          <tr><td class="mono">/agent/settings</td><td>Settings</td><td>Agent</td><td>Availability, notifications, dark mode, security</td></tr>
+        </tbody>
+      </table>
+      <p>Agents only ever see their own assigned cases plus the shared unassigned pool. Cross-agent visibility is an admin-only capability (F9), always read-only and logged.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s3">
+    <div class="spec-head"><span class="spec-num">03 /</span><h2 class="spec-title">Low-fi <em>wireframes</em></h2></div>
+    <div class="spec-body">
+<pre class="ascii">
+─── TODAY + QUEUE ──────────────────────────────────────────
+┌────────────┬───────────────────────────────────────────────┐
+│ ● Proxi    │ [search /]          [● Available] [🔔3]        │
+│  [Agent]   │ Good morning, Aline.                          │
+│ WORK       │ SAT 23 MAY · 14 OPEN · 3 NEED YOU TODAY       │
+│ Today    ◀ │ [Action 3][Progress 8][Awaiting 3][Done 11]   │
+│ My cases 14│ Needs you today                               │
+│ Messages 5 │ ┌───────────────────────────────────────────┐ │
+│ Unassigned │ │ ● PRX-00483 Passport  Aline K. [Action]3d │ │
+│ ME         │ │ ● PRX-00477 Business  Jean N.  [Await] 2d │ │
+│ Performance│ └───────────────────────────────────────────┘ │
+│ Settings   │ All my cases  [All][Action][Progress]...      │
+│ ────       │ ┌── table: code/svc/client/status/age/fee ─┐ │
+│ [AM] Aline │ │ … 14 rows, J/K nav, ↵ open               │ │
+└────────────┴───────────────────────────────────────────────┘
+  [/ search] [J K move] [↵ open] [E status] [R reply]   kbd hints
+
+─── CASE DETAIL ─────────────────────────────────────────────
+┌────────────┬──────────────────────────────┬────────────────┐
+│ sidenav    │ ‹ Back                        │ CLIENT         │
+│            │ PRX-00483 · Passport renewal  │ Aline K.       │
+│            │            [status: In prog ▾]│ +250...  [WA]  │
+│            │ [Checklist][Conv][Docs][Hist] │ ──────────     │
+│            │ ☑ verify identity             │ PAYMENT        │
+│            │ ☑ confirm fee                 │ paid 15,000    │
+│            │ ☑ collect payment             │ ──────────     │
+│            │ ◉ review photo  ⟵ here        │ SLA: over 1d   │
+│            │ ☐ fill form · submit · ...    │ ──────────     │
+│            │ [internal note box - yellow]  │ quick actions  │
+└────────────┴──────────────────────────────┴────────────────┘
+</pre>
+    </div>
+  </section>
+
+  <section class="spec" id="s4">
+    <div class="spec-head"><span class="spec-num">04 /</span><h2 class="spec-title">Hi-fi <em>screens</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Screen</th><th>File</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Today + queue</td><td class="mono"><a href="today-queue.html" class="linked">today-queue.html</a></td><td>Stats · needs-you-today · 14-row table · J/K keyboard nav · mobile cards</td></tr>
+          <tr><td>Case detail</td><td class="mono"><a href="case-detail.html" class="linked">case-detail.html</a></td><td>Two-column · checklist · dual-lane conversation · docs · details · history · client/payment/SLA rail</td></tr>
+          <tr><td>Document viewer</td><td class="mono"><a href="document-viewer.html" class="linked">document-viewer.html</a></td><td>Full-screen · zoom · filmstrip · auto QC checks · accept/reject verdict</td></tr>
+          <tr><td>Performance + settings</td><td class="mono"><a href="performance.html" class="linked">performance.html</a></td><td>Own metrics · bar chart · anonymised leaderboard · availability/notif/dark-mode/security</td></tr>
+          <tr><td>All 10 states</td><td class="mono"><a href="states.html" class="linked">states.html</a></td><td>Edge-case gallery incl. dark mode preview</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Decisions worth flagging.</strong> The case detail is built as a <em>checklist-first work surface</em>, not a status form — it tells the agent exactly what to do next. The conversation composer has a hard visual lane split (yellow internal-note mode) so an internal note can never be mistaken for a client reply. The whole zone is keyboard-navigable; the mouse is optional.
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s5">
+    <div class="spec-head"><span class="spec-num">05 /</span><h2 class="spec-title">Component <em>inventory</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin-bottom: 8px;">Reused / inherited</h4>
+      <div class="comp-list">
+        <span class="chip">AppShell / SideNav / UserChip (F6)</span>
+        <span class="chip">MobileTabBar (F6)</span>
+        <span class="chip">StatusPill</span>
+        <span class="chip">StatTile (F6)</span>
+        <span class="chip">Conversation thread (F5/F6)</span>
+        <span class="chip">DocumentCard</span>
+        <span class="chip">FeeSummary (F7)</span>
+        <span class="chip">Switch / Toggle</span>
+        <span class="chip">Banner</span>
+      </div>
+      <h4 class="t-h4" style="margin: 16px 0 8px;">New in Flow 8</h4>
+      <div class="comp-list">
+        <span class="chip new">DenseSideNav (grouped, counts)</span>
+        <span class="chip new">AgentTopBar (search + status)</span>
+        <span class="chip new">AvailabilityToggle</span>
+        <span class="chip new">CaseQueueTable</span>
+        <span class="chip new">QueueRow (priority + SLA age)</span>
+        <span class="chip new">KeyboardNav (J/K/↵)</span>
+        <span class="chip new">CommandPalette (⌘K)</span>
+        <span class="chip new">CaseWorkSurface (2-col)</span>
+        <span class="chip new">StatusChanger (select)</span>
+        <span class="chip new">WorkTabs</span>
+        <span class="chip new">AgentChecklist</span>
+        <span class="chip new">DualLaneComposer</span>
+        <span class="chip new">InternalNoteBubble</span>
+        <span class="chip new">ClientRailCard</span>
+        <span class="chip new">SLACard</span>
+        <span class="chip new">DocViewer (zoom + filmstrip)</span>
+        <span class="chip new">DocQCChecks</span>
+        <span class="chip new">VerdictButtons</span>
+        <span class="chip new">PerfBarChart</span>
+        <span class="chip new">Leaderboard</span>
+        <span class="chip new">KbdHintBar</span>
+        <span class="chip new">DarkModeTheme</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="spec" id="s6">
+    <div class="spec-head"><span class="spec-num">06 /</span><h2 class="spec-title">Motion &amp; <em>keyboard</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Key</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">/</td><td>Focus search</td></tr>
+          <tr><td class="mono">⌘K / Ctrl K</td><td>Open command palette (cases, clients, actions)</td></tr>
+          <tr><td class="mono">J / K</td><td>Move down / up the queue</td></tr>
+          <tr><td class="mono">↵</td><td>Open focused case</td></tr>
+          <tr><td class="mono">E</td><td>Change status of current case</td></tr>
+          <tr><td class="mono">R</td><td>Reply to client · <span class="mono">N</span> internal note</td></tr>
+          <tr><td class="mono">D</td><td>Jump to documents · <span class="mono">⌘↵</span> send message</td></tr>
+          <tr><td class="mono">[ / ]</td><td>Previous / next case</td></tr>
+          <tr><td class="mono">A</td><td>Assign focused unassigned case to me</td></tr>
+          <tr><td class="mono">G then T</td><td>Go to Today · <span class="mono">?</span> show all shortcuts</td></tr>
+        </tbody>
+      </table>
+      <table class="t">
+        <thead><tr><th>Element</th><th>Spec</th><th>Reduced-motion</th></tr></thead>
+        <tbody>
+          <tr><td>Queue row focus</td><td class="mono">brand-soft bg + inset rule, instant</td><td>Identical</td></tr>
+          <tr><td>Work-tab switch</td><td class="mono">200 ms cross-fade</td><td>Instant</td></tr>
+          <tr><td>Composer lane swap</td><td class="mono">120 ms bg + accent</td><td>Instant colour</td></tr>
+          <tr><td>Checklist check</td><td class="mono">box fill + strike 200 ms</td><td>Instant</td></tr>
+          <tr><td>Command palette</td><td class="mono">pop 120 ms + backdrop fade</td><td>Instant</td></tr>
+          <tr><td>Perf bars</td><td class="mono">grow-up 480 ms on view</td><td>Static height</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="spec" id="s7">
+    <div class="spec-head"><span class="spec-num">07 /</span><h2 class="spec-title">Responsive <em>matrix</em></h2></div>
+    <div class="spec-body">
+      <table class="t">
+        <thead><tr><th>Element</th><th>≤900</th><th>901–999</th><th>1000+</th></tr></thead>
+        <tbody>
+          <tr><td>Navigation</td><td>bottom tab bar</td><td>sidenav</td><td>sidenav (232px)</td></tr>
+          <tr><td>Case queue</td><td>stacked cards</td><td>table</td><td>table</td></tr>
+          <tr><td>Case detail</td><td>single column (rail below)</td><td>single column</td><td>work + 380px rail</td></tr>
+          <tr><td>Doc viewer</td><td>canvas; rail below</td><td>canvas + rail</td><td>canvas + 320px rail</td></tr>
+          <tr><td>Keyboard hints</td><td>hidden</td><td>shown</td><td>shown</td></tr>
+          <tr><td>Performance</td><td>1 col</td><td>1 col</td><td>chart + leaderboard 2-up</td></tr>
+        </tbody>
+      </table>
+      <p>The agent zone is desktop-first (most fulfilment happens at a desk) but fully usable on a phone for triage on the move — hence the bottom tab bar + card fallbacks.</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s8">
+    <div class="spec-head"><span class="spec-num">08 /</span><h2 class="spec-title">All <em>states</em></h2></div>
+    <div class="spec-body">
+      <p>10 documented in <a href="states.html" class="linked">states.html</a>: empty queue (caught-up, positive framing) · loading skeleton · command palette · SLA-breach banner · confirm-before-reassign · internal-note safety (yellow lane) · offline action queue · dark mode · case reassigned-away (read-only, draft preserved) · admin viewing-as (logged, read-only).</p>
+    </div>
+  </section>
+
+  <section class="spec" id="s9">
+    <div class="spec-head"><span class="spec-num">09 /</span><h2 class="spec-title">Accessibility <em>checklist</em></h2></div>
+    <div class="spec-body">
+      <div class="check pass">SideNav is <span class="mono">&lt;nav&gt;</span>; active link <span class="mono">aria-current="page"</span>; counts in accessible text</div>
+      <div class="check pass">Queue table is a real <span class="mono">&lt;table&gt;</span> with header scope; rows keyboard-focusable</div>
+      <div class="check pass">All keyboard shortcuts have a visible hint bar + <span class="mono">?</span> full-list dialog</div>
+      <div class="check pass">Command palette: <span class="mono">role="dialog"</span>, focus-trapped, arrow-key list, Esc closes</div>
+      <div class="check pass">Status changer is a labelled <span class="mono">&lt;select&gt;</span>; change announced via live region</div>
+      <div class="check pass">Internal-note mode announced ("Internal note — only agents see this") beyond colour</div>
+      <div class="check pass">Conversation messages distinguish client / agent / note / system semantically, not by colour alone</div>
+      <div class="check pass">Doc viewer zoom controls labelled; QC results carry icon + text</div>
+      <div class="check pass">Dark mode meets the same AA contrast floor as light</div>
+      <div class="check pass">Confirm dialogs (reassign, reject, flag) focus-trap + require explicit action</div>
+      <div class="check pass">SLA / priority never colour-only — paired with text ("Over by 1d", "High")</div>
+      <div class="check pass">Reduced-motion respected via tokens.css; bar charts render static</div>
+    </div>
+  </section>
+
+  <section class="spec" id="s10">
+    <div class="spec-head"><span class="spec-num">10 /</span><h2 class="spec-title">Hand-off &amp; <em>self-review</em></h2></div>
+    <div class="spec-body">
+      <h4 class="t-h4" style="margin: 0 0 6px;">Engineering notes</h4>
+      <ul class="l">
+        <li><strong>App shell shared with F6/F9.</strong> The SideNav, top bar, and content frame come from <span class="mono">@proxiserve/ui</span>; the agent variant sets <span class="mono">density="compact"</span> + dark-mode capable + grouped nav. F9 admin uses the same shell with admin nav items.</li>
+        <li><strong>Conversation lanes.</strong> One thread, three message types: <span class="mono">client</span>, <span class="mono">agent</span>, <span class="mono">internal_note</span>, plus <span class="mono">system</span> events. The API filters <span class="mono">internal_note</span> out of any client-facing read (F5/F6) at the query layer — not just the UI — so an internal note can never leak even via API.</li>
+        <li><strong>Real-time.</strong> WebSocket channel per case for live message + status + assignment updates. Reassignment-away and admin-viewing banners are driven by the same channel. Offline writes queue and replay on reconnect.</li>
+        <li><strong>SLA engine.</strong> Each service has a turnaround target; the queue computes age vs target and emits <span class="mono">approaching</span> (75%) and <span class="mono">breached</span> (100%) events. Breaches sort to top + trigger the banner + notify admin.</li>
+        <li><strong>Document QC.</strong> Brightness/blur/face heuristics run server-side on upload (shared with F3); results cached and shown in the viewer. The agent's manual verdict is the authority — auto-checks only advise.</li>
+        <li><strong>Assignment.</strong> Dispatcher assigns by service skill + current load + availability toggle + daily cap. Agents can pull from the unassigned pool when caught up.</li>
+        <li><strong>Audit.</strong> Every status change, reassignment, document verdict, and admin view writes an immutable audit entry (surfaced in F9). Internal notes are retained but flagged staff-only.</li>
+        <li><strong>Dark mode.</strong> Token swap on a <span class="mono">data-theme="dark"</span> root; persisted per user. Brand + status hues held constant for recognition.</li>
+        <li><strong>Analytics.</strong> agent_today_view, agent_case_open {code}, agent_status_change {from,to}, agent_reply_sent, agent_note_added, agent_doc_verdict {accept|reject}, agent_reassign, agent_flag_admin, agent_palette_open, agent_unassigned_pull, agent_availability {on|off}.</li>
+      </ul>
+
+      <h4 class="t-h4" style="margin: 24px 0 12px;">Designer self-review rubric (D.8)</h4>
+      <div class="check pass">01 — Real content (real codes, names, services, RWF fees, SLA ages)</div>
+      <div class="check pass">02 — Spacing scale obeyed (tighter density, still on scale)</div>
+      <div class="check pass">03 — Semantic tokens only (+ dark-mode token swap)</div>
+      <div class="check pass">04 — Works on mobile (tab bar + card fallbacks) though desktop-first</div>
+      <div class="check pass">05 — Safe-area respected on mobile tab bar</div>
+      <div class="check pass">06 — All states covered (10 documented)</div>
+      <div class="check pass">07 — Reduced-motion variant</div>
+      <div class="check pass">08 — A11y checklist signed (12/12)</div>
+      <div class="check pass">09 — i18n length budget honoured</div>
+      <div class="check pass">10 — Icon family consistent (Lucide line)</div>
+      <div class="check pass">11 — Banned patterns absent</div>
+      <div class="check pass">12 — Hierarchy obvious; dense but never cramped; agent zone visually distinct from client</div>
+      <div class="check pass">13 — CTAs unambiguous ("Mark step done", "Send", "Accept & mark done", "Reassign case")</div>
+      <div class="check pass">14 — Edge cases (10, incl. the internal-note safety + admin-viewing trail)</div>
+      <div class="check pass">15 — Final line invites next flow</div>
+
+      <p style="margin-top: 24px;"><span class="score">Score · <span class="big">15</span> / 15</span></p>
+
+      <div class="callout" style="margin-top: 32px;">
+        Flow 8 is complete. Type "Design Flow 9." for the Admin Panel — analytics, the service schema builder, pricing, oversight, broadcasts, and the audit log. Or correct anything here first.
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

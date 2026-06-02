@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Pay · PRX-2026-00483 · ProxiServe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="payments.css" />
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="pay-topbar">
+  <div class="container">
+    <div class="pay-topbar__inner">
+      <a href="../Flow 6 — Client Dashboard/dashboard.html" class="pay-wordmark"><span class="ico"></span> Proxi<em>Serve</em></a>
+      <div class="pay-crumb"><a href="../Flow 6 — Client Dashboard/application-detail.html">Passport renewal</a><span class="sep">/</span><strong>Payment</strong></div>
+      <span class="pay-secure">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        SECURE · PCI-DSS
+      </span>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="pay-shell">
+  <div class="container">
+    <div class="pay-page">
+
+      <div class="pay-main">
+        <header class="pay-head">
+          <span class="pay-head__num">Payment · choose method</span>
+          <h1>How would you like to <em>pay?</em></h1>
+          <p class="pay-head__lede">Your agent confirmed the fee. <em>Pay now</em> to move your passport renewal forward — or pay your agent directly.</p>
+        </header>
+
+        <div class="pay-banner pay-banner--ok">
+          <strong>Fee confirmed by Aline M.</strong> on 23 May · RWF 15,000 service fee. The government printing fee is paid separately at the office.
+        </div>
+
+        <div class="method-list" role="radiogroup" aria-label="Payment method">
+
+          <a href="mobile-money.html" class="method is-selected">
+            <span class="method__logo method__logo--mtn">MTN<br>MoMo</span>
+            <div>
+              <div class="method__name">MTN <em>Mobile Money</em></div>
+              <div class="method__desc">Approve a prompt on your phone · most popular</div>
+            </div>
+            <span class="method__radio" aria-hidden="true"></span>
+          </a>
+
+          <a href="mobile-money.html" class="method">
+            <span class="method__logo method__logo--airtel">Airtel</span>
+            <div>
+              <div class="method__name">Airtel <em>Money</em></div>
+              <div class="method__desc">Approve a prompt on your phone</div>
+            </div>
+            <span class="method__radio" aria-hidden="true"></span>
+          </a>
+
+          <a href="card-3ds.html" class="method">
+            <span class="method__logo method__logo--card">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            </span>
+            <div>
+              <div class="method__name">Card <em>(Visa / Mastercard)</em></div>
+              <div class="method__desc">Debit or credit · verified with your bank</div>
+            </div>
+            <span class="method__radio" aria-hidden="true"></span>
+          </a>
+
+          <a href="../Flow 7 — Payments/states.html#pay-agent" class="method">
+            <span class="method__logo method__logo--agent">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            </span>
+            <div>
+              <div class="method__name">Pay my <em>agent directly</em></div>
+              <div class="method__desc">Cash or transfer to Aline · she confirms receipt</div>
+            </div>
+            <span class="method__badge">Off-platform</span>
+          </a>
+
+        </div>
+
+        <div class="trust-strip">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg> Encrypted end-to-end</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg> No card details stored</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg> Refundable if we err</span>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <aside class="pay-summary" aria-label="Payment summary">
+        <div class="strip"></div>
+        <span class="pay-summary__cat">Identity &amp; civil</span>
+        <h3>Passport <em>renewal</em></h3>
+        <div class="pay-summary__code">PRX-2026-00483 · Aline M.</div>
+        <div class="fee-line"><span class="l">Service fee (standard)</span><span class="v">RWF 15,000</span></div>
+        <div class="fee-line"><span class="l">VAT</span><span class="v">incl.</span></div>
+        <div class="fee-line"><span class="l">Platform fee</span><span class="v">RWF 0</span></div>
+        <div class="fee-line total"><span class="l">Pay now</span><span class="v">RWF <em>15,000</em></span></div>
+        <p class="pay-summary__note">Government printing fee (RWF 75,000) is paid separately at the Immigration office — not collected here.</p>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<script>
+  document.querySelectorAll('.method').forEach(m => {
+    m.addEventListener('mouseenter', () => {});
+  });
+</script>
+</body>
+</html>
