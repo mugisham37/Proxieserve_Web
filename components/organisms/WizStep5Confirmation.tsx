@@ -130,11 +130,19 @@ export function WizStep5Confirmation({ service }: WizStep5ConfirmationProps) {
             title="Track your application"
             body={`Use code ${code} at any time on the ProxiServe website to check your application status.`}
           />
-          <WhatNextItem
-            num={3}
-            title="Payment confirmation"
-            body="Your agent confirms the total cost before collecting any payment. You pay nothing until you approve."
-          />
+          {service.fee > 0 ? (
+            <WhatNextItem
+              num={3}
+              title="Pay your service fee"
+              body={`Your service fee is ready to pay now. Click "Proceed to payment" below to complete it securely online.`}
+            />
+          ) : (
+            <WhatNextItem
+              num={3}
+              title="No payment needed"
+              body="This service has no platform fee. Your agent will guide you on any government office payments required."
+            />
+          )}
         </div>
       </motion.div>
 
@@ -143,20 +151,33 @@ export function WizStep5Confirmation({ service }: WizStep5ConfirmationProps) {
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.3, ease: [0.2, 0, 0, 1] }}
-        className="flex flex-wrap items-center justify-center gap-3"
+        className="flex flex-col items-center gap-3 w-full"
       >
-        <Link
-          href={`/?track=${code}`}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] bg-[var(--ink)] text-[var(--paper)] font-serif italic text-[15px] hover:opacity-90 transition-opacity"
-        >
-          Track my application →
-        </Link>
-        <Link
-          href="/services"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] border border-[var(--rule-strong)] font-serif italic text-[15px] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
-        >
-          Browse services
-        </Link>
+        {/* Payment CTA — shown when service has a fee */}
+        {service.fee > 0 && (
+          <Link
+            href={`/pay/${code}/method-choice`}
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-[var(--r-pill)] bg-[var(--ink)] text-[var(--paper)] font-serif italic text-[16px] hover:opacity-90 transition-opacity"
+          >
+            Proceed to payment →
+          </Link>
+        )}
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href={`/?track=${code}`}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] border border-[var(--rule-strong)] font-serif italic text-[15px] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
+          >
+            {service.fee > 0 ? "Pay later — track application" : "Track my application →"}
+          </Link>
+          {!service.fee && (
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] border border-[var(--rule-strong)] font-serif italic text-[15px] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
+            >
+              Browse services
+            </Link>
+          )}
+        </div>
       </motion.div>
 
       {/* Notification preference */}
