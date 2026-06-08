@@ -111,12 +111,14 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
       )}
     >
       {/* Desktop sidenav */}
-      <SideNav
-        user={MOCK_USER}
-        unreadCount={unreadCount}
-        actionCount={actionCount}
-        onSignOut={handleSignOut}
-      />
+      <React.Suspense>
+        <SideNav
+          user={MOCK_USER}
+          unreadCount={unreadCount}
+          actionCount={actionCount}
+          onSignOut={handleSignOut}
+        />
+      </React.Suspense>
 
       {/* Right column: top bar + banners + main + tab bar */}
       <div className="flex flex-col min-w-0">
@@ -159,7 +161,9 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
         </main>
 
         {/* Mobile bottom tab bar */}
-        <MobileTabBar unreadCount={unreadCount} />
+        <React.Suspense>
+          <MobileTabBar unreadCount={unreadCount} />
+        </React.Suspense>
       </div>
 
       {/* Session expired modal */}

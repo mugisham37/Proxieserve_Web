@@ -11,7 +11,9 @@ export const metadata: Metadata = {
 export default function StaffLoginPage() {
   return (
     <AuthShell zone="staff">
-      <StaffLoginForm />
+      <React.Suspense>
+        <StaffLoginForm />
+      </React.Suspense>
     </AuthShell>
   );
 }
