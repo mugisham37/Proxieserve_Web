@@ -31,14 +31,11 @@ export function PayMobileMoney() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<MomoFormData>({
     resolver: zodResolver(momoSchema),
     defaultValues: { localNumber: "", isAccountPhone: true },
   });
-
-  const localNumber = watch("localNumber") ?? "";
 
   function maskPhone(num: string) {
     if (num.length < 6) return `78 8 *** ${num.slice(-3) || "***"}`;
@@ -194,7 +191,11 @@ export function PayMobileMoney() {
               </motion.div>
             ) : (
               <motion.div key="stage-wait" {...motionProps}>
-                <div className="flex flex-col items-center gap-8 py-4 text-center">
+                <div
+                  className="flex flex-col items-center gap-8 py-4 text-center"
+                  aria-live="polite"
+                  aria-label="Waiting for mobile money payment approval"
+                >
                   <PhonePulse active />
 
                   <div className="flex flex-col gap-3">

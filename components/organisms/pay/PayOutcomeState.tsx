@@ -3,7 +3,6 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import {
-  RefreshCw,
   Clock,
   CheckCircle2,
   XCircle,
@@ -22,7 +21,6 @@ import { DisputeForm } from "@/components/molecules/DisputeForm";
 import { PayStatusTag } from "@/components/atoms/PayStatusTag";
 import { usePayment } from "@/lib/payment-context";
 import type { PaymentOutcome } from "@/lib/types/payment";
-import { formatRWF } from "@/lib/types/payment";
 
 interface StateConfig {
   variant: "ok" | "danger" | "warn" | "info" | "brand";
@@ -61,7 +59,7 @@ const STATE_CONFIGS: Record<PaymentOutcome, StateConfig> = {
     tags: [{ label: "No charge made", variant: "ok" }, { label: "Declined", variant: "danger" }],
     primaryLabel: "Try again",
     secondaryLabel: "Choose another method",
-    primaryAction: ({ router, applicationId }) => router.back(),
+    primaryAction: ({ router }) => router.back(),
     secondaryAction: ({ router, applicationId }) => router.push(`/pay/${applicationId}/method-choice`),
   },
   "awaiting-agent": {
@@ -78,7 +76,7 @@ const STATE_CONFIGS: Record<PaymentOutcome, StateConfig> = {
   "already-paid": {
     variant: "ok",
     icon: <CheckCircle2 size={36} strokeWidth={1.5} />,
-    heading: "You&apos;re all paid up",
+    heading: "You're all paid up",
     body: "This application has already been paid. Nothing is due. If you believe this is an error, contact support.",
     tags: [{ label: "Paid", variant: "ok" }],
     primaryLabel: "View receipt",
