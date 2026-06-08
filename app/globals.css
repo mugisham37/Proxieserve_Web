@@ -631,6 +631,83 @@
 }
 
 /* ============================================================
+   PAYMENT FLOW (Flow 7) TOKENS & ANIMATIONS
+   ============================================================ */
+
+:root {
+  /* Card visual gradient */
+  --card-dark-start: #2e2823;
+  --card-dark-end: #1a1612;
+  --card-chip-start: #e9b530;
+  --card-chip-end: #c9942a;
+
+  /* Payment layout constraints */
+  --pay-receipt-max: 560px;
+  --pay-tds-max: 440px;
+  --pay-sidebar: 340px;
+}
+
+/* Phone pulsing ring (mobile money wait screen) */
+@keyframes phone-ring {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Receipt entry pop */
+@keyframes receipt-pop {
+  from {
+    transform: scale(0.94);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Success checkmark pop */
+@keyframes check-pop {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Card visual clip-path (notched bottom-right corner) */
+.card-visual-clip {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 24px),
+    calc(100% - 24px) 100%,
+    0 100%
+  );
+}
+
+/* Perforated divider (receipt) */
+.perforated {
+  border-top: 2px dashed var(--rule);
+}
+
+/* Payment method selection ring */
+.method-selected {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* ============================================================
    REDUCED MOTION
    ============================================================ */
 
