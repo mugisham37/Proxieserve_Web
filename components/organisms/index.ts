@@ -23,3 +23,6 @@ export { ServiceFAQsSection } from "./ServiceFAQsSection";
 export { RelatedServicesSection } from "./RelatedServicesSection";
 export { ServicesHelpBand } from "./ServicesHelpBand";
 export { StickyServiceBar } from "./StickyServiceBar";
+
+// Flow 6 — Client Dashboard
+export { AppShell } from "./AppShell";

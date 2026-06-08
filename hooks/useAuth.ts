@@ -92,7 +92,7 @@ export function useLogin() {
     onSuccess: (data) => {
       syncSession(data.session);
 
-      const nextPath = searchParams.get("next") ?? "/";
+      const nextPath = searchParams.get("next") ?? "/dashboard";
       if (!data.session.isEmailVerified) {
         router.push(buildVerifyUrl(data.maskedEmail, nextPath));
         return;

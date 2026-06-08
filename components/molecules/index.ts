@@ -33,3 +33,21 @@ export { ArchivedServiceCard } from "./ArchivedServiceCard";
 export { EmptySearch } from "./EmptySearch";
 export { ServiceSkeletonCard } from "./ServiceSkeletonCard";
 export { Service404Card } from "./Service404Card";
+
+// Flow 6 — Client Dashboard
+export { SideNavLink } from "./SideNavLink";
+export { SideNav } from "./SideNav";
+export { UserChip } from "./UserChip";
+export { MobileTopBar } from "./MobileTopBar";
+export { MobileTabBar } from "./MobileTabBar";
+export { WelcomeBanner } from "./WelcomeBanner";
+export { ApplicationCard } from "./ApplicationCard";
+export { RecentMessageRow } from "./RecentMessageRow";
+export { HistoryRow } from "./HistoryRow";
+export { InAppStatusHero } from "./InAppStatusHero";
+export { DetailTabs } from "./DetailTabs";
+export type { DetailTab } from "./DetailTabs";
+export { SettingsSection } from "./SettingsSection";
+export { SettingsRow } from "./SettingsRow";
+export { TrustedDeviceRow } from "./TrustedDeviceRow";
+export { DangerZone } from "./DangerZone";

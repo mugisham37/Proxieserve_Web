@@ -30,3 +30,10 @@ export { SectionNum } from "./SectionNum";
 export { Divider } from "./Divider";
 
 export { SearchInput } from "./SearchInput";
+
+export { ProgressNodes } from "./ProgressNodes";
+export type { ProgressStep } from "./ProgressNodes";
+
+export { StatTile } from "./StatTile";
+
+export { QuickActionChip } from "./QuickActionChip";
