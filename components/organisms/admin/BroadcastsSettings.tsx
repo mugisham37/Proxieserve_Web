@@ -17,7 +17,7 @@ const DATA_RETENTION_OPTIONS = [
 ];
 
 export function BroadcastsSettings() {
-  const { broadcasts, settings } = useAdminState();
+  const { broadcasts, settings, darkMode } = useAdminState();
   const dispatch = useAdminDispatch();
 
   function patchSettings(patch: Parameters<typeof dispatch>[0] & { type: "UPDATE_SETTINGS" }) {
@@ -158,16 +158,11 @@ export function BroadcastsSettings() {
           <SettingsGroup title="Appearance">
             <SettingRow
               label="Dark mode"
-              description="Use dark theme across the admin panel"
+              description="Use dark theme across the admin panel (default for power users)"
             >
               <Switch
-                checked={settings.compactTables || false}
-                onChange={(val) =>
-                  dispatch({
-                    type: "UPDATE_SETTINGS",
-                    payload: { compactTables: val },
-                  })
-                }
+                checked={darkMode}
+                onChange={() => dispatch({ type: "TOGGLE_DARK_MODE" })}
               />
             </SettingRow>
             <SettingRow

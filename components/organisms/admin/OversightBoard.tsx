@@ -8,6 +8,7 @@ import { AppButton } from "@/components/atoms/AppButton";
 import { CaseOversightRow } from "@/components/molecules/CaseOversightRow";
 import { AuditRow } from "@/components/molecules/AuditRow";
 import { PermissionBoundaryDialog } from "@/components/molecules/PermissionBoundaryDialog";
+import { AdminEmptyState } from "@/components/molecules/AdminEmptyState";
 import {
   useAdminState,
   useAdminDispatch,
@@ -124,11 +125,11 @@ export function OversightBoard() {
               <tbody>
                 {filteredCases.length === 0 ? (
                   <tr>
-                    <td
-                      colSpan={7}
-                      className="px-[16px] py-[40px] text-center font-sans text-[13px] text-[var(--ink-muted)]"
-                    >
-                      No cases match this filter
+                    <td colSpan={7}>
+                      <AdminEmptyState
+                        title="No cases here"
+                        description="No cases match this filter. Try switching to 'All cases' to see the full list."
+                      />
                     </td>
                   </tr>
                 ) : (
@@ -190,9 +191,10 @@ export function OversightBoard() {
             aria-label="Audit log entries"
           >
             {filteredAudit.length === 0 ? (
-              <p className="px-[16px] py-[40px] text-center font-sans text-[13px] text-[var(--ink-muted)]">
-                No entries match this filter
-              </p>
+              <AdminEmptyState
+                title="No audit entries"
+                description="No log entries match this filter, or this is a fresh installation with no recorded actions yet."
+              />
             ) : (
               <>
                 {filteredAudit.slice(0, auditVisible).map((entry) => (

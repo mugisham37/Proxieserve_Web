@@ -22,6 +22,20 @@ function AdminShellInner({ children }: { children: React.ReactNode }) {
         "grid grid-cols-1 min-[980px]:grid-cols-[232px_1fr]"
       )}
     >
+      {/* Skip to content */}
+      <a
+        href="#main-content"
+        className={cn(
+          "sr-only focus:not-sr-only",
+          "absolute top-[8px] left-[8px] z-[100]",
+          "px-[12px] py-[6px] rounded-[var(--r-md)]",
+          "bg-[var(--ink)] text-[var(--paper)]",
+          "font-sans text-[13px] font-medium",
+          "focus:outline-none focus:shadow-[var(--focus-ring)]"
+        )}
+      >
+        Skip to main content
+      </a>
       {/* Desktop sidenav */}
       <React.Suspense>
         <AdminSideNav />
