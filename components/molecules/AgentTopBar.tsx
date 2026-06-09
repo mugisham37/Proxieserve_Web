@@ -2,18 +2,15 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { KbdHint } from "@/components/atoms/KbdHint";
 import { AvailabilityDot } from "@/components/atoms/AvailabilityDot";
-import { useAgentState, useAgentDispatch, useToggleAvailability } from "@/lib/agent-context";
+import { NotificationBell } from "@/components/atoms/NotificationBell";
+import { useAgentState, useToggleAvailability } from "@/lib/agent-context";
 
 export function AgentTopBar() {
-  const { availability, cases } = useAgentState();
-  const dispatch = useAgentDispatch();
+  const { availability } = useAgentState();
   const toggleAvailability = useToggleAvailability();
-
-  const actionCount = cases.filter((c) => c.status === "action-required").length;
 
   const handleSearchFocus = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,34 +107,7 @@ export function AgentTopBar() {
       </button>
 
       {/* Notifications bell */}
-      <button
-        type="button"
-        aria-label={
-          actionCount > 0
-            ? `Notifications — ${actionCount} unread`
-            : "Notifications"
-        }
-        className={cn(
-          "relative flex items-center justify-center",
-          "w-[36px] h-[36px] rounded-[var(--r-md)]",
-          "text-[var(--ink-muted)]",
-          "transition-colors duration-[var(--m-fast)]",
-          "hover:bg-[var(--paper)] hover:text-[var(--ink)]",
-          "focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
-        )}
-      >
-        <Bell size={18} />
-        {actionCount > 0 && (
-          <span
-            aria-hidden="true"
-            className={cn(
-              "absolute top-[6px] right-[6px]",
-              "w-[8px] h-[8px] rounded-full",
-              "bg-[var(--danger)]"
-            )}
-          />
-        )}
-      </button>
+      <NotificationBell />
     </div>
   );
 }

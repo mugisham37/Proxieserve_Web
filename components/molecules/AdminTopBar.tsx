@@ -3,9 +3,10 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { KbdHint } from "@/components/atoms/KbdHint";
+import { NotificationBell } from "@/components/atoms/NotificationBell";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
 
 const BREADCRUMB_MAP: Record<string, string> = {
@@ -18,11 +19,9 @@ const BREADCRUMB_MAP: Record<string, string> = {
 
 export function AdminTopBar() {
   const pathname = usePathname();
-  const { alerts, darkMode } = useAdminState();
+  const { darkMode } = useAdminState();
   const dispatch = useAdminDispatch();
   const searchRef = React.useRef<HTMLInputElement>(null);
-
-  const urgentCount = alerts.filter((a) => a.severity === "danger").length;
 
   const section =
     Object.entries(BREADCRUMB_MAP).find(([key]) =>
@@ -129,30 +128,7 @@ export function AdminTopBar() {
       </button>
 
       {/* Notifications bell */}
-      <button
-        type="button"
-        aria-label={
-          urgentCount > 0
-            ? `Notifications — ${urgentCount} urgent`
-            : "Notifications"
-        }
-        className={cn(
-          "relative flex items-center justify-center",
-          "w-[36px] h-[36px] rounded-[var(--r-md)]",
-          "text-[var(--ink-muted)]",
-          "transition-colors duration-[var(--m-fast)]",
-          "hover:bg-[var(--paper)] hover:text-[var(--ink)]",
-          "focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
-        )}
-      >
-        <Bell size={18} />
-        {urgentCount > 0 && (
-          <span
-            aria-hidden="true"
-            className="absolute top-[6px] right-[6px] w-[8px] h-[8px] rounded-full bg-[var(--danger)]"
-          />
-        )}
-      </button>
+      <NotificationBell />
     </div>
   );
 }
