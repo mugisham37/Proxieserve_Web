@@ -1,0 +1,38 @@
+import type { MetadataRoute } from "next";
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: "ProxiServe",
+    short_name: "ProxiServe",
+    description:
+      "Skip the queues and confusing forms. A trained ProxiServe agent handles your government paperwork on your behalf.",
+    start_url: "/",
+    display: "standalone",
+    orientation: "portrait-primary",
+    background_color: "#F2EBD7",
+    theme_color: "#1A1612",
+    categories: ["productivity", "government", "utilities"],
+    lang: "en",
+    icons: [
+      {
+        src: "/icons/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icons/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icons/icon-512-maskable.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
+    ],
+    screenshots: [],
+  };
+}

@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import { Providers } from "@/lib/providers";
 import { Toaster } from "@/components/molecules/Toaster";
+import { PwaInit } from "@/components/atoms/PwaInit";
+import { InstallPrompt } from "@/components/molecules/InstallPrompt";
 
 type Locale = "en" | "rw" | "fr";
 const VALID_LOCALES: Locale[] = ["en", "rw", "fr"];
@@ -88,6 +90,8 @@ export default async function RootLayout({
         <Providers>
           {children}
           <Toaster />
+          <PwaInit />
+          <InstallPrompt />
         </Providers>
       </body>
     </html>
