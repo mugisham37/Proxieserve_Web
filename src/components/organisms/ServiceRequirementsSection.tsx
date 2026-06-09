@@ -4,9 +4,9 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
-import { RequirementRow } from "@/components/molecules/RequirementRow";
-import { EligibilityGate } from "@/components/molecules/EligibilityGate";
-import { InPersonCallout } from "@/components/molecules/InPersonCallout";
+import { RequirementRow } from "@/components/molecules/dashboard/RequirementRow";
+import { EligibilityGate } from "@/components/molecules/wizard/EligibilityGate";
+import { InPersonCallout } from "@/components/molecules/marketing/InPersonCallout";
 import { type Service } from "@/lib/services-data";
 
 interface ServiceRequirementsSectionProps {

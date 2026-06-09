@@ -3,9 +3,9 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { PaymentMethodCard } from "@/components/molecules/PaymentMethodCard";
-import { DarkFeeSummary } from "@/components/molecules/DarkFeeSummary";
-import { TrustStrip } from "@/components/molecules/TrustStrip";
+import { PaymentMethodCard } from "@/components/molecules/payment/PaymentMethodCard";
+import { DarkFeeSummary } from "@/components/molecules/payment/DarkFeeSummary";
+import { TrustStrip } from "@/components/molecules/marketing/TrustStrip";
 import { usePayment } from "@/lib/payment-context";
 import type { PaymentMethod } from "@/lib/types/payment";
 import { formatRWF } from "@/lib/types/payment";

@@ -4,7 +4,7 @@ import * as React from "react";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useNotifications } from "@/lib/notification-context";
-import { NotificationPanel } from "@/components/molecules/NotificationPanel";
+import { NotificationPanel } from "@/components/molecules/dashboard/NotificationPanel";
 
 interface NotificationBellProps {
   className?: string;

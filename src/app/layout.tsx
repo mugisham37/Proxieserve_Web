@@ -3,9 +3,9 @@ import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
 import { Providers } from "@/lib/providers";
-import { Toaster } from "@/components/molecules/Toaster";
+import { Toaster } from "@/components/molecules/system/Toaster";
 import { PwaInit } from "@/components/atoms/shared/PwaInit";
-import { InstallPrompt } from "@/components/molecules/InstallPrompt";
+import { InstallPrompt } from "@/components/molecules/system/InstallPrompt";
 
 type Locale = "en" | "rw" | "fr";
 const VALID_LOCALES: Locale[] = ["en", "rw", "fr"];

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AppButton } from "@/components/atoms/shared/AppButton";
-import { ServiceCatalogueRow } from "@/components/molecules/ServiceCatalogueRow";
+import { ServiceCatalogueRow } from "@/components/molecules/admin/ServiceCatalogueRow";
 import { SchemaCanvas } from "@/components/organisms/admin/SchemaCanvas";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
 import type { ServiceRow } from "@/lib/types/admin";

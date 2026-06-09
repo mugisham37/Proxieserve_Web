@@ -3,9 +3,9 @@
 import * as React from "react";
 import { TopBar } from "@/components/organisms/TopBar";
 import { MobileSheet } from "@/components/organisms/MobileSheet";
-import { CookieBanner } from "@/components/molecules/CookieBanner";
-import { ReturningBanner } from "@/components/molecules/ReturningBanner";
-import { EmailVerifyBanner } from "@/components/molecules/EmailVerifyBanner";
+import { CookieBanner } from "@/components/molecules/system/CookieBanner";
+import { ReturningBanner } from "@/components/molecules/system/ReturningBanner";
+import { EmailVerifyBanner } from "@/components/molecules/auth/EmailVerifyBanner";
 import { useAuth } from "@/lib/auth-context";
 import { useResendOtp } from "@/hooks/useAuth";
 

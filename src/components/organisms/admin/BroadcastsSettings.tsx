@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 import { Switch } from "@/components/atoms/shared/Switch";
 import { AppButton } from "@/components/atoms/shared/AppButton";
 import { BroadcastComposer } from "@/components/organisms/admin/BroadcastComposer";
-import { RecentBroadcastRow } from "@/components/molecules/RecentBroadcastRow";
-import { MaintenancePanel } from "@/components/molecules/MaintenancePanel";
+import { RecentBroadcastRow } from "@/components/molecules/admin/RecentBroadcastRow";
+import { MaintenancePanel } from "@/components/molecules/system/MaintenancePanel";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
 
 const DATA_RETENTION_OPTIONS = [

@@ -4,12 +4,12 @@ import * as React from "react";
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { AdminProvider, useAdminState, useAdminDispatch } from "@/lib/admin-context";
-import { AdminSideNav } from "@/components/molecules/AdminSideNav";
-import { AdminTopBar } from "@/components/molecules/AdminTopBar";
-import { AdminMobileTabBar } from "@/components/molecules/AdminMobileTabBar";
-import { OfflineBanner } from "@/components/molecules/OfflineBanner";
+import { AdminSideNav } from "@/components/molecules/admin/AdminSideNav";
+import { AdminTopBar } from "@/components/molecules/admin/AdminTopBar";
+import { AdminMobileTabBar } from "@/components/molecules/admin/AdminMobileTabBar";
+import { OfflineBanner } from "@/components/molecules/system/OfflineBanner";
 import { OnboardingProvider, useOnboarding } from "@/lib/onboarding-context";
-import { Coachmark } from "@/components/molecules/Coachmark";
+import { Coachmark } from "@/components/molecules/system/Coachmark";
 
 function AdminTourStarter() {
   const { start } = useOnboarding();

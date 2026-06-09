@@ -3,10 +3,10 @@
 import * as React from "react";
 import { useSignOut } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
-import { SettingsSection } from "@/components/molecules/SettingsSection";
-import { SettingsRow } from "@/components/molecules/SettingsRow";
-import { TrustedDeviceRow } from "@/components/molecules/TrustedDeviceRow";
-import { DangerZone } from "@/components/molecules/DangerZone";
+import { SettingsSection } from "@/components/molecules/dashboard/SettingsSection";
+import { SettingsRow } from "@/components/molecules/dashboard/SettingsRow";
+import { TrustedDeviceRow } from "@/components/molecules/dashboard/TrustedDeviceRow";
+import { DangerZone } from "@/components/molecules/admin/DangerZone";
 import { Switch } from "@/components/atoms/shared/Switch";
 import { SegmentedGroup } from "@/components/atoms/wizard/SegmentedGroup";
 import {

@@ -6,10 +6,10 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { SearchInput } from "@/components/atoms/shared/SearchInput";
-import { ServiceFilterBar } from "@/components/molecules/ServiceFilterBar";
-import { CatalogueCard } from "@/components/molecules/CatalogueCard";
-import { ServiceSkeletonCard } from "@/components/molecules/ServiceSkeletonCard";
-import { EmptySearch } from "@/components/molecules/EmptySearch";
+import { ServiceFilterBar } from "@/components/molecules/marketing/ServiceFilterBar";
+import { CatalogueCard } from "@/components/molecules/marketing/CatalogueCard";
+import { ServiceSkeletonCard } from "@/components/molecules/marketing/ServiceSkeletonCard";
+import { EmptySearch } from "@/components/molecules/shared/EmptySearch";
 import { SERVICES, CATEGORY_LABELS, type ServiceCategory } from "@/lib/services-data";
 
 interface ServicesCatalogueGridProps {

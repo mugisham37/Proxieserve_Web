@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { DocRow } from "@/components/molecules/DocRow";
+import { DocRow } from "@/components/molecules/agent/DocRow";
 import type { DocFile } from "@/lib/tracker-data";
 
 interface DocsCardProps {

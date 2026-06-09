@@ -3,10 +3,10 @@
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { AuthCard } from "@/components/molecules/AuthCard";
-import { AuthBanner } from "@/components/molecules/AuthBanner";
-import { AuthFooterLinks } from "@/components/molecules/AuthFooterLinks";
-import { DeviceInfoCard } from "@/components/molecules/DeviceInfoCard";
+import { AuthCard } from "@/components/molecules/auth/AuthCard";
+import { AuthBanner } from "@/components/molecules/auth/AuthBanner";
+import { AuthFooterLinks } from "@/components/molecules/auth/AuthFooterLinks";
+import { DeviceInfoCard } from "@/components/molecules/system/DeviceInfoCard";
 import { OTPInput } from "@/components/atoms/auth/OTPInput";
 import { ResendCooldown } from "@/components/atoms/auth/ResendCooldown";
 import { useResendOtp, useVerifyOtp } from "@/hooks/useAuth";

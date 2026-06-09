@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { TimelineNode } from "@/components/molecules/TimelineNode";
+import { TimelineNode } from "@/components/molecules/shared/TimelineNode";
 import type { TimelineStep } from "@/lib/tracker-data";
 
 interface TimelineCardProps {

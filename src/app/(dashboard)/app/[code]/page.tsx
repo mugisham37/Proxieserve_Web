@@ -14,9 +14,9 @@ import {
   formatFileSize,
   MOCK_HISTORY,
 } from "@/lib/dashboard-data";
-import { InAppStatusHero } from "@/components/molecules/InAppStatusHero";
-import { DetailTabs } from "@/components/molecules/DetailTabs";
-import { HistoryRow } from "@/components/molecules/HistoryRow";
+import { InAppStatusHero } from "@/components/molecules/agent/InAppStatusHero";
+import { DetailTabs } from "@/components/molecules/agent/DetailTabs";
+import { HistoryRow } from "@/components/molecules/agent/HistoryRow";
 import type { DashboardMessage, DashboardDocument } from "@/lib/types/dashboard";
 
 // ─── Compact agent mini card (reference exact) ───────────────────────────────

@@ -6,10 +6,10 @@ import Link from "next/link";
 import type { Service } from "@/lib/services-data";
 import { useApplication } from "@/lib/application-context";
 import { useAuth } from "@/lib/auth-context";
-import { BigCodeChip } from "@/components/molecules/BigCodeChip";
-import { ChannelPill } from "@/components/molecules/ChannelPill";
-import { WhatNextItem } from "@/components/molecules/WhatNextItem";
-import { ConfirmPrefCard } from "@/components/molecules/ConfirmPrefCard";
+import { BigCodeChip } from "@/components/molecules/tracker/BigCodeChip";
+import { ChannelPill } from "@/components/molecules/shared/ChannelPill";
+import { WhatNextItem } from "@/components/molecules/marketing/WhatNextItem";
+import { ConfirmPrefCard } from "@/components/molecules/shared/ConfirmPrefCard";
 
 interface WizStep5ConfirmationProps {
   service: Service;

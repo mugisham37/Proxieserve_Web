@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { FileRow } from "./FileRow";
+import { FileRow } from "@/components/molecules/tracker/FileRow";
 import type { DocumentFile } from "@/lib/application-types";
 
 interface DropzoneProps {

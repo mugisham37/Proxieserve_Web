@@ -5,7 +5,7 @@ import { Download, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StatTile } from "@/components/atoms/admin/StatTile";
 import { QueueTable } from "@/components/organisms/QueueTable";
-import { KbdHintBar, QUEUE_HINTS } from "@/components/molecules/KbdHintBar";
+import { KbdHintBar, QUEUE_HINTS } from "@/components/molecules/system/KbdHintBar";
 import { useAgentState, useAgentDispatch } from "@/lib/agent-context";
 import { getAgentStats } from "@/lib/agent-data";
 

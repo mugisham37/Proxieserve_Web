@@ -6,10 +6,10 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
-import { ServiceCard } from "@/components/molecules/ServiceCard";
-import { EmptyState } from "@/components/molecules/EmptyState";
-import { ErrorState } from "@/components/molecules/ErrorState";
-import { OfflineBanner } from "@/components/molecules/OfflineBanner";
+import { ServiceCard } from "@/components/molecules/marketing/ServiceCard";
+import { EmptyState } from "@/components/molecules/shared/EmptyState";
+import { ErrorState } from "@/components/molecules/shared/ErrorState";
+import { OfflineBanner } from "@/components/molecules/system/OfflineBanner";
 
 type ColorVariant = "marigold" | "pink" | "green" | "blue" | "red" | "cream";
 

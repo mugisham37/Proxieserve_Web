@@ -4,15 +4,15 @@ import * as React from "react";
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { AgentProvider, useAgentState, useAgentDispatch } from "@/lib/agent-context";
-import { AgentSideNav } from "@/components/molecules/AgentSideNav";
-import { AgentTopBar } from "@/components/molecules/AgentTopBar";
-import { AgentMobileTabBar } from "@/components/molecules/AgentMobileTabBar";
-import { OfflineBanner } from "@/components/molecules/OfflineBanner";
-import { BannerSLA } from "@/components/molecules/BannerSLA";
-import { ConfirmModal } from "@/components/molecules/ConfirmModal";
-import { CommandPalette } from "@/components/molecules/CommandPalette";
+import { AgentSideNav } from "@/components/molecules/agent/AgentSideNav";
+import { AgentTopBar } from "@/components/molecules/agent/AgentTopBar";
+import { AgentMobileTabBar } from "@/components/molecules/agent/AgentMobileTabBar";
+import { OfflineBanner } from "@/components/molecules/system/OfflineBanner";
+import { BannerSLA } from "@/components/molecules/agent/BannerSLA";
+import { ConfirmModal } from "@/components/molecules/shared/ConfirmModal";
+import { CommandPalette } from "@/components/molecules/shared/CommandPalette";
 import { OnboardingProvider, useOnboarding } from "@/lib/onboarding-context";
-import { Coachmark } from "@/components/molecules/Coachmark";
+import { Coachmark } from "@/components/molecules/system/Coachmark";
 
 function AgentTourStarter() {
   const { start } = useOnboarding();

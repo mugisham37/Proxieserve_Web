@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
-import { StepCard } from "@/components/molecules/StepCard";
+import { StepCard } from "@/components/molecules/marketing/StepCard";
 
 const STEPS = [
   {

@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
-import { StepCard } from "@/components/molecules/StepCard";
+import { StepCard } from "@/components/molecules/marketing/StepCard";
 import { type Service } from "@/lib/services-data";
 
 interface ServiceStepsSectionProps {

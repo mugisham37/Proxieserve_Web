@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { CodeEntryInput } from "@/components/atoms/tracker/CodeEntryInput";
 import { PillButton } from "@/components/atoms/shared/PillButton";
-import { TrackerEntryTip } from "@/components/molecules/TrackerEntryTip";
-import { LostCodeRecoveryCard } from "@/components/molecules/LostCodeRecoveryCard";
+import { TrackerEntryTip } from "@/components/molecules/tracker/TrackerEntryTip";
+import { LostCodeRecoveryCard } from "@/components/molecules/tracker/LostCodeRecoveryCard";
 import { isValidTrackerCode, TRACKER_ERROR } from "@/lib/tracker";
 import { getApplicationByCode } from "@/lib/tracker-data";
 

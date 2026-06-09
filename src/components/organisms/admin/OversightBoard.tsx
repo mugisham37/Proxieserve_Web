@@ -5,10 +5,10 @@ import { AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AppButton } from "@/components/atoms/shared/AppButton";
-import { CaseOversightRow } from "@/components/molecules/CaseOversightRow";
-import { AuditRow } from "@/components/molecules/AuditRow";
-import { PermissionBoundaryDialog } from "@/components/molecules/PermissionBoundaryDialog";
-import { AdminEmptyState } from "@/components/molecules/AdminEmptyState";
+import { CaseOversightRow } from "@/components/molecules/agent/CaseOversightRow";
+import { AuditRow } from "@/components/molecules/admin/AuditRow";
+import { PermissionBoundaryDialog } from "@/components/molecules/admin/PermissionBoundaryDialog";
+import { AdminEmptyState } from "@/components/molecules/admin/AdminEmptyState";
 import {
   useAdminState,
   useAdminDispatch,

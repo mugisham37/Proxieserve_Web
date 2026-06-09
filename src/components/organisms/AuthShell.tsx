@@ -1,6 +1,6 @@
 import * as React from "react";
-import { AuthTopBar } from "@/components/molecules/AuthTopBar";
-import { AuthRail } from "@/components/molecules/AuthRail";
+import { AuthTopBar } from "@/components/molecules/auth/AuthTopBar";
+import { AuthRail } from "@/components/molecules/auth/AuthRail";
 import { cn } from "@/lib/utils";
 
 interface AuthShellProps {

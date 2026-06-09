@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { PillButton } from "@/components/atoms/shared/PillButton";
 import { StatusPill } from "@/components/atoms/shared/StatusPill";
-import { HeroStatusCard } from "@/components/molecules/HeroStatusCard";
-import { HeroDocumentCard } from "@/components/molecules/HeroDocumentCard";
-import { HeroMessageCard } from "@/components/molecules/HeroMessageCard";
+import { HeroStatusCard } from "@/components/molecules/marketing/HeroStatusCard";
+import { HeroDocumentCard } from "@/components/molecules/marketing/HeroDocumentCard";
+import { HeroMessageCard } from "@/components/molecules/marketing/HeroMessageCard";
 
 const TRUST_CHIPS = [
   { label: "Government-affiliated", variant: "info" as const },

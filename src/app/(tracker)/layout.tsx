@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TrackerTopBar } from "@/components/molecules/TrackerTopBar";
+import { TrackerTopBar } from "@/components/molecules/tracker/TrackerTopBar";
 
 export default function TrackerLayout({ children }: { children: React.ReactNode }) {
   return (

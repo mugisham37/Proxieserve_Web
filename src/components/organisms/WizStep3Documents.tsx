@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import type { Service } from "@/lib/services-data";
 import { useApplication } from "@/lib/application-context";
 import type { DocumentFile } from "@/lib/application-types";
-import { DocOverview } from "@/components/molecules/DocOverview";
-import { Dropzone } from "@/components/molecules/Dropzone";
-import { WizFooter } from "@/components/molecules/WizFooter";
-import { WizValidationBanner } from "@/components/molecules/WizValidationBanner";
+import { DocOverview } from "@/components/molecules/agent/DocOverview";
+import { Dropzone } from "@/components/molecules/wizard/Dropzone";
+import { WizFooter } from "@/components/molecules/wizard/WizFooter";
+import { WizValidationBanner } from "@/components/molecules/wizard/WizValidationBanner";
 
 interface WizStep3DocumentsProps {
   service: Service;

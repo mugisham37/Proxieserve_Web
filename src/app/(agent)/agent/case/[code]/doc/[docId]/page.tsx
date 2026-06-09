@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, RotateCcw, Download, Maximize2, Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FilmstripThumb } from "@/components/molecules/FilmstripThumb";
-import { QCCheckRow } from "@/components/molecules/QCCheckRow";
+import { FilmstripThumb } from "@/components/molecules/agent/FilmstripThumb";
+import { QCCheckRow } from "@/components/molecules/agent/QCCheckRow";
 import { MOCK_CASE_DETAIL, MOCK_DOC_QC } from "@/lib/agent-data";
 
 const ZOOM_STEPS = [50, 75, 100, 125, 150, 175, 200, 250];

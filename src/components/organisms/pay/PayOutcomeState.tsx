@@ -15,9 +15,9 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { PaymentResultHero } from "@/components/molecules/PaymentResultHero";
-import { StaleFeeNotice } from "@/components/molecules/StaleFeeNotice";
-import { DisputeForm } from "@/components/molecules/DisputeForm";
+import { PaymentResultHero } from "@/components/molecules/payment/PaymentResultHero";
+import { StaleFeeNotice } from "@/components/molecules/payment/StaleFeeNotice";
+import { DisputeForm } from "@/components/molecules/auth/DisputeForm";
 import { PayStatusTag } from "@/components/atoms/payment/PayStatusTag";
 import { usePayment } from "@/lib/payment-context";
 import type { PaymentOutcome } from "@/lib/types/payment";

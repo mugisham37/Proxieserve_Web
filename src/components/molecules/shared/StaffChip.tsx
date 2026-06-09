@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { type StaffRole } from "./RoleToggle";
+import { type StaffRole } from "@/components/molecules/auth/RoleToggle";
 
 interface StaffChipProps {
   role: StaffRole;

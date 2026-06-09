@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ReceiptRow } from "@/components/molecules/ReceiptRow";
+import { ReceiptRow } from "@/components/molecules/dashboard/ReceiptRow";
 import { PillButton } from "@/components/atoms/shared/PillButton";
 import { usePayment } from "@/lib/payment-context";
 import { useAuth } from "@/lib/auth-context";

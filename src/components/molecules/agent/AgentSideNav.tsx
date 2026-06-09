@@ -14,8 +14,8 @@ import {
   Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SideNavLink } from "@/components/molecules/SideNavLink";
-import { UserChip } from "@/components/molecules/UserChip";
+import { SideNavLink } from "@/components/molecules/system/SideNavLink";
+import { UserChip } from "@/components/molecules/shared/UserChip";
 import { AvailabilityDot } from "@/components/atoms/agent/AvailabilityDot";
 import { useAgentState, useAgentDispatch, useToggleAvailability } from "@/lib/agent-context";
 

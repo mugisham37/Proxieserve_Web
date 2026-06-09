@@ -6,16 +6,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { Service } from "@/lib/services-data";
 import { ApplicationProvider, useApplication } from "@/lib/application-context";
-import { WizTopBar } from "@/components/molecules/WizTopBar";
-import { WizStepper, WizStepperMobile } from "@/components/molecules/WizStepper";
-import { WizFooter } from "@/components/molecules/WizFooter";
-import { WizSummaryCard } from "@/components/molecules/WizSummaryCard";
-import { WizTipsCard } from "@/components/molecules/WizTipsCard";
-import { ResumeBanner } from "@/components/molecules/ResumeBanner";
-import { OfflineQueueOverlay } from "@/components/molecules/OfflineQueueOverlay";
-import { MultiTabConflictBanner } from "@/components/molecules/MultiTabConflictBanner";
-import { SchemaMigrateCard } from "@/components/molecules/SchemaMigrateCard";
-import { DraftExpiryBanner } from "@/components/molecules/DraftExpiryBanner";
+import { WizTopBar } from "@/components/molecules/wizard/WizTopBar";
+import { WizStepper, WizStepperMobile } from "@/components/molecules/wizard/WizStepper";
+import { WizFooter } from "@/components/molecules/wizard/WizFooter";
+import { WizSummaryCard } from "@/components/molecules/wizard/WizSummaryCard";
+import { WizTipsCard } from "@/components/molecules/wizard/WizTipsCard";
+import { ResumeBanner } from "@/components/molecules/system/ResumeBanner";
+import { OfflineQueueOverlay } from "@/components/molecules/system/OfflineQueueOverlay";
+import { MultiTabConflictBanner } from "@/components/molecules/system/MultiTabConflictBanner";
+import { SchemaMigrateCard } from "@/components/molecules/admin/SchemaMigrateCard";
+import { DraftExpiryBanner } from "@/components/molecules/system/DraftExpiryBanner";
 
 const STEP_LABELS = ["Personal info", "Service details", "Documents", "Review", "Confirmation"];
 

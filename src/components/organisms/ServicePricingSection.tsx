@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
-import { PricingTierCard } from "@/components/molecules/PricingTierCard";
+import { PricingTierCard } from "@/components/molecules/admin/PricingTierCard";
 import { type Service } from "@/lib/services-data";
 
 interface ServicePricingSectionProps {

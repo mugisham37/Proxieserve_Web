@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { WhyItem } from "@/components/molecules/WhyItem";
+import { WhyItem } from "@/components/molecules/marketing/WhyItem";
 
 const WHY_ITEMS = [
   {

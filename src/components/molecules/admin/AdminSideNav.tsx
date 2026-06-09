@@ -13,7 +13,7 @@ import {
   Sun,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SideNavLink } from "@/components/molecules/SideNavLink";
+import { SideNavLink } from "@/components/molecules/system/SideNavLink";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
 
 const NAV_ITEMS = [

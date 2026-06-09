@@ -2,15 +2,15 @@
 
 import * as React from "react";
 import { AnimatePresence } from "framer-motion";
-import { StatusHero } from "@/components/molecules/StatusHero";
-import { TimelineCard } from "@/components/molecules/TimelineCard";
-import { AgentCard } from "@/components/molecules/AgentCard";
-import { DocsCard } from "@/components/molecules/DocsCard";
-import { AppMetaSideCard } from "@/components/molecules/AppMetaSideCard";
-import { NotificationPrefsCard } from "@/components/molecules/NotificationPrefsCard";
-import { OutcomeCard } from "@/components/molecules/OutcomeCard";
-import { RejectionPanel } from "@/components/molecules/RejectionPanel";
-import { ClaimToAccountModal } from "@/components/molecules/ClaimToAccountModal";
+import { StatusHero } from "@/components/molecules/agent/StatusHero";
+import { TimelineCard } from "@/components/molecules/shared/TimelineCard";
+import { AgentCard } from "@/components/molecules/agent/AgentCard";
+import { DocsCard } from "@/components/molecules/agent/DocsCard";
+import { AppMetaSideCard } from "@/components/molecules/dashboard/AppMetaSideCard";
+import { NotificationPrefsCard } from "@/components/molecules/dashboard/NotificationPrefsCard";
+import { OutcomeCard } from "@/components/molecules/marketing/OutcomeCard";
+import { RejectionPanel } from "@/components/molecules/system/RejectionPanel";
+import { ClaimToAccountModal } from "@/components/molecules/auth/ClaimToAccountModal";
 import { PillButton } from "@/components/atoms/shared/PillButton";
 import { getItem, setItem } from "@/lib/storage";
 import { useAuth } from "@/lib/auth-context";

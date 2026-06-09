@@ -12,8 +12,8 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SideNavLink } from "@/components/molecules/SideNavLink";
-import { UserChip } from "@/components/molecules/UserChip";
+import { SideNavLink } from "@/components/molecules/system/SideNavLink";
+import { UserChip } from "@/components/molecules/shared/UserChip";
 import { ThemeToggle } from "@/components/atoms/shared/ThemeToggle";
 import { TOTAL_APP_COUNT } from "@/lib/dashboard-data";
 import type { DashboardUser } from "@/lib/types/dashboard";

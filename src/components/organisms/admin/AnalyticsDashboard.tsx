@@ -4,8 +4,8 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { KpiCard } from "@/components/atoms/admin/KpiCard";
-import { AlertItem } from "@/components/molecules/AlertItem";
-import { AgentPerfRow } from "@/components/molecules/AgentPerfRow";
+import { AlertItem } from "@/components/molecules/shared/AlertItem";
+import { AgentPerfRow } from "@/components/molecules/agent/AgentPerfRow";
 import { useAdminState } from "@/lib/admin-context";
 
 // ─── Bar chart helpers ────────────────────────────────────────────────────────

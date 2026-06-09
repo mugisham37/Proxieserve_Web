@@ -5,10 +5,10 @@ import { AnimatePresence } from "framer-motion";
 import { Plus, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AppButton } from "@/components/atoms/shared/AppButton";
-import { PricingTableRow } from "@/components/molecules/PricingTableRow";
-import { AgentTableRow } from "@/components/molecules/AgentTableRow";
-import { ScheduledChangesBanner } from "@/components/molecules/ScheduledChangesBanner";
-import { DestructiveConfirmDialog } from "@/components/molecules/DestructiveConfirmDialog";
+import { PricingTableRow } from "@/components/molecules/admin/PricingTableRow";
+import { AgentTableRow } from "@/components/molecules/agent/AgentTableRow";
+import { ScheduledChangesBanner } from "@/components/molecules/system/ScheduledChangesBanner";
+import { DestructiveConfirmDialog } from "@/components/molecules/shared/DestructiveConfirmDialog";
 import { useAdminState, useAdminDispatch, useScheduledChanges } from "@/lib/admin-context";
 
 export function PricingAgentsPanel() {

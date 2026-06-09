@@ -6,8 +6,8 @@ import { Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AppButton } from "@/components/atoms/shared/AppButton";
 import { Switch } from "@/components/atoms/shared/Switch";
-import { PhonePreview } from "@/components/molecules/PhonePreview";
-import { BroadcastConfirmDialog } from "@/components/molecules/BroadcastConfirmDialog";
+import { PhonePreview } from "@/components/molecules/system/PhonePreview";
+import { BroadcastConfirmDialog } from "@/components/molecules/admin/BroadcastConfirmDialog";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
 
 const MAX_CHARS = 1000;

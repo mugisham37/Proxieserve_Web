@@ -6,9 +6,9 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { StatusPill } from "@/components/atoms/shared/StatusPill";
-import { ActionCard } from "@/components/molecules/ActionCard";
-import { WaitlistCard } from "@/components/molecules/WaitlistCard";
-import { EligibilityGate } from "@/components/molecules/EligibilityGate";
+import { ActionCard } from "@/components/molecules/shared/ActionCard";
+import { WaitlistCard } from "@/components/molecules/marketing/WaitlistCard";
+import { EligibilityGate } from "@/components/molecules/wizard/EligibilityGate";
 import { CATEGORY_LABELS, COLOUR_MAP, type Service } from "@/lib/services-data";
 
 const ENTRY_VARIANTS = {

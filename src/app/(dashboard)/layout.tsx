@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { AppShell } from "@/components/organisms/AppShell";
-import { CookieBanner } from "@/components/molecules/CookieBanner";
+import { CookieBanner } from "@/components/molecules/system/CookieBanner";
 
 export const metadata: Metadata = {
   title: {

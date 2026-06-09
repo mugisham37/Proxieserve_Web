@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
-import { FAQItem } from "@/components/molecules/FAQItem";
+import { FAQItem } from "@/components/molecules/marketing/FAQItem";
 import { SiteFooter } from "@/components/organisms/SiteFooter";
 
 const FAQ_CATEGORIES = [

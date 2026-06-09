@@ -7,15 +7,15 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
 import { useSignOut } from "@/hooks/useAuth";
 import { DashboardProvider, useDashboard } from "@/lib/dashboard-context";
-import { SideNav } from "@/components/molecules/SideNav";
-import { MobileTopBar } from "@/components/molecules/MobileTopBar";
-import { MobileTabBar } from "@/components/molecules/MobileTabBar";
-import { EmailVerifyBanner } from "@/components/molecules/EmailVerifyBanner";
-import { OfflineBanner } from "@/components/molecules/OfflineBanner";
-import { MultiTabConflictBanner } from "@/components/molecules/MultiTabConflictBanner";
+import { SideNav } from "@/components/molecules/system/SideNav";
+import { MobileTopBar } from "@/components/molecules/system/MobileTopBar";
+import { MobileTabBar } from "@/components/molecules/system/MobileTabBar";
+import { EmailVerifyBanner } from "@/components/molecules/auth/EmailVerifyBanner";
+import { OfflineBanner } from "@/components/molecules/system/OfflineBanner";
+import { MultiTabConflictBanner } from "@/components/molecules/system/MultiTabConflictBanner";
 import { MOCK_USER, MOCK_SUMMARY } from "@/lib/dashboard-data";
 import { OnboardingProvider, useOnboarding } from "@/lib/onboarding-context";
-import { Coachmark } from "@/components/molecules/Coachmark";
+import { Coachmark } from "@/components/molecules/system/Coachmark";
 
 // ─── Session Expired Modal ────────────────────────────────────────────────────
 

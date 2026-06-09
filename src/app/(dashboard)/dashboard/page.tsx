@@ -22,10 +22,10 @@ import {
 import { StatTile } from "@/components/atoms/admin/StatTile";
 import { QuickActionChip } from "@/components/atoms/shared/QuickActionChip";
 import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
-import { WelcomeBanner } from "@/components/molecules/WelcomeBanner";
-import { ApplicationCard } from "@/components/molecules/ApplicationCard";
-import { RecentMessageRow } from "@/components/molecules/RecentMessageRow";
-import { HistoryRow } from "@/components/molecules/HistoryRow";
+import { WelcomeBanner } from "@/components/molecules/system/WelcomeBanner";
+import { ApplicationCard } from "@/components/molecules/dashboard/ApplicationCard";
+import { RecentMessageRow } from "@/components/molecules/dashboard/RecentMessageRow";
+import { HistoryRow } from "@/components/molecules/agent/HistoryRow";
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 

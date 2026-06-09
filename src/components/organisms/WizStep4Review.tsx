@@ -6,13 +6,13 @@ import { cn } from "@/lib/utils";
 import type { Service } from "@/lib/services-data";
 import { useApplication } from "@/lib/application-context";
 import { SUBMITTED_KEY } from "@/lib/application-types";
-import { ReviewCard } from "@/components/molecules/ReviewCard";
-import { ReviewRow } from "@/components/molecules/ReviewRow";
-import { FeeSummary } from "@/components/molecules/FeeSummary";
-import { IdempotencyCard } from "@/components/molecules/IdempotencyCard";
-import { WizErrorCard } from "@/components/molecules/WizErrorCard";
-import { WizValidationBanner } from "@/components/molecules/WizValidationBanner";
-import { WizFooter } from "@/components/molecules/WizFooter";
+import { ReviewCard } from "@/components/molecules/marketing/ReviewCard";
+import { ReviewRow } from "@/components/molecules/dashboard/ReviewRow";
+import { FeeSummary } from "@/components/molecules/payment/FeeSummary";
+import { IdempotencyCard } from "@/components/molecules/admin/IdempotencyCard";
+import { WizErrorCard } from "@/components/molecules/wizard/WizErrorCard";
+import { WizValidationBanner } from "@/components/molecules/wizard/WizValidationBanner";
+import { WizFooter } from "@/components/molecules/wizard/WizFooter";
 
 interface WizStep4ReviewProps {
   service: Service;

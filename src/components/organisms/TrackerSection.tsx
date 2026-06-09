@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
-import { TrackerInput } from "@/components/molecules/TrackerInput";
+import { TrackerInput } from "@/components/molecules/tracker/TrackerInput";
 
 export function TrackerSection({ className }: { className?: string }) {
   return (

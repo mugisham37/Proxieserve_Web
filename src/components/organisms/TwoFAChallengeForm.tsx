@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { AuthCard } from "@/components/molecules/AuthCard";
-import { AuthBanner } from "@/components/molecules/AuthBanner";
-import { TwoFAMethodToggle, type TwoFAMethod } from "@/components/molecules/TwoFAMethodToggle";
+import { AuthCard } from "@/components/molecules/auth/AuthCard";
+import { AuthBanner } from "@/components/molecules/auth/AuthBanner";
+import { TwoFAMethodToggle, type TwoFAMethod } from "@/components/molecules/auth/TwoFAMethodToggle";
 import { OTPInput } from "@/components/atoms/auth/OTPInput";
 import { useStaffTwoFactor } from "@/hooks/useAuth";
 import { isApiError } from "@/lib/api/types";

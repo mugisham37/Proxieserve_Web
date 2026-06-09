@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
-import { QuoteCard } from "@/components/molecules/QuoteCard";
+import { QuoteCard } from "@/components/molecules/marketing/QuoteCard";
 
 const TESTIMONIALS = [
   {

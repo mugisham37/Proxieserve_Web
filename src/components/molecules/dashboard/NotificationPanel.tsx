@@ -4,7 +4,7 @@ import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useNotifications } from "@/lib/notification-context";
-import { NotificationRow } from "@/components/molecules/NotificationRow";
+import { NotificationRow } from "@/components/molecules/dashboard/NotificationRow";
 
 interface NotificationPanelProps {
   open: boolean;

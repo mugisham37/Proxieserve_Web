@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
-import { PricingRow } from "@/components/molecules/PricingRow";
+import { PricingRow } from "@/components/molecules/admin/PricingRow";
 
 const PRICING_ROWS = [
   { service: "Company Registration", category: "Business", fee: "RWF 45,000", eta: "3–5 days", href: "/pricing#company" },

@@ -5,8 +5,8 @@ import { LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StatTile } from "@/components/atoms/admin/StatTile";
 import { Switch } from "@/components/atoms/shared/Switch";
-import { PerfBarChart } from "@/components/molecules/PerfBarChart";
-import { Leaderboard } from "@/components/molecules/Leaderboard";
+import { PerfBarChart } from "@/components/molecules/agent/PerfBarChart";
+import { Leaderboard } from "@/components/molecules/agent/Leaderboard";
 import { useAgentState, useAgentDispatch } from "@/lib/agent-context";
 import { MOCK_METRICS, MOCK_AGENT_SETTINGS } from "@/lib/agent-data";
 
