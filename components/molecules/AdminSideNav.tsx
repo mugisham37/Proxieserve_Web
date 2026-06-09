@@ -22,12 +22,14 @@ const NAV_ITEMS = [
     icon: <BarChart2 size={16} />,
     label: "Analytics",
     matchFn: (p: string) => p === "/admin/analytics" || p === "/admin",
+    id: "onboard-analytics",
   },
   {
     href: "/admin/services",
     icon: <Layers size={16} />,
     label: "Services & Schema",
     matchFn: (p: string) => p.startsWith("/admin/services"),
+    id: "onboard-services-nav",
   },
   {
     href: "/admin/pricing",
@@ -40,6 +42,7 @@ const NAV_ITEMS = [
     icon: <Shield size={16} />,
     label: "Oversight",
     matchFn: (p: string) => p.startsWith("/admin/oversight"),
+    id: "onboard-oversight",
   },
   {
     href: "/admin/broadcasts",
@@ -103,6 +106,7 @@ export function AdminSideNav() {
               icon={item.icon}
               label={item.label}
               isActive={isActive}
+              id={item.id}
               badge={
                 item.href === "/admin/oversight" && urgentCount > 0
                   ? urgentCount

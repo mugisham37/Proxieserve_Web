@@ -14,6 +14,8 @@ import { EmailVerifyBanner } from "@/components/molecules/EmailVerifyBanner";
 import { OfflineBanner } from "@/components/molecules/OfflineBanner";
 import { MultiTabConflictBanner } from "@/components/molecules/MultiTabConflictBanner";
 import { MOCK_USER, MOCK_SUMMARY } from "@/lib/dashboard-data";
+import { OnboardingProvider, useOnboarding } from "@/lib/onboarding-context";
+import { Coachmark } from "@/components/molecules/Coachmark";
 
 // ─── Session Expired Modal ────────────────────────────────────────────────────
 
@@ -88,6 +90,14 @@ function SessionExpiredModal() {
       </motion.div>
     </motion.div>
   );
+}
+
+// ─── Tour starter ─────────────────────────────────────────────────────────────
+
+function ClientTourStarter() {
+  const { start } = useOnboarding();
+  React.useEffect(() => { start("client"); }, [start]);
+  return null;
 }
 
 // ─── Inner Shell (consumes DashboardContext) ──────────────────────────────────
@@ -170,6 +180,10 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
       <AnimatePresence>
         {sessionExpired && <SessionExpiredModal />}
       </AnimatePresence>
+
+      {/* Onboarding coachmarks */}
+      <ClientTourStarter />
+      <Coachmark />
     </div>
   );
 }
@@ -182,11 +196,13 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   return (
-    <DashboardProvider
-      initialUnreadCount={MOCK_SUMMARY.unreadCount}
-      initialActionCount={MOCK_SUMMARY.actionCount}
-    >
-      <AppShellInner>{children}</AppShellInner>
-    </DashboardProvider>
+    <OnboardingProvider>
+      <DashboardProvider
+        initialUnreadCount={MOCK_SUMMARY.unreadCount}
+        initialActionCount={MOCK_SUMMARY.actionCount}
+      >
+        <AppShellInner>{children}</AppShellInner>
+      </DashboardProvider>
+    </OnboardingProvider>
   );
 }

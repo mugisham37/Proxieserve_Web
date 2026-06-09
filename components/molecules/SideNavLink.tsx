@@ -11,6 +11,7 @@ interface SideNavLinkProps {
   badge?: number;
   isActive?: boolean;
   className?: string;
+  id?: string;
 }
 
 export function SideNavLink({
@@ -20,9 +21,11 @@ export function SideNavLink({
   badge,
   isActive,
   className,
+  id,
 }: SideNavLinkProps) {
   return (
     <Link
+      id={id}
       href={href}
       aria-current={isActive ? "page" : undefined}
       className={cn(

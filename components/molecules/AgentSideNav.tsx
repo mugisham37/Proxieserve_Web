@@ -10,6 +10,8 @@ import {
   Inbox,
   BarChart2,
   Settings,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SideNavLink } from "@/components/molecules/SideNavLink";
@@ -19,7 +21,8 @@ import { useAgentState, useAgentDispatch, useToggleAvailability } from "@/lib/ag
 
 export function AgentSideNav() {
   const pathname = usePathname();
-  const { user, availability, cases } = useAgentState();
+  const { user, availability, cases, darkMode } = useAgentState();
+  const dispatch = useAgentDispatch();
   const toggleAvailability = useToggleAvailability();
 
   const caseCount = cases.filter(
@@ -81,6 +84,7 @@ export function AgentSideNav() {
           label="My cases"
           badge={caseCount}
           isActive={false}
+          id="onboard-case-queue"
         />
         <SideNavLink
           href="/agent"
@@ -119,6 +123,23 @@ export function AgentSideNav() {
 
       {/* Spacer */}
       <div className="flex-1" />
+
+      {/* Theme toggle */}
+      <button
+        type="button"
+        onClick={() => dispatch({ type: "TOGGLE_DARK_MODE" })}
+        aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+        className={cn(
+          "flex items-center gap-[8px] px-[10px] py-[8px]",
+          "rounded-[var(--r-md)] font-sans text-[13px] text-[var(--ink-muted)]",
+          "transition-colors duration-[var(--m-fast)]",
+          "hover:bg-[var(--cream)] hover:text-[var(--ink)]",
+          "focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
+        )}
+      >
+        {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+        <span>{darkMode ? "Light mode" : "Dark mode"}</span>
+      </button>
 
       {/* Availability toggle */}
       <button

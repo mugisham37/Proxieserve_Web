@@ -11,6 +11,14 @@ import { OfflineBanner } from "@/components/molecules/OfflineBanner";
 import { BannerSLA } from "@/components/molecules/BannerSLA";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { CommandPalette } from "@/components/molecules/CommandPalette";
+import { OnboardingProvider, useOnboarding } from "@/lib/onboarding-context";
+import { Coachmark } from "@/components/molecules/Coachmark";
+
+function AgentTourStarter() {
+  const { start } = useOnboarding();
+  React.useEffect(() => { start("agent"); }, [start]);
+  return null;
+}
 
 // ─── Inner shell — consumes AgentContext ──────────────────────────────────────
 
@@ -91,6 +99,10 @@ function AgentShellInner({ children }: { children: React.ReactNode }) {
         {commandPaletteOpen && <CommandPalette />}
       </AnimatePresence>
 
+      {/* Onboarding coachmarks */}
+      <AgentTourStarter />
+      <Coachmark />
+
       {/* Confirm modal */}
       <AnimatePresence>
         {confirmModal && (
@@ -121,8 +133,10 @@ interface AgentShellProps {
 
 export function AgentShell({ children }: AgentShellProps) {
   return (
-    <AgentProvider>
-      <AgentShellInner>{children}</AgentShellInner>
-    </AgentProvider>
+    <OnboardingProvider>
+      <AgentProvider>
+        <AgentShellInner>{children}</AgentShellInner>
+      </AgentProvider>
+    </OnboardingProvider>
   );
 }

@@ -8,6 +8,14 @@ import { AdminSideNav } from "@/components/molecules/AdminSideNav";
 import { AdminTopBar } from "@/components/molecules/AdminTopBar";
 import { AdminMobileTabBar } from "@/components/molecules/AdminMobileTabBar";
 import { OfflineBanner } from "@/components/molecules/OfflineBanner";
+import { OnboardingProvider, useOnboarding } from "@/lib/onboarding-context";
+import { Coachmark } from "@/components/molecules/Coachmark";
+
+function AdminTourStarter() {
+  const { start } = useOnboarding();
+  React.useEffect(() => { start("admin"); }, [start]);
+  return null;
+}
 
 // ─── Inner shell — consumes AdminContext ──────────────────────────────────────
 
@@ -72,6 +80,10 @@ function AdminShellInner({ children }: { children: React.ReactNode }) {
       <React.Suspense>
         <AdminMobileTabBar />
       </React.Suspense>
+
+      {/* Onboarding coachmarks */}
+      <AdminTourStarter />
+      <Coachmark />
     </div>
   );
 }
@@ -80,8 +92,10 @@ function AdminShellInner({ children }: { children: React.ReactNode }) {
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
-    <AdminProvider>
-      <AdminShellInner>{children}</AdminShellInner>
-    </AdminProvider>
+    <OnboardingProvider>
+      <AdminProvider>
+        <AdminShellInner>{children}</AdminShellInner>
+      </AdminProvider>
+    </OnboardingProvider>
   );
 }

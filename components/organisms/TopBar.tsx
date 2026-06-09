@@ -7,6 +7,7 @@ import { useScrolled } from "@/hooks/useScrolled";
 import { Wordmark } from "@/components/atoms/Wordmark";
 import { PillButton } from "@/components/atoms/PillButton";
 import { LangSwitcher } from "@/components/atoms/LangSwitcher";
+import { ThemeToggle } from "@/components/atoms/ThemeToggle";
 
 const NAV_LINKS = [
   { label: "Services", href: "/services" },
@@ -57,6 +58,7 @@ export function TopBar({ onMenuOpen, menuOpen = false }: TopBarProps) {
 
           {/* Desktop CTAs */}
           <div className="hidden lg:flex items-center gap-2">
+            <ThemeToggle variant="icon" />
             <PillButton variant="ghost" size="sm" asChild>
               <Link href="/track">Track</Link>
             </PillButton>

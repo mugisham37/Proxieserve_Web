@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { SideNavLink } from "@/components/molecules/SideNavLink";
 import { UserChip } from "@/components/molecules/UserChip";
+import { ThemeToggle } from "@/components/atoms/ThemeToggle";
 import { TOTAL_APP_COUNT } from "@/lib/dashboard-data";
 import type { DashboardUser } from "@/lib/types/dashboard";
 
@@ -96,6 +97,7 @@ export function SideNav({
           label="Messages"
           badge={unreadCount}
           isActive={isOnApp && activeTab === "messages"}
+          id="onboard-messages"
         />
         <SideNavLink
           href={`/app/${PRIMARY_APP}?tab=documents`}
@@ -129,6 +131,9 @@ export function SideNav({
 
       {/* Spacer */}
       <div className="flex-1" />
+
+      {/* Theme toggle */}
+      <ThemeToggle variant="row" />
 
       {/* Sign out */}
       {onSignOut && (
