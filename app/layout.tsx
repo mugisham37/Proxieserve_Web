@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import { Providers } from "@/lib/providers";
 import { Toaster } from "@/components/molecules/Toaster";
+
+type Locale = "en" | "rw" | "fr";
+const VALID_LOCALES: Locale[] = ["en", "rw", "fr"];
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -62,14 +66,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const rawLocale = cookieStore.get("proxi_locale")?.value ?? "en";
+  const locale: Locale = VALID_LOCALES.includes(rawLocale as Locale)
+    ? (rawLocale as Locale)
+    : "en";
+
   return (
     <html
-      lang="en"
+      lang={locale}
       suppressHydrationWarning
       data-scroll-behavior="smooth"
       className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}

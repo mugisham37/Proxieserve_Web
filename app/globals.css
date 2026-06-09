@@ -779,3 +779,136 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+
+.print-hide { display: revert; }
+.print-show { display: none; }
+
+@media print {
+  /* ── Utilities ── */
+  .print-hide { display: none !important; }
+  .print-show { display: block !important; }
+
+  /* ── Reset ── */
+  *,
+  *::before,
+  *::after {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* ── Typography ── */
+  body {
+    font-size: 11pt;
+    line-height: 1.5;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    orphans: 3;
+    widows: 3;
+  }
+
+  p, blockquote, ul, ol, dl, table { orphans: 3; widows: 3; }
+
+  /* ── Layout chrome — hidden on print ── */
+  nav,
+  header,
+  footer,
+  aside,
+  [role="navigation"],
+  [role="banner"],
+  [aria-label="Primary navigation"],
+  [aria-label="Agent navigation"],
+  [aria-label="Admin navigation"],
+  [aria-label="Main navigation"] {
+    display: none !important;
+  }
+
+  /* Mobile bars */
+  [aria-label*="tab bar"],
+  [aria-label*="mobile"] {
+    display: none !important;
+  }
+
+  /* Modals, toasts, overlays */
+  [role="dialog"],
+  [role="alert"],
+  [role="status"] {
+    display: none !important;
+  }
+
+  /* ── Page ── */
+  @page {
+    margin: 1.5cm 2cm;
+    size: A4 portrait;
+  }
+
+  html, body {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* ── Tables ── */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    page-break-inside: auto;
+  }
+
+  tr { page-break-inside: avoid; }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 4pt 6pt;
+    text-align: left;
+  }
+
+  /* ── Cards & rows ── */
+  [class*="card"],
+  [class*="row"],
+  [class*="item"] {
+    page-break-inside: avoid;
+  }
+
+  /* ── Links ── */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555 !important;
+  }
+
+  a[href^="/"]:not([href*="http"])::after,
+  a[href^="#"]::after {
+    content: "";
+  }
+
+  /* ── Print wordmark (visible on print) ── */
+  .print-wordmark {
+    display: block !important;
+    font-size: 14pt;
+    font-weight: bold;
+    margin-bottom: 12pt;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Print footer (visible on print) ── */
+  .print-footer {
+    display: block !important;
+    margin-top: 24pt;
+    padding-top: 6pt;
+    border-top: 1px solid #ccc;
+    font-size: 8pt;
+    color: #666 !important;
+    text-align: center;
+  }
+}

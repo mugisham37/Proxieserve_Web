@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/lib/auth-context";
 import { NotificationProvider } from "@/lib/notification-context";
 import { ToastProvider } from "@/lib/toast-context";
+import { I18nProvider } from "@/lib/i18n-context";
 import { getQueryClient } from "@/lib/query-client";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -20,13 +21,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
         enableSystem={false}
         disableTransitionOnChange
       >
-        <AuthProvider>
-          <NotificationProvider>
-            <ToastProvider>
-              {children}
-            </ToastProvider>
-          </NotificationProvider>
-        </AuthProvider>
+        <I18nProvider>
+          <AuthProvider>
+            <NotificationProvider>
+              <ToastProvider>
+                {children}
+              </ToastProvider>
+            </NotificationProvider>
+          </AuthProvider>
+        </I18nProvider>
         {process.env.NODE_ENV === "development" ? <ReactQueryDevtools initialIsOpen={false} /> : null}
       </ThemeProvider>
     </QueryClientProvider>

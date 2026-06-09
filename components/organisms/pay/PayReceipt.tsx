@@ -47,6 +47,11 @@ export function PayReceipt() {
 
   return (
     <div className="w-full flex flex-col items-center px-4 sm:px-8 py-12">
+      {/* Print-only wordmark */}
+      <div className="print-wordmark" aria-hidden="true">
+        ProxiServe — Official Receipt
+      </div>
+
       {/* Receipt card */}
       <motion.article
         initial={{ opacity: 0, scale: 0.94 }}
@@ -135,12 +140,12 @@ export function PayReceipt() {
         {/* Perforated divider */}
         <div className="perforated mx-6 mt-2" aria-hidden="true" />
 
-        {/* Actions */}
+        {/* Actions — hidden on print */}
         <motion.div
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45, duration: 0.3 }}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 px-6 sm:px-8 py-6"
+          className="print-hide flex flex-col sm:flex-row items-stretch sm:items-center gap-3 px-6 sm:px-8 py-6"
         >
           <PillButton
             variant="solid"
@@ -162,6 +167,11 @@ export function PayReceipt() {
           </PillButton>
         </motion.div>
       </motion.article>
+
+      {/* Print-only footer */}
+      <div className="print-footer" aria-hidden="true">
+        ProxiServe Ltd · info@proxiserve.rw · proxiserve.rw · This receipt is computer generated and valid without a signature.
+      </div>
 
       {/* Government fee note */}
       {receipt.governmentFee > 0 && (
