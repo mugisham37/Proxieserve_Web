@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { CodeEntrySection } from "@/components/organisms/CodeEntrySection";
+import { CodeEntrySection } from "@/components/organisms/shared/CodeEntrySection";
 
 export const metadata: Metadata = {
   title: "Track your application — ProxiServe",

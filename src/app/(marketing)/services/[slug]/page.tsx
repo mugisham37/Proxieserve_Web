@@ -2,16 +2,16 @@ import * as React from "react";
 import { notFound } from "next/navigation";
 import { type Metadata } from "next";
 import { SERVICES, getServiceBySlug } from "@/lib/services-data";
-import { ServiceDetailHero } from "@/components/organisms/ServiceDetailHero";
-import { ServiceSubNav } from "@/components/organisms/ServiceSubNav";
-import { ServiceRequirementsSection } from "@/components/organisms/ServiceRequirementsSection";
-import { ServiceStepsSection } from "@/components/organisms/ServiceStepsSection";
-import { ServicePricingSection } from "@/components/organisms/ServicePricingSection";
-import { ServiceFAQsSection } from "@/components/organisms/ServiceFAQsSection";
-import { RelatedServicesSection } from "@/components/organisms/RelatedServicesSection";
-import { ServicesHelpBand } from "@/components/organisms/ServicesHelpBand";
-import { StickyServiceBar } from "@/components/organisms/StickyServiceBar";
-import { SiteFooter } from "@/components/organisms/SiteFooter";
+import { ServiceDetailHero } from "@/components/organisms/marketing/ServiceDetailHero";
+import { ServiceSubNav } from "@/components/organisms/marketing/ServiceSubNav";
+import { ServiceRequirementsSection } from "@/components/organisms/marketing/ServiceRequirementsSection";
+import { ServiceStepsSection } from "@/components/organisms/marketing/ServiceStepsSection";
+import { ServicePricingSection } from "@/components/organisms/marketing/ServicePricingSection";
+import { ServiceFAQsSection } from "@/components/organisms/marketing/ServiceFAQsSection";
+import { RelatedServicesSection } from "@/components/organisms/marketing/RelatedServicesSection";
+import { ServicesHelpBand } from "@/components/organisms/marketing/ServicesHelpBand";
+import { StickyServiceBar } from "@/components/organisms/shared/StickyServiceBar";
+import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 
 interface Props {
   params: Promise<{ slug: string }>;

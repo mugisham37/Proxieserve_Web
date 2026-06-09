@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AppShell } from "@/components/organisms/AppShell";
+import { AppShell } from "@/components/organisms/dashboard/AppShell";
 import { CookieBanner } from "@/components/molecules/system/CookieBanner";
 
 export const metadata: Metadata = {

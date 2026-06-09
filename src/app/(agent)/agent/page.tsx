@@ -4,7 +4,7 @@ import * as React from "react";
 import { Download, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StatTile } from "@/components/atoms/admin/StatTile";
-import { QueueTable } from "@/components/organisms/QueueTable";
+import { QueueTable } from "@/components/organisms/dashboard/QueueTable";
 import { KbdHintBar, QUEUE_HINTS } from "@/components/molecules/system/KbdHintBar";
 import { useAgentState, useAgentDispatch } from "@/lib/agent-context";
 import { getAgentStats } from "@/lib/agent-data";

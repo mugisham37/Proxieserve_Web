@@ -1,4 +1,4 @@
-import { PayMethodChoice } from "@/components/organisms/pay/PayMethodChoice";
+import { PayMethodChoice } from "@/components/organisms/payment/PayMethodChoice";
 
 export default function MethodChoicePage() {
   return <PayMethodChoice />;

@@ -1,4 +1,4 @@
-import { PayCard } from "@/components/organisms/pay/PayCard";
+import { PayCard } from "@/components/organisms/payment/PayCard";
 
 export default function CardPage() {
   return <PayCard />;

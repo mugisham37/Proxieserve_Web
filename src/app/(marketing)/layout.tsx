@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { TopBar } from "@/components/organisms/TopBar";
-import { MobileSheet } from "@/components/organisms/MobileSheet";
+import { TopBar } from "@/components/organisms/shared/TopBar";
+import { MobileSheet } from "@/components/organisms/shared/MobileSheet";
 import { CookieBanner } from "@/components/molecules/system/CookieBanner";
 import { ReturningBanner } from "@/components/molecules/system/ReturningBanner";
 import { EmailVerifyBanner } from "@/components/molecules/auth/EmailVerifyBanner";

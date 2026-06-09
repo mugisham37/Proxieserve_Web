@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { PayOutcomeState } from "@/components/organisms/pay/PayOutcomeState";
+import { PayOutcomeState } from "@/components/organisms/payment/PayOutcomeState";
 import { VALID_OUTCOMES, type PaymentOutcome } from "@/lib/types/payment";
 
 interface Props {

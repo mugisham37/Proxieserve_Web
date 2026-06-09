@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { Tag } from "@/components/atoms/shared/Tag";
-import { SiteFooter } from "@/components/organisms/SiteFooter";
+import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 import Link from "next/link";
 
 const CATEGORIES = ["All", "Tax", "Identity", "Business", "Welfare", "Permits"] as const;

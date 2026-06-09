@@ -5,7 +5,7 @@ import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { FormField } from "@/components/atoms/auth/FormField";
 import { PillButton } from "@/components/atoms/shared/PillButton";
 import { ContactMethod } from "@/components/molecules/auth/ContactMethod";
-import { SiteFooter } from "@/components/organisms/SiteFooter";
+import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 
 const TOPICS = [
   "General inquiry",

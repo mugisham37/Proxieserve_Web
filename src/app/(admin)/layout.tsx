@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AdminShell } from "@/components/organisms/AdminShell";
+import { AdminShell } from "@/components/organisms/admin/AdminShell";
 
 export const metadata: Metadata = {
   title: "Admin Panel — ProxiServe",

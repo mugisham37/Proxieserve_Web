@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getServiceBySlug } from "@/lib/services-data";
-import { WizShellLayoutClient } from "@/components/organisms/WizShellLayoutClient";
+import { WizShellLayoutClient } from "@/components/organisms/wizard/WizShellLayoutClient";
 
 interface Props {
   children: ReactNode;

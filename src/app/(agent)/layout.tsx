@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AgentShell } from "@/components/organisms/AgentShell";
+import { AgentShell } from "@/components/organisms/agent/AgentShell";
 
 export const metadata: Metadata = {
   title: "Agent Workspace — ProxiServe",

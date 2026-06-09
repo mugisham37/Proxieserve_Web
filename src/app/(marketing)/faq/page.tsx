@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { FAQItem } from "@/components/molecules/marketing/FAQItem";
-import { SiteFooter } from "@/components/organisms/SiteFooter";
+import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 
 const FAQ_CATEGORIES = [
   {

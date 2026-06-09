@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Suspense } from "react";
 import { type Metadata } from "next";
-import { ServicesCatalogueGrid } from "@/components/organisms/ServicesCatalogueGrid";
-import { SiteFooter } from "@/components/organisms/SiteFooter";
+import { ServicesCatalogueGrid } from "@/components/organisms/marketing/ServicesCatalogueGrid";
+import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 
 export const metadata: Metadata = {
   title: "All Services — ProxiServe",

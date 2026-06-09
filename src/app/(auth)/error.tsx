@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ErrorPage } from "@/components/organisms/ErrorPage";
+import { ErrorPage } from "@/components/organisms/shared/ErrorPage";
 
 export default function AuthError({
   error,

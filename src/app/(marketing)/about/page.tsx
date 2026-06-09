@@ -3,7 +3,7 @@ import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { PillButton } from "@/components/atoms/shared/PillButton";
 import { TeamCard } from "@/components/molecules/marketing/TeamCard";
 import { MissionCard } from "@/components/molecules/marketing/MissionCard";
-import { SiteFooter } from "@/components/organisms/SiteFooter";
+import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 import Link from "next/link";
 
 export const metadata: Metadata = {

@@ -1,4 +1,4 @@
-import { ErrorPage } from "@/components/organisms/ErrorPage";
+import { ErrorPage } from "@/components/organisms/shared/ErrorPage";
 
 export const metadata = {
   title: "Page not found — ProxiServe",

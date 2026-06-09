@@ -1,4 +1,4 @@
-import { PayReceipt } from "@/components/organisms/pay/PayReceipt";
+import { PayReceipt } from "@/components/organisms/payment/PayReceipt";
 
 export default function ReceiptPage() {
   return <PayReceipt />;

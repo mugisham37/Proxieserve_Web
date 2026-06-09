@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
-import { SiteFooter } from "@/components/organisms/SiteFooter";
+import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — ProxiServe",

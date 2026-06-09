@@ -1,4 +1,4 @@
-import { ErrorPage } from "@/components/organisms/ErrorPage";
+import { ErrorPage } from "@/components/organisms/shared/ErrorPage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { type Metadata } from "next";
-import { AuthShell } from "@/components/organisms/AuthShell";
-import { StaffLoginForm } from "@/components/organisms/StaffLoginForm";
+import { AuthShell } from "@/components/organisms/auth/AuthShell";
+import { StaffLoginForm } from "@/components/organisms/auth/StaffLoginForm";
 
 export const metadata: Metadata = {
   title: "Staff sign in — ProxiServe",

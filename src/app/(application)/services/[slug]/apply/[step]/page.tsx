@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getServiceBySlug } from "@/lib/services-data";
-import { WizStepRouter } from "@/components/organisms/WizStepRouter";
+import { WizStepRouter } from "@/components/organisms/wizard/WizStepRouter";
 
 interface Props {
   params: Promise<{ slug: string; step: string }>;

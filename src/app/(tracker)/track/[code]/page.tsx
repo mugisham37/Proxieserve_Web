@@ -1,7 +1,7 @@
 import * as React from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { TrackerView } from "@/components/organisms/TrackerView";
+import { TrackerView } from "@/components/organisms/tracker/TrackerView";
 import {
   getApplicationByCode,
   MOCK_TRACKER_CODES,
