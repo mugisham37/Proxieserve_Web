@@ -411,7 +411,7 @@ function MessagesSection({
         />
         {isOffline && (
           <p role="alert" className="px-[16px] pb-[10px] font-sans text-[12px] text-[var(--danger)]">
-            You're offline. Messages will be sent when you reconnect.
+            You&apos;re offline. Messages will be sent when you reconnect.
           </p>
         )}
       </div>

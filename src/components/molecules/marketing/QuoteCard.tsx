@@ -31,8 +31,10 @@ export function QuoteCard({
       <div className="notch absolute inset-[1px] border border-[rgba(242,235,215,0.12)] pointer-events-none" />
 
       <blockquote className="font-serif text-[18px] leading-[1.6] italic relative">
+        {/* eslint-disable-next-line react/no-unescaped-entities */}
         <span className="text-[var(--brand)] text-[32px] leading-none font-serif not-italic absolute -top-2 -left-1" aria-hidden="true">"</span>
         <p className="pl-4">{quote}</p>
+        {/* eslint-disable-next-line react/no-unescaped-entities */}
         <span className="text-[var(--brand)] text-[32px] leading-none font-serif not-italic" aria-hidden="true">"</span>
       </blockquote>
 

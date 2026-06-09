@@ -58,7 +58,7 @@ export function EmptyState({
           <PillButton type="submit" variant="solid" size="sm">Notify me</PillButton>
         </form>
       ) : (
-        <p className="font-sans text-[13px] text-[var(--ok)]">✓ You're on the list</p>
+        <p className="font-sans text-[13px] text-[var(--ok)]">✓ You&apos;re on the list</p>
       )}
     </div>
   );

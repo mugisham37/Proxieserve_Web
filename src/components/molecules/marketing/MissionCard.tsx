@@ -19,7 +19,7 @@ export function MissionCard({ eyebrow = "Our Mission", quote, body, className, .
     >
       <Eyebrow className="text-[var(--brand)]">{eyebrow}</Eyebrow>
       <blockquote className="font-serif italic text-[clamp(22px,2.5vw,32px)] leading-[1.4] text-[var(--paper)]">
-        "{quote}"
+        &ldquo;{quote}&rdquo;
       </blockquote>
       <p className="font-sans text-[15px] text-[rgba(242,235,215,0.7)] leading-relaxed">{body}</p>
     </div>

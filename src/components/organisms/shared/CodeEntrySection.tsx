@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { CodeEntryInput } from "@/components/atoms/tracker/CodeEntryInput";
@@ -135,13 +136,13 @@ export function CodeEntrySection({ initialCode = "", autoRecover = false }: Code
           <div className="mt-6 pt-6 border-t border-[var(--rule)] flex justify-between gap-4 flex-wrap font-sans text-[13.5px]">
             <span className="text-[var(--ink-muted)]">
               Have an account?{" "}
-              <a href="/login" className="text-[var(--brand-ink)] font-medium hover:underline">
+              <Link href="/login" className="text-[var(--brand-ink)] font-medium hover:underline">
                 Sign in →
-              </a>
+              </Link>
             </span>
-            <a href="/services" className="text-[var(--brand-ink)] font-medium hover:underline">
+            <Link href="/services" className="text-[var(--brand-ink)] font-medium hover:underline">
               Start a new application →
-            </a>
+            </Link>
           </div>
         </motion.form>
 
