@@ -708,6 +708,64 @@
 }
 
 /* ============================================================
+   AGENT WORKSPACE — ANIMATIONS & UTILITIES
+   ============================================================ */
+
+/* Availability dot pulse (available = green ping) */
+@keyframes availability-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.animate-availability-pulse {
+  animation: availability-pulse 2s ease-in-out infinite;
+}
+
+/* Perf bar grow-up animation */
+@keyframes bar-grow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* Command palette pop */
+@keyframes palette-pop {
+  from { transform: scale(0.96); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+/* Checklist check fill */
+@keyframes check-fill {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Agent queue row focus highlight */
+.agent-row-focused {
+  background-color: var(--brand-soft);
+  box-shadow: inset 3px 0 0 var(--brand);
+}
+
+/* Agent dark mode surface swap */
+[data-theme="dark"] {
+  --cream:       #14110d;
+  --cream-2:     #0f0d0a;
+  --paper:       #1f1a14;
+  --paper-2:     #28211a;
+  --ink:         #f2ebd7;
+  --ink-2:       #e8dfcf;
+  --ink-muted:   #b8a898;
+  --ink-subtle:  #8a7a6a;
+  --rule:        rgba(242, 235, 215, 0.1);
+  --rule-strong: rgba(242, 235, 215, 0.18);
+}
+
+/* ============================================================
    REDUCED MOTION
    ============================================================ */
 
