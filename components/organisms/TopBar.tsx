@@ -8,6 +8,7 @@ import { Wordmark } from "@/components/atoms/Wordmark";
 import { PillButton } from "@/components/atoms/PillButton";
 import { LangSwitcher } from "@/components/atoms/LangSwitcher";
 import { ThemeToggle } from "@/components/atoms/ThemeToggle";
+import { useAuth } from "@/lib/auth-context";
 
 const NAV_LINKS = [
   { label: "Services", href: "/services" },
@@ -24,6 +25,14 @@ interface TopBarProps {
 
 export function TopBar({ onMenuOpen, menuOpen = false }: TopBarProps) {
   const scrolled = useScrolled(24);
+  const { session } = useAuth();
+
+  const dashboardHref =
+    session?.role === "staff:agent"
+      ? "/agent"
+      : session?.role === "staff:admin"
+        ? "/admin"
+        : "/dashboard";
 
   return (
     <header
@@ -59,12 +68,20 @@ export function TopBar({ onMenuOpen, menuOpen = false }: TopBarProps) {
           {/* Desktop CTAs */}
           <div className="hidden lg:flex items-center gap-2">
             <ThemeToggle variant="icon" />
-            <PillButton variant="ghost" size="sm" asChild>
-              <Link href="/track">Track</Link>
-            </PillButton>
-            <PillButton variant="solid" size="sm" asChild>
-              <Link href="/signup">Get started</Link>
-            </PillButton>
+            {session ? (
+              <PillButton variant="solid" size="sm" asChild>
+                <Link href={dashboardHref}>Dashboard →</Link>
+              </PillButton>
+            ) : (
+              <>
+                <PillButton variant="ghost" size="sm" asChild>
+                  <Link href="/track">Track</Link>
+                </PillButton>
+                <PillButton variant="solid" size="sm" asChild>
+                  <Link href="/signup">Get started</Link>
+                </PillButton>
+              </>
+            )}
           </div>
 
           {/* Mobile hamburger */}

@@ -77,7 +77,7 @@ export function useSignup() {
     mutationFn: (payload: SignupRequest) => signupRequest(payload),
     onSuccess: (data) => {
       syncSession(data.session);
-      router.push(buildVerifyUrl(data.maskedEmail, "/"));
+      router.push(buildVerifyUrl(data.maskedEmail, "/services"));
     },
   });
 }

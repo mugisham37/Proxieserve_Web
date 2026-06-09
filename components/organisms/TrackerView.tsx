@@ -13,6 +13,8 @@ import { RejectionPanel } from "@/components/molecules/RejectionPanel";
 import { ClaimToAccountModal } from "@/components/molecules/ClaimToAccountModal";
 import { PillButton } from "@/components/atoms/PillButton";
 import { getItem, setItem } from "@/lib/storage";
+import { useAuth } from "@/lib/auth-context";
+import Link from "next/link";
 import type { TrackerApplication } from "@/lib/tracker-data";
 
 interface TrackerViewProps {
@@ -22,6 +24,7 @@ interface TrackerViewProps {
 export function TrackerView({ application }: TrackerViewProps) {
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
+  const { session } = useAuth();
 
   // Track view count and fire modal on 2nd+ view
   React.useEffect(() => {
@@ -55,6 +58,18 @@ export function TrackerView({ application }: TrackerViewProps) {
 
   return (
     <div className="container py-8 sm:py-12 pb-20 sm:pb-[120px]">
+      {/* Authenticated shortcut — shown when user is logged in */}
+      {session && (
+        <div className="mb-4 flex justify-end">
+          <Link
+            href={`/app/${application.code}`}
+            className="inline-flex items-center gap-1.5 font-sans text-[13px] text-[var(--brand)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)] rounded-sm"
+          >
+            Manage in your dashboard →
+          </Link>
+        </div>
+      )}
+
       {/* Status hero — full width above the grid */}
       <StatusHero
         application={application}

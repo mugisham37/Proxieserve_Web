@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AppShell } from "@/components/organisms/AppShell";
+import { CookieBanner } from "@/components/molecules/CookieBanner";
 
 export const metadata: Metadata = {
   title: {
@@ -14,5 +15,10 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <AppShell>{children}</AppShell>;
+  return (
+    <AppShell>
+      {children}
+      <CookieBanner />
+    </AppShell>
+  );
 }

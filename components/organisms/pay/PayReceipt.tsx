@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ReceiptRow } from "@/components/molecules/ReceiptRow";
 import { PillButton } from "@/components/atoms/PillButton";
 import { usePayment } from "@/lib/payment-context";
+import { useAuth } from "@/lib/auth-context";
 import { MOCK_RECEIPT } from "@/lib/demo/payment-demo";
 import { formatRWF, computeVAT, PAY_STATUS_KEY } from "@/lib/types/payment";
 
@@ -18,6 +19,7 @@ const METHOD_LABEL: Record<string, string> = {
 
 export function PayReceipt() {
   const { session } = usePayment();
+  const { session: authSession } = useAuth();
 
   // Merge session with mock receipt data for demo completeness
   const receipt = {
@@ -155,16 +157,29 @@ export function PayReceipt() {
           >
             Download PDF
           </PillButton>
-          <PillButton
-            variant="default"
-            size="md"
-            asChild
-            className="flex-1 justify-center"
-          >
-            <Link href={`/app/${receipt.trackingCode}`}>
-              Back to application
-            </Link>
-          </PillButton>
+          {authSession ? (
+            <PillButton
+              variant="default"
+              size="md"
+              asChild
+              className="flex-1 justify-center"
+            >
+              <Link href={`/app/${receipt.trackingCode}`}>
+                View in dashboard →
+              </Link>
+            </PillButton>
+          ) : (
+            <PillButton
+              variant="default"
+              size="md"
+              asChild
+              className="flex-1 justify-center"
+            >
+              <Link href={`/?track=${receipt.trackingCode}`}>
+                Track application
+              </Link>
+            </PillButton>
+          )}
         </motion.div>
       </motion.article>
 

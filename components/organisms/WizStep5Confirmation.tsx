@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import type { Service } from "@/lib/services-data";
 import { useApplication } from "@/lib/application-context";
+import { useAuth } from "@/lib/auth-context";
 import { BigCodeChip } from "@/components/molecules/BigCodeChip";
 import { ChannelPill } from "@/components/molecules/ChannelPill";
 import { WhatNextItem } from "@/components/molecules/WhatNextItem";
@@ -16,6 +17,7 @@ interface WizStep5ConfirmationProps {
 
 export function WizStep5Confirmation({ service }: WizStep5ConfirmationProps) {
   const { uiState, draft, dispatch } = useApplication();
+  const { session } = useAuth();
   const [waStatus, setWaStatus] = React.useState<"pending" | "delivering" | "delivered">("pending");
   const code = uiState.confirmedCode ?? "PRX-2026-00000";
 
@@ -163,13 +165,22 @@ export function WizStep5Confirmation({ service }: WizStep5ConfirmationProps) {
           </Link>
         )}
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <Link
-            href={`/?track=${code}`}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] border border-[var(--rule-strong)] font-serif italic text-[15px] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
-          >
-            {service.fee > 0 ? "Pay later — track application" : "Track my application →"}
-          </Link>
-          {!service.fee && (
+          {session ? (
+            <Link
+              href={`/app/${code}`}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] border border-[var(--rule-strong)] font-serif italic text-[15px] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
+            >
+              View in your dashboard →
+            </Link>
+          ) : (
+            <Link
+              href={`/?track=${code}`}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] border border-[var(--rule-strong)] font-serif italic text-[15px] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
+            >
+              {service.fee > 0 ? "Pay later — track application" : "Track my application →"}
+            </Link>
+          )}
+          {!service.fee && !session && (
             <Link
               href="/services"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-[var(--r-pill)] border border-[var(--rule-strong)] font-serif italic text-[15px] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
