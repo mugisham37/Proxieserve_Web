@@ -3,8 +3,8 @@
 import * as React from "react";
 import { Users } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FormField } from "@/components/atoms/FormField";
-import { AppButton } from "@/components/atoms/AppButton";
+import { FormField } from "@/components/atoms/auth/FormField";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 
 interface WaitlistCardProps {
   serviceName: string;

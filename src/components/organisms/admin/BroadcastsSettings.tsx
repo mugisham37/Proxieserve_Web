@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Switch } from "@/components/atoms/Switch";
-import { AppButton } from "@/components/atoms/AppButton";
+import { Switch } from "@/components/atoms/shared/Switch";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 import { BroadcastComposer } from "@/components/organisms/admin/BroadcastComposer";
 import { RecentBroadcastRow } from "@/components/molecules/RecentBroadcastRow";
 import { MaintenancePanel } from "@/components/molecules/MaintenancePanel";

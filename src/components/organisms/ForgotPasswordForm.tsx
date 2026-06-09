@@ -10,7 +10,7 @@ import { AuthBanner } from "@/components/molecules/AuthBanner";
 import { AuthFooterLinks } from "@/components/molecules/AuthFooterLinks";
 import { EmailSentConfirmation } from "@/components/molecules/EmailSentConfirmation";
 import { StepPills } from "@/components/molecules/StepPills";
-import { FormField } from "@/components/atoms/FormField";
+import { FormField } from "@/components/atoms/auth/FormField";
 import { PhoneInputWithCountry } from "@/components/molecules/PhoneCountryButton";
 import { forgotSchema, type ForgotData } from "@/lib/auth-schema";
 import { useForgotPassword } from "@/hooks/useAuth";

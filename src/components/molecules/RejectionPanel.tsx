@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import type { RejectionData, AgentData } from "@/lib/tracker-data";
 
 interface RejectionPanelProps {

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { CodeChip } from "@/components/atoms/CodeChip";
-import { StatusPill } from "@/components/atoms/StatusPill";
-import { Avatar } from "@/components/atoms/Avatar";
+import { CodeChip } from "@/components/atoms/tracker/CodeChip";
+import { StatusPill } from "@/components/atoms/shared/StatusPill";
+import { Avatar } from "@/components/atoms/shared/Avatar";
 
 interface TimelineStep {
   label: string;

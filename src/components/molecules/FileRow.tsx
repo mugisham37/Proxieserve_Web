@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { FileThumb } from "@/components/atoms/FileThumb";
-import { ProgressBar } from "@/components/atoms/ProgressBar";
+import { FileThumb } from "@/components/atoms/shared/FileThumb";
+import { ProgressBar } from "@/components/atoms/wizard/ProgressBar";
 import type { DocumentFile } from "@/lib/application-types";
 
 interface FileRowProps {

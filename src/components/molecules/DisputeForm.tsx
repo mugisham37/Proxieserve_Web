@@ -4,7 +4,7 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { disputeSchema, type DisputeFormData } from "@/lib/payment-schema";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import { CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 

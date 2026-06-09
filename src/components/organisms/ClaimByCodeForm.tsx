@@ -10,7 +10,7 @@ import { AuthBanner } from "@/components/molecules/AuthBanner";
 import { AuthFooterLinks } from "@/components/molecules/AuthFooterLinks";
 import { FoundApplicationCard } from "@/components/molecules/FoundApplicationCard";
 import { PhoneInputWithCountry } from "@/components/molecules/PhoneCountryButton";
-import { FormField } from "@/components/atoms/FormField";
+import { FormField } from "@/components/atoms/auth/FormField";
 import { claimSchema, type ClaimData } from "@/lib/auth-schema";
 import { useClaimApplication } from "@/hooks/useAuth";
 import { useApplicationLookup } from "@/hooks/useApplicationLookup";

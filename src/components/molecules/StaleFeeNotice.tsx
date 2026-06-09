@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { AlertTriangle } from "lucide-react";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import { formatRWF } from "@/lib/types/payment";
 import { cn } from "@/lib/utils";
 

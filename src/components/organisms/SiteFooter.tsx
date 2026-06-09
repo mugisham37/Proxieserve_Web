@@ -5,8 +5,8 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
-import { Wordmark } from "@/components/atoms/Wordmark";
-import { LangSwitcher } from "@/components/atoms/LangSwitcher";
+import { Wordmark } from "@/components/atoms/shared/Wordmark";
+import { LangSwitcher } from "@/components/atoms/shared/LangSwitcher";
 
 const FOOTER_COLS = [
   {

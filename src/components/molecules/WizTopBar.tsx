@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Wordmark } from "@/components/atoms/Wordmark";
+import { Wordmark } from "@/components/atoms/shared/Wordmark";
 import { WizSaveState } from "./WizSaveState";
 
 interface WizTopBarProps {

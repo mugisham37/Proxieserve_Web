@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { TimelineDot } from "@/components/atoms/TimelineDot";
+import { TimelineDot } from "@/components/atoms/shared/TimelineDot";
 import type { TimelineStep } from "@/lib/tracker-data";
 
 interface TimelineNodeProps {

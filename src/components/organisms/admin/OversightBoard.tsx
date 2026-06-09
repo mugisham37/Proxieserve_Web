@@ -4,7 +4,7 @@ import * as React from "react";
 import { AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AppButton } from "@/components/atoms/AppButton";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 import { CaseOversightRow } from "@/components/molecules/CaseOversightRow";
 import { AuditRow } from "@/components/molecules/AuditRow";
 import { PermissionBoundaryDialog } from "@/components/molecules/PermissionBoundaryDialog";

@@ -1,39 +1,71 @@
-export { PillButton, pillButtonVariants } from "./PillButton";
-export type { PillButtonProps } from "./PillButton";
+// shared
+export { PillButton, pillButtonVariants } from "./shared/PillButton";
+export type { PillButtonProps } from "./shared/PillButton";
 
-export { AppButton, appButtonVariants } from "./AppButton";
-export type { AppButtonProps } from "./AppButton";
+export { AppButton, appButtonVariants } from "./shared/AppButton";
+export type { AppButtonProps } from "./shared/AppButton";
 
-export { StatusPill } from "./StatusPill";
-export type { StatusPillProps } from "./StatusPill";
+export { StatusPill } from "./shared/StatusPill";
+export type { StatusPillProps } from "./shared/StatusPill";
 
-export { CodeChip } from "./CodeChip";
+export { Tag } from "./shared/Tag";
+export type { TagProps } from "./shared/Tag";
 
-export { Tag } from "./Tag";
-export type { TagProps } from "./Tag";
+export { Avatar } from "./shared/Avatar";
+export type { AvatarProps } from "./shared/Avatar";
 
-export { Avatar } from "./Avatar";
-export type { AvatarProps } from "./Avatar";
+export { Eyebrow } from "./shared/Eyebrow";
+export { SkeletonBlock } from "./shared/SkeletonBlock";
+export { LangSwitcher } from "./shared/LangSwitcher";
+export { Wordmark } from "./shared/Wordmark";
+export { SectionNum } from "./shared/SectionNum";
+export { Divider } from "./shared/Divider";
+export { SearchInput } from "./shared/SearchInput";
+export { QuickActionChip } from "./shared/QuickActionChip";
+export { Switch } from "./shared/Switch";
+export { ThemeToggle } from "./shared/ThemeToggle";
+export { NotificationBell } from "./shared/NotificationBell";
+export { PwaInit } from "./shared/PwaInit";
+export { PhonePulse } from "./shared/PhonePulse";
+export { PrivacySeal } from "./shared/PrivacySeal";
+export { KbdHint } from "./shared/KbdHint";
+export { FileThumb } from "./shared/FileThumb";
+export { DocThumb } from "./shared/DocThumb";
+export { TimelineDot } from "./shared/TimelineDot";
 
-export { Eyebrow } from "./Eyebrow";
+// auth
+export { FormField } from "./auth/FormField";
+export { PasswordField } from "./auth/PasswordField";
+export { CardField } from "./auth/CardField";
+export type { CardBrand } from "./auth/CardField";
+export { OTPInput } from "./auth/OTPInput";
+export { PasswordStrengthMeter } from "./auth/PasswordStrengthMeter";
+export { LockoutClock } from "./auth/LockoutClock";
+export { ResendCooldown } from "./auth/ResendCooldown";
 
-export { FormField } from "./FormField";
+// payment
+export { PayStatusTag } from "./payment/PayStatusTag";
+export { CountdownTimer } from "./payment/CountdownTimer";
 
-export { SkeletonBlock } from "./SkeletonBlock";
+// agent
+export { PriorityDot } from "./agent/PriorityDot";
+export { SLABadge } from "./agent/SLABadge";
+export { AuditKindTag } from "./agent/AuditKindTag";
+export { AvailabilityDot } from "./agent/AvailabilityDot";
 
-export { LangSwitcher } from "./LangSwitcher";
+// admin
+export { AdminVersionBadge } from "./admin/AdminVersionBadge";
+export { EnvBadge } from "./admin/EnvBadge";
+export { KpiCard } from "./admin/KpiCard";
+export { StatTile } from "./admin/StatTile";
 
-export { Wordmark } from "./Wordmark";
+// tracker
+export { CodeChip } from "./tracker/CodeChip";
+export { CodeEntryInput } from "./tracker/CodeEntryInput";
 
-export { SectionNum } from "./SectionNum";
-
-export { Divider } from "./Divider";
-
-export { SearchInput } from "./SearchInput";
-
-export { ProgressNodes } from "./ProgressNodes";
-export type { ProgressStep } from "./ProgressNodes";
-
-export { StatTile } from "./StatTile";
-
-export { QuickActionChip } from "./QuickActionChip";
+// wizard
+export { ProgressBar } from "./wizard/ProgressBar";
+export { ProgressNodes } from "./wizard/ProgressNodes";
+export type { ProgressStep } from "./wizard/ProgressNodes";
+export { RadioCard } from "./wizard/RadioCard";
+export { SegmentedGroup } from "./wizard/SegmentedGroup";

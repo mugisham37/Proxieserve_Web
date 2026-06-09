@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
-import { Tag } from "@/components/atoms/Tag";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
+import { Tag } from "@/components/atoms/shared/Tag";
 import { SiteFooter } from "@/components/organisms/SiteFooter";
 import Link from "next/link";
 

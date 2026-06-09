@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import type { OutcomeData } from "@/lib/tracker-data";
 
 interface OutcomeCardProps {

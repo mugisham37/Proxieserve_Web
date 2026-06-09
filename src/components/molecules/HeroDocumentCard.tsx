@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { StatusPill } from "@/components/atoms/StatusPill";
+import { StatusPill } from "@/components/atoms/shared/StatusPill";
 
 interface HeroDocumentCardProps extends React.HTMLAttributes<HTMLDivElement> {
   filename?: string;

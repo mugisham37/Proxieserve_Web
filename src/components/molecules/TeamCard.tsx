@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Avatar } from "@/components/atoms/Avatar";
-import type { AvatarProps } from "@/components/atoms/Avatar";
+import { Avatar } from "@/components/atoms/shared/Avatar";
+import type { AvatarProps } from "@/components/atoms/shared/Avatar";
 
 interface TeamCardProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string;

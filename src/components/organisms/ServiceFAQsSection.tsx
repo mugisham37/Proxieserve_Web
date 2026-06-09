@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { FAQItem } from "@/components/molecules/FAQItem";
 import { type Service } from "@/lib/services-data";
 

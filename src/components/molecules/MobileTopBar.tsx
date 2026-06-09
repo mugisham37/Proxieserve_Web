@@ -3,8 +3,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Wordmark } from "@/components/atoms/Wordmark";
-import { NotificationBell } from "@/components/atoms/NotificationBell";
+import { Wordmark } from "@/components/atoms/shared/Wordmark";
+import { NotificationBell } from "@/components/atoms/shared/NotificationBell";
 
 interface MobileTopBarProps {
   initials: string;

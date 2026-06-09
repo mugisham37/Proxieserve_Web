@@ -4,7 +4,7 @@ import * as React from "react";
 import { AnimatePresence } from "framer-motion";
 import { Plus, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AppButton } from "@/components/atoms/AppButton";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 import { PricingTableRow } from "@/components/molecules/PricingTableRow";
 import { AgentTableRow } from "@/components/molecules/AgentTableRow";
 import { ScheduledChangesBanner } from "@/components/molecules/ScheduledChangesBanner";

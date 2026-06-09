@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Check, AlertTriangle, UserMinus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Tag } from "@/components/atoms/Tag";
-import { ProgressBar } from "@/components/atoms/ProgressBar";
-import { StatusPill } from "@/components/atoms/StatusPill";
+import { Tag } from "@/components/atoms/shared/Tag";
+import { ProgressBar } from "@/components/atoms/wizard/ProgressBar";
+import { StatusPill } from "@/components/atoms/shared/StatusPill";
 import type { AdminAgent } from "@/lib/types/admin";
 
 interface AgentTableRowProps {

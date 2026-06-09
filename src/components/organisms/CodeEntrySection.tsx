@@ -3,8 +3,8 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { CodeEntryInput } from "@/components/atoms/CodeEntryInput";
-import { PillButton } from "@/components/atoms/PillButton";
+import { CodeEntryInput } from "@/components/atoms/tracker/CodeEntryInput";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import { TrackerEntryTip } from "@/components/molecules/TrackerEntryTip";
 import { LostCodeRecoveryCard } from "@/components/molecules/LostCodeRecoveryCard";
 import { isValidTrackerCode, TRACKER_ERROR } from "@/lib/tracker";

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { FAQItem } from "@/components/molecules/FAQItem";
 import { SiteFooter } from "@/components/organisms/SiteFooter";
 

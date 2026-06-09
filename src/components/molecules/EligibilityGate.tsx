@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ShieldAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AppButton } from "@/components/atoms/AppButton";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 
 interface EligibilityGateProps {
   mode?: "overlay" | "inline";

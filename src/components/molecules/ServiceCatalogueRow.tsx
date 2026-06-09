@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Pencil, WrapText } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { StatusPill } from "@/components/atoms/StatusPill";
-import { AdminVersionBadge } from "@/components/atoms/AdminVersionBadge";
-import { AppButton } from "@/components/atoms/AppButton";
+import { StatusPill } from "@/components/atoms/shared/StatusPill";
+import { AdminVersionBadge } from "@/components/atoms/admin/AdminVersionBadge";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 import type { ServiceRow } from "@/lib/types/admin";
 
 interface ServiceCatalogueRowProps {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { SiteFooter } from "@/components/organisms/SiteFooter";
 
 export const metadata: Metadata = {

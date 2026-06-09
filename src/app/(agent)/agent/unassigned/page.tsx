@@ -3,9 +3,9 @@
 import * as React from "react";
 import { Inbox } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { PriorityDot } from "@/components/atoms/PriorityDot";
-import { SLABadge } from "@/components/atoms/SLABadge";
-import { StatusPill } from "@/components/atoms/StatusPill";
+import { PriorityDot } from "@/components/atoms/agent/PriorityDot";
+import { SLABadge } from "@/components/atoms/agent/SLABadge";
+import { StatusPill } from "@/components/atoms/shared/StatusPill";
 
 interface UnassignedCase {
   code: string;

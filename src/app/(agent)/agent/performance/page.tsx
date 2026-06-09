@@ -3,8 +3,8 @@
 import * as React from "react";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { StatTile } from "@/components/atoms/StatTile";
-import { Switch } from "@/components/atoms/Switch";
+import { StatTile } from "@/components/atoms/admin/StatTile";
+import { Switch } from "@/components/atoms/shared/Switch";
 import { PerfBarChart } from "@/components/molecules/PerfBarChart";
 import { Leaderboard } from "@/components/molecules/Leaderboard";
 import { useAgentState, useAgentDispatch } from "@/lib/agent-context";

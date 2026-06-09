@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ShieldAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AppButton } from "@/components/atoms/AppButton";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 import type { PermissionDialogState } from "@/lib/types/admin";
 
 interface PermissionBoundaryDialogProps {

@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Wordmark } from "@/components/atoms/Wordmark";
-import { LangSwitcher } from "@/components/atoms/LangSwitcher";
+import { Wordmark } from "@/components/atoms/shared/Wordmark";
+import { LangSwitcher } from "@/components/atoms/shared/LangSwitcher";
 import { cn } from "@/lib/utils";
 
 interface AuthTopBarProps {

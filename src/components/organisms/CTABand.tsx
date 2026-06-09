@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 
 export function CTABand({ className }: { className?: string }) {
   return (

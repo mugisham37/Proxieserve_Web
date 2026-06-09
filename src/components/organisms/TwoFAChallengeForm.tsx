@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { AuthCard } from "@/components/molecules/AuthCard";
 import { AuthBanner } from "@/components/molecules/AuthBanner";
 import { TwoFAMethodToggle, type TwoFAMethod } from "@/components/molecules/TwoFAMethodToggle";
-import { OTPInput } from "@/components/atoms/OTPInput";
+import { OTPInput } from "@/components/atoms/auth/OTPInput";
 import { useStaffTwoFactor } from "@/hooks/useAuth";
 import { isApiError } from "@/lib/api/types";
 import { cn } from "@/lib/utils";

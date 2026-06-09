@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { StatusPill } from "@/components/atoms/StatusPill";
-import { ProgressBar } from "@/components/atoms/ProgressBar";
+import { StatusPill } from "@/components/atoms/shared/StatusPill";
+import { ProgressBar } from "@/components/atoms/wizard/ProgressBar";
 import type { AdminAgent } from "@/lib/types/admin";
 interface AgentPerfRowProps {
   agent: AdminAgent;

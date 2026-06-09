@@ -13,9 +13,9 @@ import { WizFooter } from "@/components/molecules/WizFooter";
 import { WizJumpNav } from "@/components/molecules/WizJumpNav";
 import { WizValidationBanner } from "@/components/molecules/WizValidationBanner";
 import { ConditionalField } from "@/components/molecules/ConditionalField";
-import { FormField } from "@/components/atoms/FormField";
-import { RadioCard } from "@/components/atoms/RadioCard";
-import { Switch } from "@/components/atoms/Switch";
+import { FormField } from "@/components/atoms/auth/FormField";
+import { RadioCard } from "@/components/atoms/wizard/RadioCard";
+import { Switch } from "@/components/atoms/shared/Switch";
 
 interface WizStep2ServiceProps {
   service: Service;

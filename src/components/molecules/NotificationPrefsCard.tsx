@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Switch } from "@/components/atoms/Switch";
+import { Switch } from "@/components/atoms/shared/Switch";
 import { getItem, setItem } from "@/lib/storage";
 
 interface NotificationPrefsCardProps {

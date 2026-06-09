@@ -4,10 +4,10 @@ import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useScrolled } from "@/hooks/useScrolled";
-import { Wordmark } from "@/components/atoms/Wordmark";
-import { PillButton } from "@/components/atoms/PillButton";
-import { LangSwitcher } from "@/components/atoms/LangSwitcher";
-import { ThemeToggle } from "@/components/atoms/ThemeToggle";
+import { Wordmark } from "@/components/atoms/shared/Wordmark";
+import { PillButton } from "@/components/atoms/shared/PillButton";
+import { LangSwitcher } from "@/components/atoms/shared/LangSwitcher";
+import { ThemeToggle } from "@/components/atoms/shared/ThemeToggle";
 import { useAuth } from "@/lib/auth-context";
 
 const NAV_LINKS = [

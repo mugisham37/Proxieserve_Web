@@ -19,9 +19,9 @@ import {
   MOCK_USER,
   getTodayLabel,
 } from "@/lib/dashboard-data";
-import { StatTile } from "@/components/atoms/StatTile";
-import { QuickActionChip } from "@/components/atoms/QuickActionChip";
-import { SkeletonBlock } from "@/components/atoms/SkeletonBlock";
+import { StatTile } from "@/components/atoms/admin/StatTile";
+import { QuickActionChip } from "@/components/atoms/shared/QuickActionChip";
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
 import { WelcomeBanner } from "@/components/molecules/WelcomeBanner";
 import { ApplicationCard } from "@/components/molecules/ApplicationCard";
 import { RecentMessageRow } from "@/components/molecules/RecentMessageRow";

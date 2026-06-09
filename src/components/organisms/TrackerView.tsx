@@ -11,7 +11,7 @@ import { NotificationPrefsCard } from "@/components/molecules/NotificationPrefsC
 import { OutcomeCard } from "@/components/molecules/OutcomeCard";
 import { RejectionPanel } from "@/components/molecules/RejectionPanel";
 import { ClaimToAccountModal } from "@/components/molecules/ClaimToAccountModal";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import { getItem, setItem } from "@/lib/storage";
 import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";

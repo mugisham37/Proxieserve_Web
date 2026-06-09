@@ -4,8 +4,8 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Wordmark } from "@/components/atoms/Wordmark";
-import { PillButton } from "@/components/atoms/PillButton";
+import { Wordmark } from "@/components/atoms/shared/Wordmark";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 
 const NAV_LINKS = [
   { label: "Services", href: "/services" },

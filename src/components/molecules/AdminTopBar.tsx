@@ -5,8 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { KbdHint } from "@/components/atoms/KbdHint";
-import { NotificationBell } from "@/components/atoms/NotificationBell";
+import { KbdHint } from "@/components/atoms/shared/KbdHint";
+import { NotificationBell } from "@/components/atoms/shared/NotificationBell";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
 
 const BREADCRUMB_MAP: Record<string, string> = {

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { AppButton } from "@/components/atoms/AppButton";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 
 interface ErrorStateProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;

@@ -4,9 +4,9 @@ import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Tag } from "@/components/atoms/Tag";
-import { StatusPill } from "@/components/atoms/StatusPill";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
+import { Tag } from "@/components/atoms/shared/Tag";
+import { StatusPill } from "@/components/atoms/shared/StatusPill";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { type Service, COLOUR_MAP, CATEGORY_LABELS } from "@/lib/services-data";
 
 interface CatalogueCardProps {

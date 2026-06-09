@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { PriorityDot } from "@/components/atoms/PriorityDot";
+import { PriorityDot } from "@/components/atoms/agent/PriorityDot";
 import type { CaseDetail } from "@/lib/types/agent";
 
 interface SLARailCardProps {

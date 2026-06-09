@@ -14,7 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { SideNavLink } from "@/components/molecules/SideNavLink";
 import { UserChip } from "@/components/molecules/UserChip";
-import { ThemeToggle } from "@/components/atoms/ThemeToggle";
+import { ThemeToggle } from "@/components/atoms/shared/ThemeToggle";
 import { TOTAL_APP_COUNT } from "@/lib/dashboard-data";
 import type { DashboardUser } from "@/lib/types/dashboard";
 

@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { X, GitMerge } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AppButton } from "@/components/atoms/AppButton";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 
 interface SchemaPublishDialogProps {
   draftCount: number;

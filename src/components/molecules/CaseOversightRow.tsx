@@ -1,8 +1,8 @@
 import * as React from "react";
 import { AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { StatusPill } from "@/components/atoms/StatusPill";
-import { AppButton } from "@/components/atoms/AppButton";
+import { StatusPill } from "@/components/atoms/shared/StatusPill";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 import type { OversightCase } from "@/lib/types/admin";
 
 interface CaseOversightRowProps {

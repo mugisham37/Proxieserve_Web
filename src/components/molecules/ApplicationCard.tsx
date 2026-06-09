@@ -4,8 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { StatusPill } from "@/components/atoms/StatusPill";
-import { ProgressNodes } from "@/components/atoms/ProgressNodes";
+import { StatusPill } from "@/components/atoms/shared/StatusPill";
+import { ProgressNodes } from "@/components/atoms/wizard/ProgressNodes";
 import { STATUS_STRIP_COLOR, STATUS_LABEL, formatFeeShort } from "@/lib/dashboard-data";
 import type { DashboardApplication } from "@/lib/types/dashboard";
 

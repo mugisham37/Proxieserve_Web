@@ -1,6 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 
 export default function TrackerNotFound() {
   return (

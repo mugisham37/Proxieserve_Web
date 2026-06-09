@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { formatTrackerCode, isValidTrackerCode, TRACKER_ERROR } from "@/lib/tracker";
 import { STORAGE_KEYS, setItem } from "@/lib/storage";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 
 interface TrackerInputProps {
   onSubmit?: (code: string) => void;

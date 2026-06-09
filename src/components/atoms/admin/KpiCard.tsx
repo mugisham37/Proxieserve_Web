@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SkeletonBlock } from "@/components/atoms/SkeletonBlock";
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
 import type { AdminMetric } from "@/lib/types/admin";
 
 interface KpiCardProps {

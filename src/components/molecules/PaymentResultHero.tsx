@@ -10,7 +10,7 @@ import {
   Info,
   RefreshCw,
 } from "lucide-react";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import { cn } from "@/lib/utils";
 
 type ResultVariant = "ok" | "danger" | "warn" | "info" | "brand";

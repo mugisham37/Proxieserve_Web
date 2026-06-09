@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { KbdHint } from "@/components/atoms/KbdHint";
+import { KbdHint } from "@/components/atoms/shared/KbdHint";
 
 interface HintItem {
   keys: string[];

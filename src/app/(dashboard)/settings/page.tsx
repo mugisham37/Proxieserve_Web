@@ -7,8 +7,8 @@ import { SettingsSection } from "@/components/molecules/SettingsSection";
 import { SettingsRow } from "@/components/molecules/SettingsRow";
 import { TrustedDeviceRow } from "@/components/molecules/TrustedDeviceRow";
 import { DangerZone } from "@/components/molecules/DangerZone";
-import { Switch } from "@/components/atoms/Switch";
-import { SegmentedGroup } from "@/components/atoms/SegmentedGroup";
+import { Switch } from "@/components/atoms/shared/Switch";
+import { SegmentedGroup } from "@/components/atoms/wizard/SegmentedGroup";
 import {
   MOCK_USER,
   MOCK_TRUSTED_DEVICES,

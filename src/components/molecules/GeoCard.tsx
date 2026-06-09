@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 
 interface GeoCardProps extends React.HTMLAttributes<HTMLDivElement> {
   countryName?: string;

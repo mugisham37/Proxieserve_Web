@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { X, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AppButton } from "@/components/atoms/AppButton";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 import type { BroadcastConfirmState } from "@/lib/types/admin";
 
 interface BroadcastConfirmDialogProps {

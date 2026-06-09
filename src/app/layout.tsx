@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import { Providers } from "@/lib/providers";
 import { Toaster } from "@/components/molecules/Toaster";
-import { PwaInit } from "@/components/atoms/PwaInit";
+import { PwaInit } from "@/components/atoms/shared/PwaInit";
 import { InstallPrompt } from "@/components/molecules/InstallPrompt";
 
 type Locale = "en" | "rw" | "fr";

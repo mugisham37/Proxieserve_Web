@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { RequirementRow } from "@/components/molecules/RequirementRow";
 import { EligibilityGate } from "@/components/molecules/EligibilityGate";
 import { InPersonCallout } from "@/components/molecules/InPersonCallout";

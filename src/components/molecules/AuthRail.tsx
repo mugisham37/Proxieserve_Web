@@ -1,7 +1,7 @@
 import * as React from "react";
-import { PrivacySeal } from "@/components/atoms/PrivacySeal";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
-import { Avatar } from "@/components/atoms/Avatar";
+import { PrivacySeal } from "@/components/atoms/shared/PrivacySeal";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
+import { Avatar } from "@/components/atoms/shared/Avatar";
 import { cn } from "@/lib/utils";
 
 interface AuthRailProps {

@@ -3,9 +3,9 @@
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { KbdHint } from "@/components/atoms/KbdHint";
-import { AvailabilityDot } from "@/components/atoms/AvailabilityDot";
-import { NotificationBell } from "@/components/atoms/NotificationBell";
+import { KbdHint } from "@/components/atoms/shared/KbdHint";
+import { AvailabilityDot } from "@/components/atoms/agent/AvailabilityDot";
+import { NotificationBell } from "@/components/atoms/shared/NotificationBell";
 import { useAgentState, useToggleAvailability } from "@/lib/agent-context";
 
 export function AgentTopBar() {

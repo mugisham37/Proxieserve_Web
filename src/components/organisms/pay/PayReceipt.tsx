@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ReceiptRow } from "@/components/molecules/ReceiptRow";
-import { PillButton } from "@/components/atoms/PillButton";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import { usePayment } from "@/lib/payment-context";
 import { useAuth } from "@/lib/auth-context";
 import { MOCK_RECEIPT } from "@/lib/demo/payment-demo";

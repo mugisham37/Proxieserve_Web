@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 
 interface MissionCardProps extends React.HTMLAttributes<HTMLDivElement> {
   eyebrow?: string;

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ResendCooldown } from "@/components/atoms/ResendCooldown";
+import { ResendCooldown } from "@/components/atoms/auth/ResendCooldown";
 import { cn } from "@/lib/utils";
 
 interface EmailSentConfirmationProps {

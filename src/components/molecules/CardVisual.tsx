@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import type { CardBrand } from "@/components/atoms/CardField";
+import type { CardBrand } from "@/components/atoms/auth/CardField";
 import { cn } from "@/lib/utils";
 
 interface CardVisualProps {

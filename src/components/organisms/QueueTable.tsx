@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { CaseQueueRow } from "@/components/molecules/CaseQueueRow";
 import { CaseCard } from "@/components/molecules/CaseCard";
-import { SkeletonBlock } from "@/components/atoms/SkeletonBlock";
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
 import type { AgentCase, QueueTab } from "@/lib/types/agent";
 import { useAgentState, useAgentDispatch, useFilteredCases, useCaseCounts } from "@/lib/agent-context";
 import { CheckCircle } from "lucide-react";

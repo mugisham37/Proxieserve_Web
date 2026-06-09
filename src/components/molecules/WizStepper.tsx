@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { ProgressBar } from "@/components/atoms/ProgressBar";
+import { ProgressBar } from "@/components/atoms/wizard/ProgressBar";
 
 const STEP_LABELS = ["Personal", "Service", "Documents", "Review", "Done"];
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
-import { PillButton } from "@/components/atoms/PillButton";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import { TeamCard } from "@/components/molecules/TeamCard";
 import { MissionCard } from "@/components/molecules/MissionCard";
 import { SiteFooter } from "@/components/organisms/SiteFooter";

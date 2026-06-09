@@ -14,9 +14,9 @@ import { WizFooter } from "@/components/molecules/WizFooter";
 import { WizValidationBanner } from "@/components/molecules/WizValidationBanner";
 import { PhoneField } from "@/components/molecules/PhoneField";
 import { NationalIdField } from "@/components/molecules/NationalIdField";
-import { FormField } from "@/components/atoms/FormField";
-import { Switch } from "@/components/atoms/Switch";
-import { SegmentedGroup } from "@/components/atoms/SegmentedGroup";
+import { FormField } from "@/components/atoms/auth/FormField";
+import { Switch } from "@/components/atoms/shared/Switch";
+import { SegmentedGroup } from "@/components/atoms/wizard/SegmentedGroup";
 
 type Step1Values = z.infer<typeof step1Schema>;
 

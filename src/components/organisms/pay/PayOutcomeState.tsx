@@ -18,7 +18,7 @@ import { motion } from "framer-motion";
 import { PaymentResultHero } from "@/components/molecules/PaymentResultHero";
 import { StaleFeeNotice } from "@/components/molecules/StaleFeeNotice";
 import { DisputeForm } from "@/components/molecules/DisputeForm";
-import { PayStatusTag } from "@/components/atoms/PayStatusTag";
+import { PayStatusTag } from "@/components/atoms/payment/PayStatusTag";
 import { usePayment } from "@/lib/payment-context";
 import type { PaymentOutcome } from "@/lib/types/payment";
 

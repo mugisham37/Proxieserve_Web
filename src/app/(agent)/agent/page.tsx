@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Download, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { StatTile } from "@/components/atoms/StatTile";
+import { StatTile } from "@/components/atoms/admin/StatTile";
 import { QueueTable } from "@/components/organisms/QueueTable";
 import { KbdHintBar, QUEUE_HINTS } from "@/components/molecules/KbdHintBar";
 import { useAgentState, useAgentDispatch } from "@/lib/agent-context";

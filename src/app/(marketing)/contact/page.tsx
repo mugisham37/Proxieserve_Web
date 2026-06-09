@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Eyebrow } from "@/components/atoms/Eyebrow";
-import { FormField } from "@/components/atoms/FormField";
-import { PillButton } from "@/components/atoms/PillButton";
+import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
+import { FormField } from "@/components/atoms/auth/FormField";
+import { PillButton } from "@/components/atoms/shared/PillButton";
 import { ContactMethod } from "@/components/molecules/ContactMethod";
 import { SiteFooter } from "@/components/organisms/SiteFooter";
 

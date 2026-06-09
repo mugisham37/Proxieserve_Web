@@ -4,7 +4,7 @@ import * as React from "react";
 import { Reorder, AnimatePresence } from "framer-motion";
 import { Plus, Eye, Save, Send, Monitor } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AppButton } from "@/components/atoms/AppButton";
+import { AppButton } from "@/components/atoms/shared/AppButton";
 import { FieldCard } from "@/components/molecules/FieldCard";
 import { FieldInspector } from "@/components/molecules/FieldInspector";
 import { SchemaPublishDialog } from "@/components/molecules/SchemaPublishDialog";

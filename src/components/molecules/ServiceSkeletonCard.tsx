@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { SkeletonBlock } from "@/components/atoms/SkeletonBlock";
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
 
 export function ServiceSkeletonCard({ className }: { className?: string }) {
   return (

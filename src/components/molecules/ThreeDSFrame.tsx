@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { OTPInput } from "@/components/atoms/OTPInput";
-import { CountdownTimer } from "@/components/atoms/CountdownTimer";
+import { OTPInput } from "@/components/atoms/auth/OTPInput";
+import { CountdownTimer } from "@/components/atoms/payment/CountdownTimer";
 import { cn } from "@/lib/utils";
 
 interface ThreeDSFrameProps {
