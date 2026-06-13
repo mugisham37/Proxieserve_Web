@@ -6,18 +6,10 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "@/lib/dashboard-context";
-import {
-  getApplicationByCode,
-  getMessagesByCode,
-  getDocumentsByCode,
-  formatFee,
-  formatFileSize,
-  MOCK_HISTORY,
-} from "@/lib/dashboard-data";
+import { formatFee, formatFileSize } from "@/lib/dashboard-utils";
 import { InAppStatusHero } from "@/components/molecules/agent/InAppStatusHero";
 import { DetailTabs } from "@/components/molecules/agent/DetailTabs";
-import { HistoryRow } from "@/components/molecules/agent/HistoryRow";
-import type { DashboardMessage, DashboardDocument } from "@/lib/types/dashboard";
+import type { DashboardApplication, DashboardMessage, DashboardDocument } from "@/lib/types/dashboard";
 
 // ─── Compact agent mini card (reference exact) ───────────────────────────────
 
@@ -463,9 +455,10 @@ export default function ApplicationDetailPage() {
   const { addOptimisticMessage, resolveOptimisticMessage, isOffline } = useDashboard();
 
   const tab = searchParams.get("tab") ?? "overview";
-  const application = getApplicationByCode(code);
-  const rawMessages = getMessagesByCode(code);
-  const documents = getDocumentsByCode(code);
+  // TODO: fetch from API using `code`
+  const application = null as DashboardApplication | null;
+  const rawMessages: DashboardMessage[] = [];
+  const documents: DashboardDocument[] = [];
 
   const [localMessages, setLocalMessages] = React.useState(rawMessages);
 
@@ -646,9 +639,7 @@ export default function ApplicationDetailPage() {
                   <section>
                     <SectionHead eyebrow="04 / Timeline" title="Application" titleItalic="history" />
                     <div className="bg-[var(--paper)] border border-[var(--rule)] rounded-[var(--r-lg)] overflow-hidden">
-                      {MOCK_HISTORY.map((entry) => (
-                        <HistoryRow key={entry.code} entry={entry} />
-                      ))}
+                      <p className="font-sans text-[13px] text-[var(--ink-muted)] px-[16px] py-[20px]">No history yet.</p>
                     </div>
                   </section>
                 )}
