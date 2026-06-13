@@ -5,38 +5,29 @@ import type {
   AdminState,
   AdminAction,
   AdminUser,
-  AdminAgent,
-  AdminMetric,
-  WeeklyBar,
-  ServiceMixBar,
-  PaymentMixBar,
-  StatusBreakdown,
-  AlertItem,
-  ServiceRow,
-  FieldDef,
-  PricingRow,
-  AuditEntry,
-  OversightCase,
-  BroadcastRecord,
   AdminSettings,
 } from "@/lib/types/admin";
-import {
-  MOCK_ADMIN_USER,
-  MOCK_ADMIN_AGENTS,
-  MOCK_KPI_METRICS,
-  MOCK_WEEKLY_BARS,
-  MOCK_SERVICE_MIX,
-  MOCK_PAYMENT_MIX,
-  MOCK_STATUS_BREAKDOWN,
-  MOCK_ALERTS,
-  MOCK_SERVICES,
-  MOCK_SCHEMA_FIELDS,
-  MOCK_PRICING_ROWS,
-  MOCK_AUDIT_LOG,
-  MOCK_OVERSIGHT_CASES,
-  MOCK_BROADCASTS,
-  MOCK_ADMIN_SETTINGS,
-} from "@/lib/admin-data";
+
+const EMPTY_ADMIN_USER: AdminUser = {
+  id: "",
+  fullName: "",
+  firstName: "",
+  initials: "",
+  email: "",
+  role: "MANAGER",
+  lastLogin: "",
+};
+
+const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
+  acceptNewApps: true,
+  guestApps: false,
+  dataRetention: "24 months",
+  compactTables: true,
+  enforce2FA: false,
+  sessionTimeout: 30,
+  ipAllowlist: "",
+  maintenanceMode: false,
+};
 
 // ─── Reducer ──────────────────────────────────────────────────────────────────
 
@@ -66,8 +57,7 @@ function adminReducer(state: AdminState, action: AdminAction): AdminState {
       return {
         ...state,
         activeSchemaServiceId: action.payload,
-        schemaFields:
-          action.payload === null ? state.schemaFields : MOCK_SCHEMA_FIELDS,
+        schemaFields: action.payload === null ? state.schemaFields : [],
       };
     case "UPDATE_SCHEMA_FIELDS":
       return { ...state, schemaFields: action.payload };
@@ -92,22 +82,22 @@ function adminReducer(state: AdminState, action: AdminAction): AdminState {
 
 function buildInitialState(storedDarkMode: boolean): AdminState {
   return {
-    user: MOCK_ADMIN_USER,
-    agents: MOCK_ADMIN_AGENTS,
-    metrics: MOCK_KPI_METRICS,
-    weeklyBars: MOCK_WEEKLY_BARS,
-    serviceMix: MOCK_SERVICE_MIX,
-    paymentMix: MOCK_PAYMENT_MIX,
-    statusBreakdown: MOCK_STATUS_BREAKDOWN,
-    alerts: MOCK_ALERTS,
-    settings: MOCK_ADMIN_SETTINGS,
-    services: MOCK_SERVICES,
+    user: EMPTY_ADMIN_USER,
+    agents: [],
+    metrics: [],
+    weeklyBars: [],
+    serviceMix: [],
+    paymentMix: [],
+    statusBreakdown: [],
+    alerts: [],
+    settings: DEFAULT_ADMIN_SETTINGS,
+    services: [],
     activeSchemaServiceId: null,
-    schemaFields: MOCK_SCHEMA_FIELDS,
-    pricingRows: MOCK_PRICING_ROWS,
-    auditLog: MOCK_AUDIT_LOG,
-    oversightCases: MOCK_OVERSIGHT_CASES,
-    broadcasts: MOCK_BROADCASTS,
+    schemaFields: [],
+    pricingRows: [],
+    auditLog: [],
+    oversightCases: [],
+    broadcasts: [],
     darkMode: storedDarkMode,
     isOffline: false,
     loading: true,
