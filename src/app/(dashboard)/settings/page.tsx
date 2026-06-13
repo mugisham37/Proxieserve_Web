@@ -9,12 +9,15 @@ import { TrustedDeviceRow } from "@/components/molecules/dashboard/TrustedDevice
 import { DangerZone } from "@/components/molecules/admin/DangerZone";
 import { Switch } from "@/components/atoms/shared/Switch";
 import { SegmentedGroup } from "@/components/atoms/wizard/SegmentedGroup";
-import {
-  MOCK_USER,
-  MOCK_TRUSTED_DEVICES,
-  MOCK_NOTIF_PREFS,
-} from "@/lib/dashboard-data";
-import type { NotificationPrefs } from "@/lib/types/dashboard";
+import { useAuth } from "@/lib/auth-context";
+import type { NotificationPrefs, TrustedDevice } from "@/lib/types/dashboard";
+
+const DEFAULT_NOTIF_PREFS: NotificationPrefs = {
+  whatsapp: true,
+  sms: true,
+  email: false,
+  tips: false,
+};
 
 // ─── Inline action link ───────────────────────────────────────────────────────
 
@@ -55,11 +58,14 @@ const LANGUAGE_OPTIONS = [
 
 export default function SettingsPage() {
   const signOutMutation = useSignOut();
+  const { session } = useAuth();
 
-  const [language, setLanguage] = React.useState<"en" | "rw" | "fr">(MOCK_USER.language);
-  const [notifPrefs, setNotifPrefs] = React.useState<NotificationPrefs>(MOCK_NOTIF_PREFS);
+  const [language, setLanguage] = React.useState<"en" | "rw" | "fr">(
+    (session?.language as "en" | "rw" | "fr") ?? "en"
+  );
+  const [notifPrefs, setNotifPrefs] = React.useState<NotificationPrefs>(DEFAULT_NOTIF_PREFS);
   const [twoFAEnabled, setTwoFAEnabled] = React.useState(false);
-  const [devices, setDevices] = React.useState(MOCK_TRUSTED_DEVICES);
+  const [devices, setDevices] = React.useState<TrustedDevice[]>([]);
 
   const handleRevokeDevice = React.useCallback((deviceId: string) => {
     setDevices((prev) => prev.filter((d) => d.id !== deviceId));
@@ -98,12 +104,12 @@ export default function SettingsPage() {
         >
           <SettingsRow
             label="Full name"
-            value={MOCK_USER.fullName}
+            value={session?.name ?? "—"}
             action={<ActionLink>Request change →</ActionLink>}
           />
           <SettingsRow
             label="National ID"
-            value={MOCK_USER.nationalId}
+            value="—"
             action={
               <span className="inline-flex items-center gap-[5px] font-sans text-[13px] text-[var(--ok)]">
                 Verified ✓
@@ -112,7 +118,7 @@ export default function SettingsPage() {
           />
           <SettingsRow
             label="Date of birth"
-            value={MOCK_USER.dateOfBirth}
+            value="—"
             action={<ActionLink>Request change →</ActionLink>}
           />
         </SettingsSection>
@@ -128,7 +134,7 @@ export default function SettingsPage() {
             description="Used for WhatsApp updates"
             value={
               <span>
-                {MOCK_USER.phone}{" "}
+                {session?.phone ?? "—"}{" "}
                 <span className="font-mono text-[11px]">· WhatsApp on</span>
               </span>
             }
@@ -138,8 +144,8 @@ export default function SettingsPage() {
             label="Email"
             value={
               <span>
-                {MOCK_USER.email}{" "}
-                <span className="text-[var(--ok)]">· Verified</span>
+                {session?.email ?? "—"}{" "}
+                {session?.isEmailVerified && <span className="text-[var(--ok)]">· Verified</span>}
               </span>
             }
             action={<ActionLink>Update →</ActionLink>}
