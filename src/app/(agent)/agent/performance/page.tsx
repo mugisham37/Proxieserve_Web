@@ -8,7 +8,27 @@ import { Switch } from "@/components/atoms/shared/Switch";
 import { PerfBarChart } from "@/components/molecules/agent/PerfBarChart";
 import { Leaderboard } from "@/components/molecules/agent/Leaderboard";
 import { useAgentState, useAgentDispatch } from "@/lib/agent-context";
-import { MOCK_METRICS, MOCK_AGENT_SETTINGS } from "@/lib/agent-data";
+import type { AgentSettings } from "@/lib/types/agent";
+
+const DEFAULT_AGENT_SETTINGS: AgentSettings = {
+  acceptNewCases: true,
+  dailyCap: 8,
+  notifications: {
+    newCaseAssigned: true,
+    clientReplied: true,
+    slaApproaching: true,
+    dailySummary: false,
+  },
+  appearance: {
+    darkMode: false,
+    compactTables: true,
+  },
+  security: {
+    twoFactorEnabled: false,
+    trustedDevicesCount: 0,
+    passwordLastChangedLabel: "—",
+  },
+};
 
 // ─── Settings Row ─────────────────────────────────────────────────────────────
 
@@ -51,7 +71,7 @@ export default function PerformancePage() {
   const { darkMode } = useAgentState();
   const dispatch = useAgentDispatch();
 
-  const [settings, setSettings] = React.useState(MOCK_AGENT_SETTINGS);
+  const [settings, setSettings] = React.useState(DEFAULT_AGENT_SETTINGS);
   const [activeChip, setActiveChip] = React.useState<"month" | "quarter">("month");
 
   const toggleNotif = (key: keyof typeof settings.notifications) => {
@@ -110,31 +130,10 @@ export default function PerformancePage() {
       {/* Stat tiles */}
       <section aria-label="Performance metrics" className="mb-[32px]">
         <div className="grid grid-cols-2 min-[760px]:grid-cols-4 gap-[12px]">
-          <StatTile
-            label="Completed"
-            value={MOCK_METRICS.completedCount}
-            delta={MOCK_METRICS.completedDelta}
-            deltaColor="ok"
-          />
-          <StatTile
-            label="Avg turnaround"
-            value={`${MOCK_METRICS.avgTurnaround}d`}
-            delta={MOCK_METRICS.avgTurnaroundDelta}
-            deltaColor="ok"
-          />
-          <StatTile
-            label="On-time SLA"
-            value={`${MOCK_METRICS.onTimeSLAPercent}%`}
-            delta="target 90%"
-            deltaColor="muted"
-          />
-          <StatTile
-            label="Client rating"
-            value={MOCK_METRICS.clientRating}
-            delta={`from ${MOCK_METRICS.ratingsCount} ratings`}
-            deltaColor="brand"
-            variant="brand"
-          />
+          <StatTile label="Completed" value={0} delta="no data yet" />
+          <StatTile label="Avg turnaround" value="—" delta="no data yet" />
+          <StatTile label="On-time SLA" value="—" delta="target 90%" deltaColor="muted" />
+          <StatTile label="Client rating" value="—" delta="no ratings yet" variant="brand" />
         </div>
       </section>
 
@@ -149,7 +148,7 @@ export default function PerformancePage() {
             <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-[var(--ink-muted)] mb-[20px]">
               Last 6 weeks
             </p>
-            <PerfBarChart bars={MOCK_METRICS.weeklyBars} />
+            <PerfBarChart bars={[]} />
           </div>
 
           {/* Leaderboard */}
@@ -160,7 +159,7 @@ export default function PerformancePage() {
             <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-[var(--ink-muted)] mb-[16px]">
               Completed this month · anonymised ranks
             </p>
-            <Leaderboard entries={MOCK_METRICS.leaderboard} />
+            <Leaderboard entries={[]} />
           </div>
         </div>
       </section>
