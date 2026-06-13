@@ -3,7 +3,19 @@
 import * as React from "react";
 import type { PaymentSession, PaymentMethod, PaymentOutcome } from "@/lib/types/payment";
 import { PAY_SESSION_KEY } from "@/lib/types/payment";
-import { getPaymentSession, getDefaultSession } from "@/lib/demo/payment-demo";
+function getDefaultSession(applicationId: string): PaymentSession {
+  return {
+    applicationId,
+    trackingCode: applicationId,
+    serviceName: "Government service",
+    serviceFee: 0,
+    governmentFee: 0,
+    vatRate: 0.18,
+    platformFee: 0,
+    selectedMethod: null,
+    status: "idle",
+  };
+}
 
 /* ─── Actions ─── */
 
@@ -55,7 +67,7 @@ interface PaymentProviderProps {
 }
 
 export function PaymentProvider({ children, applicationId }: PaymentProviderProps) {
-  const initial = getPaymentSession(applicationId) ?? getDefaultSession(applicationId);
+  const initial = getDefaultSession(applicationId);
 
   const [session, dispatch] = React.useReducer(reducer, initial, (init) => {
     if (typeof window === "undefined") return init;
