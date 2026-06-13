@@ -7,7 +7,7 @@ import { StatTile } from "@/components/atoms/admin/StatTile";
 import { QueueTable } from "@/components/organisms/dashboard/QueueTable";
 import { KbdHintBar, QUEUE_HINTS } from "@/components/molecules/system/KbdHintBar";
 import { useAgentState, useAgentDispatch } from "@/lib/agent-context";
-import { getAgentStats } from "@/lib/agent-data";
+import { getAgentStats } from "@/lib/agent-utils";
 
 function getGreeting(firstName: string): string {
   const hour = new Date().getHours();
