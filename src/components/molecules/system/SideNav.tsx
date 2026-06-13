@@ -15,14 +15,17 @@ import { cn } from "@/lib/utils";
 import { SideNavLink } from "@/components/molecules/system/SideNavLink";
 import { UserChip } from "@/components/molecules/shared/UserChip";
 import { ThemeToggle } from "@/components/atoms/shared/ThemeToggle";
-import { TOTAL_APP_COUNT } from "@/lib/dashboard-data";
-import type { DashboardUser } from "@/lib/types/dashboard";
-
-// The first/most urgent application code — used for deep links
 const PRIMARY_APP = "PRX-2026-00483";
 
+interface SideNavUser {
+  fullName: string;
+  initials: string;
+  role?: string;
+  city?: string;
+}
+
 interface SideNavProps {
-  user: DashboardUser;
+  user: SideNavUser | null;
   unreadCount?: number;
   actionCount?: number;
   onSignOut?: () => void;
@@ -88,7 +91,6 @@ export function SideNav({
           href={`/app/${PRIMARY_APP}`}
           icon={<FileText size={16} />}
           label="Applications"
-          badge={TOTAL_APP_COUNT}
           isActive={isOnApp && activeTab !== "messages" && activeTab !== "documents"}
         />
         <SideNavLink
@@ -153,12 +155,14 @@ export function SideNav({
       )}
 
       {/* User chip */}
-      <UserChip
-        initials={user.initials}
-        fullName={user.fullName}
-        role={user.role}
-        city={user.city}
-      />
+      {user && (
+        <UserChip
+          initials={user.initials}
+          fullName={user.fullName}
+          role={user.role ?? ""}
+          city={user.city ?? ""}
+        />
+      )}
     </nav>
   );
 }
