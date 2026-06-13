@@ -10,11 +10,39 @@ import type {
   AvailabilityStatus,
   QueueTab,
 } from "@/lib/types/agent";
-import {
-  MOCK_AGENT_USER,
-  MOCK_CASES,
-  MOCK_AGENT_SETTINGS,
-} from "@/lib/agent-data";
+
+const EMPTY_AGENT_USER: AgentUser = {
+  id: "",
+  fullName: "",
+  firstName: "",
+  initials: "",
+  email: "",
+  role: "AGENT",
+  city: "",
+  availability: "available",
+  dailyCap: 8,
+  acceptNewCases: true,
+};
+
+const DEFAULT_AGENT_SETTINGS: AgentSettings = {
+  acceptNewCases: true,
+  dailyCap: 8,
+  notifications: {
+    newCaseAssigned: true,
+    clientReplied: true,
+    slaApproaching: true,
+    dailySummary: false,
+  },
+  appearance: {
+    darkMode: false,
+    compactTables: true,
+  },
+  security: {
+    twoFactorEnabled: false,
+    trustedDevicesCount: 0,
+    passwordLastChangedLabel: "",
+  },
+};
 
 // ─── Reducer ──────────────────────────────────────────────────────────────────
 
@@ -100,7 +128,7 @@ export function AgentProvider({ children }: AgentProviderProps) {
   const [state, dispatch] = React.useReducer(
     agentReducer,
     undefined,
-    () => buildInitialState(MOCK_AGENT_USER, MOCK_CASES, MOCK_AGENT_SETTINGS, false)
+    () => buildInitialState(EMPTY_AGENT_USER, [], DEFAULT_AGENT_SETTINGS, false)
   );
 
   // Hydrate dark mode from localStorage after mount
