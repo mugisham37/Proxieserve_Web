@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { PaymentProvider } from "@/lib/payment-context";
-import { getPaymentSession } from "@/lib/demo/payment-demo";
 
 interface Props {
   children: ReactNode;
@@ -11,8 +10,6 @@ interface Props {
 
 export default async function ApplicationPaymentLayout({ children, params }: Props) {
   const { applicationId } = await params;
-  const session = getPaymentSession(applicationId);
-  const serviceName = session?.serviceName ?? "Payment";
 
   return (
     <PaymentProvider applicationId={applicationId}>
@@ -31,7 +28,7 @@ export default async function ApplicationPaymentLayout({ children, params }: Pro
 
             <div className="flex items-center gap-2">
               <span className="font-serif italic text-[14px] text-[var(--ink-muted)]">
-                {serviceName}
+                Payment
               </span>
               <span className="text-[var(--rule-strong)]" aria-hidden="true">·</span>
               <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--ink-subtle)]">
