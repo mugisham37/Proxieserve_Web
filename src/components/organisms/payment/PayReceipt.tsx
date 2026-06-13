@@ -7,7 +7,6 @@ import { ReceiptRow } from "@/components/molecules/dashboard/ReceiptRow";
 import { PillButton } from "@/components/atoms/shared/PillButton";
 import { usePayment } from "@/lib/payment-context";
 import { useAuth } from "@/lib/auth-context";
-import { MOCK_RECEIPT } from "@/lib/demo/payment-demo";
 import { formatRWF, computeVAT, PAY_STATUS_KEY } from "@/lib/types/payment";
 
 const METHOD_LABEL: Record<string, string> = {
@@ -21,16 +20,7 @@ export function PayReceipt() {
   const { session } = usePayment();
   const { session: authSession } = useAuth();
 
-  // Merge session with mock receipt data for demo completeness
-  const receipt = {
-    ...MOCK_RECEIPT,
-    ...session,
-    transactionId: session.transactionId ?? MOCK_RECEIPT.transactionId,
-    receiptNumber: session.receiptNumber ?? MOCK_RECEIPT.receiptNumber,
-    paidAt: session.paidAt ?? MOCK_RECEIPT.paidAt,
-    maskedPhone: session.maskedPhone ?? MOCK_RECEIPT.maskedPhone,
-    selectedMethod: session.selectedMethod ?? MOCK_RECEIPT.selectedMethod,
-  };
+  const receipt = session;
 
   const vatAmount = computeVAT(receipt.serviceFee, receipt.vatRate);
   const methodLabel = receipt.selectedMethod ? METHOD_LABEL[receipt.selectedMethod] : "MTN Mobile Money";
