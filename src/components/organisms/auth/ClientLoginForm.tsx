@@ -262,6 +262,17 @@ export function ClientLoginForm() {
               Create one →
             </Link>
           </p>
+
+          {/* Staff portal link */}
+          <p className="font-sans text-[12px] text-center text-[var(--ink-subtle)]">
+            Agent or admin?{" "}
+            <Link
+              href="/staff/login"
+              className="text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors underline underline-offset-2"
+            >
+              Staff sign in →
+            </Link>
+          </p>
         </div>
         <AuthFooterLinks className="mt-4" />
       </AuthCard>

@@ -8,8 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { AuthCard } from "@/components/molecules/auth/AuthCard";
 import { AuthBanner } from "@/components/molecules/auth/AuthBanner";
-import { AuthDivider } from "@/components/molecules/auth/AuthDivider";
-import { SSOButton } from "@/components/molecules/auth/SSOButton";
 import { RoleToggle, type StaffRole } from "@/components/molecules/auth/RoleToggle";
 import { StaffChip } from "@/components/molecules/shared/StaffChip";
 import { EnvBadge } from "@/components/atoms/admin/EnvBadge";
@@ -165,10 +163,6 @@ export function StaffLoginForm() {
               "Continue to verification"
             )}
           </button>
-
-          <AuthDivider />
-
-          <SSOButton />
 
           <p className="font-mono text-[11px] text-center text-[var(--ink-subtle)]">
             ProxiServe Staff Portal v0.4
