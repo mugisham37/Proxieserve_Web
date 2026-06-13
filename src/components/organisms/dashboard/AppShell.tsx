@@ -13,7 +13,6 @@ import { MobileTabBar } from "@/components/molecules/system/MobileTabBar";
 import { EmailVerifyBanner } from "@/components/molecules/auth/EmailVerifyBanner";
 import { OfflineBanner } from "@/components/molecules/system/OfflineBanner";
 import { MultiTabConflictBanner } from "@/components/molecules/system/MultiTabConflictBanner";
-import { MOCK_USER, MOCK_SUMMARY } from "@/lib/dashboard-data";
 import { OnboardingProvider, useOnboarding } from "@/lib/onboarding-context";
 import { Coachmark } from "@/components/molecules/system/Coachmark";
 
@@ -123,7 +122,11 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
       {/* Desktop sidenav */}
       <React.Suspense>
         <SideNav
-          user={MOCK_USER}
+          user={session ? {
+            fullName: session.name,
+            initials: session.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase(),
+            role: session.role,
+          } : null}
           unreadCount={unreadCount}
           actionCount={actionCount}
           onSignOut={handleSignOut}
@@ -133,11 +136,11 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
       {/* Right column: top bar + banners + main + tab bar */}
       <div className="flex flex-col min-w-0">
         {/* Mobile top bar */}
-        <MobileTopBar initials={MOCK_USER.initials} />
+        <MobileTopBar initials={session ? session.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() : ""} />
 
         {/* Persistent banners */}
         <EmailVerifyBanner
-          email={session?.email ?? MOCK_USER.email}
+          email={session?.email ?? ""}
           visible={false}
         />
 
@@ -198,8 +201,8 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <OnboardingProvider>
       <DashboardProvider
-        initialUnreadCount={MOCK_SUMMARY.unreadCount}
-        initialActionCount={MOCK_SUMMARY.actionCount}
+        initialUnreadCount={0}
+        initialActionCount={0}
       >
         <AppShellInner>{children}</AppShellInner>
       </DashboardProvider>
