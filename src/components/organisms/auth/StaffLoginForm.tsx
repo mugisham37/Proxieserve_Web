@@ -23,7 +23,7 @@ export function StaffLoginForm() {
   const [role, setRole] = React.useState<StaffRole>("agent");
   const staffLoginMutation = useStaffLogin();
   const [bannerState, setBannerState] = React.useState<{
-    type: "invalid-credentials" | "expired" | "generic" | null;
+    type: "invalid-credentials" | "account-disabled" | "expired" | "generic" | null;
     message?: string;
   }>({
     type: searchParams.get("error") === "expired" ? "expired" : null,
@@ -60,6 +60,14 @@ export function StaffLoginForm() {
         return;
       }
 
+      if (isApiError(error) && error.errorType === "account-disabled") {
+        setBannerState({
+          type: "account-disabled",
+          message: "This account has been deactivated. Contact your administrator.",
+        });
+        return;
+      }
+
       setBannerState({
         type: "generic",
         message: isApiError(error)
@@ -92,6 +100,11 @@ export function StaffLoginForm() {
             variant="danger"
             message={bannerState.message ?? "Incorrect email or password."}
             visible={bannerState.type === "invalid-credentials" || bannerState.type === "generic"}
+          />
+          <AuthBanner
+            variant="danger"
+            message={bannerState.message ?? "This account has been deactivated. Contact your administrator."}
+            visible={bannerState.type === "account-disabled"}
           />
           <AuthBanner
             variant="warn"

@@ -9,6 +9,7 @@ export type TwoFAMethod = "totp" | "sms" | "backup";
 export type ApiErrorType =
   | "invalid-credentials"
   | "account-locked"
+  | "account-disabled"
   | "account-exists"
   | "otp-wrong"
   | "otp-expired"
