@@ -11,21 +11,12 @@ import {
   isAbsenceDismissed,
   dismissAbsenceBanner,
 } from "@/lib/dashboard-context";
-import {
-  MOCK_APPLICATIONS,
-  MOCK_MESSAGES,
-  MOCK_HISTORY,
-  MOCK_SUMMARY,
-  MOCK_USER,
-  getTodayLabel,
-} from "@/lib/dashboard-data";
+import { useAuth } from "@/lib/auth-context";
+import { getTodayLabel } from "@/lib/dashboard-utils";
 import { StatTile } from "@/components/atoms/admin/StatTile";
 import { QuickActionChip } from "@/components/atoms/shared/QuickActionChip";
 import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
 import { WelcomeBanner } from "@/components/molecules/system/WelcomeBanner";
-import { ApplicationCard } from "@/components/molecules/dashboard/ApplicationCard";
-import { RecentMessageRow } from "@/components/molecules/dashboard/RecentMessageRow";
-import { HistoryRow } from "@/components/molecules/agent/HistoryRow";
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 
@@ -87,55 +78,17 @@ function SectionHead({
   );
 }
 
-// ─── List card ────────────────────────────────────────────────────────────────
-
-function ListCardHead({
-  title,
-  titleItalic,
-  badge,
-  moreLabel = "All →",
-  moreHref,
-}: {
-  title: string;
-  titleItalic?: string;
-  badge?: number;
-  moreLabel?: string;
-  moreHref?: string;
-}) {
-  return (
-    <div className="flex items-center justify-between px-[16px] py-[14px] border-b border-[var(--rule)]">
-      <h3 className="font-serif text-[16px] font-normal text-[var(--ink)]">
-        {title}
-        {titleItalic && (
-          <em className="italic font-normal"> {titleItalic}</em>
-        )}
-        {badge !== undefined && badge > 0 && (
-          <span className="ml-[8px] inline-flex items-center justify-center min-w-[18px] h-[18px] px-[4px] rounded-full bg-[var(--brand-soft)] text-[var(--brand-ink)] font-mono text-[10px] font-medium not-italic">
-            {badge}
-            <span className="sr-only"> unread</span>
-          </span>
-        )}
-      </h3>
-      {moreHref && (
-        <Link
-          href={moreHref}
-          className="font-sans text-[12px] text-[var(--brand-ink)] hover:text-[var(--brand)] transition-colors"
-        >
-          {moreLabel}
-        </Link>
-      )}
-    </div>
-  );
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
   const prefersReduced = useReducedMotion();
-  const { isOffline, lastSeen, setUnreadCount, setActionCount } = useDashboard();
+  const { isOffline, lastSeen } = useDashboard();
+  const { session } = useAuth();
 
   const [isLoading, setIsLoading] = React.useState(true);
   const [showAbsence, setShowAbsence] = React.useState(false);
+
+  const firstName = session?.name?.split(" ")[0] ?? "";
 
   React.useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 500);
@@ -143,20 +96,10 @@ export default function DashboardPage() {
   }, []);
 
   React.useEffect(() => {
-    setUnreadCount(MOCK_SUMMARY.unreadCount);
-    setActionCount(MOCK_SUMMARY.actionCount);
-  }, [setUnreadCount, setActionCount]);
-
-  React.useEffect(() => {
     if (isLongAbsence(lastSeen) && !isAbsenceDismissed()) {
       setShowAbsence(true);
     }
   }, [lastSeen]);
-
-  const activeApps = MOCK_APPLICATIONS.filter(
-    (a) => a.status !== "completed" && a.status !== "discontinued"
-  );
-  const actionApp = activeApps.find((a) => a.status === "action-required");
 
   const fadeUp = {
     hidden: { opacity: 0, y: 8 },
@@ -175,21 +118,12 @@ export default function DashboardPage() {
               Dashboard · {getTodayLabel()}
             </p>
             <h1 className="font-serif text-[clamp(26px,3vw,36px)] font-normal text-[var(--ink)] leading-[1.1]">
-              Welcome back,{" "}
-              <em className="italic font-normal">{MOCK_USER.firstName}</em>.
+              {firstName ? (
+                <>Welcome back, <em className="italic font-normal">{firstName}</em>.</>
+              ) : (
+                <>Welcome back.</>
+              )}
             </h1>
-            <p className="font-serif italic text-[clamp(14px,1.5vw,17px)] text-[var(--ink-muted)] mt-[6px] leading-[1.5]">
-              You have{" "}
-              <strong className="font-semibold not-italic text-[var(--ink)]">
-                {MOCK_SUMMARY.unreadCount} unread message{MOCK_SUMMARY.unreadCount !== 1 ? "s" : ""}
-              </strong>{" "}
-              and{" "}
-              <strong className="font-semibold not-italic text-[var(--ink)]">
-                {MOCK_SUMMARY.actionCount} action waiting
-              </strong>
-              .{" "}
-              <em className="italic">Everything else is on track.</em>
-            </p>
           </div>
           <Link
             href="/services"
@@ -213,7 +147,7 @@ export default function DashboardPage() {
         {/* Long-absence banner */}
         <WelcomeBanner
           visible={showAbsence}
-          headline={<>Welcome back, <em className="italic">{MOCK_USER.firstName}.</em></>}
+          headline={<>Welcome back{firstName ? <>, <em className="italic">{firstName}.</em></> : "."}</>}
           body="It looks like it's been a while. Your applications are up to date — here's a quick look at what's happening."
           variant="absence"
           ctas={[
@@ -227,25 +161,6 @@ export default function DashboardPage() {
           ]}
         />
 
-        {/* Action-required welcome banner */}
-        <WelcomeBanner
-          visible={!!actionApp && !showAbsence}
-          headline={
-            <>
-              {MOCK_USER.firstName} needs a{" "}
-              <em className="italic">clearer photo</em> for your{" "}
-              <strong className="font-semibold not-italic">passport renewal</strong>
-            </>
-          }
-          body="Upload it from your phone — takes 30 seconds. Once we have it, we'll keep going."
-          ctas={[
-            {
-              label: "Upload now →",
-              href: actionApp ? `/app/${actionApp.code}?tab=documents` : "/dashboard",
-            },
-          ]}
-        />
-
         {/* ── Stat tiles ── */}
         <motion.div
           variants={prefersReduced ? {} : { visible: { transition: { staggerChildren: 0.06 } } }}
@@ -254,29 +169,10 @@ export default function DashboardPage() {
           className="grid grid-cols-2 min-[768px]:grid-cols-4 gap-[12px]"
         >
           {[
-            {
-              label: "Active",
-              value: MOCK_SUMMARY.activeCount,
-              delta: `in progress · ${MOCK_SUMMARY.actionCount} action needed`,
-              variant: "brand" as const,
-            },
-            {
-              label: "Completed",
-              value: MOCK_SUMMARY.completedCount,
-              delta: "+1 this month",
-              deltaColor: "brand" as const,
-            },
-            {
-              label: "Documents",
-              value: MOCK_SUMMARY.docCount,
-              delta: `on file · ${MOCK_SUMMARY.docSizeMB} MB`,
-            },
-            {
-              label: "Avg. turnaround",
-              value: `${MOCK_SUMMARY.avgTurnaround}d`,
-              delta: "faster than typical",
-              deltaColor: "ok" as const,
-            },
+            { label: "Active", value: 0, delta: "no active applications", variant: "brand" as const },
+            { label: "Completed", value: 0, delta: "none yet" },
+            { label: "Documents", value: 0, delta: "no files uploaded" },
+            { label: "Avg. turnaround", value: "—", delta: "no data yet" },
           ].map((tile, i) => (
             <motion.div
               key={tile.label}
@@ -287,7 +183,6 @@ export default function DashboardPage() {
                 label={tile.label}
                 value={tile.value}
                 delta={tile.delta}
-                deltaColor={tile.deltaColor}
                 variant={tile.variant}
                 className="h-full"
               />
@@ -321,47 +216,30 @@ export default function DashboardPage() {
             eyebrow="01 / Active"
             title="Your"
             titleItalic="applications"
-            moreHref="/dashboard"
-            moreLabel="See all →"
           />
 
-          {activeApps.length === 0 ? (
-            <div className="flex flex-col items-center gap-[20px] py-[48px] px-[24px] text-center border-2 border-dashed border-[var(--rule)] rounded-[var(--r-xl)] bg-[var(--paper)]">
-              <span className="inline-flex items-center justify-center w-[56px] h-[56px] rounded-full border border-[var(--rule)] text-[var(--ink-muted)]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                  <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
-                  <rect x="9" y="3" width="6" height="4" rx="1" />
-                </svg>
-              </span>
-              <div>
-                <h3 className="font-serif text-[20px] font-normal text-[var(--ink)] mb-[6px]">
-                  <em className="italic">No active applications</em>
-                </h3>
-                <p className="font-sans text-[14px] text-[var(--ink-muted)] max-w-[320px]">
-                  Browse our services and submit your first application. We handle everything from start to finish.
-                </p>
-              </div>
-              <Link
-                href="/services"
-                className="inline-flex items-center px-[20px] py-[10px] rounded-[var(--r-pill)] bg-[var(--ink)] text-[var(--paper)] font-sans text-[13px] font-medium hover:bg-[var(--ink-2)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
-              >
-                Browse services
-              </Link>
+          <div className="flex flex-col items-center gap-[20px] py-[48px] px-[24px] text-center border-2 border-dashed border-[var(--rule)] rounded-[var(--r-xl)] bg-[var(--paper)]">
+            <span className="inline-flex items-center justify-center w-[56px] h-[56px] rounded-full border border-[var(--rule)] text-[var(--ink-muted)]">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+                <rect x="9" y="3" width="6" height="4" rx="1" />
+              </svg>
+            </span>
+            <div>
+              <h3 className="font-serif text-[20px] font-normal text-[var(--ink)] mb-[6px]">
+                <em className="italic">No active applications</em>
+              </h3>
+              <p className="font-sans text-[14px] text-[var(--ink-muted)] max-w-[320px]">
+                Browse our services and submit your first application. We handle everything from start to finish.
+              </p>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-[16px]">
-              {activeApps.map((app, i) => (
-                <motion.div
-                  key={app.code}
-                  initial={prefersReduced ? undefined : { opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2, delay: i * 0.06, ease: [0.2, 0, 0, 1] }}
-                >
-                  <ApplicationCard application={app} />
-                </motion.div>
-              ))}
-            </div>
-          )}
+            <Link
+              href="/services"
+              className="inline-flex items-center px-[20px] py-[10px] rounded-[var(--r-pill)] bg-[var(--ink)] text-[var(--paper)] font-sans text-[13px] font-medium hover:bg-[var(--ink-2)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
+            >
+              Browse services
+            </Link>
+          </div>
         </section>
 
         {/* ── Bottom two-column: messages + history ── */}
@@ -372,20 +250,14 @@ export default function DashboardPage() {
             aria-labelledby="recent-msg-heading"
             className="rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--paper)] overflow-hidden"
           >
-            <ListCardHead
-              title="Recent"
-              titleItalic="messages"
-              badge={MOCK_SUMMARY.unreadCount}
-              moreLabel="All →"
-              moreHref="/dashboard"
-            />
-            <ul>
-              {MOCK_MESSAGES.map((msg) => (
-                <li key={msg.id}>
-                  <RecentMessageRow message={msg} />
-                </li>
-              ))}
-            </ul>
+            <div className="flex items-center justify-between px-[16px] py-[14px] border-b border-[var(--rule)]">
+              <h3 className="font-serif text-[16px] font-normal text-[var(--ink)]">
+                Recent <em className="italic font-normal">messages</em>
+              </h3>
+            </div>
+            <div className="px-[16px] py-[32px] text-center">
+              <p className="font-sans text-[13px] text-[var(--ink-muted)]">No messages yet.</p>
+            </div>
           </section>
 
           {/* Completed history */}
@@ -393,18 +265,14 @@ export default function DashboardPage() {
             aria-labelledby="history-heading"
             className="rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--paper)] overflow-hidden"
           >
-            <ListCardHead
-              title="Completed"
-              moreLabel={`All ${MOCK_SUMMARY.completedCount} →`}
-              moreHref="/dashboard"
-            />
-            <ul>
-              {MOCK_HISTORY.map((entry) => (
-                <li key={entry.code}>
-                  <HistoryRow entry={entry} />
-                </li>
-              ))}
-            </ul>
+            <div className="flex items-center justify-between px-[16px] py-[14px] border-b border-[var(--rule)]">
+              <h3 className="font-serif text-[16px] font-normal text-[var(--ink)]">
+                Completed
+              </h3>
+            </div>
+            <div className="px-[16px] py-[32px] text-center">
+              <p className="font-sans text-[13px] text-[var(--ink-muted)]">No completed applications yet.</p>
+            </div>
           </section>
         </div>
       </div>
