@@ -210,7 +210,7 @@ export function useStaffTwoFactor() {
       }
 
       syncSession(data.session);
-      router.push("/");
+      router.push(data.session.role === "staff:admin" ? "/admin/analytics" : "/agent");
     },
     onError: (error) => {
       if (isApiError(error) && error.errorType === "otp-expired") {
