@@ -5,9 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, RotateCcw, Download, Maximize2, Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FilmstripThumb } from "@/components/molecules/agent/FilmstripThumb";
 import { QCCheckRow } from "@/components/molecules/agent/QCCheckRow";
-import { MOCK_CASE_DETAIL, MOCK_DOC_QC } from "@/lib/agent-data";
 
 const ZOOM_STEPS = [50, 75, 100, 125, 150, 175, 200, 250];
 
@@ -16,7 +14,7 @@ export default function DocumentViewerPage() {
   const code = params.code as string;
   const docId = params.docId as string;
 
-  const doc = MOCK_CASE_DETAIL.documents.find((d) => d.id === docId) ?? MOCK_CASE_DETAIL.documents[0];
+  const doc = { label: "Document", filename: docId, uploadedAt: "—", fileSize: "—", status: "pending" as const, id: docId };
   const [zoomIndex, setZoomIndex] = React.useState(2); // 100%
   const [activeDocId, setActiveDocId] = React.useState(docId);
   const [manualChecks, setManualChecks] = React.useState([false, false, false]);
@@ -126,17 +124,6 @@ export default function DocumentViewerPage() {
           className="relative bg-[var(--ink)] flex items-center justify-center overflow-hidden"
           aria-label="Document canvas"
         >
-          {/* Filmstrip (desktop, left) */}
-          <div className="hidden min-[860px]:flex flex-col gap-[8px] absolute left-[16px] top-1/2 -translate-y-1/2 z-10">
-            {MOCK_CASE_DETAIL.documents.map((d) => (
-              <FilmstripThumb
-                key={d.id}
-                label={d.label}
-                isActive={d.id === activeDocId}
-                onClick={() => setActiveDocId(d.id)}
-              />
-            ))}
-          </div>
 
           {/* Document */}
           <div
@@ -242,9 +229,7 @@ export default function DocumentViewerPage() {
               Automatic checks
             </h3>
             <div className="bg-[var(--paper-2)] rounded-[var(--r-md)] border border-[var(--rule)] px-[14px]">
-              {MOCK_DOC_QC.map((check) => (
-                <QCCheckRow key={check.id} check={check} />
-              ))}
+              <p className="font-sans text-[12px] text-[var(--ink-muted)] py-[12px]">No automatic checks yet.</p>
             </div>
           </div>
 
