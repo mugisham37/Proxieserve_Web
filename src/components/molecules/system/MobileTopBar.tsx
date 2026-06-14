@@ -27,7 +27,7 @@ export function MobileTopBar({ initials, className }: MobileTopBarProps) {
         className="focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)] rounded-[var(--r-sm)]"
         aria-label="ProxiServe — go to dashboard"
       >
-        <Wordmark className="h-[18px]" />
+        <Wordmark className="h-[18px]" href={undefined} />
       </Link>
 
       <div className="flex items-center gap-[4px]">
