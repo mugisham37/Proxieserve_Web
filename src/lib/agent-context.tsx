@@ -4,45 +4,10 @@ import * as React from "react";
 import type {
   AgentState,
   AgentAction,
-  AgentUser,
-  AgentCase,
-  AgentSettings,
   AvailabilityStatus,
   QueueTab,
+  AgentCase,
 } from "@/lib/types/agent";
-
-const EMPTY_AGENT_USER: AgentUser = {
-  id: "",
-  fullName: "",
-  firstName: "",
-  initials: "",
-  email: "",
-  role: "AGENT",
-  city: "",
-  availability: "available",
-  dailyCap: 8,
-  acceptNewCases: true,
-};
-
-const DEFAULT_AGENT_SETTINGS: AgentSettings = {
-  acceptNewCases: true,
-  dailyCap: 8,
-  notifications: {
-    newCaseAssigned: true,
-    clientReplied: true,
-    slaApproaching: true,
-    dailySummary: false,
-  },
-  appearance: {
-    darkMode: false,
-    compactTables: true,
-  },
-  security: {
-    twoFactorEnabled: false,
-    trustedDevicesCount: 0,
-    passwordLastChangedLabel: "",
-  },
-};
 
 // ─── Reducer ──────────────────────────────────────────────────────────────────
 
@@ -66,15 +31,6 @@ function agentReducer(state: AgentState, action: AgentAction): AgentState {
       return { ...state, isOffline: action.payload };
     case "SET_CONFIRM_MODAL":
       return { ...state, confirmModal: action.payload };
-    case "CHANGE_CASE_STATUS":
-      return {
-        ...state,
-        cases: state.cases.map((c) =>
-          c.code === action.payload.code
-            ? { ...c, status: action.payload.status }
-            : c
-        ),
-      };
     case "SET_SLA_BREACH_COUNT":
       return { ...state, slaBreachCount: action.payload };
     default:
@@ -82,27 +38,16 @@ function agentReducer(state: AgentState, action: AgentAction): AgentState {
   }
 }
 
-// ─── Initial State ────────────────────────────────────────────────────────────
-
-function buildInitialState(
-  user: AgentUser,
-  cases: AgentCase[],
-  settings: AgentSettings,
-  storedDarkMode: boolean
-): AgentState {
-  const slaBreachCount = cases.filter((c) => c.slaState === "over").length;
+function buildInitialState(storedDarkMode: boolean): AgentState {
   return {
-    user,
-    cases,
-    settings,
-    availability: user.availability,
+    availability: "available",
     queueFocusIndex: 0,
     commandPaletteOpen: false,
     activeTab: "all",
     darkMode: storedDarkMode,
     isOffline: false,
     offlineQueueCount: 0,
-    slaBreachCount,
+    slaBreachCount: 0,
     confirmModal: null,
   };
 }
@@ -116,22 +61,15 @@ interface AgentContextValue {
 
 const AgentContext = React.createContext<AgentContextValue | null>(null);
 
-// ─── Provider ─────────────────────────────────────────────────────────────────
-
-interface AgentProviderProps {
-  children: React.ReactNode;
-}
-
-export function AgentProvider({ children }: AgentProviderProps) {
+export function AgentProvider({ children }: { children: React.ReactNode }) {
   const [isHydrated, setIsHydrated] = React.useState(false);
 
   const [state, dispatch] = React.useReducer(
     agentReducer,
-    undefined,
-    () => buildInitialState(EMPTY_AGENT_USER, [], DEFAULT_AGENT_SETTINGS, false)
+    false,
+    buildInitialState
   );
 
-  // Hydrate dark mode from localStorage after mount
   React.useEffect(() => {
     try {
       const stored = localStorage.getItem("agent-dark-mode");
@@ -144,7 +82,6 @@ export function AgentProvider({ children }: AgentProviderProps) {
     setIsHydrated(true);
   }, []);
 
-  // Persist dark mode to localStorage
   React.useEffect(() => {
     if (!isHydrated) return;
     try {
@@ -154,7 +91,6 @@ export function AgentProvider({ children }: AgentProviderProps) {
     }
   }, [state.darkMode, isHydrated]);
 
-  // Offline detection
   React.useEffect(() => {
     const handleOffline = () => dispatch({ type: "SET_OFFLINE", payload: true });
     const handleOnline = () => dispatch({ type: "SET_OFFLINE", payload: false });
@@ -173,8 +109,6 @@ export function AgentProvider({ children }: AgentProviderProps) {
   );
 }
 
-// ─── Hooks ────────────────────────────────────────────────────────────────────
-
 export function useAgent(): AgentContextValue {
   const ctx = React.useContext(AgentContext);
   if (!ctx) {
@@ -190,8 +124,6 @@ export function useAgentState(): AgentState {
 export function useAgentDispatch(): React.Dispatch<AgentAction> {
   return useAgent().dispatch;
 }
-
-// ─── Derived selectors ────────────────────────────────────────────────────────
 
 export function useFilteredCases(tab: QueueTab, cases: AgentCase[]) {
   return React.useMemo(() => {
@@ -233,7 +165,6 @@ export function useCaseCounts(cases: AgentCase[]) {
   }, [cases]);
 }
 
-// Toggle availability helper
 export function useToggleAvailability() {
   const dispatch = useAgentDispatch();
   const { state } = useAgent();
