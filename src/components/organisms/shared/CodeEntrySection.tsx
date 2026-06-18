@@ -9,7 +9,6 @@ import { PillButton } from "@/components/atoms/shared/PillButton";
 import { TrackerEntryTip } from "@/components/molecules/tracker/TrackerEntryTip";
 import { LostCodeRecoveryCard } from "@/components/molecules/tracker/LostCodeRecoveryCard";
 import { isValidTrackerCode, TRACKER_ERROR } from "@/lib/tracker";
-import { getApplicationByCode } from "@/lib/tracker-data";
 
 interface CodeEntrySectionProps {
   initialCode?: string;
@@ -33,15 +32,8 @@ export function CodeEntrySection({ initialCode = "", autoRecover = false }: Code
       return;
     }
 
-    // Validate against mock data on the client side
-    const app = getApplicationByCode(code);
-    if (!app) {
-      setError("We couldn't find an application with that code. Double-check it and try again.");
-      return;
-    }
-
     setLoading(true);
-    router.push(`/track/${encodeURIComponent(code)}`);
+    router.push(`/track/${encodeURIComponent(code.trim().toUpperCase())}`);
   }
 
   function handleCodeChange(value: string) {
