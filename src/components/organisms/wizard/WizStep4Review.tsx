@@ -3,9 +3,12 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import type { Service } from "@/lib/services-data";
+import type { UiService } from "@/lib/service-ui-types";
 import { useApplication } from "@/lib/application-context";
 import { SUBMITTED_KEY } from "@/lib/application-types";
+import { useSubmitApplication } from "@/hooks/useApplications";
+import { uploadDocument } from "@/lib/api/documents";
+import { isApiError } from "@/lib/api/types";
 import { ReviewCard } from "@/components/molecules/marketing/ReviewCard";
 import { ReviewRow } from "@/components/molecules/dashboard/ReviewRow";
 import { FeeSummary } from "@/components/molecules/payment/FeeSummary";
@@ -15,24 +18,19 @@ import { WizValidationBanner } from "@/components/molecules/wizard/WizValidation
 import { WizFooter } from "@/components/molecules/wizard/WizFooter";
 
 interface WizStep4ReviewProps {
-  service: Service;
-}
-
-function generatePRXCode(): string {
-  const year = new Date().getFullYear();
-  const num = String(Math.floor(Math.random() * 99999)).padStart(5, "0");
-  return `PRX-${year}-${num}`;
-}
-
-function generateIncidentId(): string {
-  return `INC-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+  service: UiService;
 }
 
 const LANGUAGE_LABELS: Record<string, string> = { en: "English", rw: "Kinyarwanda", fr: "French" };
 
+function reqKey(req: UiService["requirements"][number]): string {
+  return req.key ?? req.label;
+}
+
 export function WizStep4Review({ service }: WizStep4ReviewProps) {
   const router = useRouter();
-  const { draft, dispatch, uiState, setUiState } = useApplication();
+  const { draft, dispatch, uiState, setUiState, stagedFiles } = useApplication();
+  const submitMutation = useSubmitApplication();
   const headingRef = React.useRef<HTMLHeadingElement>(null);
   const [consentErrors, setConsentErrors] = React.useState<Record<string, string>>({});
 
@@ -41,7 +39,6 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
   }, []);
 
   const handleSubmit = async () => {
-    // Validate consents
     const errs: Record<string, string> = {};
     if (!draft.consents.accuracy) errs.accuracy = "Please confirm your information is accurate";
     if (!draft.consents.terms) errs.terms = "Please agree to the terms to continue";
@@ -52,7 +49,6 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
     }
     setConsentErrors({});
 
-    // Check idempotency
     const alreadySubmitted = localStorage.getItem(SUBMITTED_KEY(draft.idempotencyKey));
     if (alreadySubmitted) {
       setUiState((s) => ({ ...s, isDuplicateSubmit: true }));
@@ -61,28 +57,48 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
 
     setUiState((s) => ({ ...s, isSubmitting: true, submitError: null }));
 
-    // Simulate submission (80% success, 20% error)
-    await new Promise((r) => setTimeout(r, 1800));
-    const success = Math.random() > 0.2;
+    try {
+      const tier = draft.selectedTier || "standard";
+      const response = await submitMutation.mutateAsync({
+        service_slug: service.slug,
+        tier,
+        personal_info: {
+          fullName: draft.personal.fullName,
+          nationalId: draft.personal.nationalId,
+          dob: draft.personal.dob,
+          phone: draft.personal.phone,
+          email: draft.personal.email,
+          whatsapp: draft.personal.whatsapp,
+          language: draft.personal.language,
+          consent: draft.personal.consent,
+        },
+        service_data: draft.serviceConfig,
+      });
 
-    if (success) {
-      const code = generatePRXCode();
-      // Mark as submitted
-      localStorage.setItem(SUBMITTED_KEY(draft.idempotencyKey), code);
-      localStorage.setItem("proxi:lastCode", code);
+      for (const [requirementKey, files] of Object.entries(stagedFiles)) {
+        for (const file of files) {
+          const uploaded = await uploadDocument(response.code, requirementKey, file);
+          if (uploaded.qc_status === "warn" || uploaded.qc_status === "fail") {
+            setUiState((s) => ({ ...s, photoWarnKey: requirementKey }));
+          }
+        }
+      }
+
+      localStorage.setItem(SUBMITTED_KEY(draft.idempotencyKey), response.code);
+      localStorage.setItem("proxi:lastCode", response.code);
       dispatch({ type: "SET_HIGHEST_STEP", payload: 4 });
-      setUiState((s) => ({ ...s, isSubmitting: false, confirmedCode: code }));
+      setUiState((s) => ({ ...s, isSubmitting: false, confirmedCode: response.code }));
       router.push(`/services/${service.slug}/apply/5`);
-    } else {
+    } catch (error) {
+      const message = isApiError(error) ? error.message : "Submission failed. Please try again.";
       setUiState((s) => ({
         ...s,
         isSubmitting: false,
-        submitError: generateIncidentId(),
+        submitError: message,
       }));
     }
   };
 
-  // Documents summary
   const docCount = Object.values(draft.documents)
     .flat()
     .filter((f) => f.status === "done").length;
@@ -102,17 +118,13 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
         </p>
       </div>
 
-      {/* Idempotency warning */}
       {uiState.isDuplicateSubmit && (
         <IdempotencyCard
-          existingCode={
-            localStorage.getItem(SUBMITTED_KEY(draft.idempotencyKey)) ?? undefined
-          }
+          existingCode={localStorage.getItem(SUBMITTED_KEY(draft.idempotencyKey)) ?? undefined}
           className="mb-6"
         />
       )}
 
-      {/* Submit error */}
       {uiState.submitError && (
         <WizErrorCard
           incidentId={uiState.submitError}
@@ -122,7 +134,6 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
       )}
 
       <div className="flex flex-col gap-5">
-        {/* Step 1 review */}
         <ReviewCard title="Personal information" editHref={`/services/${service.slug}/apply/1`}>
           <ReviewRow label="Full name" value={draft.personal.fullName} />
           <ReviewRow label="National ID" value={draft.personal.nationalId} mono />
@@ -133,7 +144,6 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
           <ReviewRow label="Language" value={LANGUAGE_LABELS[draft.personal.language] ?? draft.personal.language} />
         </ReviewCard>
 
-        {/* Step 2 review */}
         <ReviewCard title={service.applicationConfig.step2Title} editHref={`/services/${service.slug}/apply/2`}>
           {service.applicationConfig.cards.flatMap((card) =>
             card.fields
@@ -143,35 +153,31 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
                 if (val === undefined || val === "" || val === false) return null;
                 const displayVal =
                   typeof val === "boolean"
-                    ? val ? "Yes" : "No"
+                    ? val
+                      ? "Yes"
+                      : "No"
                     : Array.isArray(val)
-                    ? val.join(", ")
-                    : String(val);
+                      ? val.join(", ")
+                      : String(val);
 
-                // Find option label for select/radio-card
                 const optionLabel =
                   field.options?.find((o) => o.value === displayVal)?.label ?? displayVal;
 
                 return (
-                  <ReviewRow
-                    key={field.id}
-                    label={field.label}
-                    value={optionLabel}
-                    mono={field.mono}
-                  />
+                  <ReviewRow key={field.id} label={field.label} value={optionLabel} mono={field.mono} />
                 );
-              })
+              }),
           )}
         </ReviewCard>
 
-        {/* Step 3 review */}
         <ReviewCard title="Documents" editHref={`/services/${service.slug}/apply/3`}>
           {service.requirements.map((req) => {
-            const files = draft.documents[req.label] ?? [];
+            const key = reqKey(req);
+            const files = draft.documents[key] ?? [];
             const doneFiles = files.filter((f) => f.status === "done");
             return (
               <ReviewRow
-                key={req.label}
+                key={key}
                 label={req.label}
                 value={
                   doneFiles.length > 0
@@ -188,23 +194,19 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
           )}
         </ReviewCard>
 
-        {/* Fee summary */}
         <FeeSummary service={service} />
 
-        {/* Consent checkboxes */}
         <div className="bg-[var(--paper)] border border-[var(--rule)] rounded-[var(--r-lg)] p-5 flex flex-col gap-4">
           <span className="eyebrow text-[var(--ink-subtle)]">Final confirmation</span>
 
-          {Object.keys(consentErrors).length > 0 && (
-            <WizValidationBanner errors={consentErrors} />
-          )}
+          {Object.keys(consentErrors).length > 0 && <WizValidationBanner errors={consentErrors} />}
 
           <div
             className={cn(
               "flex items-start gap-3 p-3 rounded-[var(--r-md)] border",
               consentErrors.accuracy
                 ? "border-[var(--danger)] bg-[var(--danger-soft)]"
-                : "border-[var(--rule-soft)] bg-[var(--cream)]"
+                : "border-[var(--rule-soft)] bg-[var(--cream)]",
             )}
           >
             <input
@@ -227,7 +229,7 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
               "flex items-start gap-3 p-3 rounded-[var(--r-md)] border",
               consentErrors.terms
                 ? "border-[var(--danger)] bg-[var(--danger-soft)]"
-                : "border-[var(--rule-soft)] bg-[var(--cream)]"
+                : "border-[var(--rule-soft)] bg-[var(--cream)]",
             )}
           >
             <input
@@ -245,33 +247,7 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
               <a href="/legal/terms" target="_blank" className="underline hover:no-underline">Terms of Service</a>
               {" "}and{" "}
               <a href="/legal/privacy" target="_blank" className="underline hover:no-underline">Privacy Policy</a>.
-              I understand ProxiServe acts as an agent and I am responsible for the accuracy of my application.
             </label>
-          </div>
-        </div>
-
-        {/* What happens after */}
-        <div className="bg-[var(--cream)] border border-[var(--rule-soft)] rounded-[var(--r-lg)] p-5">
-          <span className="eyebrow text-[var(--ink-subtle)] block mb-4">What happens after you send</span>
-          <div className="flex flex-col gap-4">
-            <div className="flex items-start gap-3">
-              <span className="font-mono text-[10px] text-[var(--ink-subtle)] mt-0.5 shrink-0">01</span>
-              <p className="font-sans text-[13px] text-[var(--ink-muted)]">
-                Your agent reviews your application within 2 business hours and contacts you to confirm.
-              </p>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="font-mono text-[10px] text-[var(--ink-subtle)] mt-0.5 shrink-0">02</span>
-              <p className="font-sans text-[13px] text-[var(--ink-muted)]">
-                You&apos;ll receive a tracking code immediately — use it anytime to check your application status.
-              </p>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="font-mono text-[10px] text-[var(--ink-subtle)] mt-0.5 shrink-0">03</span>
-              <p className="font-sans text-[13px] text-[var(--ink-muted)]">
-                You pay nothing until your agent confirms the total cost and you approve it.
-              </p>
-            </div>
           </div>
         </div>
       </div>
