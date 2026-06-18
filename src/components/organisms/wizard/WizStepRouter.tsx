@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import type { Service } from "@/lib/services-data";
+import type { UiService } from "@/lib/service-ui-types";
 import { WizStep1Personal } from "./WizStep1Personal";
 import { WizStep2Service } from "./WizStep2Service";
 import { WizStep3Documents } from "./WizStep3Documents";
@@ -9,7 +9,7 @@ import { WizStep4Review } from "./WizStep4Review";
 import { WizStep5Confirmation } from "./WizStep5Confirmation";
 
 interface WizStepRouterProps {
-  service: Service;
+  service: UiService;
   step: number;
 }
 
