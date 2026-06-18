@@ -8,12 +8,11 @@ import {
   type CreateAgentRequest,
   type UpdateAgentRequest,
 } from "@/lib/api/admin";
-
-const AGENTS_QUERY_KEY = ["admin", "agents"] as const;
+import { QUERY_KEYS as QK } from "@/lib/api/types";
 
 export function useAgents() {
   return useQuery({
-    queryKey: [...AGENTS_QUERY_KEY],
+    queryKey: [...QK.adminAgents],
     queryFn: getAgents,
   });
 }
@@ -23,7 +22,7 @@ export function useCreateAgent() {
   return useMutation({
     mutationFn: (payload: CreateAgentRequest) => createAgent(payload),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: [...AGENTS_QUERY_KEY] });
+      void queryClient.invalidateQueries({ queryKey: [...QK.adminAgents] });
     },
   });
 }
@@ -34,7 +33,7 @@ export function useUpdateAgent() {
     mutationFn: ({ agentId, ...payload }: { agentId: string } & UpdateAgentRequest) =>
       updateAgent(agentId, payload),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: [...AGENTS_QUERY_KEY] });
+      void queryClient.invalidateQueries({ queryKey: [...QK.adminAgents] });
     },
   });
 }
