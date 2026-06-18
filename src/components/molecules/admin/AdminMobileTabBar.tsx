@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BarChart2, Layers, Tag, Shield, Megaphone } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAdminState } from "@/lib/admin-context";
+import { adaptAlertItem } from "@/lib/admin-adapters";
+import { useAdminAnalytics } from "@/hooks/useAnalytics";
 
 const TABS = [
   {
@@ -42,7 +43,11 @@ const TABS = [
 
 export function AdminMobileTabBar() {
   const pathname = usePathname();
-  const { alerts } = useAdminState();
+  const { data: analyticsData } = useAdminAnalytics();
+  const alerts = React.useMemo(
+    () => (analyticsData?.alerts ?? []).map(adaptAlertItem),
+    [analyticsData?.alerts]
+  );
   const urgentCount = alerts.filter((a) => a.severity === "danger").length;
 
   return (

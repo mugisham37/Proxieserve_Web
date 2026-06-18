@@ -15,6 +15,10 @@ import {
 import { cn } from "@/lib/utils";
 import { SideNavLink } from "@/components/molecules/system/SideNavLink";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
+import { adaptAlertItem } from "@/lib/admin-adapters";
+import { getInitials } from "@/lib/agent-adapters";
+import { useAdminAnalytics } from "@/hooks/useAnalytics";
+import { useSession } from "@/hooks/useSession";
 
 const NAV_ITEMS = [
   {
@@ -54,10 +58,17 @@ const NAV_ITEMS = [
 
 export function AdminSideNav() {
   const pathname = usePathname();
-  const { user, darkMode, alerts } = useAdminState();
+  const { darkMode } = useAdminState();
   const dispatch = useAdminDispatch();
+  const { session } = useSession();
+  const { data: analyticsData } = useAdminAnalytics();
 
+  const alerts = React.useMemo(
+    () => (analyticsData?.alerts ?? []).map(adaptAlertItem),
+    [analyticsData?.alerts]
+  );
   const urgentCount = alerts.filter((a) => a.severity === "danger").length;
+  const userName = session?.name ?? "Admin";
 
   return (
     <nav
@@ -152,14 +163,14 @@ export function AdminSideNav() {
             "font-mono text-[12px] font-medium"
           )}
         >
-          {user.initials}
+          {getInitials(userName)}
         </div>
         <div className="flex flex-col min-w-0">
           <span className="font-sans text-[13px] font-medium text-[var(--ink)] truncate">
-            {user.fullName}
+            {userName}
           </span>
           <span className="font-mono text-[10px] tracking-[0.06em] uppercase text-[var(--brand)]">
-            {user.role}
+            MANAGER
           </span>
         </div>
       </div>
