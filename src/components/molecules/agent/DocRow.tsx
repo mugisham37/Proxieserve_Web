@@ -1,7 +1,7 @@
 import * as React from "react";
 import { DocThumb } from "@/components/atoms/shared/DocThumb";
 import { PillButton } from "@/components/atoms/shared/PillButton";
-import type { DocFile } from "@/lib/tracker-data";
+import type { DocFile } from "@/lib/tracker-ui-types";
 
 interface DocRowProps {
   doc: DocFile;

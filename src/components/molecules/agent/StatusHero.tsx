@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import type { TrackerApplication, TrackStatus } from "@/lib/tracker-data";
+import type { TrackerApplication, TrackStatus } from "@/lib/tracker-ui-types";
 
 const STATUS_CONFIG: Record<
   TrackStatus,
@@ -89,11 +89,11 @@ const STATUS_CONFIG: Record<
 
 interface StatusHeroProps {
   application: TrackerApplication;
-  onRefresh: () => void;
-  isRefreshing: boolean;
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
 }
 
-export function StatusHero({ application, onRefresh, isRefreshing }: StatusHeroProps) {
+export function StatusHero({ application, onRefresh = () => {}, isRefreshing = false }: StatusHeroProps) {
   const cfg = STATUS_CONFIG[application.status];
 
   return (
@@ -123,7 +123,7 @@ export function StatusHero({ application, onRefresh, isRefreshing }: StatusHeroP
 
       {/* Service label */}
       <p className={cn("font-mono text-[11px] tracking-[0.08em] uppercase mb-3", cfg.mutedColor)}>
-        {application.serviceCategory}
+        {application.serviceCategory ?? application.serviceName}
       </p>
 
       {/* Status chip */}
@@ -150,12 +150,12 @@ export function StatusHero({ application, onRefresh, isRefreshing }: StatusHeroP
 
       {/* H1 */}
       <h1 className={cn("font-serif font-normal text-[clamp(36px,5.4vw,64px)] leading-[1.02] tracking-[-0.02em] text-balance mb-2", cfg.textColor)}>
-        {application.headline}
+        {application.headline ?? cfg.label}
       </h1>
 
       {/* Sub */}
       <p className={cn("font-serif text-[clamp(17px,1.8vw,20px)] leading-[1.45] max-w-[540px]", cfg.mutedColor)}>
-        {application.subheadline}
+        {application.subheadline ?? application.serviceName}
       </p>
 
       {/* Inner card */}
