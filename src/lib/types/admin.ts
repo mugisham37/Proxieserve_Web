@@ -178,25 +178,10 @@ export interface BroadcastConfirmState {
 }
 
 export interface AdminState {
-  user: AdminUser;
-  agents: AdminAgent[];
-  metrics: AdminMetric[];
-  weeklyBars: WeeklyBar[];
-  serviceMix: ServiceMixBar[];
-  paymentMix: PaymentMixBar[];
-  statusBreakdown: StatusBreakdown[];
-  alerts: AlertItem[];
-  settings: AdminSettings;
-  services: ServiceRow[];
   activeSchemaServiceId: string | null;
   schemaFields: FieldDef[];
-  pricingRows: PricingRow[];
-  auditLog: AuditEntry[];
-  oversightCases: OversightCase[];
-  broadcasts: BroadcastRecord[];
   darkMode: boolean;
   isOffline: boolean;
-  loading: boolean;
   confirmModal: ConfirmModalState | null;
   permissionDialog: PermissionDialogState | null;
   broadcastConfirm: BroadcastConfirmState | null;
@@ -208,7 +193,6 @@ export interface AdminState {
 export type AdminAction =
   | { type: "TOGGLE_DARK_MODE" }
   | { type: "SET_DARK_MODE"; payload: boolean }
-  | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_OFFLINE"; payload: boolean }
   | { type: "SET_CONFIRM_MODAL"; payload: ConfirmModalState | null }
   | { type: "SET_PERMISSION_DIALOG"; payload: PermissionDialogState | null }
@@ -217,7 +201,4 @@ export type AdminAction =
   | { type: "SET_OVERSIGHT_TAB"; payload: OversightTab }
   | { type: "SET_AUDIT_FILTER"; payload: AuditFilter }
   | { type: "SET_ACTIVE_SCHEMA_SERVICE"; payload: string | null }
-  | { type: "UPDATE_SCHEMA_FIELDS"; payload: FieldDef[] }
-  | { type: "UPDATE_SETTINGS"; payload: Partial<AdminSettings> }
-  | { type: "DELETE_PRICING_ROW"; payload: string }
-  | { type: "REMOVE_AGENT"; payload: string };
+  | { type: "UPDATE_SCHEMA_FIELDS"; payload: FieldDef[] };
