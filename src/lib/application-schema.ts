@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { type AppField } from "./services-data";
+import { type AppField } from "@/lib/service-ui-types";
 
 export const step1Schema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -21,9 +21,39 @@ export function buildStep2Schema(fields: AppField[]) {
   const entries: [string, z.ZodTypeAny][] = [];
   for (const field of fields) {
     if (field.conditional) continue;
-    const validator: z.ZodTypeAny = field.required
-      ? z.string().min(1, `${field.label} is required`)
-      : z.string().optional();
+
+    let validator: z.ZodTypeAny;
+    switch (field.type) {
+      case "date":
+        validator = field.required
+          ? z.string().min(1, `${field.label} is required`)
+          : z.string().optional();
+        break;
+      case "switch":
+      case "checkbox":
+        validator = field.required
+          ? z.boolean().refine((v) => v === true, { message: `${field.label} is required` })
+          : z.boolean().optional();
+        break;
+      case "select":
+      case "radio-card": {
+        const values = field.options?.map((o) => o.value) ?? [];
+        if (values.length === 0) {
+          validator = field.required
+            ? z.string().min(1, `${field.label} is required`)
+            : z.string().optional();
+        } else {
+          const enumValidator = z.enum(values as [string, ...string[]]);
+          validator = field.required ? enumValidator : enumValidator.optional();
+        }
+        break;
+      }
+      default:
+        validator = field.required
+          ? z.string().min(1, `${field.label} is required`)
+          : z.string().optional();
+    }
+
     entries.push([field.id, validator]);
   }
   return z.object(Object.fromEntries(entries));

@@ -32,6 +32,7 @@ export interface ApplicationDraft {
   };
   serviceConfig: Record<string, string | boolean | string[]>;
   documents: Record<string, DocumentFile[]>;
+  selectedTier: string;
   consents: {
     accuracy: boolean;
     terms: boolean;
@@ -58,6 +59,7 @@ export function createDraft(slug: string): ApplicationDraft {
     },
     serviceConfig: {},
     documents: {},
+    selectedTier: "standard",
     consents: { accuracy: false, terms: false },
   };
 }
