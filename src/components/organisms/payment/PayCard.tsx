@@ -13,6 +13,7 @@ import { PillButton } from "@/components/atoms/shared/PillButton";
 import { usePayment } from "@/lib/payment-context";
 import { cardSchema, type CardFormData } from "@/lib/payment-schema";
 import { formatRWF } from "@/lib/types/payment";
+import { useInitiatePayment, usePaymentStatus } from "@/hooks/usePayment";
 import { cn } from "@/lib/utils";
 
 type Stage = "form" | "3ds";
@@ -26,11 +27,17 @@ function formatExpiry(raw: string): string {
 export function PayCard() {
   const router = useRouter();
   const { session, dispatch } = usePayment();
+  const initiatePayment = useInitiatePayment();
   const [stage, setStage] = React.useState<Stage>("form");
   const [cardBrand, setCardBrand] = React.useState<CardBrand>(null);
   const [cardNumberFormatted, setCardNumberFormatted] = React.useState("");
+  const [submitError, setSubmitError] = React.useState<string | null>(null);
 
-  const { applicationId, serviceName, serviceFee, governmentFee, vatRate, platformFee } = session;
+  const { applicationId, serviceName, serviceFee, governmentFee, vatRate, platformFee, transactionId } = session;
+  const { data: statusData } = usePaymentStatus(
+    transactionId ?? "",
+    stage === "3ds" && Boolean(transactionId),
+  );
 
   const {
     control,
@@ -52,18 +59,45 @@ export function PayCard() {
 
   const expiry = watch("expiry") ?? "";
   const cardholderName = watch("cardholderName") ?? "";
-  // Parse expiry back to "MM / YY" display
   const expiryDisplay = expiry;
 
-  function onSubmit() {
-    dispatch({ type: "SET_STATUS", payload: "processing" });
-    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
-    setStage("3ds");
-  }
+  React.useEffect(() => {
+    if (!statusData) return;
+    if (statusData.status === "paid") {
+      dispatch({
+        type: "SET_TRANSACTION",
+        payload: {
+          transactionId: statusData.transactionId,
+          receiptNumber: statusData.transactionId,
+          paidAt: statusData.paidAt ?? new Date().toISOString(),
+        },
+      });
+      router.push(`/pay/${applicationId}/receipt`);
+    } else if (statusData.status === "failed" || statusData.status === "timed_out") {
+      dispatch({ type: "SET_STATUS", payload: statusData.status === "timed_out" ? "timeout" : "declined" });
+      router.push(`/pay/${applicationId}/${statusData.status === "timed_out" ? "timeout" : "declined"}`);
+    }
+  }, [statusData, dispatch, router, applicationId]);
 
-  function handle3DSComplete() {
-    dispatch({ type: "SET_STATUS", payload: "success" });
-    router.push(`/pay/${applicationId}/receipt`);
+  function onSubmit() {
+    setSubmitError(null);
+    initiatePayment.mutate(
+      {
+        application_code: applicationId,
+        method: "card",
+        card_token: "stub-card-token",
+      },
+      {
+        onSuccess: () => {
+          dispatch({ type: "SET_STATUS", payload: "processing" });
+          if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+          setStage("3ds");
+        },
+        onError: (err) => {
+          setSubmitError(err.message ?? "Payment could not be started. Please try again.");
+        },
+      },
+    );
   }
 
   function handle3DSCancel() {
@@ -83,13 +117,11 @@ export function PayCard() {
       <div className="grid grid-cols-1 gap-10">
         <style>{`@media(min-width:920px){#card-grid{grid-template-columns:1fr var(--pay-sidebar)!important}}`}</style>
 
-        {/* Main column */}
         <div id="card-grid" className="min-w-0">
           <AnimatePresence mode="wait" initial={false}>
             {stage === "form" ? (
               <motion.div key="stage-form" {...motionProps}>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8" noValidate>
-                  {/* Heading */}
                   <div className="flex flex-col gap-2">
                     <span className="eyebrow text-[var(--ink-subtle)]">Card payment</span>
                     <h1 className="font-serif text-[clamp(28px,4vw,40px)] font-medium italic text-[var(--ink)]">
@@ -97,7 +129,6 @@ export function PayCard() {
                     </h1>
                   </div>
 
-                  {/* Live card visual */}
                   <CardVisual
                     cardNumber={cardNumberFormatted}
                     cardholderName={cardholderName}
@@ -105,7 +136,6 @@ export function PayCard() {
                     brand={cardBrand}
                   />
 
-                  {/* Card number */}
                   <div className="flex flex-col gap-1.5">
                     <label className="font-sans text-[13px] font-medium text-[var(--ink)]">
                       Card number
@@ -127,9 +157,7 @@ export function PayCard() {
                     />
                   </div>
 
-                  {/* Expiry + CVC row */}
                   <div className="grid grid-cols-2 gap-4">
-                    {/* Expiry */}
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="expiry" className="font-sans text-[13px] font-medium text-[var(--ink)]">
                         Expiry
@@ -157,7 +185,7 @@ export function PayCard() {
                           "transition-[border-color,box-shadow] duration-[120ms]",
                           errors.expiry
                             ? "border-[var(--danger)]"
-                            : "border-[var(--rule-strong)]"
+                            : "border-[var(--rule-strong)]",
                         )}
                       />
                       {errors.expiry && (
@@ -167,7 +195,6 @@ export function PayCard() {
                       )}
                     </div>
 
-                    {/* CVC */}
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="cvc" className="font-sans text-[13px] font-medium text-[var(--ink)]">
                         CVC
@@ -194,7 +221,7 @@ export function PayCard() {
                           "transition-[border-color,box-shadow] duration-[120ms]",
                           errors.cvc
                             ? "border-[var(--danger)]"
-                            : "border-[var(--rule-strong)]"
+                            : "border-[var(--rule-strong)]",
                         )}
                       />
                       {errors.cvc && (
@@ -205,7 +232,6 @@ export function PayCard() {
                     </div>
                   </div>
 
-                  {/* Cardholder name */}
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="cardholder-name" className="font-sans text-[13px] font-medium text-[var(--ink)]">
                       Name on card
@@ -225,7 +251,7 @@ export function PayCard() {
                         "transition-[border-color,box-shadow] duration-[120ms]",
                         errors.cardholderName
                           ? "border-[var(--danger)]"
-                          : "border-[var(--rule-strong)]"
+                          : "border-[var(--rule-strong)]",
                       )}
                     />
                     {errors.cardholderName && (
@@ -235,7 +261,6 @@ export function PayCard() {
                     )}
                   </div>
 
-                  {/* Save card */}
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
@@ -248,7 +273,12 @@ export function PayCard() {
                     </span>
                   </label>
 
-                  {/* Inline fee summary narrow */}
+                  {submitError && (
+                    <p role="alert" className="font-sans text-[13px] text-[var(--danger)]">
+                      {submitError}
+                    </p>
+                  )}
+
                   <DarkFeeSummary
                     serviceName={serviceName}
                     serviceFee={serviceFee}
@@ -258,10 +288,9 @@ export function PayCard() {
                     className="block lg:hidden"
                   />
 
-                  {/* Actions */}
                   <div className="flex flex-col sm:flex-row items-start gap-3">
-                    <PillButton type="submit" variant="solid" size="md" arrow>
-                      Pay {formatRWF(serviceFee + platformFee)}
+                    <PillButton type="submit" variant="solid" size="md" arrow disabled={initiatePayment.isPending}>
+                      {initiatePayment.isPending ? "Processing…" : `Pay ${formatRWF(serviceFee + platformFee)}`}
                     </PillButton>
                     <PillButton
                       type="button"
@@ -287,7 +316,7 @@ export function PayCard() {
                 </div>
                 <ThreeDSFrame
                   amount={formatRWF(serviceFee)}
-                  onComplete={handle3DSComplete}
+                  onComplete={() => {}}
                   onCancel={handle3DSCancel}
                   className="w-full"
                 />
@@ -296,7 +325,6 @@ export function PayCard() {
           </AnimatePresence>
         </div>
 
-        {/* Sticky sidebar */}
         <aside className="hidden lg:block self-start sticky top-8" style={{ width: "var(--pay-sidebar)" }}>
           <DarkFeeSummary
             serviceName={serviceName}
