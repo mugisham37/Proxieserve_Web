@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import type { Service } from "@/lib/services-data";
+import type { UiService } from "@/lib/service-ui-types";
 import { useApplication } from "@/lib/application-context";
 import { useAuth } from "@/lib/auth-context";
 import { BigCodeChip } from "@/components/molecules/tracker/BigCodeChip";
@@ -12,21 +12,29 @@ import { WhatNextItem } from "@/components/molecules/marketing/WhatNextItem";
 import { ConfirmPrefCard } from "@/components/molecules/shared/ConfirmPrefCard";
 
 interface WizStep5ConfirmationProps {
-  service: Service;
+  service: UiService;
 }
 
 export function WizStep5Confirmation({ service }: WizStep5ConfirmationProps) {
   const { uiState, draft, dispatch } = useApplication();
   const { session } = useAuth();
   const [waStatus, setWaStatus] = React.useState<"pending" | "delivering" | "delivered">("pending");
-  const code = uiState.confirmedCode ?? "PRX-2026-00000";
+  const code = uiState.confirmedCode;
 
-  // WhatsApp delivery simulation — delivers after 2.4s
   React.useEffect(() => {
+    if (!code) return;
     const t1 = setTimeout(() => setWaStatus("delivering"), 800);
     const t2 = setTimeout(() => setWaStatus("delivered"), 2400);
     return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, []);
+  }, [code]);
+
+  if (!code) {
+    return (
+      <div className="container py-16 text-center">
+        <p className="font-sans text-[14px] text-[var(--ink-muted)]">No confirmation code available.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center gap-12 py-8 max-w-[640px] mx-auto text-center">
