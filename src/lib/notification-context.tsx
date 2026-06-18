@@ -32,38 +32,6 @@ type NotificationAction =
   | { type: "MARK_ALL_READ" }
   | { type: "CLEAR_ALL" };
 
-// ─── Demo seed data ───────────────────────────────────────────────────────────
-
-const DEMO: Notification[] = [
-  {
-    id: "n1",
-    type: "status_change",
-    title: "Status changed to In Progress",
-    body: "Passport renewal · PRX-2026-00483",
-    applicationCode: "PRX-2026-00483",
-    read: false,
-    createdAt: new Date(Date.now() - 5 * 60 * 1000),
-  },
-  {
-    id: "n2",
-    type: "payment",
-    title: "Payment received · RWF 15,000",
-    body: "MTN MoMo · receipt available",
-    applicationCode: "PRX-2026-00483",
-    read: false,
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-  },
-  {
-    id: "n3",
-    type: "message",
-    title: "Agent sent you a message",
-    body: '"Got your forms — sending them today."',
-    applicationCode: "PRX-2026-00483",
-    read: true,
-    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-  },
-];
-
 const STORAGE_KEY = "proxi:notifRead";
 
 function reducer(state: NotificationState, action: NotificationAction): NotificationState {
@@ -110,15 +78,7 @@ const NotificationContext = React.createContext<NotificationContextValue | null>
 
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   // Hydrate read state from localStorage so refreshes don't show stale unread badges
-  const [state, dispatch] = React.useReducer(reducer, undefined, () => {
-    const readIds = getReadIds();
-    return {
-      notifications: DEMO.map((n) => ({
-        ...n,
-        read: readIds.has(n.id) || n.read,
-      })),
-    };
-  });
+  const [state, dispatch] = React.useReducer(reducer, { notifications: [] });
 
   // Persist read IDs on change
   React.useEffect(() => {
@@ -154,14 +114,3 @@ export function useNotifications() {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function getReadIds(): Set<string> {
-  try {
-    const raw = getItem(STORAGE_KEY);
-    if (!raw) return new Set();
-    const parsed = JSON.parse(raw);
-    return new Set(Array.isArray(parsed) ? parsed : []);
-  } catch {
-    return new Set();
-  }
-}
