@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
-import type { Service, AppField, AppCard } from "@/lib/services-data";
+import type { UiService, AppField, AppCard } from "@/lib/service-ui-types";
 import { useApplication } from "@/lib/application-context";
 import { buildStep2Schema } from "@/lib/application-schema";
 import { WizCard } from "@/components/molecules/wizard/WizCard";
@@ -18,7 +18,7 @@ import { RadioCard } from "@/components/atoms/wizard/RadioCard";
 import { Switch } from "@/components/atoms/shared/Switch";
 
 interface WizStep2ServiceProps {
-  service: Service;
+  service: UiService;
 }
 
 function isFieldVisible(field: AppField, watchValues: Record<string, unknown>): boolean {
