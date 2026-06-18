@@ -9,7 +9,8 @@ import { StatusPill } from "@/components/atoms/shared/StatusPill";
 import { ActionCard } from "@/components/molecules/shared/ActionCard";
 import { WaitlistCard } from "@/components/molecules/marketing/WaitlistCard";
 import { EligibilityGate } from "@/components/molecules/wizard/EligibilityGate";
-import { CATEGORY_LABELS, COLOUR_MAP, type Service } from "@/lib/services-data";
+import { CATEGORY_LABELS, COLOUR_MAP } from "@/lib/service-constants";
+import type { UiService } from "@/lib/service-ui-types";
 
 const ENTRY_VARIANTS = {
   hidden: { opacity: 0, y: 8 },
@@ -25,7 +26,7 @@ const ENTRY_VARIANTS = {
 };
 
 interface ServiceDetailHeroProps {
-  service: Service;
+  service: UiService;
   className?: string;
 }
 

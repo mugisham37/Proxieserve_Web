@@ -7,10 +7,10 @@ import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { RequirementRow } from "@/components/molecules/dashboard/RequirementRow";
 import { EligibilityGate } from "@/components/molecules/wizard/EligibilityGate";
 import { InPersonCallout } from "@/components/molecules/marketing/InPersonCallout";
-import { type Service } from "@/lib/services-data";
+import { type UiService } from "@/lib/service-ui-types";
 
 interface ServiceRequirementsSectionProps {
-  service: Service;
+  service: UiService;
   id?: string;
   className?: string;
 }

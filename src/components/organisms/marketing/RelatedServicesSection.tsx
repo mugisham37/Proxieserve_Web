@@ -5,17 +5,22 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { CatalogueCard } from "@/components/molecules/marketing/CatalogueCard";
-import { getRelatedServices, type Service } from "@/lib/services-data";
+import type { UiService, UiServiceSummary } from "@/lib/service-ui-types";
 
 interface RelatedServicesSectionProps {
-  service: Service;
+  service: UiService;
+  relatedServices?: UiServiceSummary[];
   id?: string;
   className?: string;
 }
 
-export function RelatedServicesSection({ service, id = "related", className }: RelatedServicesSectionProps) {
-  const related = getRelatedServices(service.slug);
-  if (related.length === 0) return null;
+export function RelatedServicesSection({
+  service,
+  relatedServices = [],
+  id = "related",
+  className,
+}: RelatedServicesSectionProps) {
+  if (relatedServices.length === 0) return null;
 
   return (
     <section
@@ -36,7 +41,7 @@ export function RelatedServicesSection({ service, id = "related", className }: R
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {related.map((rel, i) => (
+          {relatedServices.map((rel, i) => (
             <motion.div
               key={rel.slug}
               initial={{ opacity: 0, y: 8 }}

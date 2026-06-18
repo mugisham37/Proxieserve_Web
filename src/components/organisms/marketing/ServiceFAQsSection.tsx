@@ -6,10 +6,10 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { FAQItem } from "@/components/molecules/marketing/FAQItem";
-import { type Service } from "@/lib/services-data";
+import { type UiService } from "@/lib/service-ui-types";
 
 interface ServiceFAQsSectionProps {
-  service: Service;
+  service: UiService;
   id?: string;
   className?: string;
 }

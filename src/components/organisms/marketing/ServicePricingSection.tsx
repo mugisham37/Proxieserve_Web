@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { PricingTierCard } from "@/components/molecules/admin/PricingTierCard";
-import { type Service } from "@/lib/services-data";
+import { type UiService } from "@/lib/service-ui-types";
 
 interface ServicePricingSectionProps {
-  service: Service;
+  service: UiService;
   id?: string;
   className?: string;
 }

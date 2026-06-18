@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { StepCard } from "@/components/molecules/marketing/StepCard";
-import { type Service } from "@/lib/services-data";
+import { type UiService } from "@/lib/service-ui-types";
 
 interface ServiceStepsSectionProps {
-  service: Service;
+  service: UiService;
   id?: string;
   className?: string;
 }
