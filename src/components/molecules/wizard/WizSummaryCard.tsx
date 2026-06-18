@@ -1,9 +1,9 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { type Service } from "@/lib/services-data";
+import { type UiService } from "@/lib/service-ui-types";
 
 interface WizSummaryCardProps {
-  service: Service;
+  service: UiService;
   className?: string;
 }
 
