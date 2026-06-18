@@ -13,29 +13,54 @@ import { PillButton } from "@/components/atoms/shared/PillButton";
 import { usePayment } from "@/lib/payment-context";
 import { momoSchema, type MomoFormData } from "@/lib/payment-schema";
 import { formatRWF } from "@/lib/types/payment";
+import { useInitiatePayment, usePaymentStatus } from "@/hooks/usePayment";
 import { cn } from "@/lib/utils";
 
 type Stage = "number" | "wait";
 
-const DEMO_ADVANCE_AT = 7; // seconds left when demo auto-advances to receipt
-
 export function PayMobileMoney() {
   const router = useRouter();
   const { session, dispatch } = usePayment();
+  const initiatePayment = useInitiatePayment();
   const [stage, setStage] = React.useState<Stage>("number");
+  const [timerSeconds, setTimerSeconds] = React.useState(120);
   const [timerKey, setTimerKey] = React.useState(0);
   const [maskedPhone, setMaskedPhone] = React.useState("");
+  const [submitError, setSubmitError] = React.useState<string | null>(null);
 
-  const { applicationId, serviceName, serviceFee, governmentFee, vatRate, platformFee } = session;
+  const { applicationId, serviceName, serviceFee, governmentFee, vatRate, platformFee, transactionId } = session;
+  const { data: statusData } = usePaymentStatus(
+    transactionId ?? "",
+    stage === "wait" && Boolean(transactionId),
+  );
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<MomoFormData>({
     resolver: zodResolver(momoSchema),
     defaultValues: { localNumber: "", isAccountPhone: true },
   });
+
+  React.useEffect(() => {
+    if (!statusData) return;
+    if (statusData.status === "paid") {
+      dispatch({
+        type: "SET_TRANSACTION",
+        payload: {
+          transactionId: statusData.transactionId,
+          receiptNumber: statusData.transactionId,
+          paidAt: statusData.paidAt ?? new Date().toISOString(),
+        },
+      });
+      router.push(`/pay/${applicationId}/receipt`);
+    } else if (statusData.status === "timed_out" || statusData.status === "failed") {
+      dispatch({ type: "SET_STATUS", payload: statusData.status as "timeout" });
+      router.push(`/pay/${applicationId}/timeout`);
+    }
+  }, [statusData, dispatch, router, applicationId]);
 
   function maskPhone(num: string) {
     if (num.length < 6) return `78 8 *** ${num.slice(-3) || "***"}`;
@@ -43,26 +68,58 @@ export function PayMobileMoney() {
     return `78 8 *** ${last3}`;
   }
 
-  function onSubmit(data: MomoFormData) {
+  function startPayment(data: MomoFormData) {
     const masked = maskPhone(data.localNumber);
     setMaskedPhone(masked);
-    dispatch({ type: "SET_STATUS", payload: "processing" });
-    setStage("wait");
+    setSubmitError(null);
+
+    const method = session.selectedMethod === "airtel-money" ? "airtel-money" : "mtn-momo";
+
+    initiatePayment.mutate(
+      {
+        application_code: applicationId,
+        method,
+        phone_number: `+250${data.localNumber}`,
+      },
+      {
+        onSuccess: (result) => {
+          dispatch({
+            type: "PATCH",
+            payload: {
+              transactionId: result.transactionId,
+              status: "processing",
+              maskedPhone: masked,
+            },
+          });
+          if (result.expiresAt) {
+            const seconds = Math.max(
+              0,
+              Math.floor((new Date(result.expiresAt).getTime() - Date.now()) / 1000),
+            );
+            setTimerSeconds(seconds > 0 ? seconds : 120);
+          } else {
+            setTimerSeconds(120);
+          }
+          setStage("wait");
+          setTimerKey((k) => k + 1);
+        },
+        onError: (err) => {
+          setSubmitError(err.message ?? "Could not send payment prompt. Please try again.");
+        },
+      },
+    );
+  }
+
+  function onSubmit(data: MomoFormData) {
+    startPayment(data);
   }
 
   function handleExpire() {
     router.push(`/pay/${applicationId}/timeout`);
   }
 
-  function handleTick(secondsLeft: number) {
-    if (secondsLeft === DEMO_ADVANCE_AT) {
-      dispatch({ type: "SET_STATUS", payload: "success" });
-      router.push(`/pay/${applicationId}/receipt`);
-    }
-  }
-
   function handleResend() {
-    setTimerKey((k) => k + 1);
+    startPayment(getValues());
   }
 
   const motionProps = {
@@ -77,13 +134,11 @@ export function PayMobileMoney() {
       <div className="grid grid-cols-1 gap-10">
         <style>{`@media(min-width:920px){#momo-grid{grid-template-columns:1fr var(--pay-sidebar)!important}}`}</style>
 
-        {/* Main column */}
         <div id="momo-grid" className="min-w-0" style={{ gridColumn: "1" }}>
           <AnimatePresence mode="wait" initial={false}>
             {stage === "number" ? (
               <motion.div key="stage-number" {...motionProps}>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8" noValidate>
-                  {/* Heading */}
                   <div className="flex flex-col gap-2">
                     <span className="eyebrow text-[var(--ink-subtle)]">Mobile Money</span>
                     <h1 className="font-serif text-[clamp(28px,4vw,40px)] font-medium italic text-[var(--ink)]">
@@ -94,18 +149,15 @@ export function PayMobileMoney() {
                     </p>
                   </div>
 
-                  {/* Phone field */}
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="momo-number" className="font-sans text-[13px] font-medium text-[var(--ink)]">
                       MoMo number
                     </label>
                     <div className="flex items-stretch gap-0">
-                      {/* Country prefix */}
                       <div className="flex items-center gap-2 px-3 rounded-l-[var(--r-md)] border border-r-0 border-[var(--rule-strong)] bg-[var(--cream-2)]">
                         <span className="text-[16px]" aria-hidden="true">🇷🇼</span>
                         <span className="font-mono text-[14px] text-[var(--ink-muted)]">+250</span>
                       </div>
-                      {/* Number input */}
                       <input
                         id="momo-number"
                         type="tel"
@@ -128,7 +180,7 @@ export function PayMobileMoney() {
                           "transition-[border-color,box-shadow] duration-[120ms]",
                           errors.localNumber
                             ? "border-[var(--danger)]"
-                            : "border-[var(--rule-strong)]"
+                            : "border-[var(--rule-strong)]",
                         )}
                       />
                     </div>
@@ -143,7 +195,6 @@ export function PayMobileMoney() {
                     )}
                   </div>
 
-                  {/* Checkbox */}
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
@@ -155,7 +206,6 @@ export function PayMobileMoney() {
                     </span>
                   </label>
 
-                  {/* Info tip */}
                   <div className="rounded-[var(--r-md)] bg-[var(--info-soft)] border border-[var(--info)] px-4 py-3">
                     <p className="font-sans text-[13px] text-[var(--info)]">
                       <strong className="font-medium">Tip:</strong> If you don&apos;t receive the push, dial{" "}
@@ -163,7 +213,12 @@ export function PayMobileMoney() {
                     </p>
                   </div>
 
-                  {/* Inline fee summary narrow */}
+                  {submitError && (
+                    <p role="alert" className="font-sans text-[13px] text-[var(--danger)]">
+                      {submitError}
+                    </p>
+                  )}
+
                   <DarkFeeSummary
                     serviceName={serviceName}
                     serviceFee={serviceFee}
@@ -173,10 +228,9 @@ export function PayMobileMoney() {
                     className="block lg:hidden"
                   />
 
-                  {/* Actions */}
                   <div className="flex flex-col sm:flex-row items-start gap-3">
-                    <PillButton type="submit" variant="solid" size="md" arrow>
-                      Send payment prompt
+                    <PillButton type="submit" variant="solid" size="md" arrow disabled={initiatePayment.isPending}>
+                      {initiatePayment.isPending ? "Sending…" : "Send payment prompt"}
                     </PillButton>
                     <PillButton
                       type="button"
@@ -215,9 +269,8 @@ export function PayMobileMoney() {
                   <div className="flex flex-col items-center gap-1">
                     <CountdownTimer
                       key={timerKey}
-                      initialSeconds={120}
+                      initialSeconds={timerSeconds}
                       onExpire={handleExpire}
-                      onTick={handleTick}
                     />
                     <span className="font-sans text-[12px] text-[var(--ink-muted)]">
                       Prompt expires in
@@ -228,7 +281,8 @@ export function PayMobileMoney() {
                     <button
                       type="button"
                       onClick={handleResend}
-                      className="font-sans text-[13px] text-[var(--ink-muted)] underline underline-offset-2 hover:text-[var(--ink)] transition-colors"
+                      disabled={initiatePayment.isPending}
+                      className="font-sans text-[13px] text-[var(--ink-muted)] underline underline-offset-2 hover:text-[var(--ink)] transition-colors disabled:opacity-50"
                     >
                       Resend prompt
                     </button>
@@ -241,18 +295,12 @@ export function PayMobileMoney() {
                       Use another method
                     </button>
                   </div>
-
-                  {/* Demo helper */}
-                  <p className="font-mono text-[11px] text-[var(--ink-subtle)] bg-[var(--cream-2)] px-3 py-1.5 rounded-[var(--r-pill)]">
-                    Demo: auto-advances to receipt at {DEMO_ADVANCE_AT}s
-                  </p>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Sticky sidebar */}
         <aside className="hidden lg:block self-start sticky top-8" style={{ width: "var(--pay-sidebar)" }}>
           <DarkFeeSummary
             serviceName={serviceName}
