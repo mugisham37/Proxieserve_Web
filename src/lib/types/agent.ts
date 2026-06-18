@@ -181,9 +181,6 @@ export interface AgentSettings {
 // ─── Agent Context State ──────────────────────────────────────────────────────
 
 export interface AgentState {
-  user: AgentUser;
-  cases: AgentCase[];
-  settings: AgentSettings;
   availability: AvailabilityStatus;
   queueFocusIndex: number;
   commandPaletteOpen: boolean;
@@ -215,5 +212,4 @@ export type AgentAction =
   | { type: "SET_TAB"; payload: QueueTab }
   | { type: "SET_OFFLINE"; payload: boolean }
   | { type: "SET_CONFIRM_MODAL"; payload: ConfirmModalState | null }
-  | { type: "CHANGE_CASE_STATUS"; payload: { code: string; status: AgentStatus } }
   | { type: "SET_SLA_BREACH_COUNT"; payload: number };
