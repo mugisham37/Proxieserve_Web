@@ -4,7 +4,9 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, MoreHorizontal, UserX, UserCheck, KeyRound, ShieldOff } from "lucide-react";
 import { useAgents, useCreateAgent, useUpdateAgent } from "@/hooks/useAdmin";
+import { useAdminAgentSkills, useSetAdminAgentSkills } from "@/hooks/useAgentProfile";
 import type { AgentListItem } from "@/lib/api/admin";
+import type { AgentSkill } from "@/lib/api/types";
 import { isApiError } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
@@ -359,6 +361,142 @@ function formatDate(iso: string): string {
   }
 }
 
+const SKILL_CATEGORIES = ["Identity", "Business", "Property", "Legal", "Transport"];
+
+function AgentSkillsSheet({
+  agent,
+  open,
+  onClose,
+}: {
+  agent: AgentListItem | null;
+  open: boolean;
+  onClose: () => void;
+}) {
+  const agentId = agent?.agent_id ?? "";
+  const { data, isLoading } = useAdminAgentSkills(agentId);
+  const setSkills = useSetAdminAgentSkills(agentId);
+  const [skills, setLocalSkills] = React.useState<AgentSkill[]>([]);
+  const [error, setError] = React.useState<string | null>(null);
+  const [saved, setSaved] = React.useState(false);
+
+  React.useEffect(() => {
+    if (data?.skills) {
+      setLocalSkills(data.skills);
+    } else {
+      setLocalSkills(
+        SKILL_CATEGORIES.map((category) => ({
+          service_category: category,
+          proficiency_level: 1,
+          notes: null,
+        }))
+      );
+    }
+  }, [data?.skills, agentId]);
+
+  async function handleSave() {
+    if (!agentId) return;
+    setError(null);
+    setSaved(false);
+    try {
+      await setSkills.mutateAsync(skills);
+      setSaved(true);
+    } catch (err) {
+      setError(isApiError(err) ? err.message : "Failed to save skills.");
+    }
+  }
+
+  return (
+    <AnimatePresence>
+      {open && agent && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-start justify-end bg-black/40"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
+            className="w-full max-w-[440px] h-full bg-[var(--paper)] shadow-xl flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--rule)]">
+              <div>
+                <h2 className="font-serif text-[20px] text-[var(--ink)]">Agent skills</h2>
+                <p className="font-sans text-[12px] text-[var(--ink-muted)]">{agent.name}</p>
+              </div>
+              <button
+                onClick={onClose}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--cream)] text-[var(--ink-muted)]"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-4">
+              {error && (
+                <p className="font-sans text-[12px] text-[var(--danger)] bg-[var(--danger)]/8 border border-[var(--danger)]/20 rounded-[var(--r-md)] px-3 py-2">
+                  {error}
+                </p>
+              )}
+              {saved && (
+                <p className="font-sans text-[12px] text-[var(--ok)] bg-[var(--ok)]/8 border border-[var(--ok)]/20 rounded-[var(--r-md)] px-3 py-2">
+                  Skills updated.
+                </p>
+              )}
+              {isLoading ? (
+                <SkeletonRow />
+              ) : (
+                skills.map((skill, index) => (
+                  <div key={skill.service_category} className="flex flex-col gap-2 py-2 border-b border-[var(--rule)] last:border-0">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-sans text-[13px] font-medium text-[var(--ink)]">
+                        {skill.service_category}
+                      </span>
+                      <select
+                        value={skill.proficiency_level}
+                        onChange={(e) => {
+                          const level = Number(e.target.value);
+                          setLocalSkills((current) =>
+                            current.map((item, i) =>
+                              i === index ? { ...item, proficiency_level: level } : item
+                            )
+                          );
+                        }}
+                        aria-label={`${skill.service_category} proficiency`}
+                        className="h-8 px-2 rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--cream)] font-mono text-[12px]"
+                      >
+                        {[1, 2, 3, 4, 5].map((level) => (
+                          <option key={level} value={level}>
+                            Level {level}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="px-6 py-4 border-t border-[var(--rule)]">
+              <button
+                onClick={() => void handleSave()}
+                disabled={setSkills.isPending || isLoading}
+                className="w-full h-10 rounded-[var(--r-pill)] bg-[var(--ink)] hover:bg-[var(--ink-2)] text-white font-sans text-[13px] font-medium disabled:opacity-50"
+              >
+                {setSkills.isPending ? "Saving…" : "Save skills"}
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function AgentInitials({ name }: { name: string }) {
   const initials = name
     .split(" ")
@@ -377,6 +515,7 @@ export default function AdminAgentsPage() {
   const { data: agents, isLoading, error } = useAgents();
   const updateAgent = useUpdateAgent();
   const [addOpen, setAddOpen] = React.useState(false);
+  const [skillsAgent, setSkillsAgent] = React.useState<AgentListItem | null>(null);
   const [pendingAction, setPendingAction] = React.useState<PendingAction>(null);
   const [actionError, setActionError] = React.useState<string | null>(null);
 
@@ -432,11 +571,12 @@ export default function AdminAgentsPage() {
         {/* Table */}
         <div className="border border-[var(--rule)] rounded-[var(--r-lg)] overflow-hidden bg-[var(--paper)]">
           {/* Table header */}
-          <div className="grid grid-cols-[1fr_auto_auto_auto_auto] items-center gap-4 px-4 py-2.5 border-b border-[var(--rule)] bg-[var(--cream)]">
+          <div className="grid grid-cols-[1fr_auto_auto_auto_auto_auto] items-center gap-4 px-4 py-2.5 border-b border-[var(--rule)] bg-[var(--cream)]">
             <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--ink-subtle)]">Agent</span>
             <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--ink-subtle)] w-[80px] text-center">Status</span>
             <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--ink-subtle)] w-[50px] text-center">2FA</span>
             <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--ink-subtle)] w-[100px]">Created</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--ink-subtle)] w-[70px]">Skills</span>
             <span className="w-8" />
           </div>
 
@@ -472,7 +612,7 @@ export default function AdminAgentsPage() {
               key={agent.agent_id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-[1fr_auto_auto_auto_auto] items-center gap-4 px-4 py-3.5 border-b border-[var(--rule)] last:border-0 hover:bg-[var(--cream)]/40 transition-colors"
+              className="grid grid-cols-[1fr_auto_auto_auto_auto_auto] items-center gap-4 px-4 py-3.5 border-b border-[var(--rule)] last:border-0 hover:bg-[var(--cream)]/40 transition-colors"
             >
               {/* Name + email */}
               <div className="flex items-center gap-3 min-w-0">
@@ -522,6 +662,13 @@ export default function AdminAgentsPage() {
                 <span className="font-mono text-[11px] text-[var(--ink-muted)]">{formatDate(agent.created_at)}</span>
               </div>
 
+              <button
+                onClick={() => setSkillsAgent(agent)}
+                className="h-8 px-3 rounded-[var(--r-pill)] border border-[var(--rule)] bg-[var(--cream)] hover:bg-[var(--paper)] font-sans text-[12px] text-[var(--ink)] transition-colors"
+              >
+                Skills
+              </button>
+
               {/* Actions */}
               <AgentRowActions
                 agent={agent}
@@ -536,6 +683,11 @@ export default function AdminAgentsPage() {
       </div>
 
       <AddAgentSheet open={addOpen} onClose={() => setAddOpen(false)} />
+      <AgentSkillsSheet
+        agent={skillsAgent}
+        open={skillsAgent !== null}
+        onClose={() => setSkillsAgent(null)}
+      />
       <ConfirmDialog
         open={pendingAction !== null}
         title={dialog.title}
