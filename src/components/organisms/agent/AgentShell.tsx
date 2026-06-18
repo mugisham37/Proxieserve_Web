@@ -4,6 +4,8 @@ import * as React from "react";
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { AgentProvider, useAgentState, useAgentDispatch } from "@/lib/agent-context";
+import { adaptAgentCaseSummary } from "@/lib/agent-adapters";
+import { useAgentCases } from "@/hooks/useAgentCases";
 import { AgentSideNav } from "@/components/molecules/agent/AgentSideNav";
 import { AgentTopBar } from "@/components/molecules/agent/AgentTopBar";
 import { AgentMobileTabBar } from "@/components/molecules/agent/AgentMobileTabBar";
@@ -23,9 +25,19 @@ function AgentTourStarter() {
 // ─── Inner shell — consumes AgentContext ──────────────────────────────────────
 
 function AgentShellInner({ children }: { children: React.ReactNode }) {
-  const { darkMode, isOffline, slaBreachCount, cases, confirmModal, commandPaletteOpen } =
-    useAgentState();
+  const { darkMode, isOffline, confirmModal, commandPaletteOpen } = useAgentState();
   const dispatch = useAgentDispatch();
+  const { data } = useAgentCases();
+
+  const cases = React.useMemo(
+    () => (data?.cases ?? []).map(adaptAgentCaseSummary),
+    [data?.cases]
+  );
+  const slaBreachCount = cases.filter((c) => c.slaState === "over").length;
+
+  React.useEffect(() => {
+    dispatch({ type: "SET_SLA_BREACH_COUNT", payload: slaBreachCount });
+  }, [dispatch, slaBreachCount]);
 
   // Global ⌘K / Ctrl+K handler
   React.useEffect(() => {
