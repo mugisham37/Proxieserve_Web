@@ -9,7 +9,17 @@ import { FieldCard } from "@/components/molecules/admin/FieldCard";
 import { FieldInspector } from "@/components/molecules/agent/FieldInspector";
 import { SchemaPublishDialog } from "@/components/molecules/admin/SchemaPublishDialog";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
+import {
+  adaptFieldDefToFormFieldInput,
+  adaptFormFieldToFieldDef,
+} from "@/lib/admin-adapters";
+import {
+  useAdminService,
+  useSetFormFields,
+  useUpdateServiceStatus,
+} from "@/hooks/useServices";
 import type { FieldDef, FieldType } from "@/lib/types/admin";
+import { isApiError } from "@/lib/api/types";
 
 const FIELD_PALETTE: { type: FieldType; label: string; icon: string }[] = [
   { type: "short-text", label: "Short text", icon: "T" },
@@ -33,27 +43,41 @@ function useWindowWidth() {
   return width;
 }
 
-export function SchemaCanvas() {
-  const { schemaFields, activeSchemaServiceId, schemaPublishOpen, services } =
-    useAdminState();
+interface SchemaCanvasProps {
+  serviceSlug: string;
+}
+
+export function SchemaCanvas({ serviceSlug }: SchemaCanvasProps) {
+  const { schemaFields, schemaPublishOpen } = useAdminState();
   const dispatch = useAdminDispatch();
   const width = useWindowWidth();
   const isDesktop = width >= 1000;
 
+  const { data: serviceDetail } = useAdminService(serviceSlug);
+  const setFormFields = useSetFormFields(serviceSlug);
+  const updateServiceStatus = useUpdateServiceStatus(serviceSlug);
+
   const [selectedFieldId, setSelectedFieldId] = React.useState<string | null>(null);
+  const [saveError, setSaveError] = React.useState<string | null>(null);
+  const [isSaving, setIsSaving] = React.useState(false);
   const selectedField = schemaFields.find((f) => f.id === selectedFieldId) ?? null;
 
-  const activeService = services.find(
-    (s) => s.id === activeSchemaServiceId
-  );
+  React.useEffect(() => {
+    if (!serviceDetail?.application_config) return;
+    const fields = serviceDetail.application_config.cards.flatMap((card, cardIndex) =>
+      card.fields.map((field, fieldIndex) =>
+        adaptFormFieldToFieldDef(field, cardIndex * 100 + fieldIndex)
+      )
+    );
+    dispatch({ type: "UPDATE_SCHEMA_FIELDS", payload: fields });
+  }, [serviceDetail, dispatch]);
 
   function handleReorder(newOrder: FieldDef[]) {
     dispatch({ type: "UPDATE_SCHEMA_FIELDS", payload: newOrder });
   }
 
   function addField(type: FieldType) {
-    const label =
-      FIELD_PALETTE.find((p) => p.type === type)?.label ?? "New field";
+    const label = FIELD_PALETTE.find((p) => p.type === type)?.label ?? "New field";
     const newField: FieldDef = {
       id: `f-${Date.now()}`,
       label,
@@ -80,18 +104,42 @@ export function SchemaCanvas() {
   function updateField(id: string, patch: Partial<FieldDef>) {
     dispatch({
       type: "UPDATE_SCHEMA_FIELDS",
-      payload: schemaFields.map((f) =>
-        f.id === id ? { ...f, ...patch } : f
-      ),
+      payload: schemaFields.map((f) => (f.id === id ? { ...f, ...patch } : f)),
     });
   }
 
-  function handlePublish(mode: "auto" | "manual") {
-    void mode; // In production: submit to backend
-    dispatch({ type: "SET_SCHEMA_PUBLISH", payload: false });
+  async function handleSaveDraft() {
+    setSaveError(null);
+    setIsSaving(true);
+    try {
+      await setFormFields.mutateAsync(
+        schemaFields.map((field, index) => adaptFieldDefToFormFieldInput(field, index))
+      );
+    } catch (err) {
+      setSaveError(isApiError(err) ? err.message : "Failed to save schema.");
+    } finally {
+      setIsSaving(false);
+    }
   }
 
-  // Desktop-only guard for schema builder
+  async function handlePublish(mode: "auto" | "manual") {
+    setSaveError(null);
+    setIsSaving(true);
+    try {
+      await setFormFields.mutateAsync(
+        schemaFields.map((field, index) => adaptFieldDefToFormFieldInput(field, index))
+      );
+      await updateServiceStatus.mutateAsync("active");
+      void mode;
+      dispatch({ type: "SET_SCHEMA_PUBLISH", payload: false });
+    } catch (err) {
+      setSaveError(isApiError(err) ? err.message : "Failed to publish schema.");
+      dispatch({ type: "SET_SCHEMA_PUBLISH", payload: false });
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   if (!isDesktop) {
     return (
       <div
@@ -103,17 +151,10 @@ export function SchemaCanvas() {
         )}
         aria-live="polite"
       >
-        <Monitor
-          size={28}
-          className="text-[var(--ink-subtle)]"
-          aria-hidden="true"
-        />
-        <p className="font-sans text-[14px] font-medium text-[var(--ink)]">
-          Best on desktop
-        </p>
+        <Monitor size={28} className="text-[var(--ink-subtle)]" aria-hidden="true" />
+        <p className="font-sans text-[14px] font-medium text-[var(--ink)]">Best on desktop</p>
         <p className="font-sans text-[13px] text-[var(--ink-muted)] max-w-[280px]">
           The schema builder works best on screens 1000px or wider.
-          Please switch to a desktop to build and publish schemas.
         </p>
       </div>
     );
@@ -127,24 +168,31 @@ export function SchemaCanvas() {
           "overflow-hidden"
         )}
       >
-        {/* Builder header */}
         <div className="flex items-center justify-between px-[16px] py-[12px] border-b border-[var(--rule)]">
           <div>
             <h3 className="font-sans text-[14px] font-medium text-[var(--ink)]">
-              {activeService?.name ?? "Service"} — Schema builder
+              {serviceDetail?.name ?? "Service"} — Schema builder
             </h3>
             <p className="font-mono text-[10px] text-[var(--ink-muted)] mt-[1px]">
               {schemaFields.length} field{schemaFields.length !== 1 ? "s" : ""}
             </p>
+            {saveError && (
+              <p className="font-sans text-[11px] text-[var(--danger)] mt-1">{saveError}</p>
+            )}
           </div>
           <div className="flex items-center gap-[6px]">
             <AppButton variant="ghost" size="sm">
               <Eye size={13} aria-hidden="true" />
               Preview
             </AppButton>
-            <AppButton variant="default" size="sm">
+            <AppButton
+              variant="default"
+              size="sm"
+              disabled={isSaving || setFormFields.isPending}
+              onClick={() => void handleSaveDraft()}
+            >
               <Save size={13} aria-hidden="true" />
-              Save draft
+              {isSaving ? "Saving…" : "Save draft"}
             </AppButton>
             <AppButton
               variant="brand"
@@ -157,9 +205,7 @@ export function SchemaCanvas() {
           </div>
         </div>
 
-        {/* Canvas + Palette split */}
         <div className="grid grid-cols-[1fr_280px]">
-          {/* Canvas */}
           <div className="p-[20px] border-r border-[var(--rule)] min-h-[400px]">
             {schemaFields.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[300px] text-center">
@@ -183,9 +229,7 @@ export function SchemaCanvas() {
                       field={field}
                       isSelected={selectedFieldId === field.id}
                       onSelect={() =>
-                        setSelectedFieldId(
-                          selectedFieldId === field.id ? null : field.id
-                        )
+                        setSelectedFieldId(selectedFieldId === field.id ? null : field.id)
                       }
                       onDelete={() => deleteField(field.id)}
                     />
@@ -195,9 +239,7 @@ export function SchemaCanvas() {
             )}
           </div>
 
-          {/* Palette */}
           <div className="flex flex-col bg-[var(--paper-2)]">
-            {/* Field type palette */}
             <div className="p-[12px] border-b border-[var(--rule)]">
               <p className="font-mono text-[10px] tracking-[0.08em] uppercase text-[var(--ink-muted)] mb-[8px]">
                 Add field
@@ -225,7 +267,6 @@ export function SchemaCanvas() {
               </div>
             </div>
 
-            {/* Inspector */}
             <FieldInspector
               field={selectedField}
               onUpdate={(patch) => {
@@ -236,11 +277,10 @@ export function SchemaCanvas() {
         </div>
       </div>
 
-      {/* Schema publish dialog — state #1 */}
       <AnimatePresence>
         {schemaPublishOpen && (
           <SchemaPublishDialog
-            draftCount={142}
+            draftCount={schemaFields.length}
             onPublish={handlePublish}
             onCancel={() => dispatch({ type: "SET_SCHEMA_PUBLISH", payload: false })}
           />

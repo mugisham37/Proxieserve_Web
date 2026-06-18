@@ -7,7 +7,10 @@ import { cn } from "@/lib/utils";
 import { AppButton } from "@/components/atoms/shared/AppButton";
 import { ServiceCatalogueRow } from "@/components/molecules/admin/ServiceCatalogueRow";
 import { SchemaCanvas } from "@/components/organisms/admin/SchemaCanvas";
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
+import { adaptServiceRow } from "@/lib/admin-adapters";
+import { useAdminServices } from "@/hooks/useServices";
 import type { ServiceRow } from "@/lib/types/admin";
 
 type CatalogueFilter = "all" | "active" | "inactive" | "draft";
@@ -20,21 +23,24 @@ const FILTERS: { id: CatalogueFilter; label: string }[] = [
 ];
 
 export function ServicesSchemaBuilder() {
-  const { services, activeSchemaServiceId } = useAdminState();
+  const { activeSchemaServiceId } = useAdminState();
   const dispatch = useAdminDispatch();
+  const { data, isLoading, error } = useAdminServices();
   const [filter, setFilter] = React.useState<CatalogueFilter>("all");
 
+  const services: ServiceRow[] = React.useMemo(
+    () => (data?.services ?? []).map(adaptServiceRow),
+    [data?.services]
+  );
+
   const filtered: ServiceRow[] =
-    filter === "all"
-      ? services
-      : services.filter((s) => s.status === filter);
+    filter === "all" ? services : services.filter((s) => s.status === filter);
 
   function handleBuildSchema(serviceId: string) {
     dispatch({
       type: "SET_ACTIVE_SCHEMA_SERVICE",
       payload: activeSchemaServiceId === serviceId ? null : serviceId,
     });
-    // Scroll down to builder
     setTimeout(() => {
       document
         .getElementById("schema-builder-section")
@@ -44,7 +50,6 @@ export function ServicesSchemaBuilder() {
 
   return (
     <div className="px-[20px] min-[980px]:px-[40px] py-[28px] flex flex-col gap-[28px]">
-      {/* Page header */}
       <div>
         <h1 className="font-serif text-[26px] font-normal text-[var(--ink)]">
           Services & Schema
@@ -54,10 +59,8 @@ export function ServicesSchemaBuilder() {
         </p>
       </div>
 
-      {/* Catalogue section */}
       <section aria-label="Service catalogue">
         <div className="flex items-center justify-between mb-[14px] flex-wrap gap-[8px]">
-          {/* Filter chips */}
           <div className="flex gap-[4px]" role="group" aria-label="Service filter">
             {FILTERS.map((f) => (
               <button
@@ -115,7 +118,22 @@ export function ServicesSchemaBuilder() {
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={8} className="px-[16px] py-[24px]">
+                    <SkeletonBlock className="h-[80px] rounded-[var(--r-md)]" />
+                  </td>
+                </tr>
+              ) : error ? (
+                <tr>
+                  <td
+                    colSpan={8}
+                    className="px-[16px] py-[40px] text-center font-sans text-[13px] text-[var(--danger)]"
+                  >
+                    Failed to load services
+                  </td>
+                </tr>
+              ) : filtered.length === 0 ? (
                 <tr>
                   <td
                     colSpan={8}
@@ -130,7 +148,7 @@ export function ServicesSchemaBuilder() {
                     key={service.id}
                     service={service}
                     isActive={activeSchemaServiceId === service.id}
-                    onEdit={() => {/* TODO: open edit modal */}}
+                    onEdit={() => handleBuildSchema(service.id)}
                     onBuild={() => handleBuildSchema(service.id)}
                   />
                 ))
@@ -140,7 +158,6 @@ export function ServicesSchemaBuilder() {
         </div>
       </section>
 
-      {/* Schema builder — animated slide-in */}
       <AnimatePresence>
         {activeSchemaServiceId && (
           <motion.section
@@ -152,7 +169,7 @@ export function ServicesSchemaBuilder() {
             transition={{ duration: 0.32, ease: [0, 0, 0, 1] }}
             aria-label="Schema builder"
           >
-            <SchemaCanvas />
+            <SchemaCanvas serviceSlug={activeSchemaServiceId} />
           </motion.section>
         )}
       </AnimatePresence>
