@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getServiceBySlug } from "@/lib/services-data";
 import { WizShellLayoutClient } from "@/components/organisms/wizard/WizShellLayoutClient";
 
 interface Props {
@@ -11,22 +9,14 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
-  if (!service) return {};
+  const formatted = slug.replace(/-/g, " ");
   return {
-    title: `Apply — ${service.name} — ProxiServe`,
-    description: service.lede,
+    title: `Apply — ${formatted} — ProxiServe`,
   };
 }
 
 export default async function ApplyLayout({ children, params }: Props) {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
-  if (!service) notFound();
 
-  return (
-    <WizShellLayoutClient slug={slug}>
-      {children}
-    </WizShellLayoutClient>
-  );
+  return <WizShellLayoutClient slug={slug}>{children}</WizShellLayoutClient>;
 }
