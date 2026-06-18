@@ -4,7 +4,7 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import type { Service } from "@/lib/services-data";
+import type { UiService } from "@/lib/service-ui-types";
 import { ApplicationProvider, useApplication } from "@/lib/application-context";
 import { WizTopBar } from "@/components/molecules/wizard/WizTopBar";
 import { WizStepper, WizStepperMobile } from "@/components/molecules/wizard/WizStepper";
@@ -20,7 +20,7 @@ import { DraftExpiryBanner } from "@/components/molecules/system/DraftExpiryBann
 const STEP_LABELS = ["Personal info", "Service details", "Documents", "Review", "Confirmation"];
 
 interface WizShellInnerProps {
-  service: Service;
+  service: UiService;
   step: number;
   children: React.ReactNode;
 }
@@ -189,7 +189,7 @@ function WizShellInner({ service, step, children }: WizShellInnerProps) {
 }
 
 interface WizShellProps {
-  service: Service;
+  service: UiService;
   step: number;
   children: React.ReactNode;
 }
