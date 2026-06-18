@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 import { KpiCard } from "@/components/atoms/admin/KpiCard";
 import { AlertItem } from "@/components/molecules/shared/AlertItem";
 import { AgentPerfRow } from "@/components/molecules/agent/AgentPerfRow";
-import { useAdminState } from "@/lib/admin-context";
-
-// ─── Bar chart helpers ────────────────────────────────────────────────────────
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
+import { adaptAnalyticsResponse } from "@/lib/admin-adapters";
+import { useAdminAnalytics } from "@/hooks/useAnalytics";
 
 function BarChart({
   bars,
@@ -17,7 +17,7 @@ function BarChart({
   bars: { label: string; value: number; color?: string }[];
   className?: string;
 }) {
-  const max = Math.max(...bars.map((b) => b.value));
+  const max = Math.max(...bars.map((b) => b.value), 1);
   return (
     <div
       className={cn("flex items-end gap-[6px] h-[120px]", className)}
@@ -61,10 +61,9 @@ function HorizBar({
     <div className="flex flex-col gap-[4px]">
       <div className="flex items-center justify-between">
         <span className="font-sans text-[12px] text-[var(--ink-muted)]">{label}</span>
-        {value !== undefined && (
+        {value !== undefined ? (
           <span className="font-mono text-[12px] text-[var(--ink)]">{value}</span>
-        )}
-        {value === undefined && (
+        ) : (
           <span className="font-mono text-[12px] text-[var(--ink)]">{pct}%</span>
         )}
       </div>
@@ -106,23 +105,36 @@ function ChartCard({
   );
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
+const KPI_SKELETONS = [
+  { id: "s1", label: "Loading" },
+  { id: "s2", label: "Loading" },
+  { id: "s3", label: "Loading" },
+  { id: "s4", label: "Loading" },
+  { id: "s5", label: "Loading" },
+  { id: "s6", label: "Loading" },
+];
 
 export function AnalyticsDashboard() {
-  const {
-    metrics,
-    loading,
-    weeklyBars,
-    serviceMix,
-    paymentMix,
-    statusBreakdown,
-    alerts,
-    agents,
-  } = useAdminState();
+  const { data, isLoading } = useAdminAnalytics();
+  const analytics = React.useMemo(
+    () => (data ? adaptAnalyticsResponse(data) : null),
+    [data]
+  );
+
+  const metrics = analytics?.metrics ?? KPI_SKELETONS.map((s) => ({
+    id: s.id,
+    label: s.label,
+    value: "—",
+  }));
+  const weeklyBars = analytics?.weeklyBars ?? [];
+  const serviceMix = analytics?.serviceMix ?? [];
+  const paymentMix = analytics?.paymentMix ?? [];
+  const statusBreakdown = analytics?.statusBreakdown ?? [];
+  const alerts = analytics?.alerts ?? [];
+  const agents = analytics?.agents ?? [];
 
   return (
     <div className="px-[20px] min-[980px]:px-[40px] py-[28px] flex flex-col gap-[28px]">
-      {/* Page header */}
       <div>
         <h1 className="font-serif text-[26px] font-normal text-[var(--ink)]">
           Analytics
@@ -132,89 +144,103 @@ export function AnalyticsDashboard() {
         </p>
       </div>
 
-      {/* KPI row — 2 col mobile, 3 col tablet, 6 col desktop */}
       <section aria-label="Key metrics">
         <div className="grid grid-cols-2 min-[640px]:grid-cols-3 min-[1280px]:grid-cols-6 gap-[12px]">
-          {loading
-            ? metrics.map((m) => <KpiCard key={m.id} metric={m} loading />)
-            : metrics.map((m, i) => (
-                <KpiCard key={m.id} metric={m} index={i} />
-              ))}
+          {isLoading
+            ? KPI_SKELETONS.map((m) => (
+                <SkeletonBlock key={m.id} className="h-[88px] rounded-[var(--r-lg)]" />
+              ))
+            : metrics.map((m, i) => <KpiCard key={m.id} metric={m} index={i} />)}
         </div>
       </section>
 
-      {/* Charts row 1 */}
       <section
         aria-label="Volume charts"
         className="grid grid-cols-1 min-[640px]:grid-cols-2 gap-[16px]"
       >
         <ChartCard title="Weekly application volume">
-          <BarChart
-            bars={weeklyBars.map((b) => ({
-              label: b.week.replace(/^[A-Za-z]+ /, ""),
-              value: b.count,
-              color: "var(--brand)",
-            }))}
-          />
-          <div className="flex items-center justify-between mt-[4px]">
-            <span className="font-sans text-[11px] text-[var(--ink-subtle)]">
-              Last 10 weeks
-            </span>
-            <span className="font-mono text-[11px] text-[var(--ink-muted)]">
-              {weeklyBars.reduce((s, b) => s + b.count, 0)} total
-            </span>
-          </div>
+          {isLoading ? (
+            <SkeletonBlock className="h-[120px] rounded-[var(--r-md)]" />
+          ) : (
+            <>
+              <BarChart
+                bars={weeklyBars.map((b) => ({
+                  label: b.week.replace(/^[A-Za-z]+ /, ""),
+                  value: b.count,
+                  color: "var(--brand)",
+                }))}
+              />
+              <div className="flex items-center justify-between mt-[4px]">
+                <span className="font-sans text-[11px] text-[var(--ink-subtle)]">
+                  Last 10 weeks
+                </span>
+                <span className="font-mono text-[11px] text-[var(--ink-muted)]">
+                  {weeklyBars.reduce((s, b) => s + b.count, 0)} total
+                </span>
+              </div>
+            </>
+          )}
         </ChartCard>
 
         <ChartCard title="Service mix (30 days)">
-          <div className="flex flex-col gap-[10px]">
-            {serviceMix.map((s) => (
-              <HorizBar
-                key={s.service}
-                label={s.service}
-                pct={s.pct}
-                color={s.color}
-              />
-            ))}
-          </div>
+          {isLoading ? (
+            <SkeletonBlock className="h-[120px] rounded-[var(--r-md)]" />
+          ) : (
+            <div className="flex flex-col gap-[10px]">
+              {serviceMix.map((s) => (
+                <HorizBar
+                  key={s.service}
+                  label={s.service}
+                  pct={s.pct}
+                  color={s.color}
+                />
+              ))}
+            </div>
+          )}
         </ChartCard>
       </section>
 
-      {/* Charts row 2 */}
       <section
         aria-label="Payment and status breakdowns"
         className="grid grid-cols-1 min-[640px]:grid-cols-2 gap-[16px]"
       >
         <ChartCard title="Payment method split">
-          <div className="flex flex-col gap-[10px]">
-            {paymentMix.map((p) => (
-              <HorizBar
-                key={p.method}
-                label={p.method}
-                pct={p.pct}
-                color={p.color}
-              />
-            ))}
-          </div>
+          {isLoading ? (
+            <SkeletonBlock className="h-[120px] rounded-[var(--r-md)]" />
+          ) : (
+            <div className="flex flex-col gap-[10px]">
+              {paymentMix.map((p) => (
+                <HorizBar
+                  key={p.method}
+                  label={p.method}
+                  pct={p.pct}
+                  color={p.color}
+                />
+              ))}
+            </div>
+          )}
         </ChartCard>
 
         <ChartCard title="Status breakdown">
-          <div className="flex flex-col gap-[10px]">
-            {statusBreakdown.map((s) => (
-              <HorizBar
-                key={s.label}
-                label={s.label}
-                pct={s.pct}
-                color={s.color}
-                value={s.count.toLocaleString()}
-              />
-            ))}
-          </div>
+          {isLoading ? (
+            <SkeletonBlock className="h-[120px] rounded-[var(--r-md)]" />
+          ) : (
+            <div className="flex flex-col gap-[10px]">
+              {statusBreakdown.map((s) => (
+                <HorizBar
+                  key={s.label}
+                  label={s.label}
+                  pct={s.pct}
+                  color={s.color}
+                  value={s.count.toLocaleString()}
+                />
+              ))}
+            </div>
+          )}
         </ChartCard>
       </section>
 
-      {/* Needs attention */}
-      {alerts.length > 0 && (
+      {!isLoading && alerts.length > 0 && (
         <section aria-label="Needs attention">
           <h2 className="font-mono text-[11px] tracking-[0.08em] uppercase text-[var(--ink-muted)] mb-[12px]">
             Needs attention
@@ -231,7 +257,6 @@ export function AnalyticsDashboard() {
         </section>
       )}
 
-      {/* Agent performance table */}
       <section aria-label="Agent performance">
         <h2 className="font-mono text-[11px] tracking-[0.08em] uppercase text-[var(--ink-muted)] mb-[12px]">
           Agent performance
@@ -271,7 +296,13 @@ export function AnalyticsDashboard() {
               </tr>
             </thead>
             <tbody>
-              {agents.length === 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={8} className="px-[16px] py-[24px]">
+                    <SkeletonBlock className="h-[80px] rounded-[var(--r-md)]" />
+                  </td>
+                </tr>
+              ) : agents.length === 0 ? (
                 <tr>
                   <td
                     colSpan={8}
@@ -281,9 +312,7 @@ export function AnalyticsDashboard() {
                   </td>
                 </tr>
               ) : (
-                agents.map((agent) => (
-                  <AgentPerfRow key={agent.id} agent={agent} />
-                ))
+                agents.map((agent) => <AgentPerfRow key={agent.id} agent={agent} />)
               )}
             </tbody>
           </table>
