@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { type ServicePricingTier } from "@/lib/services-data";
+import { type ServicePricingTier } from "@/lib/service-ui-types";
 
 interface PricingTierCardProps {
   tier: ServicePricingTier;
