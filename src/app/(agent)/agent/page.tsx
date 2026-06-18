@@ -6,8 +6,11 @@ import { cn } from "@/lib/utils";
 import { StatTile } from "@/components/atoms/admin/StatTile";
 import { QueueTable } from "@/components/organisms/dashboard/QueueTable";
 import { KbdHintBar, QUEUE_HINTS } from "@/components/molecules/system/KbdHintBar";
-import { useAgentState, useAgentDispatch } from "@/lib/agent-context";
+import { useAgentDispatch } from "@/lib/agent-context";
 import { getAgentStats } from "@/lib/agent-utils";
+import { adaptAgentCaseSummary } from "@/lib/agent-adapters";
+import { useAgentCases, useUnassignedCases } from "@/hooks/useAgentCases";
+import { useSession } from "@/hooks/useSession";
 
 function getGreeting(firstName: string): string {
   const hour = new Date().getHours();
@@ -16,10 +19,22 @@ function getGreeting(firstName: string): string {
   return `Good evening, ${firstName}.`;
 }
 
-export default function AgentTodayPage() {
-  const { user, cases } = useAgentState();
-  const dispatch = useAgentDispatch();
+function getFirstName(name: string): string {
+  return name.trim().split(/\s+/)[0] || "Agent";
+}
 
+export default function AgentTodayPage() {
+  const dispatch = useAgentDispatch();
+  const { session } = useSession();
+  const { data, isLoading } = useAgentCases();
+  const { data: unassignedData } = useUnassignedCases();
+
+  const cases = React.useMemo(
+    () => (data?.cases ?? []).map(adaptAgentCaseSummary),
+    [data?.cases]
+  );
+
+  const firstName = getFirstName(session?.name ?? "Agent");
   const stats = getAgentStats(cases);
   const openCount = cases.filter((c) => c.status !== "completed").length;
   const needsYouCount = cases.filter(
@@ -33,10 +48,7 @@ export default function AgentTodayPage() {
     year: "numeric",
   });
 
-  // J / K keyboard queue navigation
-  const { queueFocusIndex } = useAgentState();
-  const focusIndexRef = React.useRef(queueFocusIndex);
-  focusIndexRef.current = queueFocusIndex;
+  const focusIndexRef = React.useRef(0);
 
   React.useEffect(() => {
     const openCases = cases.filter((c) => c.status !== "completed");
@@ -69,12 +81,11 @@ export default function AgentTodayPage() {
   return (
     <>
       <div className="px-[20px] min-[980px]:px-[32px] py-[28px] max-w-[1200px]">
-        {/* Greeting */}
         <div className="flex items-start justify-between gap-[16px] mb-[28px] flex-wrap">
           <div>
             <h1 className="font-serif text-[28px] min-[980px]:text-[34px] font-normal text-[var(--ink)] mb-[6px]">
-              {getGreeting(user.firstName).replace(user.firstName, "")}
-              <em className="italic font-normal">{user.firstName}.</em>
+              {getGreeting(firstName).replace(firstName, "")}
+              <em className="italic font-normal">{firstName}.</em>
             </h1>
             <p className="font-mono text-[11px] tracking-[0.1em] uppercase text-[var(--ink-muted)]">
               {today.toUpperCase()} · {openCount} OPEN CASES · {needsYouCount} NEED YOU TODAY
@@ -114,7 +125,6 @@ export default function AgentTodayPage() {
           </div>
         </div>
 
-        {/* Stat tiles */}
         <section aria-label="Summary statistics" className="mb-[32px]">
           <div className="grid grid-cols-2 min-[760px]:grid-cols-4 gap-[12px]">
             <StatTile
@@ -126,25 +136,24 @@ export default function AgentTodayPage() {
             <StatTile
               label="In progress"
               value={stats.inProgress}
-              delta="↑ 2 since yesterday"
+              delta={`${stats.inProgress} active`}
               deltaColor="muted"
             />
             <StatTile
               label="Awaiting authority"
               value={stats.awaitingAuthority}
-              delta="avg 4 days waiting"
+              delta={`${stats.awaitingAuthority} waiting`}
               deltaColor="muted"
             />
             <StatTile
               label="Done this week"
               value={stats.doneThisWeek}
-              delta="5.2 day avg turnaround"
+              delta={`${stats.doneThisWeek} completed`}
               deltaColor="ok"
             />
           </div>
         </section>
 
-        {/* Needs you today */}
         {needsYouCount > 0 && (
           <section aria-label="Cases needing you today" className="mb-[32px]">
             <div className="flex items-center gap-[10px] mb-[12px]">
@@ -156,12 +165,11 @@ export default function AgentTodayPage() {
               </span>
             </div>
             <div className="bg-[var(--paper)] rounded-[var(--r-lg)] border border-[var(--rule)] overflow-hidden">
-              <QueueTable showNeeds />
+              <QueueTable cases={cases} loading={isLoading} showNeeds />
             </div>
           </section>
         )}
 
-        {/* All my cases */}
         <section aria-label="All my cases">
           <div className="flex items-center gap-[10px] mb-[12px]">
             <h2 className="font-serif text-[18px] font-normal text-[var(--ink)]">
@@ -169,12 +177,15 @@ export default function AgentTodayPage() {
             </h2>
           </div>
           <div className="bg-[var(--paper)] rounded-[var(--r-lg)] border border-[var(--rule)] overflow-hidden">
-            <QueueTable />
+            <QueueTable
+              cases={cases}
+              loading={isLoading}
+              unassignedCount={unassignedData?.count ?? 0}
+            />
           </div>
         </section>
       </div>
 
-      {/* Keyboard hints */}
       <KbdHintBar hints={QUEUE_HINTS} />
     </>
   );
