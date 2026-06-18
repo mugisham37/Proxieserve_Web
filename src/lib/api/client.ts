@@ -84,6 +84,11 @@ function applyRequestHeaders(config: InternalAxiosRequestConfig): InternalAxiosR
   config.withCredentials = true;
   config.headers.set("X-Requested-With", "XMLHttpRequest");
 
+  if (config.data instanceof FormData) {
+    config.headers.delete("Content-Type");
+    return config;
+  }
+
   if (!config.headers.has("Content-Type") && config.method !== "get") {
     config.headers.set("Content-Type", "application/json");
   }
