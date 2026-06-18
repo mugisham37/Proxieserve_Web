@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import type { Service } from "@/lib/services-data";
+import type { UiService } from "@/lib/service-ui-types";
 import { useApplication } from "@/lib/application-context";
 import type { DocumentFile } from "@/lib/application-types";
 import { DocOverview } from "@/components/molecules/agent/DocOverview";
@@ -11,127 +11,80 @@ import { WizFooter } from "@/components/molecules/wizard/WizFooter";
 import { WizValidationBanner } from "@/components/molecules/wizard/WizValidationBanner";
 
 interface WizStep3DocumentsProps {
-  service: Service;
+  service: UiService;
 }
 
-const MAX_FILE_MB = 10;
-
-function simulateUpload(
-  file: File,
-  onProgress: (pct: number) => void,
-  onDone: () => void,
-  onError: (msg: string) => void
-) {
-  if (file.size > MAX_FILE_MB * 1024 * 1024) {
-    onError(`File exceeds ${MAX_FILE_MB} MB limit`);
-    return;
-  }
-
-  let pct = 0;
-  const interval = setInterval(() => {
-    pct += Math.random() * 15 + 5;
-    if (pct >= 100) {
-      clearInterval(interval);
-      onDone();
-    } else {
-      onProgress(Math.min(pct, 95));
-    }
-  }, 220);
+function reqKey(req: UiService["requirements"][number]): string {
+  return req.key ?? req.label;
 }
 
 export function WizStep3Documents({ service }: WizStep3DocumentsProps) {
   const router = useRouter();
-  const { draft, dispatch, setUiState, uiState } = useApplication();
+  const { draft, dispatch, setUiState, uiState, stagedFiles, setStagedFiles } = useApplication();
   const headingRef = React.useRef<HTMLHeadingElement>(null);
 
   React.useEffect(() => {
     headingRef.current?.focus();
   }, []);
 
-  const handleFiles = (requirementLabel: string, files: File[]) => {
+  const handleFiles = (requirementKey: string, files: File[], req: UiService["requirements"][number]) => {
     files.forEach((file) => {
-      const key = requirementLabel;
-      // Start with uploading state
+      const maxMb = req.maxSizeMb ?? 10;
+      if (file.size > maxMb * 1024 * 1024) {
+        const pending: DocumentFile = {
+          fileName: file.name,
+          fileSize: file.size,
+          mimeType: file.type,
+          status: "error",
+          errorMessage: `File exceeds ${maxMb} MB limit`,
+        };
+        const existing = draft.documents[requirementKey] ?? [];
+        dispatch({
+          type: "PATCH_DOCUMENT",
+          payload: { key: requirementKey, files: [...existing, pending] },
+        });
+        return;
+      }
+
       const pending: DocumentFile = {
         fileName: file.name,
         fileSize: file.size,
         mimeType: file.type,
-        status: "uploading",
-        progress: 0,
+        status: "done",
+        progress: 100,
       };
 
-      const existing = draft.documents[key] ?? [];
+      const existing = draft.documents[requirementKey] ?? [];
       dispatch({
         type: "PATCH_DOCUMENT",
-        payload: { key, files: [...existing, pending] },
+        payload: { key: requirementKey, files: [...existing, pending] },
       });
 
-      const currentIndex = existing.length;
-
-      simulateUpload(
-        file,
-        (pct) => {
-          dispatch({
-            type: "PATCH_DOCUMENT",
-            payload: {
-              key,
-              files: (draft.documents[key] ?? []).map((f, i) =>
-                i === currentIndex ? { ...f, progress: pct } : f
-              ),
-            },
-          });
-        },
-        () => {
-          // Done — check if it's a photo type to trigger photo warn
-          const isPhoto = file.type.startsWith("image/");
-          const docType = service.requirements.find((r) => r.label === key)?.docType;
-
-          dispatch({
-            type: "PATCH_DOCUMENT",
-            payload: {
-              key,
-              files: (draft.documents[key] ?? []).map((f, i) =>
-                i === currentIndex ? { ...f, status: "done", progress: 100 } : f
-              ),
-            },
-          });
-
-          if (isPhoto && docType === "photo") {
-            // Simulate AI quality check after 1.5s
-            setTimeout(() => {
-              setUiState((s) => ({ ...s, photoWarnKey: key }));
-            }, 1500);
-          }
-        },
-        (msg) => {
-          dispatch({
-            type: "PATCH_DOCUMENT",
-            payload: {
-              key,
-              files: (draft.documents[key] ?? []).map((f, i) =>
-                i === currentIndex ? { ...f, status: "error", errorMessage: msg } : f
-              ),
-            },
-          });
-        }
-      );
+      setStagedFiles((prev) => ({
+        ...prev,
+        [requirementKey]: [...(prev[requirementKey] ?? []), file],
+      }));
     });
   };
 
   const handleRemove = (key: string, index: number) => {
     dispatch({ type: "REMOVE_DOCUMENT", payload: { key, index } });
+    setStagedFiles((prev) => ({
+      ...prev,
+      [key]: (prev[key] ?? []).filter((_, i) => i !== index),
+    }));
     if (uiState.photoWarnKey === key) {
       setUiState((s) => ({ ...s, photoWarnKey: null }));
     }
   };
 
   const handleNext = () => {
-    // Check required docs
     const missingRequired: string[] = [];
     service.requirements
-      .filter((r) => !r.note?.includes("optional"))
+      .filter((r) => r.status !== "optional")
       .forEach((r) => {
-        const files = draft.documents[r.label] ?? [];
+        const key = reqKey(r);
+        const files = draft.documents[key] ?? [];
         const doneFiles = files.filter((f) => f.status === "done");
         if (doneFiles.length === 0) missingRequired.push(r.label);
       });
@@ -148,14 +101,13 @@ export function WizStep3Documents({ service }: WizStep3DocumentsProps) {
     router.push(`/services/${service.slug}/apply/4`);
   };
 
-  // Compute stats
-  const requiredReqs = service.requirements.filter((r) => !r.note?.includes("optional"));
-  const optionalReqs = service.requirements.filter((r) => r.note?.includes("optional"));
+  const requiredReqs = service.requirements.filter((r) => r.status !== "optional");
+  const optionalReqs = service.requirements.filter((r) => r.status === "optional");
   const requiredDone = requiredReqs.filter((r) =>
-    (draft.documents[r.label] ?? []).some((f) => f.status === "done")
+    (draft.documents[reqKey(r)] ?? []).some((f) => f.status === "done"),
   ).length;
   const optionalAdded = optionalReqs.filter((r) =>
-    (draft.documents[r.label] ?? []).some((f) => f.status === "done")
+    (draft.documents[reqKey(r)] ?? []).some((f) => f.status === "done"),
   ).length;
   const totalBytes = Object.values(draft.documents)
     .flat()
@@ -194,14 +146,15 @@ export function WizStep3Documents({ service }: WizStep3DocumentsProps) {
 
       <div className="flex flex-col gap-5">
         {service.requirements.map((req) => {
-          const isOptional = !!req.note?.includes("optional");
-          const files = draft.documents[req.label] ?? [];
-          const showPhotoWarn = uiState.photoWarnKey === req.label;
+          const key = reqKey(req);
+          const isOptional = req.status === "optional";
+          const files = draft.documents[key] ?? [];
+          const showPhotoWarn = uiState.photoWarnKey === key;
 
           return (
             <div
-              key={req.label}
-              id={`doc-${req.label.replace(/\s+/g, "-").toLowerCase()}`}
+              key={key}
+              id={`doc-${key.replace(/\s+/g, "-").toLowerCase()}`}
               className="bg-[var(--paper)] border border-[var(--rule)] rounded-[var(--r-lg)] p-5"
             >
               {req.note && !isOptional && (
@@ -215,22 +168,18 @@ export function WizStep3Documents({ service }: WizStep3DocumentsProps) {
                 multiple={req.docType === "id"}
                 accept={req.docType === "photo" || req.docType === "id" ? "image/*,.pdf" : "image/*,.pdf"}
                 files={files}
-                onFile={(fs) => handleFiles(req.label, fs)}
-                onRemove={(i) => handleRemove(req.label, i)}
+                onFile={(fs) => handleFiles(key, fs, req)}
+                onRemove={(i) => handleRemove(key, i)}
                 showPhotoWarn={showPhotoWarn}
                 onKeepPhoto={() => setUiState((s) => ({ ...s, photoWarnKey: null }))}
-                onRetryPhoto={() => setUiState((s) => ({ ...s, photoWarnKey: null }))}
+                onRetryPhoto={() => handleRemove(key, files.length - 1)}
               />
             </div>
           );
         })}
       </div>
 
-      <WizFooter
-        step={3}
-        serviceSlug={service.slug}
-        onNext={handleNext}
-      />
+      <WizFooter step={3} serviceSlug={service.slug} onNext={handleNext} />
     </div>
   );
 }
