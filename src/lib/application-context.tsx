@@ -68,6 +68,8 @@ interface ApplicationContextValue {
   uiState: WizUiState;
   setUiState: React.Dispatch<React.SetStateAction<WizUiState>>;
   isHydrated: boolean;
+  stagedFiles: Record<string, File[]>;
+  setStagedFiles: React.Dispatch<React.SetStateAction<Record<string, File[]>>>;
 }
 
 const ApplicationContext = React.createContext<ApplicationContextValue | null>(null);
@@ -89,6 +91,7 @@ export function ApplicationProvider({ slug, children }: ApplicationProviderProps
   const [draft, dispatch] = React.useReducer(reducer, createDraft(slug));
   const [uiState, setUiState] = React.useState<WizUiState>(INITIAL_UI_STATE);
   const [isHydrated, setIsHydrated] = React.useState(false);
+  const [stagedFiles, setStagedFiles] = React.useState<Record<string, File[]>>({});
   const saveTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const channelRef = React.useRef<BroadcastChannel | null>(null);
   const isFirstDispatch = React.useRef(true);
@@ -184,7 +187,9 @@ export function ApplicationProvider({ slug, children }: ApplicationProviderProps
   }, [draft.createdAt]);
 
   return (
-    <ApplicationContext.Provider value={{ draft, dispatch, uiState, setUiState, isHydrated }}>
+    <ApplicationContext.Provider
+      value={{ draft, dispatch, uiState, setUiState, isHydrated, stagedFiles, setStagedFiles }}
+    >
       {children}
     </ApplicationContext.Provider>
   );
