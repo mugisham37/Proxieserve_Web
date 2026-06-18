@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import type { Service } from "@/lib/services-data";
+import type { UiService } from "@/lib/service-ui-types";
 import { useApplication } from "@/lib/application-context";
 import { step1Schema } from "@/lib/application-schema";
 import { WizCard } from "@/components/molecules/wizard/WizCard";
@@ -21,7 +21,7 @@ import { SegmentedGroup } from "@/components/atoms/wizard/SegmentedGroup";
 type Step1Values = z.infer<typeof step1Schema>;
 
 interface WizStep1PersonalProps {
-  service: Service;
+  service: UiService;
 }
 
 const LANGUAGE_OPTIONS = [
