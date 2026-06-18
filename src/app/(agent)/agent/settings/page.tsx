@@ -4,6 +4,13 @@ import * as React from "react";
 import { Shield, Smartphone, User, Lock, Info } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
+import { Switch } from "@/components/atoms/shared/Switch";
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
+import {
+  adaptApiAgentSettings,
+  adaptUiAgentSettingsPatch,
+} from "@/lib/agent-adapters";
+import { useAgentSettings, useUpdateAgentSettings } from "@/hooks/useAgentProfile";
 
 // ─── Section wrapper ──────────────────────────────────────────────────────────
 
@@ -121,6 +128,16 @@ function PasswordChangeForm() {
 
 export default function AgentSettingsPage() {
   const { session } = useAuth();
+  const { data: settingsData, isLoading: settingsLoading } = useAgentSettings();
+  const updateSettings = useUpdateAgentSettings();
+  const settings = React.useMemo(
+    () => (settingsData ? adaptApiAgentSettings(settingsData) : null),
+    [settingsData]
+  );
+
+  const patchSettings = async (patch: Parameters<typeof adaptUiAgentSettingsPatch>[0]) => {
+    await updateSettings.mutateAsync(adaptUiAgentSettingsPatch(patch));
+  };
 
   return (
     <div className="px-[20px] min-[980px]:px-[32px] py-[28px] max-w-[720px]">
@@ -142,6 +159,127 @@ export default function AgentSettingsPage() {
             Profile changes (name, email) must be requested from your administrator. They can update your account from the admin panel.
           </Notice>
         </div>
+      </SettingsSection>
+
+      <SettingsSection title="Work preferences">
+        {settingsLoading || !settings ? (
+          <div className="py-4">
+            <SkeletonBlock className="h-[120px] rounded-[var(--r-md)]" />
+          </div>
+        ) : (
+          <>
+            <SettingsRow
+              label="Accept new case assignments"
+              description="When off, the dispatcher skips you for new work"
+              control={
+                <Switch
+                  checked={settings.acceptNewCases}
+                  onChange={(v) => void patchSettings({ acceptNewCases: v })}
+                  label="Accept new case assignments"
+                />
+              }
+            />
+            <SettingsRow
+              label="Daily case cap"
+              description="Max new cases assigned per day"
+              control={
+                <select
+                  aria-label="Daily case cap"
+                  value={settings.dailyCap ?? "none"}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    void patchSettings({
+                      dailyCap: val === "none" ? null : Number(val),
+                    });
+                  }}
+                  className={cn(
+                    "px-[10px] h-[32px] rounded-[var(--r-pill)]",
+                    "border border-[var(--rule)]",
+                    "font-sans text-[13px] text-[var(--ink)] bg-[var(--paper)]",
+                    "focus:outline-none focus:border-[var(--ink)]"
+                  )}
+                >
+                  <option value="5">5</option>
+                  <option value="8">8</option>
+                  <option value="10">10</option>
+                  <option value="none">No cap</option>
+                </select>
+              }
+            />
+            <SettingsRow
+              label="New case assigned"
+              description="Push + email when a case is assigned to you"
+              control={
+                <Switch
+                  checked={settings.notifications.newCaseAssigned}
+                  onChange={() =>
+                    void patchSettings({
+                      notifications: {
+                        ...settings.notifications,
+                        newCaseAssigned: !settings.notifications.newCaseAssigned,
+                      },
+                    })
+                  }
+                  label="New case assigned notifications"
+                />
+              }
+            />
+            <SettingsRow
+              label="Client replied"
+              description="Push when a client sends a message"
+              control={
+                <Switch
+                  checked={settings.notifications.clientReplied}
+                  onChange={() =>
+                    void patchSettings({
+                      notifications: {
+                        ...settings.notifications,
+                        clientReplied: !settings.notifications.clientReplied,
+                      },
+                    })
+                  }
+                  label="Client replied notifications"
+                />
+              }
+            />
+            <SettingsRow
+              label="SLA approaching breach"
+              description="Alert 4 hours before SLA breach"
+              control={
+                <Switch
+                  checked={settings.notifications.slaApproaching}
+                  onChange={() =>
+                    void patchSettings({
+                      notifications: {
+                        ...settings.notifications,
+                        slaApproaching: !settings.notifications.slaApproaching,
+                      },
+                    })
+                  }
+                  label="SLA approaching notifications"
+                />
+              }
+            />
+            <SettingsRow
+              label="Daily summary"
+              description="Email summary at 8:00 CAT"
+              control={
+                <Switch
+                  checked={settings.notifications.dailySummary}
+                  onChange={() =>
+                    void patchSettings({
+                      notifications: {
+                        ...settings.notifications,
+                        dailySummary: !settings.notifications.dailySummary,
+                      },
+                    })
+                  }
+                  label="Daily summary email"
+                />
+              }
+            />
+          </>
+        )}
       </SettingsSection>
 
       {/* Security */}
