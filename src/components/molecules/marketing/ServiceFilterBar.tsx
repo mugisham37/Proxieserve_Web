@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { type ServiceCategory, CATEGORY_LABELS } from "@/lib/services-data";
+import { type ServiceCategory, CATEGORY_LABELS } from "@/lib/service-constants";
 
 const CATEGORIES: Array<{ value: ServiceCategory | "all"; label: string }> = [
   { value: "all", label: "All services" },
