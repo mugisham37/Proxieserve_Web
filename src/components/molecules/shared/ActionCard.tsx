@@ -2,10 +2,10 @@ import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { PillButton } from "@/components/atoms/shared/PillButton";
-import { type Service } from "@/lib/services-data";
+import { type UiService } from "@/lib/service-ui-types";
 
 interface ActionCardProps {
-  service: Service;
+  service: UiService;
   className?: string;
 }
 

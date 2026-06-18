@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { PillButton } from "@/components/atoms/shared/PillButton";
-import type { RejectionData, AgentData } from "@/lib/tracker-data";
+import type { RejectionData, AgentData } from "@/lib/tracker-ui-types";
 
 interface RejectionPanelProps {
   rejection: RejectionData;

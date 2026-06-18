@@ -5,7 +5,10 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAgentState, useAgentDispatch } from "@/lib/agent-context";
+import { useAgentDispatch } from "@/lib/agent-context";
+import { adaptAgentCaseSummary } from "@/lib/agent-adapters";
+import { useAgentCases } from "@/hooks/useAgentCases";
+import type { AgentCase } from "@/lib/types/agent";
 
 interface PaletteResult {
   id: string;
@@ -16,7 +19,7 @@ interface PaletteResult {
 
 function buildResults(
   query: string,
-  cases: ReturnType<typeof useAgentState>["cases"],
+  cases: AgentCase[],
   router: ReturnType<typeof useRouter>,
   dispatch: ReturnType<typeof useAgentDispatch>
 ): PaletteResult[] {
@@ -72,8 +75,12 @@ function buildResults(
 export function CommandPalette() {
   const prefersReduced = useReducedMotion();
   const router = useRouter();
-  const { cases } = useAgentState();
   const dispatch = useAgentDispatch();
+  const { data } = useAgentCases();
+  const cases = React.useMemo(
+    () => (data?.cases ?? []).map(adaptAgentCaseSummary),
+    [data?.cases]
+  );
 
   const [query, setQuery] = React.useState("");
   const [activeIndex, setActiveIndex] = React.useState(0);
