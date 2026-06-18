@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { PaymentProvider } from "@/lib/payment-context";
+import { PaymentProvider, PaymentSessionHydrator } from "@/lib/payment-context";
 
 interface Props {
   children: ReactNode;
@@ -13,6 +13,7 @@ export default async function ApplicationPaymentLayout({ children, params }: Pro
 
   return (
     <PaymentProvider applicationId={applicationId}>
+      <PaymentSessionHydrator applicationId={applicationId} />
       <div className="min-h-screen bg-[var(--cream)] flex flex-col">
         {/* Payment shell top bar */}
         <header className="border-b border-[var(--rule)] bg-[var(--paper)] sticky top-0 z-30">
