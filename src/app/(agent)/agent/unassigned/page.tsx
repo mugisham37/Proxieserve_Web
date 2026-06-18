@@ -4,80 +4,52 @@ import * as React from "react";
 import { Inbox } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PriorityDot } from "@/components/atoms/agent/PriorityDot";
-import { SLABadge } from "@/components/atoms/agent/SLABadge";
 import { StatusPill } from "@/components/atoms/shared/StatusPill";
-
-interface UnassignedCase {
-  code: string;
-  serviceName: string;
-  serviceNameBase: string;
-  serviceNameItalic: string;
-  clientInitials: string;
-  clientName: string;
-  priority: "high" | "mid" | "low";
-  ageDisplay: string;
-  slaState: "over" | "warn" | "ok";
-  category: string;
-}
-
-const MOCK_UNASSIGNED: UnassignedCase[] = [
-  {
-    code: "PRX-2026-00510",
-    serviceName: "Passport renewal",
-    serviceNameBase: "Passport",
-    serviceNameItalic: "renewal",
-    clientInitials: "FK",
-    clientName: "Fabrice Kayitesi",
-    priority: "high",
-    ageDisplay: "2h",
-    slaState: "ok",
-    category: "Identity",
-  },
-  {
-    code: "PRX-2026-00511",
-    serviceName: "Business license",
-    serviceNameBase: "Business",
-    serviceNameItalic: "license",
-    clientInitials: "GN",
-    clientName: "Grace Nishimwe",
-    priority: "mid",
-    ageDisplay: "5h",
-    slaState: "ok",
-    category: "Business",
-  },
-  {
-    code: "PRX-2026-00512",
-    serviceName: "National ID",
-    serviceNameBase: "National",
-    serviceNameItalic: "ID",
-    clientInitials: "EP",
-    clientName: "Etienne Patrice",
-    priority: "low",
-    ageDisplay: "12h",
-    slaState: "ok",
-    category: "Identity",
-  },
-];
+import { adaptUnassignedCase } from "@/lib/agent-adapters";
+import { useUnassignedCases, useClaimCase } from "@/hooks/useAgentCases";
+import { isApiError } from "@/lib/api/types";
 
 export default function UnassignedPage() {
-  const [claimed, setClaimed] = React.useState<string[]>([]);
+  const { data, isLoading } = useUnassignedCases();
+  const claimCase = useClaimCase();
+  const [claimingCode, setClaimingCode] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
 
-  const remaining = MOCK_UNASSIGNED.filter((c) => !claimed.includes(c.code));
+  const remaining = React.useMemo(
+    () => (data?.cases ?? []).map(adaptUnassignedCase),
+    [data?.cases]
+  );
+
+  async function handleClaim(code: string) {
+    setError(null);
+    setClaimingCode(code);
+    try {
+      await claimCase.mutateAsync(code);
+    } catch (err) {
+      setError(isApiError(err) ? err.message : "Failed to claim case.");
+    } finally {
+      setClaimingCode(null);
+    }
+  }
 
   return (
     <div className="px-[20px] min-[980px]:px-[32px] py-[28px] max-w-[1000px]">
-      {/* Header */}
       <div className="mb-[28px]">
         <h1 className="font-serif text-[28px] min-[980px]:text-[34px] font-normal text-[var(--ink)] mb-[6px]">
           Unassigned <em className="italic font-normal">pool</em>
         </h1>
         <p className="font-mono text-[11px] tracking-[0.1em] uppercase text-[var(--ink-muted)]">
-          {remaining.length} CASES AVAILABLE · PULL TO CLAIM
+          {isLoading ? "LOADING…" : `${remaining.length} CASES AVAILABLE · PULL TO CLAIM`}
         </p>
       </div>
 
-      {remaining.length === 0 ? (
-        /* Empty state */
+      {error && (
+        <p className="mb-4 font-sans text-[12px] text-[var(--danger)] bg-[var(--danger)]/8 border border-[var(--danger)]/20 rounded-[var(--r-md)] px-3 py-2">
+          {error}
+        </p>
+      )}
+
+      {!isLoading && remaining.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-[64px] gap-[16px]">
           <div className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-[var(--ok-soft)]">
             <Inbox size={28} className="text-[var(--ok)]" />
@@ -92,9 +64,7 @@ export default function UnassignedPage() {
           </div>
         </div>
       ) : (
-        /* Table */
         <div className="bg-[var(--paper)] rounded-[var(--r-lg)] border border-[var(--rule)] overflow-hidden">
-          {/* Desktop */}
           <div className="hidden min-[640px]:block overflow-x-auto">
             <table className="w-full" aria-label="Unassigned cases">
               <thead>
@@ -104,8 +74,7 @@ export default function UnassignedPage() {
                   </th>
                   <th scope="col" className="py-[10px] pr-[16px] text-left font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--ink-muted)]">Code</th>
                   <th scope="col" className="py-[10px] pr-[16px] text-left font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--ink-muted)]">Service</th>
-                  <th scope="col" className="py-[10px] pr-[16px] text-left font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--ink-muted)]">Client</th>
-                  <th scope="col" className="py-[10px] pr-[16px] text-left font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--ink-muted)]">Category</th>
+                  <th scope="col" className="py-[10px] pr-[16px] text-left font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--ink-muted)]">Tier</th>
                   <th scope="col" className="py-[10px] pr-[16px] text-left font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--ink-muted)]">Age</th>
                   <th scope="col" className="py-[10px] pr-[16px] text-right font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--ink-muted)]">Action</th>
                 </tr>
@@ -131,19 +100,6 @@ export default function UnassignedPage() {
                       </span>
                     </td>
                     <td className="py-[12px] pr-[16px]">
-                      <div className="flex items-center gap-[8px]">
-                        <span
-                          aria-hidden="true"
-                          className="inline-flex items-center justify-center w-[28px] h-[28px] rounded-full bg-[var(--brand-soft)] text-[var(--brand-ink)] font-sans text-[11px] font-semibold"
-                        >
-                          {c.clientInitials}
-                        </span>
-                        <span className="font-sans text-[13px] text-[var(--ink)]">
-                          {c.clientName}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-[12px] pr-[16px]">
                       <StatusPill label={c.category} variant="info" />
                     </td>
                     <td className="py-[12px] pr-[16px]">
@@ -155,17 +111,19 @@ export default function UnassignedPage() {
                       <button
                         type="button"
                         aria-label={`Assign ${c.code} to me`}
-                        onClick={() => setClaimed((prev) => [...prev, c.code])}
+                        disabled={claimingCode === c.code || claimCase.isPending}
+                        onClick={() => void handleClaim(c.code)}
                         className={cn(
                           "px-[12px] h-[28px] rounded-[var(--r-pill)]",
                           "bg-[var(--ink)] text-[var(--paper)]",
                           "font-sans text-[12px] font-medium",
                           "transition-colors duration-[var(--m-fast)]",
                           "hover:bg-[var(--ink-2)]",
+                          "disabled:opacity-50 disabled:cursor-not-allowed",
                           "focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
                         )}
                       >
-                        Assign to me
+                        {claimingCode === c.code ? "Claiming…" : "Assign to me"}
                       </button>
                     </td>
                   </tr>
@@ -174,7 +132,6 @@ export default function UnassignedPage() {
             </table>
           </div>
 
-          {/* Mobile cards */}
           <div className="min-[640px]:hidden flex flex-col gap-[8px] p-[12px]">
             {remaining.map((c) => (
               <div
@@ -194,19 +151,16 @@ export default function UnassignedPage() {
                   <em className="italic font-normal">{c.serviceNameItalic}</em>
                 </p>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-[6px]">
-                    <PriorityDot priority={c.priority} />
-                    <span className="font-sans text-[12px] text-[var(--ink-muted)]">
-                      {c.clientName}
-                    </span>
-                  </div>
+                  <PriorityDot priority={c.priority} />
                   <button
                     type="button"
-                    onClick={() => setClaimed((prev) => [...prev, c.code])}
+                    disabled={claimingCode === c.code || claimCase.isPending}
+                    onClick={() => void handleClaim(c.code)}
                     className={cn(
                       "px-[12px] h-[28px] rounded-[var(--r-pill)]",
                       "bg-[var(--ink)] text-[var(--paper)]",
-                      "font-sans text-[12px] font-medium"
+                      "font-sans text-[12px] font-medium",
+                      "disabled:opacity-50"
                     )}
                   >
                     Assign to me
