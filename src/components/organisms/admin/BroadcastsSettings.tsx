@@ -7,7 +7,13 @@ import { AppButton } from "@/components/atoms/shared/AppButton";
 import { BroadcastComposer } from "@/components/organisms/admin/BroadcastComposer";
 import { RecentBroadcastRow } from "@/components/molecules/admin/RecentBroadcastRow";
 import { MaintenancePanel } from "@/components/molecules/system/MaintenancePanel";
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
+import { adaptBroadcastRecord, adaptPlatformSettings, adaptPlatformSettingsPatch } from "@/lib/admin-adapters";
+import { useBroadcasts } from "@/hooks/useBroadcasts";
+import { usePlatformSettings, useUpdatePlatformSettings } from "@/hooks/usePlatformSettings";
+import type { AdminSettings } from "@/lib/types/admin";
+import { isApiError } from "@/lib/api/types";
 
 const DATA_RETENTION_OPTIONS = [
   { value: "12-months", label: "12 months" },
@@ -17,12 +23,52 @@ const DATA_RETENTION_OPTIONS = [
 ];
 
 export function BroadcastsSettings() {
-  const { broadcasts, settings, darkMode } = useAdminState();
+  const { darkMode } = useAdminState();
   const dispatch = useAdminDispatch();
+  const { data: broadcastsData, isLoading: broadcastsLoading } = useBroadcasts();
+  const { data: platformData, isLoading: settingsLoading } = usePlatformSettings();
+  const updatePlatformSettings = useUpdatePlatformSettings();
 
-  function patchSettings(patch: Parameters<typeof dispatch>[0] & { type: "UPDATE_SETTINGS" }) {
-    dispatch(patch);
+  const broadcasts = React.useMemo(
+    () => (broadcastsData?.broadcasts ?? []).map(adaptBroadcastRecord),
+    [broadcastsData?.broadcasts]
+  );
+
+  const [settings, setSettings] = React.useState<AdminSettings | null>(null);
+  const [saveError, setSaveError] = React.useState<string | null>(null);
+  const [saveSuccess, setSaveSuccess] = React.useState(false);
+
+  React.useEffect(() => {
+    if (platformData) {
+      setSettings(adaptPlatformSettings(platformData));
+    }
+  }, [platformData]);
+
+  async function handleSaveSettings() {
+    if (!settings) return;
+    setSaveError(null);
+    setSaveSuccess(false);
+    try {
+      await updatePlatformSettings.mutateAsync(adaptPlatformSettingsPatch(settings));
+      setSaveSuccess(true);
+    } catch (err) {
+      setSaveError(isApiError(err) ? err.message : "Failed to save settings.");
+    }
   }
+
+  function patchSettings(patch: Partial<AdminSettings>) {
+    setSettings((current) => (current ? { ...current, ...patch } : current));
+  }
+
+  if (!settings && settingsLoading) {
+    return (
+      <div className="px-[20px] min-[980px]:px-[40px] py-[28px]">
+        <SkeletonBlock className="h-[400px] rounded-[var(--r-lg)]" />
+      </div>
+    );
+  }
+
+  if (!settings) return null;
 
   return (
     <div className="px-[20px] min-[980px]:px-[40px] py-[28px] flex flex-col gap-[32px]">
@@ -75,7 +121,13 @@ export function BroadcastsSettings() {
               </tr>
             </thead>
             <tbody>
-              {broadcasts.length === 0 ? (
+              {broadcastsLoading ? (
+                <tr>
+                  <td colSpan={5} className="px-[16px] py-[24px]">
+                    <SkeletonBlock className="h-[60px] rounded-[var(--r-md)]" />
+                  </td>
+                </tr>
+              ) : broadcasts.length === 0 ? (
                 <tr>
                   <td
                     colSpan={5}
@@ -109,9 +161,7 @@ export function BroadcastsSettings() {
             >
               <Switch
                 checked={settings.acceptNewApps}
-                onChange={(val) =>
-                  dispatch({ type: "UPDATE_SETTINGS", payload: { acceptNewApps: val } })
-                }
+                onChange={(val) => patchSettings({ acceptNewApps: val })}
               />
             </SettingRow>
             <SettingRow
@@ -120,9 +170,7 @@ export function BroadcastsSettings() {
             >
               <Switch
                 checked={settings.guestApps}
-                onChange={(val) =>
-                  dispatch({ type: "UPDATE_SETTINGS", payload: { guestApps: val } })
-                }
+                onChange={(val) => patchSettings({ guestApps: val })}
               />
             </SettingRow>
             <SettingRow
@@ -131,12 +179,7 @@ export function BroadcastsSettings() {
             >
               <select
                 value={settings.dataRetention}
-                onChange={(e) =>
-                  dispatch({
-                    type: "UPDATE_SETTINGS",
-                    payload: { dataRetention: e.target.value },
-                  })
-                }
+                onChange={(e) => patchSettings({ dataRetention: e.target.value })}
                 aria-label="Data retention period"
                 className={cn(
                   "h-[34px] px-[10px]",
@@ -171,12 +214,7 @@ export function BroadcastsSettings() {
             >
               <Switch
                 checked={settings.compactTables}
-                onChange={(val) =>
-                  dispatch({
-                    type: "UPDATE_SETTINGS",
-                    payload: { compactTables: val },
-                  })
-                }
+                onChange={(val) => patchSettings({ compactTables: val })}
               />
             </SettingRow>
           </SettingsGroup>
@@ -189,9 +227,7 @@ export function BroadcastsSettings() {
             >
               <Switch
                 checked={settings.enforce2FA}
-                onChange={(val) =>
-                  dispatch({ type: "UPDATE_SETTINGS", payload: { enforce2FA: val } })
-                }
+                onChange={(val) => patchSettings({ enforce2FA: val })}
               />
             </SettingRow>
             <SettingRow
@@ -204,12 +240,7 @@ export function BroadcastsSettings() {
                 max={480}
                 step={15}
                 value={settings.sessionTimeout}
-                onChange={(e) =>
-                  dispatch({
-                    type: "UPDATE_SETTINGS",
-                    payload: { sessionTimeout: Number(e.target.value) },
-                  })
-                }
+                onChange={(e) => patchSettings({ sessionTimeout: Number(e.target.value) })}
                 aria-label="Session timeout in minutes"
                 className={cn(
                   "w-[80px] h-[34px] px-[10px]",
@@ -226,12 +257,7 @@ export function BroadcastsSettings() {
               <input
                 type="text"
                 value={settings.ipAllowlist}
-                onChange={(e) =>
-                  dispatch({
-                    type: "UPDATE_SETTINGS",
-                    payload: { ipAllowlist: e.target.value },
-                  })
-                }
+                onChange={(e) => patchSettings({ ipAllowlist: e.target.value })}
                 placeholder="e.g. 192.168.1.1, 10.0.0.0/24"
                 aria-label="IP allowlist"
                 className={cn(
@@ -250,21 +276,27 @@ export function BroadcastsSettings() {
             <div className="p-[4px]">
               <MaintenancePanel
                 enabled={settings.maintenanceMode}
-                onToggle={() =>
-                  dispatch({
-                    type: "UPDATE_SETTINGS",
-                    payload: { maintenanceMode: !settings.maintenanceMode },
-                  })
-                }
+                onToggle={() => patchSettings({ maintenanceMode: !settings.maintenanceMode })}
               />
             </div>
           </SettingsGroup>
         </div>
 
         {/* Save settings */}
-        <div className="flex justify-end mt-[16px]">
-          <AppButton variant="solid" size="md">
-            Save settings
+        <div className="flex items-center justify-end gap-3 mt-[16px]">
+          {saveError && (
+            <p className="font-sans text-[12px] text-[var(--danger)]">{saveError}</p>
+          )}
+          {saveSuccess && (
+            <p className="font-sans text-[12px] text-[var(--ok)]">Settings saved.</p>
+          )}
+          <AppButton
+            variant="solid"
+            size="md"
+            disabled={updatePlatformSettings.isPending}
+            onClick={() => void handleSaveSettings()}
+          >
+            {updatePlatformSettings.isPending ? "Saving…" : "Save settings"}
           </AppButton>
         </div>
       </section>

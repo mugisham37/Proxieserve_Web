@@ -9,6 +9,8 @@ import { Switch } from "@/components/atoms/shared/Switch";
 import { PhonePreview } from "@/components/molecules/system/PhonePreview";
 import { BroadcastConfirmDialog } from "@/components/molecules/admin/BroadcastConfirmDialog";
 import { useAdminState, useAdminDispatch } from "@/lib/admin-context";
+import { useCreateBroadcast } from "@/hooks/useBroadcasts";
+import { isApiError } from "@/lib/api/types";
 
 const MAX_CHARS = 1000;
 
@@ -27,14 +29,25 @@ const CHANNELS = [
   { id: "in-app", label: "In-app" },
 ];
 
+const AUDIENCE_FILTERS: Record<string, Record<string, unknown>> = {
+  "All clients": { role: "client" },
+  "Clients with pending applications": { role: "client", application_status: "pending" },
+  "Clients with completed applications": { role: "client", application_status: "completed" },
+  "All agents": { role: "agent" },
+  "Clients with overdue payment": { role: "client", payment_status: "overdue" },
+};
+
 export function BroadcastComposer() {
   const { broadcastConfirm } = useAdminState();
   const dispatch = useAdminDispatch();
+  const createBroadcast = useCreateBroadcast();
 
   const [audience, setAudience] = React.useState(AUDIENCE_OPTIONS[0]);
   const [activeChannels, setActiveChannels] = React.useState<string[]>(["whatsapp"]);
   const [message, setMessage] = React.useState("");
   const [scheduleMode, setScheduleMode] = React.useState(false);
+  const [scheduledAt, setScheduledAt] = React.useState("");
+  const [error, setError] = React.useState<string | null>(null);
   const previewChannel = activeChannels[0] ?? "whatsapp";
 
   function toggleChannel(id: string) {
@@ -48,18 +61,32 @@ export function BroadcastComposer() {
     dispatch({
       type: "SET_BROADCAST_CONFIRM",
       payload: {
-        reach: 1180,
-        estimatedCost: "RWF 29,500",
-        optOuts: 42,
+        reach: 0,
+        estimatedCost: "Calculated at send",
+        optOuts: 0,
         channels: activeChannels,
       },
     });
   }
 
-  function handleConfirmSend() {
-    // In production: submit broadcast to backend
-    dispatch({ type: "SET_BROADCAST_CONFIRM", payload: null });
-    setMessage("");
+  async function handleConfirmSend() {
+    setError(null);
+    try {
+      await createBroadcast.mutateAsync({
+        audience_description: audience,
+        audience_filter: AUDIENCE_FILTERS[audience] ?? {},
+        channels: activeChannels,
+        message: message.trim(),
+        scheduled_at: scheduleMode && scheduledAt ? scheduledAt : null,
+      });
+      dispatch({ type: "SET_BROADCAST_CONFIRM", payload: null });
+      setMessage("");
+      setScheduleMode(false);
+      setScheduledAt("");
+    } catch (err) {
+      setError(isApiError(err) ? err.message : "Failed to send broadcast.");
+      dispatch({ type: "SET_BROADCAST_CONFIRM", payload: null });
+    }
   }
 
   const canSend = message.trim().length > 0 && activeChannels.length > 0;
@@ -76,12 +103,13 @@ export function BroadcastComposer() {
           <h3 className="font-sans text-[14px] font-medium text-[var(--ink)]">
             New broadcast
           </h3>
+          {error && (
+            <p className="font-sans text-[11px] text-[var(--danger)] mt-1">{error}</p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 min-[980px]:grid-cols-[1fr_220px]">
-          {/* Composer form */}
           <div className="p-[20px] flex flex-col gap-[16px] border-r border-[var(--rule)]">
-            {/* Audience */}
             <div className="flex flex-col gap-[5px]">
               <label
                 htmlFor="bc-audience"
@@ -109,7 +137,6 @@ export function BroadcastComposer() {
               </select>
             </div>
 
-            {/* Channels */}
             <div className="flex flex-col gap-[8px]">
               <span className="font-mono text-[10px] tracking-[0.06em] uppercase text-[var(--ink-muted)]">
                 Channels
@@ -145,7 +172,6 @@ export function BroadcastComposer() {
               </div>
             </div>
 
-            {/* Message */}
             <div className="flex flex-col gap-[5px]">
               <div className="flex items-center justify-between">
                 <label
@@ -168,9 +194,7 @@ export function BroadcastComposer() {
               <textarea
                 id="bc-message"
                 value={message}
-                onChange={(e) =>
-                  setMessage(e.target.value.slice(0, MAX_CHARS))
-                }
+                onChange={(e) => setMessage(e.target.value.slice(0, MAX_CHARS))}
                 rows={5}
                 placeholder="Type your broadcast message…"
                 className={cn(
@@ -184,7 +208,6 @@ export function BroadcastComposer() {
               />
             </div>
 
-            {/* Schedule toggle */}
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-[1px]">
                 <span className="font-sans text-[13px] font-medium text-[var(--ink)]">
@@ -194,17 +217,28 @@ export function BroadcastComposer() {
                   Send later instead of immediately
                 </span>
               </div>
-              <Switch
-                checked={scheduleMode}
-                onChange={setScheduleMode}
-              />
+              <Switch checked={scheduleMode} onChange={setScheduleMode} />
             </div>
 
-            {/* Send / Schedule button */}
+            {scheduleMode && (
+              <input
+                type="datetime-local"
+                value={scheduledAt}
+                onChange={(e) => setScheduledAt(e.target.value)}
+                aria-label="Scheduled send time"
+                className={cn(
+                  "w-full h-[36px] px-[12px]",
+                  "bg-[var(--cream)] border border-[var(--rule)]",
+                  "rounded-[var(--r-md)] font-sans text-[13px] text-[var(--ink)]",
+                  "focus:outline-none focus:border-[var(--ink)]"
+                )}
+              />
+            )}
+
             <AppButton
               variant="brand"
               size="md"
-              disabled={!canSend}
+              disabled={!canSend || createBroadcast.isPending}
               onClick={handleSend}
               className="self-start"
             >
@@ -213,22 +247,18 @@ export function BroadcastComposer() {
             </AppButton>
           </div>
 
-          {/* Phone preview — desktop only */}
           <div className="hidden min-[980px]:flex items-start justify-center p-[24px] bg-[var(--paper-2)]">
             <PhonePreview message={message} channel={previewChannel} />
           </div>
         </div>
       </div>
 
-      {/* Broadcast confirm dialog — state #5 */}
       <AnimatePresence>
         {broadcastConfirm && (
           <BroadcastConfirmDialog
             state={broadcastConfirm}
-            onSend={handleConfirmSend}
-            onCancel={() =>
-              dispatch({ type: "SET_BROADCAST_CONFIRM", payload: null })
-            }
+            onSend={() => void handleConfirmSend()}
+            onCancel={() => dispatch({ type: "SET_BROADCAST_CONFIRM", payload: null })}
           />
         )}
       </AnimatePresence>
