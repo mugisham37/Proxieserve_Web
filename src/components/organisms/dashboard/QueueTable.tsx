@@ -19,12 +19,14 @@ const TABS: { key: QueueTab; label: string; countKey: keyof ReturnType<typeof us
 ];
 
 interface QueueTableProps {
+  cases: AgentCase[];
   loading?: boolean;
-  showNeeds?: boolean; // true = render "Needs you today" (top 3 priority)
+  showNeeds?: boolean;
+  unassignedCount?: number;
 }
 
-export function QueueTable({ loading, showNeeds }: QueueTableProps) {
-  const { activeTab, cases, queueFocusIndex } = useAgentState();
+export function QueueTable({ cases, loading, showNeeds, unassignedCount = 0 }: QueueTableProps) {
+  const { activeTab, queueFocusIndex } = useAgentState();
   const dispatch = useAgentDispatch();
   const filteredCases = useFilteredCases(activeTab, cases);
   const counts = useCaseCounts(cases);
@@ -74,7 +76,7 @@ export function QueueTable({ loading, showNeeds }: QueueTableProps) {
             "focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
           )}
         >
-          Pull from unassigned (3)
+          Pull from unassigned ({unassignedCount})
         </Link>
       </div>
     );

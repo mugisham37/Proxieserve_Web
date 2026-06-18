@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { AppMeta } from "@/lib/tracker-data";
+import type { AppMeta } from "@/lib/tracker-ui-types";
 
 interface AppMetaSideCardProps {
   meta: AppMeta;

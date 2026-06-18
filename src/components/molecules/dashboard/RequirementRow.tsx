@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FileText, CreditCard, Camera, ClipboardList, Receipt, File } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { type ServiceRequirement } from "@/lib/services-data";
+import { type ServiceRequirement } from "@/lib/service-ui-types";
 
 const DOC_ICONS: Record<ServiceRequirement["docType"], React.ElementType> = {
   id: CreditCard,
