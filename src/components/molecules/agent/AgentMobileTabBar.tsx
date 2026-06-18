@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CalendarDays, FolderOpen, MessageSquare, BarChart2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAgentState } from "@/lib/agent-context";
+import { adaptAgentCaseSummary } from "@/lib/agent-adapters";
+import { useAgentCases } from "@/hooks/useAgentCases";
 
 interface TabItem {
   href: string;
@@ -17,7 +18,11 @@ interface TabItem {
 
 export function AgentMobileTabBar() {
   const pathname = usePathname();
-  const { cases } = useAgentState();
+  const { data } = useAgentCases();
+  const cases = React.useMemo(
+    () => (data?.cases ?? []).map(adaptAgentCaseSummary),
+    [data?.cases]
+  );
   const actionCount = cases.filter((c) => c.status === "action-required").length;
 
   const tabs: TabItem[] = [

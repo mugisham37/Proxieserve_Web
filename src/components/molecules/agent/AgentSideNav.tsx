@@ -18,18 +18,27 @@ import { SideNavLink } from "@/components/molecules/system/SideNavLink";
 import { UserChip } from "@/components/molecules/shared/UserChip";
 import { AvailabilityDot } from "@/components/atoms/agent/AvailabilityDot";
 import { useAgentState, useAgentDispatch, useToggleAvailability } from "@/lib/agent-context";
+import { adaptAgentCaseSummary, getInitials } from "@/lib/agent-adapters";
+import { useAgentCases, useUnassignedCases } from "@/hooks/useAgentCases";
+import { useSession } from "@/hooks/useSession";
 
 export function AgentSideNav() {
   const pathname = usePathname();
-  const { user, availability, cases, darkMode } = useAgentState();
+  const { availability, darkMode } = useAgentState();
   const dispatch = useAgentDispatch();
   const toggleAvailability = useToggleAvailability();
+  const { session } = useSession();
+  const { data } = useAgentCases();
+  const { data: unassignedData } = useUnassignedCases();
 
-  const caseCount = cases.filter(
-    (c) => c.status !== "completed"
-  ).length;
+  const cases = React.useMemo(
+    () => (data?.cases ?? []).map(adaptAgentCaseSummary),
+    [data?.cases]
+  );
+  const caseCount = cases.filter((c) => c.status !== "completed").length;
   const actionCount = cases.filter((c) => c.status === "action-required").length;
-  const unassignedCount = 3; // mock
+  const unassignedCount = unassignedData?.count ?? 0;
+  const userName = session?.name ?? "Agent";
 
   return (
     <nav
@@ -165,10 +174,10 @@ export function AgentSideNav() {
 
       {/* User chip */}
       <UserChip
-        initials={user.initials}
-        fullName={user.fullName}
+        initials={getInitials(userName)}
+        fullName={userName}
         role="agent"
-        city={user.city}
+        city=""
       />
     </nav>
   );

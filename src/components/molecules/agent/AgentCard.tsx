@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import type { AgentData } from "@/lib/tracker-data";
+import type { AgentData } from "@/lib/tracker-ui-types";
 
 interface AgentCardProps {
   agent: AgentData;
