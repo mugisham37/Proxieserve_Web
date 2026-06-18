@@ -6,10 +6,22 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "@/lib/dashboard-context";
+import { useAuth } from "@/lib/auth-context";
 import { formatFee, formatFileSize } from "@/lib/dashboard-utils";
+import {
+  adaptApplicationDetail,
+  adaptDocumentItem,
+  adaptMessageItem,
+  adaptStatusHistoryItem,
+} from "@/lib/dashboard-adapters";
+import { useApplication, useCancelApplication } from "@/hooks/useApplications";
+import { useDocuments } from "@/hooks/useDocuments";
+import { useMessages, useSendMessage } from "@/hooks/useMessages";
+import { downloadDocument } from "@/lib/api/documents";
 import { InAppStatusHero } from "@/components/molecules/agent/InAppStatusHero";
 import { DetailTabs } from "@/components/molecules/agent/DetailTabs";
-import type { DashboardApplication, DashboardMessage, DashboardDocument } from "@/lib/types/dashboard";
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
+import type { DashboardMessage, DashboardDocument } from "@/lib/types/dashboard";
 
 // ─── Compact agent mini card (reference exact) ───────────────────────────────
 
@@ -313,7 +325,15 @@ function MessageInputRow({
 
 // ─── Document tile (reference exact) ─────────────────────────────────────────
 
-function DocTile({ doc }: { doc: DashboardDocument }) {
+function DocTile({
+  doc,
+  onDownload,
+  isDownloading,
+}: {
+  doc: DashboardDocument;
+  onDownload: (doc: DashboardDocument) => void;
+  isDownloading?: boolean;
+}) {
   return (
     <div
       className={cn(
@@ -355,9 +375,11 @@ function DocTile({ doc }: { doc: DashboardDocument }) {
         ) : (
           <button
             type="button"
-            className="inline-flex items-center px-[10px] py-[4px] rounded-[var(--r-pill)] bg-transparent border border-[var(--rule)] text-[var(--ink)] font-sans text-[12px] font-medium hover:bg-[var(--cream)] hover:border-[var(--ink)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
+            onClick={() => onDownload(doc)}
+            disabled={isDownloading}
+            className="inline-flex items-center px-[10px] py-[4px] rounded-[var(--r-pill)] bg-transparent border border-[var(--rule)] text-[var(--ink)] font-sans text-[12px] font-medium hover:bg-[var(--cream)] hover:border-[var(--ink)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)] disabled:opacity-50"
           >
-            Preview
+            {isDownloading ? "Loading…" : "Download"}
           </button>
         )}
       </div>
@@ -413,7 +435,15 @@ function MessagesSection({
 
 // ─── Documents section (reusable) ────────────────────────────────────────────
 
-function DocumentsSection({ documents }: { documents: DashboardDocument[] }) {
+function DocumentsSection({
+  documents,
+  onDownload,
+  downloadingId,
+}: {
+  documents: DashboardDocument[];
+  onDownload: (doc: DashboardDocument) => void;
+  downloadingId: string | null;
+}) {
   return (
     <section>
       <SectionHead
@@ -427,9 +457,18 @@ function DocumentsSection({ documents }: { documents: DashboardDocument[] }) {
         }
       />
       <div className="bg-[var(--paper)] border border-[var(--rule)] rounded-[var(--r-lg)] overflow-hidden">
-        {documents.map((doc) => (
-          <DocTile key={doc.id} doc={doc} />
-        ))}
+        {documents.length === 0 ? (
+          <p className="font-sans text-[13px] text-[var(--ink-muted)] px-[16px] py-[20px]">No documents uploaded yet.</p>
+        ) : (
+          documents.map((doc) => (
+            <DocTile
+              key={doc.id}
+              doc={doc}
+              onDownload={onDownload}
+              isDownloading={downloadingId === doc.id}
+            />
+          ))
+        )}
       </div>
     </section>
   );
@@ -452,15 +491,41 @@ export default function ApplicationDetailPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const prefersReduced = useReducedMotion();
-  const { addOptimisticMessage, resolveOptimisticMessage, isOffline } = useDashboard();
+  const { isOffline } = useDashboard();
+  const { session } = useAuth();
 
   const tab = searchParams.get("tab") ?? "overview";
-  // TODO: fetch from API using `code`
-  const application = null as DashboardApplication | null;
-  const rawMessages: DashboardMessage[] = [];
-  const documents: DashboardDocument[] = [];
+  const userInitials = session?.name ? session.name.split(/\s+/).slice(0, 2).map((p) => p[0]?.toUpperCase() ?? "").join("") : "ME";
 
-  const [localMessages, setLocalMessages] = React.useState(rawMessages);
+  const {
+    data: appData,
+    isLoading: appLoading,
+    isError: appError,
+  } = useApplication(code);
+  const { data: messagesData } = useMessages(code);
+  const { data: documentsData } = useDocuments(code);
+  const sendMessage = useSendMessage(code);
+  const cancelApplication = useCancelApplication(code);
+
+  const [downloadingId, setDownloadingId] = React.useState<string | null>(null);
+
+  const application = appData ? adaptApplicationDetail(appData) : null;
+  const messages: DashboardMessage[] = React.useMemo(
+    () =>
+      (messagesData?.messages ?? [])
+        .filter((m) => !m.is_internal)
+        .map((m) =>
+          adaptMessageItem(m, code, application?.category ?? "APPLICATION", userInitials),
+        ),
+    [messagesData?.messages, code, application?.category, userInitials],
+  );
+  const documents: DashboardDocument[] = React.useMemo(
+    () =>
+      (documentsData?.documents ?? [])
+        .filter((d) => d.is_active)
+        .map((d) => adaptDocumentItem(d, code)),
+    [documentsData?.documents, code],
+  );
 
   const agentFirstName = application?.agent.name.split(" ")[0] ?? "your agent";
 
@@ -470,40 +535,50 @@ export default function ApplicationDetailPage() {
       t.id === "messages"
         ? application?.unreadMessageCount
         : t.id === "documents"
-        ? application?.documentCount
-        : undefined,
+          ? application?.documentCount
+          : undefined,
   }));
 
   const handleSend = React.useCallback(
     (body: string) => {
-      const tempId = `opt_${Date.now()}`;
-      const msg: DashboardMessage & { isOptimistic: boolean } = {
-        id: tempId,
-        applicationCode: code,
-        applicationLabel: "PASSPORT",
-        senderType: "user",
-        senderName: "You",
-        senderInitials: "AM",
-        avatarVariant: "brand",
-        timestamp: "Just now",
-        timeAgo: "Just now",
-        body,
-        isRead: true,
-        isOptimistic: true,
-      };
-      setLocalMessages((prev) => [...prev, msg]);
-      addOptimisticMessage({ id: tempId, body, timestamp: msg.timestamp, status: "sending" });
-      setTimeout(() => {
-        setLocalMessages((prev) =>
-          prev.map((m) => (m.id === tempId ? { ...m, isOptimistic: false } : m))
-        );
-        resolveOptimisticMessage(tempId, "sent");
-      }, 1200);
+      sendMessage.mutate({ content: body });
     },
-    [code, addOptimisticMessage, resolveOptimisticMessage]
+    [sendMessage],
   );
 
-  if (!application) {
+  const handleDownload = React.useCallback(async (doc: DashboardDocument) => {
+    setDownloadingId(doc.id);
+    try {
+      const blob = await downloadDocument(doc.id);
+      const url = URL.createObjectURL(blob);
+      const anchor = window.document.createElement("a");
+      anchor.href = url;
+      anchor.download = doc.filename;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setDownloadingId(null);
+    }
+  }, []);
+
+  const handleCancel = React.useCallback(() => {
+    if (!window.confirm("Cancel this application? This cannot be undone.")) return;
+    cancelApplication.mutate(undefined, {
+      onSuccess: () => router.push("/dashboard"),
+    });
+  }, [cancelApplication, router]);
+
+  if (appLoading) {
+    return (
+      <div className="px-[24px] py-[28px] min-[980px]:px-[40px] flex flex-col gap-[16px]">
+        <SkeletonBlock className="h-[120px] rounded-[var(--r-md)]" />
+        <SkeletonBlock className="h-[48px] rounded-[var(--r-md)]" />
+        <SkeletonBlock className="h-[400px] rounded-[var(--r-md)]" />
+      </div>
+    );
+  }
+
+  if (appError || !application || !appData) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-[16px] p-[40px] text-center">
         <p className="font-serif text-[24px] text-[var(--ink-muted)]">Application not found</p>
@@ -598,39 +673,77 @@ export default function ApplicationDetailPage() {
                 {tab === "overview" && (
                   <>
                     <MessagesSection
-                      messages={localMessages}
+                      messages={messages}
                       agentFirstName={agentFirstName}
                       onSend={handleSend}
-                      isOffline={isOffline}
+                      isOffline={isOffline || sendMessage.isPending}
                     />
-                    <DocumentsSection documents={documents} />
+                    <DocumentsSection
+                      documents={documents}
+                      onDownload={handleDownload}
+                      downloadingId={downloadingId}
+                    />
                   </>
                 )}
 
                 {/* ── Messages only ── */}
                 {tab === "messages" && (
                   <MessagesSection
-                    messages={localMessages}
+                    messages={messages}
                     agentFirstName={agentFirstName}
                     onSend={handleSend}
-                    isOffline={isOffline}
+                    isOffline={isOffline || sendMessage.isPending}
                   />
                 )}
 
                 {/* ── Documents only ── */}
                 {tab === "documents" && (
-                  <DocumentsSection documents={documents} />
+                  <DocumentsSection
+                    documents={documents}
+                    onDownload={handleDownload}
+                    downloadingId={downloadingId}
+                  />
                 )}
 
                 {/* ── Payment ── */}
                 {tab === "payment" && (
-                  <div className="flex flex-col items-center gap-[16px] py-[60px] text-center">
-                    <p className="font-serif italic text-[20px] text-[var(--ink-muted)]">
-                      Payment portal coming soon
-                    </p>
-                    <p className="font-sans text-[13.5px] text-[var(--ink-muted)] max-w-[360px] leading-[1.5]">
-                      Online payments will be available in the next update. Follow up via WhatsApp or in-app message.
-                    </p>
+                  <div className="flex flex-col items-center gap-[16px] py-[48px] text-center">
+                    {appData.payment_info ? (
+                      <>
+                        <p className="font-serif italic text-[20px] text-[var(--ink)]">
+                          Payment {appData.payment_status === "paid" ? "received" : "details"}
+                        </p>
+                        <div className="bg-[var(--paper)] border border-[var(--rule)] rounded-[var(--r-lg)] px-[24px] py-[20px] text-left w-full max-w-[420px]">
+                          <p className="font-sans text-[13px] text-[var(--ink-muted)] mb-[4px]">Method</p>
+                          <p className="font-sans text-[14px] text-[var(--ink)] mb-[12px]">{appData.payment_info.method}</p>
+                          <p className="font-sans text-[13px] text-[var(--ink-muted)] mb-[4px]">Amount</p>
+                          <p className="font-mono text-[14px] text-[var(--ink)] mb-[12px]">{formatFee(appData.payment_info.amount)}</p>
+                          {appData.payment_info.receiptNumber && (
+                            <>
+                              <p className="font-sans text-[13px] text-[var(--ink-muted)] mb-[4px]">Receipt no.</p>
+                              <p className="font-mono text-[14px] text-[var(--ink)]">{appData.payment_info.receiptNumber}</p>
+                            </>
+                          )}
+                        </div>
+                      </>
+                    ) : appData.payment_status === "pending" || appData.payment_status === "unpaid" ? (
+                      <>
+                        <p className="font-serif italic text-[20px] text-[var(--ink-muted)]">
+                          Payment required
+                        </p>
+                        <p className="font-sans text-[13.5px] text-[var(--ink-muted)] max-w-[360px] leading-[1.5]">
+                          Complete your service fee payment to continue processing your application.
+                        </p>
+                        <Link
+                          href={`/pay/${code}/method-choice`}
+                          className="inline-flex items-center px-[20px] py-[10px] rounded-[var(--r-pill)] bg-[var(--ink)] text-[var(--paper)] font-sans text-[13px] font-medium hover:bg-[var(--ink-2)] transition-colors"
+                        >
+                          Pay now →
+                        </Link>
+                      </>
+                    ) : (
+                      <p className="font-sans text-[13px] text-[var(--ink-muted)]">No payment information available.</p>
+                    )}
                   </div>
                 )}
 
@@ -639,7 +752,27 @@ export default function ApplicationDetailPage() {
                   <section>
                     <SectionHead eyebrow="04 / Timeline" title="Application" titleItalic="history" />
                     <div className="bg-[var(--paper)] border border-[var(--rule)] rounded-[var(--r-lg)] overflow-hidden">
-                      <p className="font-sans text-[13px] text-[var(--ink-muted)] px-[16px] py-[20px]">No history yet.</p>
+                      {appData.status_history.length === 0 ? (
+                        <p className="font-sans text-[13px] text-[var(--ink-muted)] px-[16px] py-[20px]">No history yet.</p>
+                      ) : (
+                        appData.status_history.map((item, i) => {
+                          const entry = adaptStatusHistoryItem(item);
+                          return (
+                            <div
+                              key={`${item.status}-${item.created_at}-${i}`}
+                              className="px-[16px] py-[14px] border-b border-[var(--rule)] last:border-b-0"
+                            >
+                              <div className="flex items-start justify-between gap-[12px]">
+                                <p className="font-sans text-[14px] font-medium text-[var(--ink)] capitalize">{entry.label}</p>
+                                <time className="font-mono text-[10px] text-[var(--ink-muted)] shrink-0">{entry.date}</time>
+                              </div>
+                              {entry.note && (
+                                <p className="font-sans text-[13px] text-[var(--ink-muted)] mt-[4px]">{entry.note}</p>
+                              )}
+                            </div>
+                          );
+                        })
+                      )}
                     </div>
                   </section>
                 )}
@@ -697,7 +830,9 @@ export default function ApplicationDetailPage() {
                 </a>
                 <button
                   type="button"
-                  className="flex items-center gap-[10px] px-[14px] py-[10px] rounded-[var(--r-md)] bg-transparent border border-[var(--rule)] font-sans text-[13px] font-medium text-[var(--danger)] hover:bg-[var(--danger-soft)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
+                  onClick={handleCancel}
+                  disabled={cancelApplication.isPending}
+                  className="flex items-center gap-[10px] px-[14px] py-[10px] rounded-[var(--r-md)] bg-transparent border border-[var(--rule)] font-sans text-[13px] font-medium text-[var(--danger)] hover:bg-[var(--danger-soft)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)] disabled:opacity-50"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="10" /><path d="m15 9-6 6M9 9l6 6" />
