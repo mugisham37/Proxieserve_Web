@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { AdminShell } from "@/components/organisms/admin/AdminShell";
 
 export const metadata: Metadata = {
-  title: "Admin Panel — ProxiServe",
-  description: "ProxiServe platform administration and management",
+  title: "Admin Panel — Hebuza",
+  description: "Hebuza platform administration and management",
 };
 
 export default function AdminLayout({
