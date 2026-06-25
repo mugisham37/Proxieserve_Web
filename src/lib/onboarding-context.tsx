@@ -84,7 +84,7 @@ const STEPS: Record<OnboardingRole, OnboardingStep[]> = {
 };
 
 function storageKey(role: OnboardingRole) {
-  return `proxi:onboarding:${role}`;
+  return `hebuza:onboarding:${role}`;
 }
 
 function isComplete(role: OnboardingRole): boolean {
