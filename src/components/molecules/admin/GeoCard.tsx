@@ -19,7 +19,7 @@ export function GeoCard({ countryName = "your region", onDismiss, className, ...
       <div>
         <p className="eyebrow text-[var(--warn)] mb-3">Availability Notice</p>
         <h3 className="t-h2 text-[var(--ink)] mb-2">
-          ProxiServe may not be available in {countryName}
+          Hebuza may not be available in {countryName}
         </h3>
         <p className="font-sans text-[15px] text-[var(--ink-muted)] leading-relaxed">
           Our services are currently focused on Rwanda. You can still browse pricing and
