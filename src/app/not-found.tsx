@@ -1,7 +1,7 @@
 import { ErrorPage } from "@/components/organisms/shared/ErrorPage";
 
 export const metadata = {
-  title: "Page not found — ProxiServe",
+  title: "Page not found — Hebuza",
 };
 
 export default function NotFound() {
