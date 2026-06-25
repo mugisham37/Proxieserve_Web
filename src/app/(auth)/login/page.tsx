@@ -6,7 +6,7 @@ import { ClientLoginForm } from "@/components/organisms/auth/ClientLoginForm";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Sign in — ProxiServe",
+  title: "Sign in — Hebuza",
   robots: { index: false },
 };
 
