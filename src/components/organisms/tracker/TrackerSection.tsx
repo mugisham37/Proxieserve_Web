@@ -31,7 +31,7 @@ export function TrackerSection({ className }: { className?: string }) {
               Where are your documents?
             </h2>
             <p className="font-sans text-[15px] text-[var(--ink-muted)] leading-relaxed">
-              Enter your ProxiServe code to see real-time status updates, documents, and agent messages.
+              Enter your Hebuza code to see real-time status updates, documents, and agent messages.
             </p>
             <p className="font-mono text-[12px] text-[var(--ink-subtle)]">
               Example: <span className="text-[var(--ink-muted)]">PRX-2026-00483</span>
