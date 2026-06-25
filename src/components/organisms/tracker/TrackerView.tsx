@@ -28,7 +28,7 @@ export function TrackerView({ application, onRefresh, isRefreshing = false }: Tr
   const { session } = useAuth();
 
   React.useEffect(() => {
-    const key = `proxi:tracker:views:${application.code}`;
+    const key = `hebuza:tracker:views:${application.code}`;
     const current = parseInt(getItem(key) ?? "0", 10);
     const next = current + 1;
     setItem(key, String(next));
