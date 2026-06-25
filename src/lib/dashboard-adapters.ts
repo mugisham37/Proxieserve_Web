@@ -97,7 +97,7 @@ function defaultAgent(assigned: boolean): DashboardAgent {
     return {
       name: "Your agent",
       shortName: "Agent",
-      role: "ProxiServe Agent",
+      role: "Hebuza Agent",
       initials: "AG",
       isOnline: true,
       avgReplyMinutes: 60,
@@ -110,7 +110,7 @@ function defaultAgent(assigned: boolean): DashboardAgent {
   return {
     name: "Pending assignment",
     shortName: "Pending",
-    role: "ProxiServe Agent",
+    role: "Hebuza Agent",
     initials: "—",
     isOnline: false,
     avgReplyMinutes: 0,
