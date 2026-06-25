@@ -7,8 +7,8 @@ import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About — ProxiServe",
-  description: "ProxiServe is a Rwandan company that helps individuals and businesses navigate government paperwork with ease.",
+  title: "About — Hebuza",
+  description: "Hebuza is a Rwandan company that helps individuals and businesses navigate government paperwork with ease.",
 };
 
 const TEAM = [
@@ -49,7 +49,7 @@ export default function AboutPage() {
         <Eyebrow withLine className="text-[var(--ink-muted)] mb-4">About us</Eyebrow>
         <h1 className="t-h1 text-[var(--ink)] mb-4 max-w-xl">We believe paperwork shouldn&apos;t slow Rwanda down.</h1>
         <p className="t-lede text-[var(--ink-muted)] max-w-lg mb-16">
-          ProxiServe was founded in Kigali in 2023 by a team frustrated by how much time businesses and individuals lost to government queues.
+          Hebuza was founded in Kigali in 2023 by a team frustrated by how much time businesses and individuals lost to government queues.
         </p>
 
         {/* Mission + Team grid */}
