@@ -126,7 +126,7 @@ export function ClientLoginForm() {
       transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
       className="w-full max-w-[460px]"
     >
-      <AuthCard variant="client" title="Welcome back" subtitle="Sign in to your ProxiServe account.">
+      <AuthCard variant="client" title="Welcome back" subtitle="Sign in to your Hebuza account.">
         <div className="flex flex-col gap-4">
           {/* Success banners from redirects */}
           <AuthBanner
