@@ -3,28 +3,28 @@
 @import "shadcn/tailwind.css";
 
 /* ============================================================
-   PROXISERVE THEME TOKENS (integrated with shadcn base)
+   HEBUZA THEME TOKENS (integrated with shadcn base)
    ============================================================ */
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 
 @theme {
-  /* ProxiServe surface colours */
-  --color-cream: #f2ebd7;
-  --color-cream-2: #efe6cc;
-  --color-paper: #fbf6e8;
-  --color-paper-2: #f7f0db;
+  /* Hebuza surface colours */
+  --color-cream: #F8FAFF;
+  --color-cream-2: #EEF2FF;
+  --color-paper: #FFFFFF;
+  --color-paper-2: #F1F5FF;
 
-  /* ProxiServe ink */
+  /* Hebuza ink */
   --color-ink: #1a1612;
   --color-ink-2: #2e2823;
   --color-ink-muted: #6b6056;
   --color-ink-subtle: #9a8e80;
 
   /* Brand */
-  --color-brand: #c9437a;
-  --color-brand-ink: #8e2a56;
-  --color-brand-soft: #f6dce7;
+  --color-brand: #2563EB;
+  --color-brand-ink: #1E3A8A;
+  --color-brand-soft: #DBEAFE;
   --color-brand-contrast: #ffffff;
 
   /* Status */
@@ -39,7 +39,7 @@
 
   /* Marketing service blocks */
   --color-b-marigold: #e9b530;
-  --color-b-pink: #e78bb4;
+  --color-b-pink: #F0B429;
   --color-b-green: #2d7a3e;
   --color-b-blue: #2f4fcc;
   --color-b-red: #d5341e;
@@ -78,10 +78,10 @@
 
 :root {
   /* Surfaces */
-  --cream: #f2ebd7;
-  --cream-2: #efe6cc;
-  --paper: #fbf6e8;
-  --paper-2: #f7f0db;
+  --cream: #F8FAFF;
+  --cream-2: #EEF2FF;
+  --paper: #FFFFFF;
+  --paper-2: #F1F5FF;
 
   /* Ink */
   --ink: #1a1612;
@@ -95,9 +95,9 @@
   --rule-soft: rgba(26, 22, 18, 0.08);
 
   /* Brand */
-  --brand: #c9437a;
-  --brand-ink: #8e2a56;
-  --brand-soft: #f6dce7;
+  --brand: #2563EB;
+  --brand-ink: #1E3A8A;
+  --brand-soft: #DBEAFE;
   --brand-contrast: #ffffff;
 
   /* Status */
@@ -112,7 +112,7 @@
 
   /* Service colours */
   --b-marigold: #e9b530;
-  --b-pink: #e78bb4;
+  --b-pink: #F0B429;
   --b-green: #2d7a3e;
   --b-blue: #2f4fcc;
   --b-red: #d5341e;
@@ -150,21 +150,21 @@
   --w-mkt: 1280px;
   --w-wide: 1440px;
 
-  /* shadcn semantic tokens remapped to ProxiServe */
-  --background: #f2ebd7;
+  /* shadcn semantic tokens remapped to Hebuza */
+  --background: #F8FAFF;
   --foreground: #1a1612;
-  --card: #fbf6e8;
+  --card: #FFFFFF;
   --card-foreground: #1a1612;
-  --popover: #fbf6e8;
+  --popover: #FFFFFF;
   --popover-foreground: #1a1612;
   --primary: #1a1612;
-  --primary-foreground: #fbf6e8;
-  --secondary: #efe6cc;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EEF2FF;
   --secondary-foreground: #1a1612;
-  --muted: #efe6cc;
+  --muted: #EEF2FF;
   --muted-foreground: #6b6056;
-  --accent: #f6dce7;
-  --accent-foreground: #8e2a56;
+  --accent: #DBEAFE;
+  --accent-foreground: #1E3A8A;
   --destructive: #b83a2a;
   --border: rgba(26, 22, 18, 0.18);
   --input: rgba(26, 22, 18, 0.18);
@@ -177,47 +177,47 @@
    ============================================================ */
 
 [data-theme="dark"] {
-  --cream: #1a1612;
-  --cream-2: #211c17;
-  --paper: #211c17;
-  --paper-2: #2a2319;
+  --cream: #0B1324;
+  --cream-2: #0F1B33;
+  --paper: #0F1B33;
+  --paper-2: #162040;
 
-  --ink: #f2ebd7;
-  --ink-2: #e0d8c7;
-  --ink-muted: #9a8e80;
-  --ink-subtle: #6b6056;
+  --ink: #F0F6FF;
+  --ink-2: #CBD5E1;
+  --ink-muted: #94A3B8;
+  --ink-subtle: #64748B;
 
-  --rule: rgba(242, 235, 215, 0.12);
-  --rule-strong: rgba(242, 235, 215, 0.35);
-  --rule-soft: rgba(242, 235, 215, 0.06);
+  --rule: rgba(240, 246, 255, 0.12);
+  --rule-strong: rgba(240, 246, 255, 0.35);
+  --rule-soft: rgba(240, 246, 255, 0.06);
 
-  --brand: #d9527e;
-  --brand-ink: #f07aa0;
-  --brand-soft: rgba(201, 67, 122, 0.18);
+  --brand: #60A5FA;
+  --brand-ink: #93C5FD;
+  --brand-soft: rgba(37, 99, 235, 0.2);
 
   --sh-subtle: 0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 16px rgba(0, 0, 0, 0.25);
   --sh-raised: 0 2px 4px rgba(0, 0, 0, 0.25), 0 16px 32px rgba(0, 0, 0, 0.35);
   --sh-overlay: 0 8px 16px rgba(0, 0, 0, 0.35), 0 32px 64px rgba(0, 0, 0, 0.5);
 
   /* Remap shadcn tokens for dark */
-  --background: #1a1612;
-  --foreground: #f2ebd7;
-  --card: #211c17;
-  --card-foreground: #f2ebd7;
-  --popover: #211c17;
-  --popover-foreground: #f2ebd7;
-  --primary: #f2ebd7;
-  --primary-foreground: #1a1612;
-  --secondary: #2a2319;
-  --secondary-foreground: #f2ebd7;
-  --muted: #2a2319;
-  --muted-foreground: #9a8e80;
-  --accent: rgba(201, 67, 122, 0.18);
-  --accent-foreground: #f07aa0;
+  --background: #0B1324;
+  --foreground: #F0F6FF;
+  --card: #0F1B33;
+  --card-foreground: #F0F6FF;
+  --popover: #0F1B33;
+  --popover-foreground: #F0F6FF;
+  --primary: #F0F6FF;
+  --primary-foreground: #0B1324;
+  --secondary: #162040;
+  --secondary-foreground: #F0F6FF;
+  --muted: #162040;
+  --muted-foreground: #94A3B8;
+  --accent: rgba(37, 99, 235, 0.2);
+  --accent-foreground: #93C5FD;
   --destructive: #d95b4b;
-  --border: rgba(242, 235, 215, 0.12);
-  --input: rgba(242, 235, 215, 0.12);
-  --ring: #5b7ae8;
+  --border: rgba(240, 246, 255, 0.12);
+  --input: rgba(240, 246, 255, 0.12);
+  --ring: #60A5FA;
 }
 
 /* ============================================================
@@ -227,7 +227,7 @@
 @layer base {
   * {
     border-color: var(--rule);
-    outline-color: rgba(47, 79, 204, 0.5);
+    outline-color: rgba(37, 99, 235, 0.5);
     box-sizing: border-box;
   }
 
