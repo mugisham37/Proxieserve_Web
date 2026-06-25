@@ -32,7 +32,7 @@ export function WhySection({ className }: { className?: string }) {
       aria-labelledby="why-heading"
     >
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 pt-6 pb-4">
-        <h2 id="why-heading" className="sr-only">Why ProxiServe</h2>
+        <h2 id="why-heading" className="sr-only">Why Hebuza</h2>
       </div>
       {/* Full bleed: no container padding */}
       <div
