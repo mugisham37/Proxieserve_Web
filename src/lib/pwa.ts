@@ -27,7 +27,7 @@ export function registerServiceWorker() {
               navigator.serviceWorker.controller
             ) {
               // New SW installed, notify user
-              toastFn?.("A new version of ProxiServe is available — reload to update.", {
+              toastFn?.("A new version of Hebuza is available — reload to update.", {
                 variant: "default",
               });
             }
@@ -41,7 +41,7 @@ export function registerServiceWorker() {
     // Listen for SW messages
     navigator.serviceWorker.addEventListener("message", (event) => {
       if (event.data?.type === "SW_UPDATE_AVAILABLE") {
-        toastFn?.("ProxiServe has been updated. Reload to get the latest version.", {
+        toastFn?.("Hebuza has been updated. Reload to get the latest version.", {
           variant: "default",
         });
       }
