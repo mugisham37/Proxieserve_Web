@@ -1,7 +1,7 @@
 export const DRAFT_SCHEMA_VERSION = 1;
 
-export const DRAFT_KEY = (slug: string) => `proxi:draft:${slug}`;
-export const SUBMITTED_KEY = (idempotencyKey: string) => `proxi:submitted:${idempotencyKey}`;
+export const DRAFT_KEY = (slug: string) => `hebuza:draft:${slug}`;
+export const SUBMITTED_KEY = (idempotencyKey: string) => `hebuza:submitted:${idempotencyKey}`;
 
 export interface DocumentFile {
   fileName: string;
