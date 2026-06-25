@@ -19,7 +19,7 @@ export function CTABand({ className }: { className?: string }) {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.4 }}
           className="notch-lg overflow-hidden"
-          style={{ background: "linear-gradient(100deg, #C9437A 0%, #D5341E 100%)" }}
+          style={{ background: "linear-gradient(100deg, #2563EB 0%, #1E3A8A 100%)" }}
         >
           <div className="grid md:grid-cols-[1.4fr_1fr] gap-8 items-center px-10 sm:px-14 py-14 sm:py-20">
             {/* Left */}
