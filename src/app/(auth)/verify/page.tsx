@@ -5,7 +5,7 @@ import { AuthShell } from "@/components/organisms/auth/AuthShell";
 import { VerifyOTPForm } from "@/components/organisms/auth/VerifyOTPForm";
 
 export const metadata: Metadata = {
-  title: "Verify your email — ProxiServe",
+  title: "Verify your email — Hebuza",
   robots: { index: false },
 };
 
