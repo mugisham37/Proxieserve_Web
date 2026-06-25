@@ -138,7 +138,7 @@ export function WizStep5Confirmation({ service }: WizStep5ConfirmationProps) {
           <WhatNextItem
             num={2}
             title="Track your application"
-            body={`Use code ${code} at any time on the ProxiServe website to check your application status.`}
+            body={`Use code ${code} at any time on the Hebuza website to check your application status.`}
           />
           {service.fee > 0 ? (
             <WhatNextItem
