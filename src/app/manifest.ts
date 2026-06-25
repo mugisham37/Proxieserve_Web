@@ -2,15 +2,15 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ProxiServe",
-    short_name: "ProxiServe",
+    name: "Hebuza",
+    short_name: "Hebuza",
     description:
-      "Skip the queues and confusing forms. A trained ProxiServe agent handles your government paperwork on your behalf.",
+      "Skip the queues and confusing forms. A trained Hebuza agent handles your government paperwork on your behalf.",
     start_url: "/",
     display: "standalone",
     orientation: "portrait-primary",
-    background_color: "#F2EBD7",
-    theme_color: "#1A1612",
+    background_color: "#F8FAFF",
+    theme_color: "#2563EB",
     categories: ["productivity", "government", "utilities"],
     lang: "en",
     icons: [
