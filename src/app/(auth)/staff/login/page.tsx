@@ -4,7 +4,7 @@ import { AuthShell } from "@/components/organisms/auth/AuthShell";
 import { StaffLoginForm } from "@/components/organisms/auth/StaffLoginForm";
 
 export const metadata: Metadata = {
-  title: "Staff sign in — ProxiServe",
+  title: "Staff sign in — Hebuza",
   robots: { index: false, follow: false },
 };
 
