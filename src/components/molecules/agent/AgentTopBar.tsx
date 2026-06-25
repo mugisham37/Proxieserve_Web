@@ -53,7 +53,7 @@ export function AgentTopBar() {
           "min-[980px]:hidden",
           "font-serif text-[17px] text-[var(--ink)] shrink-0"
         )}
-        aria-label="ProxiServe — go to today"
+        aria-label="Hebuza — go to today"
       >
         Proxi<em className="italic font-normal">Serve</em>
       </Link>
