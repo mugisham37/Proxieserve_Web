@@ -31,9 +31,9 @@ export const INITIAL_AUTH_UI_STATE: AuthUiState = {
   claimFoundService: null,
 };
 
-export const AUTH_SESSION_KEY = "proxi:auth:session";
-export const AUTH_VERIFIED_KEY = "proxi:auth:verified";
-export const STAFF_PRE_2FA_KEY = "proxi:staff:pre2fa";
+export const AUTH_SESSION_KEY = "hebuza:auth:session";
+export const AUTH_VERIFIED_KEY = "hebuza:auth:verified";
+export const STAFF_PRE_2FA_KEY = "hebuza:staff:pre2fa";
 export const SESSION_QUERY_KEY = ["session"] as const;
 
 export type { AuthLanguage, AuthRole };
