@@ -5,7 +5,7 @@ import { AuthShell } from "@/components/organisms/auth/AuthShell";
 import { ForgotPasswordForm } from "@/components/organisms/auth/ForgotPasswordForm";
 
 export const metadata: Metadata = {
-  title: "Reset password — ProxiServe",
+  title: "Reset password — Hebuza",
   robots: { index: false },
 };
 
