@@ -239,7 +239,7 @@ export function WizStep1Personal({ service }: WizStep1PersonalProps) {
               className="mt-0.5 w-4 h-4 rounded accent-[var(--ink)] shrink-0 cursor-pointer"
             />
             <label htmlFor="consent-checkbox" className="font-sans text-[13px] text-[var(--ink)] leading-relaxed cursor-pointer">
-              I authorise ProxiServe to act on my behalf in handling my information to apply for{" "}
+              I authorise Hebuza to act on my behalf in handling my information to apply for{" "}
               <strong>{service.name}</strong>. I confirm all details I provide are accurate and complete.
             </label>
           </div>
