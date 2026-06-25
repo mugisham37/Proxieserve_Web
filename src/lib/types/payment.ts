@@ -61,10 +61,10 @@ export interface MobileMoneyDetails {
 }
 
 export const PAY_SESSION_KEY = (applicationId: string) =>
-  `proxi:pay:${applicationId}`;
+  `hebuza:pay:${applicationId}`;
 
 export const PAY_STATUS_KEY = (applicationId: string) =>
-  `proxi:pay-status:${applicationId}`;
+  `hebuza:pay-status:${applicationId}`;
 
 export function formatRWF(amount: number): string {
   return `RWF ${amount.toLocaleString("en-US")}`;
