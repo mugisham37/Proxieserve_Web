@@ -11,7 +11,7 @@ export default function GlobalError({
   unstable_retry: () => void;
 }) {
   React.useEffect(() => {
-    console.error("[ProxiServe] Global error:", error);
+    console.error("[Hebuza] Global error:", error);
   }, [error]);
 
   return (
@@ -20,8 +20,8 @@ export default function GlobalError({
         style={{
           margin: 0,
           fontFamily: "system-ui, sans-serif",
-          background: "#F2EBD7",
-          color: "#1A1612",
+          background: "#F8FAFF",
+          color: "#1a1612",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -38,7 +38,7 @@ export default function GlobalError({
               margin: "0 0 16px",
               lineHeight: 1,
               fontStyle: "italic",
-              color: "#1A1612",
+              color: "#1a1612",
             }}
             aria-hidden="true"
           >
@@ -47,7 +47,7 @@ export default function GlobalError({
           <h1 style={{ fontSize: 22, fontWeight: 500, margin: "0 0 10px" }}>
             Something went wrong.
           </h1>
-          <p style={{ fontSize: 14, color: "#6B6056", lineHeight: 1.6, margin: "0 0 24px" }}>
+          <p style={{ fontSize: 14, color: "#6b6056", lineHeight: 1.6, margin: "0 0 24px" }}>
             Your data is safe. Try refreshing the page.
           </p>
           <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
@@ -56,9 +56,9 @@ export default function GlobalError({
               style={{
                 padding: "10px 22px",
                 borderRadius: 999,
-                border: "1px solid #1A1612",
-                background: "#1A1612",
-                color: "#F2EBD7",
+                border: "1px solid #2563EB",
+                background: "#2563EB",
+                color: "#FFFFFF",
                 cursor: "pointer",
                 fontFamily: "Georgia, serif",
                 fontStyle: "italic",
@@ -73,9 +73,9 @@ export default function GlobalError({
               style={{
                 padding: "10px 22px",
                 borderRadius: 999,
-                border: "1px solid #1A1612",
+                border: "1px solid #1a1612",
                 background: "transparent",
-                color: "#1A1612",
+                color: "#1a1612",
                 textDecoration: "none",
                 fontFamily: "Georgia, serif",
                 fontStyle: "italic",
@@ -86,7 +86,7 @@ export default function GlobalError({
             </a>
           </div>
           {error.digest && (
-            <p style={{ fontFamily: "monospace", fontSize: 11, color: "#A09488", marginTop: 20 }}>
+            <p style={{ fontFamily: "monospace", fontSize: 11, color: "#94A3B8", marginTop: 20 }}>
               Incident #{error.digest}
             </p>
           )}
