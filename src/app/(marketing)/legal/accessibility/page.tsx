@@ -3,8 +3,8 @@ import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 
 export const metadata: Metadata = {
-  title: "Accessibility — ProxiServe",
-  description: "ProxiServe's accessibility statement and our commitment to inclusive design.",
+  title: "Accessibility — Hebuza",
+  description: "Hebuza's accessibility statement and our commitment to inclusive design.",
 };
 
 const NAV_ITEMS = [
@@ -20,7 +20,7 @@ const SECTIONS = [
     id: "commitment",
     title: "Our commitment",
     plain: "We aim to meet WCAG 2.1 AA. Accessibility is not an afterthought — it is a requirement.",
-    body: `ProxiServe is committed to ensuring that our website and services are accessible to all people, including those with disabilities. We believe that access to government services should not be limited by a person's ability. We strive to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 at level AA.`,
+    body: `Hebuza is committed to ensuring that our website and services are accessible to all people, including those with disabilities. We believe that access to government services should not be limited by a person's ability. We strive to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 at level AA.`,
   },
   {
     id: "standards",
@@ -44,7 +44,7 @@ const SECTIONS = [
     id: "contact-a11y",
     title: "Accessibility feedback",
     plain: "Found a barrier? Let us know and we'll fix it within 5 business days.",
-    body: `If you experience any accessibility barriers on our website or need content in an alternative format, please contact us:\n\nEmail: accessibility@proxiserve.rw\nPhone: +250 788 000 000\n\nWe aim to respond within 2 business days and resolve confirmed issues within 5 business days. For urgent needs, please call us directly.`,
+    body: `If you experience any accessibility barriers on our website or need content in an alternative format, please contact us:\n\nEmail: accessibility@hebuza.rw\nPhone: +250 788 000 000\n\nWe aim to respond within 2 business days and resolve confirmed issues within 5 business days. For urgent needs, please call us directly.`,
   },
 ];
 
