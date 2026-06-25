@@ -47,8 +47,8 @@ interface DashboardProviderProps {
   initialActionCount?: number;
 }
 
-const LAST_SEEN_KEY = "proxi:dashboard:last_seen";
-const LONG_ABSENCE_DISMISSED_KEY = "proxi:dashboard:absence_dismissed";
+const LAST_SEEN_KEY = "hebuza:dashboard:last_seen";
+const LONG_ABSENCE_DISMISSED_KEY = "hebuza:dashboard:absence_dismissed";
 const ABSENCE_THRESHOLD_DAYS = 90;
 
 export function DashboardProvider({
@@ -100,7 +100,7 @@ export function DashboardProvider({
   React.useEffect(() => {
     if (typeof BroadcastChannel === "undefined") return;
 
-    const channel = new BroadcastChannel("proxi:dashboard");
+    const channel = new BroadcastChannel("hebuza:dashboard");
     channelRef.current = channel;
 
     channel.onmessage = (e) => {
