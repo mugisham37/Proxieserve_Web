@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const formatted = slug.replace(/-/g, " ");
   return {
-    title: `${formatted} — ProxiServe`,
+    title: `${formatted} — Hebuza`,
   };
 }
 
