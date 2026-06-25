@@ -8,7 +8,7 @@ import { QuoteCard } from "@/components/molecules/marketing/QuoteCard";
 
 const TESTIMONIALS = [
   {
-    quote: "I registered my company in 4 days without taking a single day off work. ProxiServe handled everything while I ran my business.",
+    quote: "I registered my company in 4 days without taking a single day off work. Hebuza handled everything while I ran my business.",
     authorName: "Jean-Paul Nzeyimana",
     authorInitials: "JN",
     authorMeta: "Kigali, Rwanda",
@@ -22,7 +22,7 @@ const TESTIMONIALS = [
     service: "TIN Registration",
   },
   {
-    quote: "Renewing my ID while living abroad seemed impossible. ProxiServe made it straightforward and stress-free.",
+    quote: "Renewing my ID while living abroad seemed impossible. Hebuza made it straightforward and stress-free.",
     authorName: "Eric Habimana",
     authorInitials: "EH",
     authorMeta: "Kampala, Uganda",
