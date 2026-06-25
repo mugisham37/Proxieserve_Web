@@ -79,7 +79,7 @@ export default function ContactPage() {
               />
               <ContactMethod
                 label="Email"
-                content={<a href="mailto:hello@proxiserve.rw" className="hover:text-[var(--brand)]">hello@proxiserve.rw</a>}
+                content={<a href="mailto:hello@hebuza.rw" className="hover:text-[var(--brand)]">hello@hebuza.rw</a>}
               />
               <ContactMethod
                 label="Office"
