@@ -152,7 +152,7 @@ export function ApplicationProvider({ slug, children }: ApplicationProviderProps
   // Multi-tab BroadcastChannel
   React.useEffect(() => {
     if (typeof BroadcastChannel === "undefined") return;
-    const channel = new BroadcastChannel("proxi:application");
+    const channel = new BroadcastChannel("hebuza:application");
     channelRef.current = channel;
     channel.onmessage = (e) => {
       if (e.data?.type === "DRAFT_UPDATED" && e.data?.slug === slug) {
