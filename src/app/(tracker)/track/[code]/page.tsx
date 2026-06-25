@@ -8,7 +8,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { code } = await params;
   return {
-    title: `Track ${code} — ProxiServe`,
+    title: `Track ${code} — Hebuza`,
     robots: { index: false },
   };
 }
