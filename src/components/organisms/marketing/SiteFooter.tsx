@@ -10,7 +10,7 @@ import { LangSwitcher } from "@/components/atoms/shared/LangSwitcher";
 
 const FOOTER_COLS = [
   {
-    heading: "ProxiServe",
+    heading: "Hebuza",
     links: [
       { label: "How it works", href: "/how-it-works" },
       { label: "About us", href: "/about" },
@@ -144,7 +144,7 @@ export function SiteFooter({ className }: { className?: string }) {
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-6 border-t border-[var(--rule)]">
           <p className="font-sans text-[12px] text-[var(--ink-subtle)]">
-            © {new Date().getFullYear()} ProxiServe Ltd. Kigali, Rwanda.
+            © {new Date().getFullYear()} Hebuza Ltd. Kigali, Rwanda.
           </p>
           <div className="flex items-center gap-4">
             <ThemeToggle />
