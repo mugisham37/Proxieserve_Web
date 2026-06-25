@@ -4,8 +4,8 @@ import { CookieBanner } from "@/components/molecules/system/CookieBanner";
 
 export const metadata: Metadata = {
   title: {
-    default: "Dashboard — ProxiServe",
-    template: "%s — ProxiServe",
+    default: "Dashboard — Hebuza",
+    template: "%s — Hebuza",
   },
   robots: { index: false },
 };
