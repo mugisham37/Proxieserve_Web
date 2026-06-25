@@ -50,7 +50,7 @@ const DEFAULTS: Record<
   },
   "503": {
     headline: "We're doing a little maintenance.",
-    subline: "ProxiServe is briefly offline for an upgrade. Your applications are safe and waiting.",
+    subline: "Hebuza is briefly offline for an upgrade. Your applications are safe and waiting.",
     actions: [
       { label: "Check status page", href: "/status", variant: "ghost" },
     ],
