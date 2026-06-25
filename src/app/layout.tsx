@@ -38,29 +38,29 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "ProxiServe — Hand it over. We'll handle it.",
-    template: "%s — ProxiServe",
+    default: "Hebuza — Hand it over. We'll handle it.",
+    template: "%s — Hebuza",
   },
   description:
-    "Skip the queues and confusing forms. A trained ProxiServe agent handles your government paperwork — tax, ID, licenses, permits — on your behalf.",
-  keywords: ["government services", "Rwanda", "paperwork", "agent", "ProxiServe"],
-  authors: [{ name: "ProxiServe Ltd" }],
-  creator: "ProxiServe Ltd",
-  metadataBase: new URL("https://proxiserve.rw"),
+    "Skip the queues and confusing forms. A trained Hebuza agent handles your government paperwork — tax, ID, licenses, permits — on your behalf.",
+  keywords: ["government services", "Rwanda", "paperwork", "agent", "Hebuza"],
+  authors: [{ name: "Hebuza Ltd" }],
+  creator: "Hebuza Ltd",
+  metadataBase: new URL("https://hebuza.rw"),
   openGraph: {
     type: "website",
     locale: "en_RW",
-    url: "https://proxiserve.rw",
-    siteName: "ProxiServe",
-    title: "ProxiServe — Hand it over. We'll handle it.",
+    url: "https://hebuza.rw",
+    siteName: "Hebuza",
+    title: "Hebuza — Hand it over. We'll handle it.",
     description:
-      "Skip the queues and confusing forms. A trained ProxiServe agent handles your government paperwork on your behalf.",
+      "Skip the queues and confusing forms. A trained Hebuza agent handles your government paperwork on your behalf.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ProxiServe — Hand it over. We'll handle it.",
+    title: "Hebuza — Hand it over. We'll handle it.",
     description:
-      "Skip the queues and confusing forms. A trained ProxiServe agent handles your government paperwork on your behalf.",
+      "Skip the queues and confusing forms. A trained Hebuza agent handles your government paperwork on your behalf.",
   },
   robots: {
     index: true,
@@ -74,7 +74,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const rawLocale = cookieStore.get("proxi_locale")?.value ?? "en";
+  const rawLocale = cookieStore.get("hebuza_locale")?.value ?? "en";
   const locale: Locale = VALID_LOCALES.includes(rawLocale as Locale)
     ? (rawLocale as Locale)
     : "en";
