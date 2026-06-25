@@ -3,8 +3,8 @@ import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — ProxiServe",
-  description: "The terms governing use of ProxiServe's government service intermediary platform.",
+  title: "Terms of Service — Hebuza",
+  description: "The terms governing use of Hebuza's government service intermediary platform.",
 };
 
 const NAV_ITEMS = [
@@ -20,14 +20,14 @@ const SECTIONS = [
   {
     id: "definitions",
     title: "Definitions",
-    plain: "\"ProxiServe\" means us. \"Client\" means you. \"Service\" means any government application we process on your behalf.",
-    body: `"ProxiServe Ltd" refers to the company registered in Rwanda providing government services intermediary services. "Client" refers to any individual or organisation using ProxiServe's services. "Service" refers to a specific government application, filing, or document request we process on your behalf. "Tracking code" refers to the PRX reference code assigned to your application.`,
+    plain: "\"Hebuza\" means us. \"Client\" means you. \"Service\" means any government application we process on your behalf.",
+    body: `"Hebuza Ltd" refers to the company registered in Rwanda providing government services intermediary services. "Client" refers to any individual or organisation using Hebuza's services. "Service" refers to a specific government application, filing, or document request we process on your behalf. "Tracking code" refers to the PRX reference code assigned to your application.`,
   },
   {
     id: "services",
     title: "Our services",
     plain: "We act as your agent — we submit and follow up on your behalf. We are not a government body and don't guarantee outcomes.",
-    body: `ProxiServe acts as your authorised representative in dealings with Rwandan government offices. We do not replace, modify, or guarantee the decisions of government authorities. Our role is to: collect your information, prepare and submit applications, follow up with government offices, and deliver results to you. We do not offer legal advice. For legal advice, please consult a qualified advocate.`,
+    body: `Hebuza acts as your authorised representative in dealings with Rwandan government offices. We do not replace, modify, or guarantee the decisions of government authorities. Our role is to: collect your information, prepare and submit applications, follow up with government offices, and deliver results to you. We do not offer legal advice. For legal advice, please consult a qualified advocate.`,
   },
   {
     id: "payment",
@@ -45,13 +45,13 @@ const SECTIONS = [
     id: "liability",
     title: "Limitation of liability",
     plain: "We're responsible for our own errors but not for government delays or decisions.",
-    body: `ProxiServe is liable for errors made in preparing or submitting your application. We are not liable for: delays or decisions made by government authorities, loss of data due to events outside our control (force majeure), or indirect or consequential losses. Our total liability in any case is limited to the amount you paid for the affected service.`,
+    body: `Hebuza is liable for errors made in preparing or submitting your application. We are not liable for: delays or decisions made by government authorities, loss of data due to events outside our control (force majeure), or indirect or consequential losses. Our total liability in any case is limited to the amount you paid for the affected service.`,
   },
   {
     id: "governing-law",
     title: "Governing law",
     plain: "These terms are governed by Rwandan law. Disputes go to Kigali courts first.",
-    body: `These terms are governed by the laws of the Republic of Rwanda. Any disputes arising from or relating to these terms or your use of ProxiServe's services shall be subject to the exclusive jurisdiction of the courts of Kigali, Rwanda. We encourage resolving disputes through direct communication before any legal action.`,
+    body: `These terms are governed by the laws of the Republic of Rwanda. Any disputes arising from or relating to these terms or your use of Hebuza's services shall be subject to the exclusive jurisdiction of the courts of Kigali, Rwanda. We encourage resolving disputes through direct communication before any legal action.`,
   },
 ];
 
