@@ -51,7 +51,7 @@ export function PhonePreview({ message, channel, className }: PhonePreviewProps)
               : "bg-[var(--info)] text-white"
           )}
         >
-          <p className="font-sans text-[11px] font-medium">ProxiServe</p>
+          <p className="font-sans text-[11px] font-medium">Hebuza</p>
           <p className="font-sans text-[9px] opacity-80">{channelName}</p>
         </div>
 
