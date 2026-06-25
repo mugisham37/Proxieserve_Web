@@ -12,8 +12,8 @@ export type Locale = "en" | "rw" | "fr";
 
 const MESSAGES: Record<Locale, Record<MessageKey, string>> = { en, rw, fr };
 
-const STORAGE_KEY = "proxi:locale";
-const COOKIE_KEY = "proxi_locale";
+const STORAGE_KEY = "hebuza:locale";
+const COOKIE_KEY = "hebuza_locale";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
