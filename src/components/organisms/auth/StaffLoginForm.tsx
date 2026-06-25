@@ -127,7 +127,7 @@ export function StaffLoginForm() {
               name="email"
               type="input"
               inputType="email"
-              placeholder="you@proxiserve.rw"
+              placeholder="you@hebuza.rw"
               error={errors.email?.message}
               {...r}
             />
@@ -178,7 +178,7 @@ export function StaffLoginForm() {
           </button>
 
           <p className="font-mono text-[11px] text-center text-[var(--ink-subtle)]">
-            ProxiServe Staff Portal v0.4
+            Hebuza Staff Portal v0.4
           </p>
         </div>
       </AuthCard>
