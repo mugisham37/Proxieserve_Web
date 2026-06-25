@@ -39,7 +39,7 @@ export default async function ApplicationPaymentLayout({ children, params }: Pro
 
             {/* Wordmark */}
             <Link href="/" className="font-serif italic text-[15px] font-medium text-[var(--ink)]">
-              ProxiServe
+              Hebuza
             </Link>
           </div>
         </header>
