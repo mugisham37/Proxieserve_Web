@@ -27,9 +27,9 @@ export function removeItem(key: string): void {
   }
 }
 
-/** ProxiServe-specific storage keys */
+/** Hebuza-specific storage keys */
 export const STORAGE_KEYS = {
-  LAST_CODE: "proxi:lastCode",
-  COOKIE_CONSENT: "proxi:cookieConsent",
-  RETURNING_DISMISSED: "proxi:returningDismissed",
+  LAST_CODE: "hebuza:lastCode",
+  COOKIE_CONSENT: "hebuza:cookieConsent",
+  RETURNING_DISMISSED: "hebuza:returningDismissed",
 } as const;
