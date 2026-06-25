@@ -118,7 +118,7 @@ export function ClientSignupForm() {
         variant="client"
         size="lg"
         title="Create your account"
-        subtitle="ProxiServe handles your applications — you just fill in the form."
+        subtitle="Hebuza handles your applications — you just fill in the form."
       >
         <div className="flex flex-col gap-4">
           <AuthBanner
@@ -247,7 +247,7 @@ export function ClientSignupForm() {
               "font-sans text-[13px] leading-snug cursor-pointer",
               errors.terms ? "text-[var(--danger)]" : "text-[var(--ink-muted)]"
             )}>
-              I agree to ProxiServe handling my information in accordance with the{" "}
+              I agree to Hebuza handling my information in accordance with the{" "}
               <Link href="/legal/privacy" className="text-[var(--brand-ink)] underline underline-offset-2">
                 Privacy Policy
               </Link>{" "}
