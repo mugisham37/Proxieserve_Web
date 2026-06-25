@@ -12,11 +12,11 @@ import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 import { StickyMobileCTA } from "@/components/organisms/shared/StickyMobileCTA";
 
 export const metadata: Metadata = {
-  title: "Hand it over. We'll handle it. — ProxiServe",
+  title: "Hand it over. We'll handle it. — Hebuza",
   description:
     "Government paperwork, business registrations, and official documents — sorted by local Rwandan experts. Fast, secure, and fully tracked.",
   openGraph: {
-    title: "ProxiServe — Rwanda's Paperwork Service",
+    title: "Hebuza — Rwanda's Paperwork Service",
     description: "We handle government paperwork so you don't have to.",
     type: "website",
   },
