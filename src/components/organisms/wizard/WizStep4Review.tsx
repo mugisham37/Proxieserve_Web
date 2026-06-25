@@ -85,7 +85,7 @@ export function WizStep4Review({ service }: WizStep4ReviewProps) {
       }
 
       localStorage.setItem(SUBMITTED_KEY(draft.idempotencyKey), response.code);
-      localStorage.setItem("proxi:lastCode", response.code);
+      localStorage.setItem("hebuza:lastCode", response.code);
       dispatch({ type: "SET_HIGHEST_STEP", payload: 4 });
       setUiState((s) => ({ ...s, isSubmitting: false, confirmedCode: response.code }));
       router.push(`/services/${service.slug}/apply/5`);
