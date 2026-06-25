@@ -60,7 +60,7 @@ export function AdminTopBar() {
           "min-[980px]:hidden",
           "font-serif text-[17px] text-[var(--ink)] shrink-0"
         )}
-        aria-label="ProxiServe Admin"
+        aria-label="Hebuza Admin"
       >
         Proxi<em className="italic font-normal">Serve</em>
       </Link>
