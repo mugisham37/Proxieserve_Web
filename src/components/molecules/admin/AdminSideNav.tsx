@@ -92,7 +92,7 @@ export function AdminSideNav() {
           "hover:bg-[var(--cream)]",
           "focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
         )}
-        aria-label="ProxiServe Admin — go to analytics"
+        aria-label="Hebuza Admin — go to analytics"
       >
         <span
           className="w-[8px] h-[8px] rounded-full bg-[var(--brand)] shrink-0"
