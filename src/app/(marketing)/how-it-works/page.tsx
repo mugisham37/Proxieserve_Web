@@ -5,8 +5,8 @@ import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "How It Works — ProxiServe",
-  description: "A step-by-step guide to how ProxiServe handles your government paperwork from start to finish.",
+  title: "How It Works — Hebuza",
+  description: "A step-by-step guide to how Hebuza handles your government paperwork from start to finish.",
 };
 
 const STEPS = [
@@ -43,7 +43,7 @@ const STEPS = [
     num: "05",
     title: "Receive your documents",
     body: "Completed documents are delivered digitally or by secure courier. Your tracking code remains active for 24 months.",
-    detail: "Digital delivery via email and your ProxiServe dashboard. Physical delivery available in Kigali. Track every status change with your PRX code.",
+    detail: "Digital delivery via email and your Hebuza dashboard. Physical delivery available in Kigali. Track every status change with your PRX code.",
   },
 ];
 
