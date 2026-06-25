@@ -10,7 +10,7 @@ import { FAQItem } from "@/components/molecules/marketing/FAQItem";
 const FAQS = [
   {
     question: "Do I need to visit any government office?",
-    answer: "No. ProxiServe handles all in-person visits on your behalf. You only need to upload documents and provide information online or via WhatsApp.",
+    answer: "No. Hebuza handles all in-person visits on your behalf. You only need to upload documents and provide information online or via WhatsApp.",
   },
   {
     question: "How do I know my documents are safe?",
@@ -25,7 +25,7 @@ const FAQS = [
     answer: "We'll notify you immediately with the reason and advise on next steps. If the rejection is due to an error on our part, we'll resubmit at no additional cost.",
   },
   {
-    question: "Can I use ProxiServe from outside Rwanda?",
+    question: "Can I use Hebuza from outside Rwanda?",
     answer: "Yes. Many of our clients are diaspora members managing affairs in Rwanda remotely. We can handle everything without you being physically present in Rwanda.",
   },
   {
@@ -33,7 +33,7 @@ const FAQS = [
     answer: "Turnaround time starts from when we receive all required documents from you. Government processing times vary and are outside our control, but our estimates are based on recent actual processing times.",
   },
   {
-    question: "Can I use ProxiServe for ongoing compliance (annual returns, renewals)?",
+    question: "Can I use Hebuza for ongoing compliance (annual returns, renewals)?",
     answer: "Yes. We offer recurring compliance packages for businesses that need regular filings, renewals, and updates. Contact us to discuss a subscription.",
   },
 ];
