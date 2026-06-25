@@ -24,7 +24,7 @@ export function ArchivedServiceCard({ serviceName, alternativeSlugs = [], classN
           <p className="font-sans text-[14px] font-semibold text-[var(--ink)]">Service no longer offered</p>
           <p className="font-sans text-[13px] text-[var(--ink-muted)] mt-1 leading-snug">
             <strong className="font-medium text-[var(--ink)]">{serviceName}</strong> has been archived and is no longer
-            available through ProxiServe.
+            available through Hebuza.
           </p>
         </div>
       </div>
