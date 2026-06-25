@@ -30,7 +30,7 @@ export function PayReceipt() {
 
   React.useEffect(() => {
     if (typeof window === "undefined" || !receiptData) return;
-    localStorage.setItem("proxi:lastCode", trackingCode);
+    localStorage.setItem("hebuza:lastCode", trackingCode);
     localStorage.setItem(PAY_STATUS_KEY(session.applicationId), "paid");
   }, [receiptData, trackingCode, session.applicationId]);
 
@@ -63,7 +63,7 @@ export function PayReceipt() {
   return (
     <div className="w-full flex flex-col items-center px-4 sm:px-8 py-12">
       <div className="print-wordmark" aria-hidden="true">
-        ProxiServe — Official Receipt
+        Hebuza — Official Receipt
       </div>
 
       <motion.article
@@ -132,7 +132,7 @@ export function PayReceipt() {
         >
           <ReceiptRow label="Application" value={serviceName} />
           <ReceiptRow label="Tracking code" value={trackingCode} mono />
-          <ReceiptRow label="Paid to" value="ProxiServe Ltd" />
+          <ReceiptRow label="Paid to" value="Hebuza Ltd" />
           <ReceiptRow
             label="Method"
             value={`${methodLabel}${methodDetail}`}
@@ -189,7 +189,7 @@ export function PayReceipt() {
       </motion.article>
 
       <div className="print-footer" aria-hidden="true">
-        ProxiServe Ltd · info@proxiserve.rw · proxiserve.rw · This receipt is computer generated and valid without a signature.
+        Hebuza Ltd · info@hebuza.rw · hebuza.rw · This receipt is computer generated and valid without a signature.
       </div>
 
       {governmentFee > 0 && (
