@@ -6,8 +6,8 @@ import { X, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getItem, setItem } from "@/lib/storage";
 
-const DISMISSED_KEY = "proxi:installDismissed";
-const INTERACTED_KEY = "proxi:installInteracted";
+const DISMISSED_KEY = "hebuza:installDismissed";
+const INTERACTED_KEY = "hebuza:installInteracted";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -71,7 +71,7 @@ export function InstallPrompt() {
       {visible && (
         <motion.div
           role="banner"
-          aria-label="Install ProxiServe app"
+          aria-label="Install Hebuza app"
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
@@ -100,7 +100,7 @@ export function InstallPrompt() {
           {/* Text */}
           <div className="flex-1 min-w-0">
             <p className="font-serif italic text-[14px] text-[var(--cream)] leading-snug">
-              Install ProxiServe
+              Install Hebuza
             </p>
             <p className="font-sans text-[12px] text-[var(--cream-2)] leading-snug mt-[1px]">
               Add to your home screen for quick access
@@ -111,7 +111,7 @@ export function InstallPrompt() {
           <button
             type="button"
             onClick={handleInstall}
-            aria-label="Install ProxiServe app"
+            aria-label="Install Hebuza app"
             className={cn(
               "shrink-0 flex items-center gap-[6px] px-[14px] py-[7px]",
               "bg-[var(--brand)] text-white rounded-[var(--r-pill)]",
