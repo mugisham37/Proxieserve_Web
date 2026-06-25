@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "System status — ProxiServe",
-  description: "Real-time status of ProxiServe services.",
+  title: "System status — Hebuza",
+  description: "Real-time status of Hebuza services.",
 };
 
 // Status entries — in production these would come from an uptime monitoring API
@@ -42,7 +42,7 @@ export default function StatusPage() {
             )}
           </h1>
           <p className="font-sans text-[14px] text-[var(--ink-muted)] leading-[1.6] m-0">
-            This page shows the live status of all ProxiServe systems.
+            This page shows the live status of all Hebuza systems.
             Incidents are posted here as soon as they are detected.
           </p>
         </div>
@@ -105,7 +105,7 @@ export default function StatusPage() {
             href="/"
             className="font-serif italic text-[15px] text-[var(--ink-muted)] hover:text-[var(--ink)] underline transition-colors"
           >
-            ← Back to ProxiServe
+            ← Back to Hebuza
           </Link>
         </div>
 
