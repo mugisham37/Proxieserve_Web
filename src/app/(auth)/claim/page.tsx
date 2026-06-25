@@ -5,7 +5,7 @@ import { AuthShell } from "@/components/organisms/auth/AuthShell";
 import { ClaimByCodeForm } from "@/components/organisms/auth/ClaimByCodeForm";
 
 export const metadata: Metadata = {
-  title: "Link your application — ProxiServe",
+  title: "Link your application — Hebuza",
   robots: { index: false },
 };
 
