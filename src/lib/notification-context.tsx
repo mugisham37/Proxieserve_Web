@@ -32,7 +32,7 @@ type NotificationAction =
   | { type: "MARK_ALL_READ" }
   | { type: "CLEAR_ALL" };
 
-const STORAGE_KEY = "proxi:notifRead";
+const STORAGE_KEY = "hebuza:notifRead";
 
 function reducer(state: NotificationState, action: NotificationAction): NotificationState {
   switch (action.type) {
