@@ -38,7 +38,7 @@ const METHODS: {
   {
     method: "agent",
     label: "Pay via agent",
-    description: "Hand cash or transfer directly to your assigned ProxiServe agent. Slower — up to 24h to confirm.",
+    description: "Hand cash or transfer directly to your assigned Hebuza agent. Slower — up to 24h to confirm.",
     isOffPlatform: true,
     offPlatformLabel: "Off-platform",
     slug: "awaiting-agent",
