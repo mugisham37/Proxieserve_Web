@@ -29,7 +29,7 @@ export function BigCodeChip({ code, className }: BigCodeChipProps) {
     }
   };
 
-  const waLink = `https://wa.me/?text=${encodeURIComponent(`My ProxiServe tracking code: ${code}`)}`;
+  const waLink = `https://wa.me/?text=${encodeURIComponent(`My Hebuza tracking code: ${code}`)}`;
 
   return (
     <div className={cn("flex flex-col items-center gap-3", className)}>
