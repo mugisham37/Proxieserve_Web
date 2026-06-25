@@ -5,9 +5,9 @@ import { ServicesCatalogueGrid } from "@/components/organisms/marketing/Services
 import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 
 export const metadata: Metadata = {
-  title: "All Services — ProxiServe",
+  title: "All Services — Hebuza",
   description:
-    "Browse ProxiServe's full catalogue of government and paperwork services: company registration, TIN, national ID, business permits, and more — handled for you in Rwanda.",
+    "Browse Hebuza's full catalogue of government and paperwork services: company registration, TIN, national ID, business permits, and more — handled for you in Rwanda.",
 };
 
 export default function ServicesPage() {
