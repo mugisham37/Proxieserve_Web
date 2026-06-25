@@ -177,7 +177,7 @@ function AddAgentSheet({ open, onClose }: AddAgentSheetProps) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="jane@proxiserve.rw"
+                  placeholder="jane@hebuza.rw"
                   required
                   className="h-10 px-3 rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--cream)] font-sans text-[13px] text-[var(--ink)] placeholder:text-[var(--ink-subtle)] focus:outline-none focus:border-[var(--brand)] transition-colors"
                 />
