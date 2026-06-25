@@ -4,7 +4,7 @@ import { AuthShell } from "@/components/organisms/auth/AuthShell";
 import { TwoFAChallengeForm } from "@/components/organisms/auth/TwoFAChallengeForm";
 
 export const metadata: Metadata = {
-  title: "Two-factor verification — ProxiServe",
+  title: "Two-factor verification — Hebuza",
   robots: { index: false, follow: false },
 };
 
