@@ -10,9 +10,9 @@ const FAQ_CATEGORIES = [
     id: "getting-started",
     label: "Getting started",
     items: [
-      { q: "Do I need to visit any government office?", a: "No. ProxiServe handles all in-person visits on your behalf. You only need to upload documents and provide information online or via WhatsApp." },
+      { q: "Do I need to visit any government office?", a: "No. Hebuza handles all in-person visits on your behalf. You only need to upload documents and provide information online or via WhatsApp." },
       { q: "How do I choose the right service?", a: "Browse our service catalogue or use the intake form and describe what you need. Our team reviews every request and will advise if there's a more suitable option." },
-      { q: "Can I use ProxiServe from outside Rwanda?", a: "Yes. Many of our clients are diaspora members managing affairs in Rwanda remotely. We can handle everything without you being physically present." },
+      { q: "Can I use Hebuza from outside Rwanda?", a: "Yes. Many of our clients are diaspora members managing affairs in Rwanda remotely. We can handle everything without you being physically present." },
     ],
   },
   {
