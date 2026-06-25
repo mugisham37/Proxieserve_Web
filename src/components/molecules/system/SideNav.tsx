@@ -67,7 +67,7 @@ export function SideNav({
           "hover:bg-[var(--cream)]",
           "focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
         )}
-        aria-label="ProxiServe — go to dashboard"
+        aria-label="Hebuza — go to dashboard"
       >
         <span
           className="w-[8px] h-[8px] rounded-full bg-[var(--brand)] shrink-0"
