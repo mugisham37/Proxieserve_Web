@@ -17,7 +17,7 @@ const sizeMap = {
 export function Wordmark({ size = "md", href = "/", className }: WordmarkProps) {
   const content = (
     <span className={cn("font-serif font-medium tracking-[-0.01em] text-[var(--ink)]", sizeMap[size], className)}>
-      Proxi<span className="not-italic text-[var(--brand)]">.</span>Serve
+      Hebu<span className="not-italic text-(--brand)">za</span>
     </span>
   );
 
