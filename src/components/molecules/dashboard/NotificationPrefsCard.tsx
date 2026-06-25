@@ -17,7 +17,7 @@ interface Prefs {
 const defaultPrefs: Prefs = { whatsapp: true, sms: false, email: false };
 
 function loadPrefs(code: string): Prefs {
-  const raw = getItem(`proxi:tracker:prefs:${code}`);
+  const raw = getItem(`hebuza:tracker:prefs:${code}`);
   if (!raw) return defaultPrefs;
   try {
     return { ...defaultPrefs, ...JSON.parse(raw) };
@@ -36,7 +36,7 @@ export function NotificationPrefsCard({ code }: NotificationPrefsCardProps) {
   function handleChange(key: keyof Prefs, value: boolean) {
     const next = { ...prefs, [key]: value };
     setPrefs(next);
-    setItem(`proxi:tracker:prefs:${code}`, JSON.stringify(next));
+    setItem(`hebuza:tracker:prefs:${code}`, JSON.stringify(next));
   }
 
   const rows: Array<{ key: keyof Prefs; label: string; icon: string }> = [
