@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { CodeEntrySection } from "@/components/organisms/shared/CodeEntrySection";
 
 export const metadata: Metadata = {
-  title: "Track your application — ProxiServe",
+  title: "Track your application — Hebuza",
   description: "Enter your PRX tracking code to see the live status of your application.",
   robots: { index: false },
 };
