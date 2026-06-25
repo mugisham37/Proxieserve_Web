@@ -11,7 +11,7 @@ export default function RootError({
   unstable_retry: () => void;
 }) {
   React.useEffect(() => {
-    console.error("[ProxiServe] Unhandled error:", error);
+    console.error("[Hebuza] Unhandled error:", error);
   }, [error]);
 
   return (
