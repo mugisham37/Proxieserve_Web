@@ -3,7 +3,7 @@
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from "axios";
 import { ApiError, type ApiErrorType, isApiResponse, isRecord } from "@/lib/api/types";
 
-export const SESSION_INVALIDATED_EVENT = "proxi:session-invalidated";
+export const SESSION_INVALIDATED_EVENT = "hebuza:session-invalidated";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
 
