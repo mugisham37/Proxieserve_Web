@@ -3,8 +3,8 @@ import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — ProxiServe",
-  description: "How ProxiServe collects, uses, and protects your personal data.",
+  title: "Privacy Policy — Hebuza",
+  description: "How Hebuza collects, uses, and protects your personal data.",
 };
 
 const NAV_ITEMS = [
@@ -45,13 +45,13 @@ const SECTIONS = [
     id: "rights",
     title: "Your rights",
     plain: "You can access, correct, delete, or export your data at any time. Just ask.",
-    body: `Under Rwanda's Law No. 058/2021 on Personal Data Protection and Privacy, and where applicable GDPR, you have the right to: access your data, correct inaccurate data, request deletion, object to processing, request data portability, and withdraw consent at any time. To exercise these rights, contact our DPO at privacy@proxiserve.rw. We will respond within 30 days.`,
+    body: `Under Rwanda's Law No. 058/2021 on Personal Data Protection and Privacy, and where applicable GDPR, you have the right to: access your data, correct inaccurate data, request deletion, object to processing, request data portability, and withdraw consent at any time. To exercise these rights, contact our DPO at privacy@hebuza.rw. We will respond within 30 days.`,
   },
   {
     id: "contact-dpo",
     title: "Contact our DPO",
     plain: "Our Data Protection Officer handles all privacy requests.",
-    body: `Data Protection Officer: Claudine Niyomugabo\nEmail: privacy@proxiserve.rw\nAddress: KN 4 Ave, Kigali City Tower, 3rd Floor, Kigali, Rwanda\n\nFor complaints, you may also contact the Rwanda Utilities Regulatory Authority (RURA) which serves as the national data protection supervisory authority.`,
+    body: `Data Protection Officer: Claudine Niyomugabo\nEmail: privacy@hebuza.rw\nAddress: KN 4 Ave, Kigali City Tower, 3rd Floor, Kigali, Rwanda\n\nFor complaints, you may also contact the Rwanda Utilities Regulatory Authority (RURA) which serves as the national data protection supervisory authority.`,
   },
 ];
 
