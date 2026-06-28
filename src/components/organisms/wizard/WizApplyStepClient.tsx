@@ -18,7 +18,13 @@ export function WizApplyStepClient({ slug, step }: WizApplyStepClientProps) {
   }
 
   if (isError || !data) {
-    return null;
+    return (
+      <div className="container py-16 text-center">
+        <p className="font-sans text-[14px] text-[var(--ink-muted)]">
+          This step could not be loaded. The server may be starting up — please try again shortly.
+        </p>
+      </div>
+    );
   }
 
   return <WizStepRouter service={adaptServiceDetail(data)} step={step} />;
