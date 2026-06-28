@@ -8,6 +8,8 @@ import { SESSION_QUERY_KEY } from "@/lib/auth-types";
 interface UseSessionResult {
   session: SessionData | null;
   isLoading: boolean;
+  isFetching: boolean;
+  isFetched: boolean;
   isError: boolean;
   refetch: () => Promise<QueryObserverResult<SessionData | null, Error>>;
 }
@@ -27,13 +29,17 @@ export function useSession(): UseSessionResult {
         throw error;
       }
     },
-    refetchInterval: 4 * 60 * 1000,
-    refetchIntervalInBackground: true,
+    initialData: null,
+    staleTime: 0,
+    refetchInterval: 15 * 60 * 1000,
+    refetchIntervalInBackground: false,
   });
 
   return {
     session: query.data ?? null,
     isLoading: query.isLoading,
+    isFetching: query.isFetching,
+    isFetched: query.isFetched,
     isError: query.isError,
     refetch: query.refetch,
   };
