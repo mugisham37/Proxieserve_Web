@@ -3,6 +3,7 @@ import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
 import { Providers } from "@/lib/providers";
+import { BackendStatusBanner } from "@/components/molecules/system/BackendStatusBanner";
 import { Toaster } from "@/components/molecules/system/Toaster";
 import { PwaInit } from "@/components/atoms/shared/PwaInit";
 import { InstallPrompt } from "@/components/molecules/system/InstallPrompt";
@@ -88,6 +89,7 @@ export default async function RootLayout({
     >
       <body>
         <Providers>
+          <BackendStatusBanner />
           {children}
           <Toaster />
           <PwaInit />
