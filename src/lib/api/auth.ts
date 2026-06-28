@@ -53,7 +53,9 @@ export function signOut(): Promise<SignOutData> {
 }
 
 export function getSession(): Promise<SessionResponse> {
-  return apiClient.get<ApiResponse<SessionResponse>, SessionResponse>("/api/auth/session");
+  return apiClient.get<ApiResponse<SessionResponse>, SessionResponse>("/api/auth/session", {
+    timeout: 3_000,
+  });
 }
 
 export function staffLogin(data: StaffLoginRequest): Promise<StaffLoginData> {

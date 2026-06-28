@@ -22,7 +22,7 @@ export function uploadDocument(
   return apiClient.post<ApiResponse<DocumentItem>, DocumentItem, FormData>(
     `/api/applications/${code}/documents`,
     formData,
-    { onUploadProgress },
+    { onUploadProgress, timeout: 60_000 },
   );
 }
 
@@ -67,6 +67,6 @@ export function agentUploadDocument(
   return apiClient.post<ApiResponse<DocumentItem>, DocumentItem, FormData>(
     `/api/agent/cases/${caseCode}/documents`,
     formData,
-    { onUploadProgress },
+    { onUploadProgress, timeout: 60_000 },
   );
 }
