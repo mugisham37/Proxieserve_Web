@@ -40,7 +40,8 @@ export function PayReceipt() {
 
   if (isLoading) {
     return (
-      <div className="w-full flex flex-col items-center px-4 sm:px-8 py-12">
+      <div className="w-full flex flex-col items-center px-4 sm:px-8 py-12 gap-4">
+        <p className="font-serif text-[20px] text-[var(--ink)]">Loading your receipt…</p>
         <SkeletonBlock className="w-full rounded-[var(--r-xl)]" style={{ maxWidth: "var(--pay-receipt-max)", height: 480 }} />
       </div>
     );
