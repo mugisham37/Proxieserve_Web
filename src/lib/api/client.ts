@@ -1,6 +1,7 @@
 "use client";
 
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from "axios";
+import { recordApiNetworkFailure, recordApiSuccess } from "@/lib/backend-status-tracker";
 import { ApiError, type ApiErrorType, isApiResponse, isRecord } from "@/lib/api/types";
 
 export const SESSION_INVALIDATED_EVENT = "hebuza:session-invalidated";
@@ -96,35 +97,57 @@ function applyRequestHeaders(config: InternalAxiosRequestConfig): InternalAxiosR
   return config;
 }
 
+function attachResponseTracking(client: AxiosInstance): void {
+  client.interceptors.response.use(
+    (response) => {
+      recordApiSuccess();
+
+      const payload = response.data;
+
+      if (isApiResponse(payload)) {
+        if (!payload.success) {
+          throw new ApiError(
+            payload.message,
+            (payload.errorType ?? "unknown-error") as ApiErrorType,
+            response.status,
+            payload.data,
+          );
+        }
+
+        return payload.data;
+      }
+
+      return payload;
+    },
+    (error) => {
+      const normalized = normalizeError(error);
+      if (normalized.errorType === "network-error" || normalized.errorType === "timeout") {
+        recordApiNetworkFailure();
+      }
+      return Promise.reject(normalized);
+    },
+  );
+}
+
 export const apiClient: AxiosInstance = axios.create({
   baseURL: apiBaseUrl,
   withCredentials: true,
-  timeout: 15_000,
+  timeout: 5_000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const healthClient: AxiosInstance = axios.create({
+  baseURL: apiBaseUrl,
+  withCredentials: true,
+  timeout: 2_000,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 apiClient.interceptors.request.use(applyRequestHeaders);
-
-apiClient.interceptors.response.use(
-  (response) => {
-    const payload = response.data;
-
-    if (isApiResponse(payload)) {
-      if (!payload.success) {
-        throw new ApiError(
-          payload.message,
-          (payload.errorType ?? "unknown-error") as ApiErrorType,
-          response.status,
-          payload.data,
-        );
-      }
-
-      return payload.data;
-    }
-
-    return payload;
-  },
-  (error) => Promise.reject(normalizeError(error)),
-);
+healthClient.interceptors.request.use(applyRequestHeaders);
+attachResponseTracking(apiClient);
+attachResponseTracking(healthClient);
