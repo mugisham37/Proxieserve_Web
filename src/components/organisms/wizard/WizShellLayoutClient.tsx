@@ -26,8 +26,9 @@ export function WizShellLayoutClient({ slug, children }: WizShellLayoutClientPro
   if (isError || !data) {
     return (
       <div className="container py-16 text-center">
+        <h1 className="font-serif text-[22px] text-[var(--ink)] mb-2">Service unavailable</h1>
         <p className="font-sans text-[14px] text-[var(--ink-muted)]">
-          This service could not be loaded. Please try again later.
+          This service could not be loaded. The server may be starting up — please try again shortly.
         </p>
       </div>
     );
