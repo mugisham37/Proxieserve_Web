@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
 import { StepCard } from "@/components/molecules/marketing/StepCard";
@@ -14,40 +14,7 @@ interface ServiceStepsSectionProps {
 }
 
 export function ServiceStepsSection({ service, id = "how-it-works", className }: ServiceStepsSectionProps) {
-  const lineRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    const el = lineRef.current;
-    if (!el) return;
-
-    async function init() {
-      if (!lineRef.current) return;
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        lineRef.current.style.transform = "scaleX(1)";
-        return;
-      }
-      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
-        import("gsap"),
-        import("gsap/ScrollTrigger"),
-      ]);
-      gsap.registerPlugin(ScrollTrigger);
-      gsap.fromTo(
-        lineRef.current,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          duration: 0.48,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: lineRef.current,
-            start: "top 80%",
-            once: true,
-          },
-        }
-      );
-    }
-    init();
-  }, []);
+  const prefersReduced = useReducedMotion();
 
   return (
     <section
@@ -68,12 +35,13 @@ export function ServiceStepsSection({ service, id = "how-it-works", className }:
         </motion.div>
 
         <div className="relative">
-          {/* GSAP connector line — desktop only */}
-          <div
-            ref={lineRef}
+          <motion.div
+            initial={prefersReduced ? { scaleX: 1 } : { scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.48, ease: [0.2, 0, 0, 1] }}
             className="hidden md:block absolute top-[88px] left-[48px] right-[48px] h-px bg-[var(--rule)] origin-left"
             aria-hidden="true"
-            style={{ transform: "scaleX(0)" }}
           />
 
           <div
