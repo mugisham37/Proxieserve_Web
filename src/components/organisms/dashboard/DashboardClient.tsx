@@ -28,24 +28,6 @@ import { WelcomeBanner } from "@/components/molecules/system/WelcomeBanner";
 import { ApplicationCard } from "@/components/molecules/dashboard/ApplicationCard";
 import { HistoryRow } from "@/components/molecules/agent/HistoryRow";
 
-function DashboardSkeleton() {
-  return (
-    <div className="flex flex-col gap-[20px] px-[24px] py-[28px] min-[980px]:px-[40px]">
-      <SkeletonBlock className="h-[80px] rounded-[var(--r-md)]" />
-      <div className="grid grid-cols-2 min-[768px]:grid-cols-4 gap-[12px]">
-        {[...Array(4)].map((_, i) => (
-          <SkeletonBlock key={i} className="h-[90px] rounded-[var(--r-md)]" />
-        ))}
-      </div>
-      <div className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-[16px]">
-        {[...Array(2)].map((_, i) => (
-          <SkeletonBlock key={i} className="h-[200px] rounded-[var(--r-md)]" />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function SectionHead({
   eyebrow,
   title,
@@ -113,26 +95,13 @@ export function DashboardClient() {
     visible: { opacity: 1, y: 0 },
   };
 
-  if (isLoading) return <DashboardSkeleton />;
-
-  if (isError) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-[12px] px-[24px] text-center">
-        <p className="font-serif text-[22px] text-[var(--ink)]">Could not load dashboard</p>
-        <p className="font-sans text-[14px] text-[var(--ink-muted)]">
-          Please refresh the page or try again shortly.
-        </p>
-      </div>
-    );
-  }
-
   const summary = summaryData ? adaptDashboardSummary(summaryData) : null;
   const applications = (appsData?.applications ?? []).map(adaptApplicationSummary);
   const activeApps = applications.filter((app) =>
-    isActiveApplication(appsData!.applications.find((a) => a.code === app.code)!.status),
+    appsData ? isActiveApplication(appsData.applications.find((a) => a.code === app.code)!.status) : false,
   );
   const completedApps = applications.filter((app) =>
-    isCompletedApplication(appsData!.applications.find((a) => a.code === app.code)!.status),
+    appsData ? isCompletedApplication(appsData.applications.find((a) => a.code === app.code)!.status) : false,
   );
 
   const statTiles = summary
@@ -210,129 +179,155 @@ export function DashboardClient() {
           ]}
         />
 
-        <motion.div
-          variants={prefersReduced ? {} : { visible: { transition: { staggerChildren: 0.06 } } }}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-2 min-[768px]:grid-cols-4 gap-[12px]"
-        >
-          {statTiles.map((tile, i) => (
-            <motion.div
-              key={tile.label}
-              variants={prefersReduced ? {} : fadeUp}
-              transition={{ duration: 0.2, delay: i * 0.05 }}
-            >
-              <StatTile
-                label={tile.label}
-                value={tile.value}
-                delta={tile.delta}
-                variant={tile.variant}
-                className="h-full"
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+        {isError && (
+          <div className="rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--paper)] px-[16px] py-[14px]">
+            <p className="font-sans text-[14px] text-[var(--ink)]">Could not load dashboard data.</p>
+            <p className="font-sans text-[13px] text-[var(--ink-muted)] mt-[4px]">
+              The server may be starting up. Your layout is ready — data will appear when the connection is restored.
+            </p>
+          </div>
+        )}
 
-        <div className="flex flex-wrap gap-[8px]">
-          <QuickActionChip
-            icon={<Plus size={14} />}
-            label="Apply for another service"
-            href="/services"
-            disabled={isOffline}
-          />
-          <QuickActionChip
-            icon={<Search size={14} />}
-            label="Track another code"
-            href="/track"
-          />
-          <QuickActionChip
-            icon={<MessageCircle size={14} />}
-            label="WhatsApp support"
-            href="https://wa.me/250788000000"
-          />
-        </div>
-
-        <section aria-labelledby="active-apps-heading">
-          <SectionHead
-            eyebrow="01 / Active"
-            title="Your"
-            titleItalic="applications"
-          />
-
-          {activeApps.length === 0 ? (
-            <div className="flex flex-col items-center gap-[20px] py-[48px] px-[24px] text-center border-2 border-dashed border-[var(--rule)] rounded-[var(--r-xl)] bg-[var(--paper)]">
-              <span className="inline-flex items-center justify-center w-[56px] h-[56px] rounded-full border border-[var(--rule)] text-[var(--ink-muted)]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                  <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
-                  <rect x="9" y="3" width="6" height="4" rx="1" />
-                </svg>
-              </span>
-              <div>
-                <h3 className="font-serif text-[20px] font-normal text-[var(--ink)] mb-[6px]">
-                  <em className="italic">No active applications</em>
-                </h3>
-                <p className="font-sans text-[14px] text-[var(--ink-muted)] max-w-[320px]">
-                  Browse our services and submit your first application. We handle everything from start to finish.
-                </p>
-              </div>
-              <Link
-                href="/services"
-                className="inline-flex items-center px-[20px] py-[10px] rounded-[var(--r-pill)] bg-[var(--ink)] text-[var(--paper)] font-sans text-[13px] font-medium hover:bg-[var(--ink-2)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
-              >
-                Browse services
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-[16px]">
-              {activeApps.map((app) => (
-                <ApplicationCard key={app.code} application={app} />
+        {isLoading ? (
+          <>
+            <div className="grid grid-cols-2 min-[768px]:grid-cols-4 gap-[12px]">
+              {[...Array(4)].map((_, i) => (
+                <SkeletonBlock key={i} className="h-[90px] rounded-[var(--r-md)]" />
               ))}
             </div>
-          )}
-        </section>
+            <div className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-[16px]">
+              {[...Array(2)].map((_, i) => (
+                <SkeletonBlock key={i} className="h-[200px] rounded-[var(--r-md)]" />
+              ))}
+            </div>
+          </>
+        ) : !isError ? (
+          <>
+            <motion.div
+              variants={prefersReduced ? {} : { visible: { transition: { staggerChildren: 0.06 } } }}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-2 min-[768px]:grid-cols-4 gap-[12px]"
+            >
+              {statTiles.map((tile, i) => (
+                <motion.div
+                  key={tile.label}
+                  variants={prefersReduced ? {} : fadeUp}
+                  transition={{ duration: 0.2, delay: i * 0.05 }}
+                >
+                  <StatTile
+                    label={tile.label}
+                    value={tile.value}
+                    delta={tile.delta}
+                    variant={tile.variant}
+                    className="h-full"
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
 
-        <div className="grid grid-cols-1 min-[980px]:grid-cols-2 gap-[20px]">
-          <section
-            aria-labelledby="recent-msg-heading"
-            className="rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--paper)] overflow-hidden"
-          >
-            <div className="flex items-center justify-between px-[16px] py-[14px] border-b border-[var(--rule)]">
-              <h3 className="font-serif text-[16px] font-normal text-[var(--ink)]">
-                Recent <em className="italic font-normal">messages</em>
-              </h3>
+            <div className="flex flex-wrap gap-[8px]">
+              <QuickActionChip
+                icon={<Plus size={14} />}
+                label="Apply for another service"
+                href="/services"
+                disabled={isOffline}
+              />
+              <QuickActionChip
+                icon={<Search size={14} />}
+                label="Track another code"
+                href="/track"
+              />
+              <QuickActionChip
+                icon={<MessageCircle size={14} />}
+                label="WhatsApp support"
+                href="https://wa.me/250788000000"
+              />
             </div>
-            <div className="px-[16px] py-[32px] text-center">
-              <p className="font-sans text-[13px] text-[var(--ink-muted)]">
-                {summary && summary.unreadCount > 0
-                  ? `${summary.unreadCount} unread message${summary.unreadCount === 1 ? "" : "s"} across your applications.`
-                  : "No messages yet."}
-              </p>
-            </div>
-          </section>
 
-          <section
-            aria-labelledby="history-heading"
-            className="rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--paper)] overflow-hidden"
-          >
-            <div className="flex items-center justify-between px-[16px] py-[14px] border-b border-[var(--rule)]">
-              <h3 className="font-serif text-[16px] font-normal text-[var(--ink)]">
-                Completed
-              </h3>
+            <section aria-labelledby="active-apps-heading">
+              <SectionHead
+                eyebrow="01 / Active"
+                title="Your"
+                titleItalic="applications"
+              />
+
+              {activeApps.length === 0 ? (
+                <div className="flex flex-col items-center gap-[20px] py-[48px] px-[24px] text-center border-2 border-dashed border-[var(--rule)] rounded-[var(--r-xl)] bg-[var(--paper)]">
+                  <span className="inline-flex items-center justify-center w-[56px] h-[56px] rounded-full border border-[var(--rule)] text-[var(--ink-muted)]">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                      <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+                      <rect x="9" y="3" width="6" height="4" rx="1" />
+                    </svg>
+                  </span>
+                  <div>
+                    <h3 className="font-serif text-[20px] font-normal text-[var(--ink)] mb-[6px]">
+                      <em className="italic">No active applications</em>
+                    </h3>
+                    <p className="font-sans text-[14px] text-[var(--ink-muted)] max-w-[320px]">
+                      Browse our services and submit your first application. We handle everything from start to finish.
+                    </p>
+                  </div>
+                  <Link
+                    href="/services"
+                    className="inline-flex items-center px-[20px] py-[10px] rounded-[var(--r-pill)] bg-[var(--ink)] text-[var(--paper)] font-sans text-[13px] font-medium hover:bg-[var(--ink-2)] transition-colors focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]"
+                  >
+                    Browse services
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 min-[768px]:grid-cols-2 gap-[16px]">
+                  {activeApps.map((app) => (
+                    <ApplicationCard key={app.code} application={app} />
+                  ))}
+                </div>
+              )}
+            </section>
+
+            <div className="grid grid-cols-1 min-[980px]:grid-cols-2 gap-[20px]">
+              <section
+                aria-labelledby="recent-msg-heading"
+                className="rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--paper)] overflow-hidden"
+              >
+                <div className="flex items-center justify-between px-[16px] py-[14px] border-b border-[var(--rule)]">
+                  <h3 className="font-serif text-[16px] font-normal text-[var(--ink)]">
+                    Recent <em className="italic font-normal">messages</em>
+                  </h3>
+                </div>
+                <div className="px-[16px] py-[32px] text-center">
+                  <p className="font-sans text-[13px] text-[var(--ink-muted)]">
+                    {summary && summary.unreadCount > 0
+                      ? `${summary.unreadCount} unread message${summary.unreadCount === 1 ? "" : "s"} across your applications.`
+                      : "No messages yet."}
+                  </p>
+                </div>
+              </section>
+
+              <section
+                aria-labelledby="history-heading"
+                className="rounded-[var(--r-md)] border border-[var(--rule)] bg-[var(--paper)] overflow-hidden"
+              >
+                <div className="flex items-center justify-between px-[16px] py-[14px] border-b border-[var(--rule)]">
+                  <h3 className="font-serif text-[16px] font-normal text-[var(--ink)]">
+                    Completed
+                  </h3>
+                </div>
+                {completedApps.length === 0 ? (
+                  <div className="px-[16px] py-[32px] text-center">
+                    <p className="font-sans text-[13px] text-[var(--ink-muted)]">No completed applications yet.</p>
+                  </div>
+                ) : (
+                  <div>
+                    {completedApps.map((app) => {
+                      const raw = appsData!.applications.find((a) => a.code === app.code)!;
+                      return <HistoryRow key={app.code} entry={adaptHistoryEntry(raw)} />;
+                    })}
+                  </div>
+                )}
+              </section>
             </div>
-            {completedApps.length === 0 ? (
-              <div className="px-[16px] py-[32px] text-center">
-                <p className="font-sans text-[13px] text-[var(--ink-muted)]">No completed applications yet.</p>
-              </div>
-            ) : (
-              <div>
-                {completedApps.map((app) => {
-                  const raw = appsData!.applications.find((a) => a.code === app.code)!;
-                  return <HistoryRow key={app.code} entry={adaptHistoryEntry(raw)} />;
-                })}
-              </div>
-            )}
-          </section>
-        </div>
+          </>
+        ) : null}
       </div>
     </div>
   );
