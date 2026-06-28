@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "@/components/atoms/shared/Eyebrow";
@@ -26,47 +26,7 @@ const STEPS = [
 ];
 
 export function HowItWorksSection({ className }: { className?: string }) {
-  const connectorRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    const el = connectorRef.current;
-    if (!el) return;
-
-    let gsapLoaded = false;
-
-    async function init() {
-      if (gsapLoaded) return;
-      const { gsap } = await import("gsap");
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-      gsapLoaded = true;
-
-      if (!el) return;
-
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        el.style.transform = "scaleX(1)";
-        return;
-      }
-
-      gsap.fromTo(
-        el,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          duration: 0.48,
-          ease: "power2.out",
-          transformOrigin: "left",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 80%",
-            once: true,
-          },
-        }
-      );
-    }
-
-    init();
-  }, []);
+  const prefersReduced = useReducedMotion();
 
   return (
     <section
@@ -85,11 +45,12 @@ export function HowItWorksSection({ className }: { className?: string }) {
           <h2 id="how-heading" className="t-h2 text-[var(--ink)]">Simple as one, two, three</h2>
         </motion.div>
 
-        {/* Steps grid with connector line */}
         <div className="relative">
-          {/* GSAP connector line — desktop only */}
-          <div
-            ref={connectorRef}
+          <motion.div
+            initial={prefersReduced ? { scaleX: 1 } : { scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.48, ease: [0.2, 0, 0, 1] }}
             className="hidden lg:block absolute top-[72px] left-8 right-8 h-px bg-[var(--rule)] origin-left"
             aria-hidden="true"
           />
