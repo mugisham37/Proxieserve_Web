@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       "framer-motion",
       "lucide-react",
       "@radix-ui/react-slot",
+      "@tanstack/react-query",
     ],
   },
 };
