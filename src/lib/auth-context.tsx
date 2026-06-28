@@ -70,20 +70,24 @@ const AuthContext = React.createContext<AuthContextValue | null>(null);
 // ---------------------------------------------------------------------------
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
-  const { session: serverSession, isLoading: isSessionLoading, isError: isSessionError } = useSession();
+  const {
+    session: serverSession,
+    isFetched: isSessionFetched,
+    isFetching: isSessionFetching,
+  } = useSession();
   const [state, dispatch] = React.useReducer(reducer, {
     session: null,
     uiState: INITIAL_AUTH_UI_STATE,
   });
-  const isHydrated = !isSessionLoading;
+  const isHydrated = isSessionFetched && !isSessionFetching;
 
   React.useEffect(() => {
-    if (isSessionLoading || isSessionError) {
+    if (!isSessionFetched || isSessionFetching) {
       return;
     }
 
     dispatch({ type: "HYDRATE_FROM_SERVER", payload: serverSession });
-  }, [isSessionError, isSessionLoading, serverSession]);
+  }, [isSessionFetched, isSessionFetching, serverSession]);
 
   React.useEffect(() => {
     if (typeof window === "undefined") {
