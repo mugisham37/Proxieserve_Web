@@ -13,6 +13,7 @@ import { ServicesHelpBand } from "@/components/organisms/marketing/ServicesHelpB
 import { StickyServiceBar } from "@/components/organisms/shared/StickyServiceBar";
 import { SiteFooter } from "@/components/organisms/marketing/SiteFooter";
 import { ServiceSkeletonCard } from "@/components/molecules/marketing/ServiceSkeletonCard";
+import { SkeletonBlock } from "@/components/atoms/shared/SkeletonBlock";
 
 interface ServiceDetailClientProps {
   slug: string;
@@ -24,16 +25,26 @@ export function ServiceDetailClient({ slug }: ServiceDetailClientProps) {
 
   if (isLoading) {
     return (
-      <div className="container py-16">
-        <ServiceSkeletonCard />
-      </div>
+      <>
+        <div className="container py-16">
+          <ServiceSkeletonCard />
+        </div>
+        <div className="container pb-16 space-y-6">
+          <SkeletonBlock className="h-[240px] rounded-[var(--r-lg)]" />
+          <SkeletonBlock className="h-[180px] rounded-[var(--r-lg)]" />
+          <SkeletonBlock className="h-[180px] rounded-[var(--r-lg)]" />
+        </div>
+      </>
     );
   }
 
   if (isError || !data) {
     return (
       <div className="container py-16 text-center">
-        <p className="font-sans text-[14px] text-[var(--ink-muted)]">Service not found.</p>
+        <h1 className="font-serif text-[24px] text-[var(--ink)] mb-2">Service unavailable</h1>
+        <p className="font-sans text-[14px] text-[var(--ink-muted)] max-w-md mx-auto">
+          We couldn&apos;t load this service right now. The server may be starting up — please try again shortly.
+        </p>
       </div>
     );
   }
