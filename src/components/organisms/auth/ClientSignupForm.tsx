@@ -30,7 +30,14 @@ export function ClientSignupForm() {
   const [tab, setTab] = React.useState<AuthTabValue>("email");
   const signupMutation = useSignup();
   const [bannerState, setBannerState] = React.useState<{
-    type: "account-exists" | "rate-limited" | "network-error" | "timeout" | "unexpected" | null;
+    type:
+      | "account-exists"
+      | "identifier-reserved"
+      | "rate-limited"
+      | "network-error"
+      | "timeout"
+      | "unexpected"
+      | null;
     message?: string;
   }>({ type: null });
 
@@ -82,6 +89,9 @@ export function ClientSignupForm() {
         case "account-exists":
           setBannerState({ type: "account-exists", message: error.message });
           break;
+        case "identifier-reserved":
+          setBannerState({ type: "identifier-reserved", message: error.message });
+          break;
         case "rate-limited":
           setBannerState({
             type: "rate-limited",
@@ -126,6 +136,15 @@ export function ClientSignupForm() {
             message={bannerState.message ?? "An account with this email already exists."}
             action={{ label: "Sign in instead →", href: "/login" }}
             visible={bannerState.type === "account-exists"}
+          />
+          <AuthBanner
+            variant="info"
+            message={
+              bannerState.message ??
+              "This email is reserved for staff access. Use the staff sign-in portal instead."
+            }
+            action={{ label: "Staff sign in →", href: "/staff/login" }}
+            visible={bannerState.type === "identifier-reserved"}
           />
           <AuthBanner
             variant="warn"
