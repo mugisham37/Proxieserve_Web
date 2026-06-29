@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/lib/auth-context";
 import { BackendStatusProvider } from "@/lib/backend-status";
+import { SessionHydrationBanner } from "@/components/molecules/auth/SessionHydrationBanner";
 import { NotificationProvider } from "@/lib/notification-context";
 import { ToastProvider } from "@/lib/toast-context";
 import { I18nProvider } from "@/lib/i18n-context";
@@ -28,6 +29,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
               <NotificationProvider>
                 <ToastProvider>
                   {children}
+                  <SessionHydrationBanner />
                 </ToastProvider>
               </NotificationProvider>
             </AuthProvider>
