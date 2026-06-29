@@ -104,7 +104,11 @@ export function ClientSignupForm() {
           setBannerState({ type: "network-error", message: error.message });
           break;
         case "timeout":
-          setBannerState({ type: "timeout", message: error.message });
+          setBannerState({
+            type: "timeout",
+            message:
+              "This is taking longer than expected. Your account may already have been created — try signing in.",
+          });
           break;
         default:
           setBannerState({
