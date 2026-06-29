@@ -6,6 +6,13 @@ import { ApiError, type ApiErrorType, isApiResponse, isRecord } from "@/lib/api/
 
 export const SESSION_INVALIDATED_EVENT = "hebuza:session-invalidated";
 
+/** Default timeout for most API calls. */
+export const DEFAULT_API_TIMEOUT_MS = 5_000;
+/** Auth mutations (signup, login, OTP) — includes Argon2 + session issuance on the server. */
+export const AUTH_MUTATION_TIMEOUT_MS = 15_000;
+/** Session hydration — may trigger token refresh on the server. */
+export const AUTH_SESSION_TIMEOUT_MS = 8_000;
+
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 if (!apiBaseUrl) {
@@ -132,7 +139,7 @@ function attachResponseTracking(client: AxiosInstance): void {
 export const apiClient: AxiosInstance = axios.create({
   baseURL: apiBaseUrl,
   withCredentials: true,
-  timeout: 5_000,
+  timeout: DEFAULT_API_TIMEOUT_MS,
   headers: {
     "Content-Type": "application/json",
   },
