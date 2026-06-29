@@ -157,7 +157,20 @@ export function ClientLoginForm() {
           <AuthBanner
             variant="danger"
             message={bannerState.message ?? "Connection error. Check your internet and try again."}
-            visible={bannerState.type === "network-error" || bannerState.type === "timeout" || bannerState.type === "unexpected"}
+            visible={bannerState.type === "network-error"}
+          />
+          <AuthBanner
+            variant="warn"
+            message={
+              bannerState.message ??
+              "Sign-in is taking longer than expected. Please wait a moment and try again."
+            }
+            visible={bannerState.type === "timeout"}
+          />
+          <AuthBanner
+            variant="danger"
+            message={bannerState.message ?? "Something went wrong on our end. Please try again."}
+            visible={bannerState.type === "unexpected"}
           />
           {bannerState.type === "account-locked" && bannerState.lockoutUntil && (
             <div className="rounded-[var(--r-md)] bg-[var(--danger-soft)] border-l-[3px] border-[var(--danger)] px-4 py-3">
