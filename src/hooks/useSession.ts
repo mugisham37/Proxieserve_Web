@@ -11,6 +11,7 @@ interface UseSessionResult {
   isFetching: boolean;
   isFetched: boolean;
   isError: boolean;
+  error: Error | null;
   refetch: () => Promise<QueryObserverResult<SessionData | null, Error>>;
 }
 
@@ -41,6 +42,7 @@ export function useSession(): UseSessionResult {
     isFetching: query.isFetching,
     isFetched: query.isFetched,
     isError: query.isError,
+    error: query.error,
     refetch: query.refetch,
   };
 }
