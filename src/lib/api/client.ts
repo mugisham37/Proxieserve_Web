@@ -13,10 +13,10 @@ export const AUTH_MUTATION_TIMEOUT_MS = 15_000;
 /** Session hydration — may trigger token refresh on the server. */
 export const AUTH_SESSION_TIMEOUT_MS = 8_000;
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
 
-if (!apiBaseUrl) {
-  throw new Error("NEXT_PUBLIC_API_URL is required.");
+if (!apiBaseUrl && process.env.NODE_ENV === "production") {
+  throw new Error("NEXT_PUBLIC_API_URL is required in production.");
 }
 
 function extractValidationMessage(payload: unknown): string {
