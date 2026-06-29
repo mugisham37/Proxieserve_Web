@@ -11,6 +11,7 @@ export type ApiErrorType =
   | "account-locked"
   | "account-disabled"
   | "account-exists"
+  | "identifier-reserved"
   | "otp-wrong"
   | "otp-expired"
   | "reset-expired"
