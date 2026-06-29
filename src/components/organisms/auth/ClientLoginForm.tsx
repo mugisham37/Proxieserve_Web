@@ -102,7 +102,10 @@ export function ClientLoginForm() {
           setBannerState({ type: "network-error", message: error.message });
           break;
         case "timeout":
-          setBannerState({ type: "timeout", message: error.message });
+          setBannerState({
+            type: "timeout",
+            message: "Sign-in is taking longer than expected. Please wait a moment and try again.",
+          });
           break;
         default:
           setBannerState({
