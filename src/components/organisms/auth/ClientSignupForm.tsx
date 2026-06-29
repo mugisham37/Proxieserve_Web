@@ -157,8 +157,22 @@ export function ClientSignupForm() {
           />
           <AuthBanner
             variant="danger"
+            message={bannerState.message ?? "Connection error. Check your internet and try again."}
+            visible={bannerState.type === "network-error"}
+          />
+          <AuthBanner
+            variant="warn"
+            message={
+              bannerState.message ??
+              "This is taking longer than expected. Your account may already have been created — try signing in."
+            }
+            action={{ label: "Sign in instead →", href: "/login" }}
+            visible={bannerState.type === "timeout"}
+          />
+          <AuthBanner
+            variant="danger"
             message={bannerState.message ?? "Something went wrong on our end. Please try again."}
-            visible={bannerState.type === "network-error" || bannerState.type === "timeout" || bannerState.type === "unexpected"}
+            visible={bannerState.type === "unexpected"}
           />
 
           {/* Full name */}
